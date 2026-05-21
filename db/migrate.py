@@ -48,7 +48,42 @@ def migrate(drop: bool = False) -> None:
             ADD COLUMN IF NOT EXISTS share_token TEXT UNIQUE;
     """)
 
+    # Seed existing prompt files as v1 if prompt_versions is empty.
+    _seed_prompt_versions()
+
     print("migration complete")
+
+
+def _seed_prompt_versions() -> None:
+    from pathlib import Path
+    prompts_dir = Path(__file__).resolve().parent.parent / "prompts" / "system"
+    shared_path = Path(__file__).resolve().parent.parent / "prompts" / "shared" / "pe_context.md"
+
+    with connect() as conn, conn.cursor() as cur:
+        cur.execute("SELECT COUNT(*) FROM pehero.prompt_versions")
+        if cur.fetchone()[0] > 0:
+            return
+
+        seeded = 0
+        for md in sorted(prompts_dir.glob("*.md")):
+            slug = md.stem
+            content = md.read_text()
+            cur.execute(
+                "INSERT INTO pehero.prompt_versions (slug, content, changed_by) VALUES (%s, %s, %s)",
+                (slug, content, "seed"),
+            )
+            seeded += 1
+
+        if shared_path.exists():
+            cur.execute(
+                "INSERT INTO pehero.prompt_versions (slug, content, changed_by) VALUES (%s, %s, %s)",
+                ("__shared__", shared_path.read_text(), "seed"),
+            )
+            seeded += 1
+
+        conn.commit()
+        if seeded:
+            print(f"  seeded {seeded} prompt versions")
 
 
 if __name__ == "__main__":

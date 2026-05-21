@@ -256,6 +256,16 @@ CREATE TABLE IF NOT EXISTS pehero.portfolio_kpis (
 );
 CREATE INDEX IF NOT EXISTS portfolio_kpis_company_idx ON pehero.portfolio_kpis(company_id, month DESC);
 
+-- ── prompt versions (audit trail for system prompts) ──────────────────
+CREATE TABLE IF NOT EXISTS pehero.prompt_versions (
+    id          BIGSERIAL PRIMARY KEY,
+    slug        TEXT        NOT NULL,
+    content     TEXT        NOT NULL,
+    changed_by  TEXT,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS prompt_versions_slug_idx ON pehero.prompt_versions(slug, id DESC);
+
 -- ── agent invocation log ──────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS pehero.agent_invocations (
     id           BIGSERIAL PRIMARY KEY,
