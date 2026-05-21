@@ -80,8 +80,6 @@ def instructions_home(sess):
         path = PROMPTS_DIR / f"{a.slug}.md"
         exists = path.exists()
         size = path.stat().st_size if exists else 0
-        vc = count_prompt_versions(a.slug)
-        version_badge = Span(f"v{vc}", cls="instr-version-badge") if vc else ""
         items.append(A(
             Div(
                 Span(a.icon, cls="instr-icon"),
@@ -89,7 +87,6 @@ def instructions_home(sess):
                     Div(a.name, cls="instr-name"),
                     Div(a.one_liner, cls="instr-sub"),
                 ),
-                version_badge,
                 Span(f"{size}b" if exists else "missing", cls="instr-size"),
                 cls="instr-row",
             ),
