@@ -256,6 +256,30 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: h
 .artifact-inline-title { color: var(--ink); font-size: .8rem; font-weight: 600; margin-bottom: .15rem; }
 .artifact-inline-sub { color: var(--ink-dim); font-size: .68rem; font-family: 'JetBrains Mono', monospace; margin-bottom: .5rem; }
 
+/* Table "See more / See less" toggle */
+.table-see-more {
+    display: block; margin: .4rem auto 0; padding: .3rem .9rem;
+    background: var(--bg-raise); border: 1px solid var(--line); border-radius: .4rem;
+    color: var(--accent); font-size: .72rem; font-weight: 600; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; transition: all .15s;
+}
+.table-see-more:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+/* Chart container (Plotly) */
+.chart-container { margin-top: .5rem; border-radius: .4rem; overflow: hidden; min-height: 300px; }
+
+/* Visualize button accent */
+.table-chart-btn { color: var(--green) !important; }
+
+/* Word download button */
+.memo-word-btn {
+    padding: .35rem .85rem; border-radius: .4rem; font-size: .75rem;
+    background: var(--bg); color: var(--accent); border: 1px solid var(--accent);
+    cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: .3rem;
+}
+.memo-word-btn:hover { background: var(--accent-dim); }
+.memo-word-btn:disabled { opacity: .6; cursor: wait; }
+
 /* Shared table styles — used in both chat bubbles and canvas */
 .pe-table, .artifact-table, .msg-bubble table {
     width: 100%; border-collapse: collapse; font-size: .8rem; margin: .5rem 0;

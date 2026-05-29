@@ -800,6 +800,16 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "fi": "{n}t sitten", "sv": "{n}t sedan"},
     "js_news_day_ago":   {"en": "{n}d ago",          "et": "{n}p tagasi",        "lt": "prieš {n}d",
                           "fi": "{n}pv sitten", "sv": "{n}d sedan"},
+    "js_see_more":       {"en": "See more",          "et": "Näita rohkem",       "lt": "Rodyti daugiau",
+                          "fi": "Näytä lisää", "sv": "Visa mer"},
+    "js_see_less":       {"en": "See less",           "et": "Näita vähem",        "lt": "Rodyti mažiau",
+                          "fi": "Näytä vähemmän", "sv": "Visa mindre"},
+    "js_download_xls":   {"en": "Download XLS",      "et": "Laadi XLS alla",     "lt": "Atsisiųsti XLS",
+                          "fi": "Lataa XLS", "sv": "Ladda ner XLS"},
+    "js_download_word":  {"en": "\U0001f4dd Download Word", "et": "\U0001f4dd Laadi Word alla", "lt": "\U0001f4dd Atsisiųsti Word",
+                          "fi": "\U0001f4dd Lataa Word", "sv": "\U0001f4dd Ladda ner Word"},
+    "js_visualize":      {"en": "Visualize",         "et": "Visualiseeri",       "lt": "Vizualizuoti",
+                          "fi": "Visualisoi", "sv": "Visualisera"},
 
     # ── Pipeline page ─────────────────────────────────────────────
     "pipe_title":        {"en": "Pipeline",          "et": "Pipeline",           "lt": "Pipeline",

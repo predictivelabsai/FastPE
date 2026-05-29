@@ -33,6 +33,10 @@ plotly>=6.0.0
 # RSS news feeds
 feedparser>=6.0.0
 
+# Export (XLS tables, Word memos)
+openpyxl>=3.1.0
+python-docx>=1.1.0
+
 # Web search tools (Tavily default, EXA fallback)
 tavily-python>=0.7.0
 exa-py>=2.0.0

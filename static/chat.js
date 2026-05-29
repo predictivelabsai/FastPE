@@ -90,6 +90,21 @@
         return rows.join("\n");
     }
 
+    function tableToJSON(table) {
+        const headers = [];
+        table.querySelectorAll("th").forEach(th => headers.push(th.textContent.trim()));
+        const rows = [];
+        table.querySelectorAll("tbody tr, tr:not(:first-child)").forEach(tr => {
+            if (tr.querySelector("th")) return;
+            const row = {};
+            tr.querySelectorAll("td").forEach((td, i) => {
+                if (i < headers.length) row[headers[i]] = td.textContent.trim();
+            });
+            if (Object.keys(row).length) rows.push(row);
+        });
+        return { columns: headers, rows };
+    }
+
     function enhanceTables(container) {
         if (!container) return;
         container.querySelectorAll("table").forEach(table => {
@@ -97,6 +112,7 @@
             table.dataset.enhanced = "1";
             const toolbar = document.createElement("div");
             toolbar.className = "table-toolbar";
+
             const copyBtn = document.createElement("button");
             copyBtn.textContent = I18N.copy_csv || "Copy CSV";
             copyBtn.className = "table-action-btn";
@@ -106,10 +122,11 @@
                     setTimeout(() => { copyBtn.textContent = I18N.copy_csv || "Copy CSV"; }, 1500);
                 });
             };
-            const dlBtn = document.createElement("button");
-            dlBtn.textContent = I18N.download_csv || "Download CSV";
-            dlBtn.className = "table-action-btn";
-            dlBtn.onclick = () => {
+
+            const csvBtn = document.createElement("button");
+            csvBtn.textContent = I18N.download_csv || "Download CSV";
+            csvBtn.className = "table-action-btn";
+            csvBtn.onclick = () => {
                 const blob = new Blob([tableToCSV(table)], { type: "text/csv" });
                 const a = document.createElement("a");
                 a.href = URL.createObjectURL(blob);
@@ -117,10 +134,71 @@
                 a.click();
                 URL.revokeObjectURL(a.href);
             };
+
+            const xlsBtn = document.createElement("button");
+            xlsBtn.textContent = I18N.download_xls || "Download XLS";
+            xlsBtn.className = "table-action-btn";
+            xlsBtn.onclick = async () => {
+                const { columns, rows } = tableToJSON(table);
+                const card = table.closest(".artifact-inline");
+                const title = card ? (card.querySelector(".artifact-inline-title")?.textContent || "Export") : "Export";
+                const body = new URLSearchParams({ data: JSON.stringify({ columns, rows, title }) });
+                const r = await fetch("/app/export/xlsx", { method: "POST", body });
+                if (!r.ok) return;
+                const blob = await r.blob();
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = "pehero-data.xlsx";
+                a.click();
+                URL.revokeObjectURL(a.href);
+            };
+
+            const chartBtn = document.createElement("button");
+            chartBtn.textContent = I18N.visualize || "Visualize";
+            chartBtn.className = "table-action-btn table-chart-btn";
+            chartBtn.onclick = () => renderChartFromTable(table);
+
             toolbar.appendChild(copyBtn);
-            toolbar.appendChild(dlBtn);
+            toolbar.appendChild(csvBtn);
+            toolbar.appendChild(xlsBtn);
+            toolbar.appendChild(chartBtn);
             table.parentNode.insertBefore(toolbar, table);
         });
+    }
+
+    // ── Chart rendering (Plotly.js lazy-loaded) ───────────────────
+    let plotlyLoaded = false;
+    function ensurePlotly() {
+        if (plotlyLoaded) return Promise.resolve();
+        return new Promise((resolve) => {
+            if (window.Plotly) { plotlyLoaded = true; resolve(); return; }
+            const s = document.createElement("script");
+            s.src = "https://cdn.plot.ly/plotly-2.35.2.min.js";
+            s.onload = () => { plotlyLoaded = true; resolve(); };
+            document.head.appendChild(s);
+        });
+    }
+
+    async function renderChartFromTable(table) {
+        const { columns, rows } = tableToJSON(table);
+        if (!rows.length) return;
+        const card = table.closest(".artifact-inline") || table.closest(".msg-bubble") || table.parentElement;
+        const title = card.querySelector(".artifact-inline-title")?.textContent || "";
+
+        const existing = card.querySelector(".chart-container");
+        if (existing) { existing.remove(); return; }
+
+        const body = new URLSearchParams({ data: JSON.stringify({ columns, rows, title }) });
+        const r = await fetch("/app/chart", { method: "POST", body });
+        if (!r.ok) return;
+        const result = await r.json();
+
+        await ensurePlotly();
+        const div = document.createElement("div");
+        div.className = "chart-container";
+        card.appendChild(div);
+        window.Plotly.react(div, result.plotly.data, result.plotly.layout, { responsive: true, displayModeBar: false });
+        scrollMessagesBottom();
     }
 
     // ── Thinking indicator (timer + rotating tool name) ────────────
@@ -238,10 +316,12 @@
         row.className = "memo-preview-row";
         row.innerHTML = `
             <button class="memo-preview-btn">${I18N.preview_pdf || "📄 Preview PDF"}</button>
-            <button class="memo-download-btn" style="display:none">${I18N.download_pdf || "⬇ Download PDF"}</button>`;
+            <button class="memo-download-btn" style="display:none">${I18N.download_pdf || "⬇ Download PDF"}</button>
+            <button class="memo-word-btn">${I18N.download_word || "📝 Download Word"}</button>`;
         bubble.parentElement.appendChild(row);
         const previewBtn = row.querySelector(".memo-preview-btn");
         const dlBtn = row.querySelector(".memo-download-btn");
+        const wordBtn = row.querySelector(".memo-word-btn");
         previewBtn.onclick = async () => {
             previewBtn.disabled = true; previewBtn.textContent = I18N.rendering || "Rendering…";
             try {
@@ -258,6 +338,25 @@
                 previewBtn.textContent = I18N.render_failed || "Render failed";
                 console.error(e);
             }
+        };
+        wordBtn.onclick = async () => {
+            wordBtn.disabled = true; wordBtn.textContent = I18N.rendering || "Rendering…";
+            try {
+                const body = new URLSearchParams({ markdown: text, title: docTitle });
+                const r = await fetch("/app/export/docx", { method: "POST", body });
+                if (!r.ok) throw new Error(r.status);
+                const blob = await r.blob();
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = docTitle.replace(/\s+/g, "-").toLowerCase() + ".docx";
+                a.click();
+                URL.revokeObjectURL(a.href);
+                wordBtn.textContent = I18N.download_word || "📝 Download Word";
+            } catch (e) {
+                wordBtn.textContent = I18N.render_failed || "Render failed";
+                console.error(e);
+            }
+            wordBtn.disabled = false;
         };
     }
 
@@ -278,13 +377,25 @@
         scrollMessagesBottom();
     }
 
+    const TABLE_PREVIEW_ROWS = 5;
+
     function renderArtifactHTML(p) {
         if (p.kind === "table" && Array.isArray(p.rows)) {
             if (!p.rows.length) return `<p><em>${I18N.no_rows || "No rows."}</em></p>`;
             const cols = p.columns || Object.keys(p.rows[0]);
             const head = "<tr>" + cols.map(c => `<th>${escapeHtml(c)}</th>`).join("") + "</tr>";
-            const body = p.rows.map(r => "<tr>" + cols.map(c => `<td>${formatCell(r[c])}</td>`).join("") + "</tr>").join("");
-            return `<table class="artifact-table">${head}${body}</table>`;
+            const preview = p.rows.slice(0, TABLE_PREVIEW_ROWS);
+            const rest = p.rows.slice(TABLE_PREVIEW_ROWS);
+            const previewHtml = preview.map(r => "<tr>" + cols.map(c => `<td>${formatCell(r[c])}</td>`).join("") + "</tr>").join("");
+            const restHtml = rest.map(r => "<tr class=\"table-hidden-row\" style=\"display:none\">" + cols.map(c => `<td>${formatCell(r[c])}</td>`).join("") + "</tr>").join("");
+            const table = `<table class="artifact-table">${head}${previewHtml}${restHtml}</table>`;
+            if (rest.length) {
+                const seeMore = I18N.see_more || "See more";
+                const seeLess = I18N.see_less || "See less";
+                const total = p.rows.length;
+                return table + `<button class="table-see-more" onclick="toggleTableRows(this)" data-more="${escapeHtml(seeMore)} (${total - TABLE_PREVIEW_ROWS})" data-less="${escapeHtml(seeLess)}">${seeMore} (${total - TABLE_PREVIEW_ROWS})</button>`;
+            }
+            return table;
         }
         if (p.kind === "citations" && Array.isArray(p.items)) {
             return p.items.map(it => `
@@ -508,6 +619,13 @@
     };
     // Pipeline deal-detail page uses the right pane for deal brief
     window.toggleArtifactPane = window.toggleNewsPane;
+    window.toggleTableRows = (btn) => {
+        const card = btn.closest(".artifact-inline") || btn.closest(".msg-bubble") || btn.parentElement;
+        const hidden = card.querySelectorAll(".table-hidden-row");
+        const expanded = hidden.length && hidden[0].style.display !== "none";
+        hidden.forEach(r => r.style.display = expanded ? "none" : "");
+        btn.textContent = expanded ? btn.dataset.more : btn.dataset.less;
+    };
     window.toggleGroup = (id) => {
         const el = document.getElementById(id);
         if (!el) return;

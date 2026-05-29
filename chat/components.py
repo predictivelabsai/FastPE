@@ -30,6 +30,9 @@ def message_bubble(role: str, content: str, agent_slug: str | None = None):
     )
 
 
+_TABLE_PREVIEW_ROWS = 5
+
+
 def _render_content(content: str) -> str:
     """Server-side markdown → HTML for persisted messages."""
     import html as _html
@@ -46,6 +49,8 @@ def _render_content(content: str) -> str:
     in_list = False
     in_table = False
     is_header = True
+    table_row_count = 0
+    table_hidden_count = 0
     for line in lines:
         stripped = line.strip()
         if stripped.startswith("|") and stripped.endswith("|"):
@@ -55,13 +60,29 @@ def _render_content(content: str) -> str:
                 out.append('<table>')
                 in_table = True
                 is_header = True
+                table_row_count = 0
+                table_hidden_count = 0
             cells = [c.strip() for c in stripped[1:-1].split("|")]
             tag = "th" if is_header else "td"
-            out.append("<tr>" + "".join(f"<{tag}>{c}</{tag}>" for c in cells) + "</tr>")
+            if not is_header:
+                table_row_count += 1
+            if not is_header and table_row_count > _TABLE_PREVIEW_ROWS:
+                out.append('<tr class="table-hidden-row" style="display:none">'
+                           + "".join(f"<{tag}>{c}</{tag}>" for c in cells) + "</tr>")
+                table_hidden_count += 1
+            else:
+                out.append("<tr>" + "".join(f"<{tag}>{c}</{tag}>" for c in cells) + "</tr>")
             is_header = False
         else:
             if in_table:
                 out.append("</table>")
+                if table_hidden_count > 0:
+                    out.append(
+                        f'<button class="table-see-more" onclick="toggleTableRows(this)"'
+                        f' data-more="See more ({table_hidden_count})"'
+                        f' data-less="See less">'
+                        f'See more ({table_hidden_count})</button>'
+                    )
                 in_table = False
             if stripped.startswith("- "):
                 if not in_list:
@@ -84,6 +105,13 @@ def _render_content(content: str) -> str:
         out.append("</ul>")
     if in_table:
         out.append("</table>")
+        if table_hidden_count > 0:
+            out.append(
+                f'<button class="table-see-more" onclick="toggleTableRows(this)"'
+                f' data-more="See more ({table_hidden_count})"'
+                f' data-less="See less">'
+                f'See more ({table_hidden_count})</button>'
+            )
     return "\n".join(out)
 
 
