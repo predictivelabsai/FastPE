@@ -358,14 +358,22 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None,
     prompts_lookup = {a.slug: list(a.example_prompts[:6]) for a in AGENTS}
     names_lookup = {a.slug: agent_t(a.slug, "name", lang) for a in AGENTS}
 
-    # Language flag buttons for the header
-    flag_buttons = []
-    for code, info in LANGUAGES.items():
-        active = "active" if code == lang else ""
-        flag_buttons.append(
-            Button(info["flag"], cls=f"lang-flag-btn {active}",
-                   onclick=f"setLang({code!r})", title=info["native"]),
+    # Language dropdown for the header — only the active flag is visible
+    current_flag = LANGUAGES.get(lang, LANGUAGES["en"])["flag"]
+    lang_options = [
+        Button(
+            Span(info["flag"], cls="lang-dd-flag"),
+            Span(info["native"], cls="lang-dd-label"),
+            cls=f"lang-dd-item{' active' if code == lang else ''}",
+            onclick=f"setLang({code!r})",
         )
+        for code, info in LANGUAGES.items()
+    ]
+    lang_dropdown = Div(
+        Button(current_flag, cls="lang-trigger", onclick="toggleLangDropdown(event)"),
+        Div(*lang_options, cls="lang-dd-menu", id="lang-dd-menu"),
+        cls="lang-dropdown",
+    )
 
     return Div(
         Div(
@@ -381,8 +389,7 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None,
                 cls="chat-header-left",
             ),
             Div(
-                *flag_buttons,
-                Span("·", cls="chat-header-dot"),
+                lang_dropdown,
                 Button(t("chat_copy", lang), id="copy-chat-btn", cls="chat-action-btn",
                        onclick="copyChat()"),
                 Button(t("chat_share", lang), id="share-chat-btn", cls="chat-action-btn",

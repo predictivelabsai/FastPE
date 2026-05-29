@@ -95,13 +95,21 @@ def _navbar(current_path: str = "/", lang: str = "en"):
              cls=f"text-sm text-ink-muted hover:text-ink transition-colors {'text-ink' if current_path == href or current_path.startswith(href + '/') else ''}"))
         for key, href in NAV_ITEMS
     ]
-    flag_links = [
-        A(Span(info["flag"]),
+    current_flag = LANGUAGES.get(lang, LANGUAGES["en"])["flag"]
+    lang_options = [
+        A(Span(info["flag"], cls="mr-2"), Span(info["native"], cls="text-xs"),
           href=f"/set-lang/{code}",
-          cls=f"text-lg leading-none {'opacity-100' if code == lang else 'opacity-40 hover:opacity-70'} transition-opacity",
-          title=info["native"])
+          cls=f"flex items-center gap-1 px-3 py-1.5 rounded text-sm text-ink-muted hover:bg-bg-raised hover:text-ink transition-colors {'font-semibold text-accent-deep' if code == lang else ''}")
         for code, info in LANGUAGES.items()
     ]
+    lang_dropdown = Div(
+        Button(current_flag,
+               cls="text-base leading-none px-1.5 py-1 border border-transparent rounded hover:border-line-bright transition-colors cursor-pointer bg-transparent",
+               onclick="this.nextElementSibling.classList.toggle('hidden')"),
+        Div(*lang_options,
+            cls="hidden absolute right-0 top-full mt-1 bg-bg-elevated border border-line rounded-lg shadow-lg z-50 py-1 min-w-[130px] flex flex-col"),
+        cls="relative",
+    )
     return Nav(
         Div(
             A(
@@ -112,8 +120,7 @@ def _navbar(current_path: str = "/", lang: str = "en"):
             ),
             Ul(*items, cls="hidden lg:flex items-center gap-7"),
             Div(
-                *flag_links,
-                Span("·", cls="text-ink-dim mx-1"),
+                lang_dropdown,
                 A(t("nav_book_demo", lang), href="/contact",
                   cls="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-ink border border-line-bright hover:border-accent hover:text-accent transition-colors"),
                 A(t("nav_open_app", lang), href="/app",

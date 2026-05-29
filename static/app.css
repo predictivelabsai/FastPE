@@ -432,14 +432,31 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: h
 .bottom-nav-icon { color: var(--accent); width: 1rem; text-align: center; flex-shrink: 0; }
 .bottom-nav-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* Language flag buttons in chat header */
-.lang-flag-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: 1.1rem; line-height: 1; padding: .15rem .2rem;
-    opacity: .4; transition: opacity .15s;
+/* Language dropdown in chat header */
+.lang-dropdown { position: relative; }
+.lang-trigger {
+    background: none; border: 1px solid transparent; border-radius: .35rem;
+    cursor: pointer; font-size: 1rem; line-height: 1; padding: .2rem .35rem;
+    transition: border-color .15s;
 }
-.lang-flag-btn:hover { opacity: .7; }
-.lang-flag-btn.active { opacity: 1; }
+.lang-trigger:hover { border-color: var(--line-br); }
+.lang-dd-menu {
+    display: none; position: absolute; right: 0; top: calc(100% + 4px);
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: .45rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,.08); z-index: 100;
+    min-width: 140px; padding: .3rem;
+}
+.lang-dd-menu.open { display: flex; flex-direction: column; }
+.lang-dd-item {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .4rem .6rem; background: none; border: none; border-radius: .3rem;
+    cursor: pointer; font-size: .78rem; color: var(--ink-muted);
+    transition: background .12s, color .12s; white-space: nowrap;
+}
+.lang-dd-item:hover { background: var(--bg-raise); color: var(--ink); }
+.lang-dd-item.active { color: var(--accent-deep); font-weight: 600; }
+.lang-dd-flag { font-size: 1rem; }
+.lang-dd-label { font-family: 'Inter', sans-serif; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 9px; height: 9px; }

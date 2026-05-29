@@ -546,6 +546,15 @@
         });
         if (r.ok) window.location.reload();
     };
+    window.toggleLangDropdown = (ev) => {
+        ev.stopPropagation();
+        const menu = document.getElementById("lang-dd-menu");
+        if (menu) menu.classList.toggle("open");
+    };
+    document.addEventListener("click", () => {
+        const menu = document.getElementById("lang-dd-menu");
+        if (menu) menu.classList.remove("open");
+    });
     window.setCurrency = async (code) => {
         const r = await fetch("/app/config", {
             method: "POST",
