@@ -19,3 +19,13 @@ tc17,lp_update,"lpupd: draft Q1 letter for Fund IV LPs",portfolio,lp_update,Quar
 tc18,tenant_churn,"churn: which DR VET customers are at highest renewal risk?",risk,tenant_churn,Churn prediction for DR VET
 tc19,environmental_risk,"esg: summarize ESG risk across my current pipeline",ESG,environmental_risk,ESG risk summary
 tc20,physical_condition,"ops: build a 100-day plan for Kardiolita post-close",100-day,physical_condition,Ops diligence for Kardiolita
+tc21,t12_normalizer,"show me financials for Baltic Transline",revenue,t12_normalizer,Plain-English financials query (logistics)
+tc22,t12_normalizer,"ltm: what is the revenue and profit of Eika Construction?",revenue,t12_normalizer,Revenue+profit for real estate company
+tc23,t12_normalizer,"show me the income statement for Northway",revenue,t12_normalizer,Income statement for healthcare company
+tc24,t12_normalizer,"ltm: what are the financials of Lietuvos Draudimas?",revenue,t12_normalizer,Financials for insurance company
+tc25,deal_triage,"triage: tell me about DR VET",go,deal_triage,Triage DR VET without financial details in prompt
+tc26,t12_normalizer,"ltm: show revenue growth for Agrologistika",growth,t12_normalizer,Revenue growth query for logistics
+tc27,t12_normalizer,"ltm: what is the EBITDA margin of Kardiolita?",margin,t12_normalizer,EBITDA margin query for hospital
+tc28,pro_forma_builder,"lbo: model DR VET at 10x entry multiple",IRR,pro_forma_builder,LBO for a small vet clinic
+tc29,outreach_email,"outreach: write an email to Baltic Transline management",Baltic,outreach_email,Outreach to a large logistics company
+tc30,investor_memo,"memo: write IC memo for Eika Construction",Eika,investor_memo,IC memo for real estate developer

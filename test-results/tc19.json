@@ -1,0 +1,9 @@
+{
+  "id": "tc19",
+  "prompt": "esg: summarize ESG risk across my current pipeline",
+  "expected_agent": "environmental_risk",
+  "routed_agent": "environmental_risk",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

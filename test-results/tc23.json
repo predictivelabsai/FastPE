@@ -1,0 +1,20 @@
+{
+  "id": "tc23",
+  "prompt": "show me the income statement for Northway",
+  "expected_agent": "t12_normalizer",
+  "expected_contains": "revenue",
+  "timestamp": "2026-05-29T21:32:53.946317",
+  "routed_agent": "t12_normalizer",
+  "route_match": true,
+  "elapsed_s": 17.0,
+  "response": "**LTM Income Statement Summary — Northway medicinos centrai, UAB** (slug: `northway_medicinos_centras`)\n\n**Period:** Jan 2020 – Dec 2024 (LTM ending Dec 2024)  \n**Currency:** EUR (€)\n\n### Key LTM Figures\n- **Revenue:** €20,786,637\n- **EBITDA (reported):** €6,577,115\n- **Adj. EBITDA:** €6,577,115 (no add-backs identified)\n- **EBITDA margin:** 31.64%\n- **YoY revenue growth (LTM):** +9.3%\n\n### Monthly Breakdown (selected years)\nThe underlying data shows stable monthly run-rates within each calendar year:\n\n| Year | Monthly Revenue | Monthly EBITDA | Annual Revenue | Annual EBITDA |\n|------|-----------------|----------------|----------------|---------------|\n| 2020 | €865,960       | €305,548      | €10,391,514   | €3,666,577   |\n| 2021 | €1,233,860     | €415,980      | €14,806,320   | €4,991,760   |\n| 2022 | €1,379,341     | €488,526      | €16,552,090   | €5,862,306   |\n| 2023 | €1,584,980     | €557,894      | €19,019,759   | €6,694,727   |\n| 2024 | €1,732,220     | €548,093      | €20,786,637   | €6,577,115   |\n\n**Notes**  \n- No non-recurring items or add-backs were present in the data → reported EBITDA = Adj. EBITDA.  \n- Gross margin shown as 100% (no cost-of-services line item provided).  \n- Full P&L detail (COGS, opex categories, D&A, interest, taxes) is not available in the current dataset.\n\nWould you like me to run a peer benchmark on the 31.6% EBITDA margin or pull trading comps?",
+  "response_length": 1408,
+  "tools_called": [
+    "get_company",
+    "search_companies",
+    "normalize_ltm"
+  ],
+  "contains_match": true,
+  "passed": true,
+  "error": null
+}

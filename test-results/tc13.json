@@ -1,6 +1,6 @@
 {
-  "id": "tc01",
-  "prompt": "triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",
+  "id": "tc13",
+  "prompt": "triage: Baltic Transline logistics, €397M revenue, Kaunas",
   "expected_agent": "deal_triage",
   "routed_agent": "deal_triage",
   "route_match": true,

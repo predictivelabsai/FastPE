@@ -1,0 +1,20 @@
+{
+  "id": "tc24",
+  "prompt": "ltm: what are the financials of Lietuvos Draudimas?",
+  "expected_agent": "t12_normalizer",
+  "expected_contains": "revenue",
+  "timestamp": "2026-05-29T21:36:50.500615",
+  "routed_agent": "t12_normalizer",
+  "route_match": true,
+  "elapsed_s": 7.9,
+  "response": "**Lietuvos draudimas, AB** (slug: `lietuvos_draudimas_centrine_buveine`) has no financial rows loaded in the PEHero database.\n\n- **LTM revenue / EBITDA**: null (no data available)\n- **Sector**: financial_services (Insurance)\n- **HQ**: Vilnius, Lithuania\n- **Employees**: 930\n- **Founded**: 1991\n\nNo LTM normalization, add-backs, or peer benchmarking can be performed. If you have seller-provided financials or a different company slug, provide them and I can run the normalization workflow.",
+  "response_length": 490,
+  "tools_called": [
+    "search_companies",
+    "normalize_ltm",
+    "get_company"
+  ],
+  "contains_match": true,
+  "passed": true,
+  "error": null
+}

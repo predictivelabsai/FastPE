@@ -1,0 +1,18 @@
+{
+  "id": "tc22",
+  "prompt": "ltm: what is the revenue and profit of Eika Construction?",
+  "expected_agent": "t12_normalizer",
+  "expected_contains": "revenue",
+  "timestamp": "2026-05-29T21:32:26.529229",
+  "routed_agent": "t12_normalizer",
+  "route_match": true,
+  "elapsed_s": 6.2,
+  "response": "**Eika Construction, UAB** (slug: `eika_construction`) reports the following LTM figures (in €):\n\n- **Revenue (LTM)**: €71.17M  \n- **EBITDA (LTM)**: €16.64M  \n\n(Note: “Profit” in this context is interpreted as EBITDA, the standard PE profitability metric. Net income is not available in the current data snapshot.)",
+  "response_length": 314,
+  "tools_called": [
+    "search_companies"
+  ],
+  "contains_match": true,
+  "passed": true,
+  "error": null
+}

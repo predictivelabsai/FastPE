@@ -1,0 +1,9 @@
+{
+  "id": "tc20",
+  "prompt": "ops: build a 100-day plan for Kardiolita post-close",
+  "expected_agent": "physical_condition",
+  "routed_agent": "physical_condition",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

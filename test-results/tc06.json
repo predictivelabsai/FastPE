@@ -1,0 +1,9 @@
+{
+  "id": "tc06",
+  "prompt": "outreach: draft an intro email to the founder of DR VET",
+  "expected_agent": "outreach_email",
+  "routed_agent": "outreach_email",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

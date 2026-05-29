@@ -1,0 +1,19 @@
+{
+  "id": "tc27",
+  "prompt": "ltm: what is the EBITDA margin of Kardiolita?",
+  "expected_agent": "t12_normalizer",
+  "expected_contains": "margin",
+  "timestamp": "2026-05-29T21:35:34.540930",
+  "routed_agent": "t12_normalizer",
+  "route_match": true,
+  "elapsed_s": 11.0,
+  "response": "**Kardiolita, UAB (slug: kardiolita)** has an **LTM Adj. EBITDA margin of 36.9%**.\n\n### Key LTM figures (EUR)\n- **LTM Revenue**: €34.48M  \n- **LTM EBITDA / Adj. EBITDA**: €12.73M  \n- **LTM EBITDA margin**: **36.9%** (no add-backs applied)  \n- **LTM growth**: +18.5%\n\nNo normalization adjustments were needed; reported EBITDA equals Adj. EBITDA.",
+  "response_length": 344,
+  "tools_called": [
+    "search_companies",
+    "normalize_ltm"
+  ],
+  "contains_match": true,
+  "passed": true,
+  "error": null
+}

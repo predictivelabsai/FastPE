@@ -1,0 +1,9 @@
+{
+  "id": "tc18",
+  "prompt": "churn: which DR VET customers are at highest renewal risk?",
+  "expected_agent": "tenant_churn",
+  "routed_agent": "tenant_churn",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

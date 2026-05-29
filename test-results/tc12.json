@@ -1,0 +1,9 @@
+{
+  "id": "tc12",
+  "prompt": "ebitda: show me the top 5 portco-wide EBITDA variances",
+  "expected_agent": "opex_variance",
+  "routed_agent": "opex_variance",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

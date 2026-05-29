@@ -1,0 +1,9 @@
+{
+  "id": "tc28",
+  "prompt": "lbo: model DR VET at 10x entry multiple",
+  "expected_agent": "pro_forma_builder",
+  "routed_agent": "pro_forma_builder",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

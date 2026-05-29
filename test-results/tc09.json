@@ -1,0 +1,9 @@
+{
+  "id": "tc09",
+  "prompt": "scan: logistics companies in Lithuania",
+  "expected_agent": "market_scanner",
+  "routed_agent": "market_scanner",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

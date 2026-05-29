@@ -1,0 +1,9 @@
+{
+  "id": "tc04",
+  "prompt": "lbo: build a 5-year model for Kardiolita at 12% growth",
+  "expected_agent": "pro_forma_builder",
+  "routed_agent": "pro_forma_builder",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

@@ -1,6 +1,6 @@
 {
-  "id": "tc02",
-  "prompt": "ltm: what are the financials of DR VET?",
+  "id": "tc03",
+  "prompt": "ltm: normalize Kardiolita financials",
   "expected_agent": "t12_normalizer",
   "routed_agent": "t12_normalizer",
   "route_match": true,

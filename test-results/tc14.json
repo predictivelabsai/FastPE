@@ -1,0 +1,9 @@
+{
+  "id": "tc14",
+  "prompt": "abstract: the top-10 customer contracts for Baltic Transline",
+  "expected_agent": "lease_abstractor",
+  "routed_agent": "lease_abstractor",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

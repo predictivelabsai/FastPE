@@ -1,0 +1,19 @@
+{
+  "id": "tc21",
+  "prompt": "show me financials for Baltic Transline",
+  "expected_agent": "t12_normalizer",
+  "expected_contains": "revenue",
+  "timestamp": "2026-05-29T21:31:46.015132",
+  "routed_agent": "t12_normalizer",
+  "route_match": true,
+  "elapsed_s": 8.6,
+  "response": "**Baltic transline, UAB** (slug: `baltic_transline_uab`)  \nSector: Industrials / Logistics services | HQ: Kaunas, Lithuania\n\n### LTM Financials (Jan 2020 – Dec 2024)\n- **LTM Revenue**: €397.2M  \n- **LTM Reported EBITDA**: €39.2M  \n- **LTM Adj. EBITDA**: €39.2M (no add-backs)  \n- **Adj. EBITDA margin**: 9.87%  \n- **LTM revenue growth**: +1.37%\n\n### Reported → Normalized EBITDA Bridge\n| Metric              | Amount     | Notes |\n|---------------------|------------|-------|\n| Reported EBITDA     | €39.2M    | As provided |\n| Add-backs (total)   | €0         | None identified |\n| **Adj. EBITDA**     | **€39.2M** | 100% of reported |\n\n**Add-back detail**: Zero adjustments. All monthly EBITDA figures equal reported EBITDA (no owner compensation, one-time legal, discontinued operations, or other normalizations applied).\n\n### Key Ratios\n- Adj. EBITDA margin: **9.87%**\n- Revenue growth (LTM): **1.37%**\n\n### Credibility of Add-backs\n**High credibility / no adjustments needed.** The seller provided clean financials with no non-recurring items flagged. The 9.87% margin is therefore directly usable for modeling.",
+  "response_length": 1116,
+  "tools_called": [
+    "search_companies",
+    "normalize_ltm"
+  ],
+  "contains_match": true,
+  "passed": true,
+  "error": null
+}

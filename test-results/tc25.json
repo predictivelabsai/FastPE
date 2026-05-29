@@ -1,0 +1,22 @@
+{
+  "id": "tc25",
+  "prompt": "triage: tell me about DR VET",
+  "expected_agent": "deal_triage",
+  "expected_contains": "go",
+  "timestamp": "2026-05-29T21:37:19.577913",
+  "routed_agent": "deal_triage",
+  "route_match": true,
+  "elapsed_s": 11.9,
+  "response": "**Verdict:** No-Go\n\n**Rationale (3 bullets):**\n- Valuation: 41.7x EV/EBITDA (€11.58M EV on €277k LTM EBITDA) is dramatically above any plausible peer range for veterinary services.\n- Growth/margin quality: 22% revenue growth but only 6% EBITDA margin on €4.63M revenue indicates limited operating leverage and low cash-flow quality.\n- Deal-specific risk: Lithuania-based platform founded 2022/2023 with no transaction comps or sector signals available; seller asking an unrealistic multiple on a small, low-margin asset.\n\n**Next step:** Pull public web search on Lithuanian veterinary M&A multiples and recent exits to confirm valuation reality before any further diligence.",
+  "response_length": 674,
+  "tools_called": [
+    "search_companies",
+    "find_transaction_comps",
+    "fetch_market_signals",
+    "normalize_ltm",
+    "get_company"
+  ],
+  "contains_match": true,
+  "passed": true,
+  "error": null
+}

@@ -1,0 +1,9 @@
+{
+  "id": "tc30",
+  "prompt": "memo: write IC memo for Eika Construction",
+  "expected_agent": "investor_memo",
+  "routed_agent": "investor_memo",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

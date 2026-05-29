@@ -1,0 +1,9 @@
+{
+  "id": "tc11",
+  "prompt": "price: what pricing lift can we capture at Kardiolita?",
+  "expected_agent": "rent_optimization",
+  "routed_agent": "rent_optimization",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

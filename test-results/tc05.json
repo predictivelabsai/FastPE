@@ -1,0 +1,9 @@
+{
+  "id": "tc05",
+  "prompt": "memo: draft the IC memo for Kardiolita",
+  "expected_agent": "investor_memo",
+  "routed_agent": "investor_memo",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

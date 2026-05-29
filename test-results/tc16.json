@@ -1,0 +1,9 @@
+{
+  "id": "tc16",
+  "prompt": "crm: who are the top 10 LPs to reach out to?",
+  "expected_agent": "fundraising_crm",
+  "routed_agent": "fundraising_crm",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

@@ -1,0 +1,9 @@
+{
+  "id": "tc10",
+  "prompt": "vdr: audit the data room for Kardiolita",
+  "expected_agent": "doc_room_auditor",
+  "routed_agent": "doc_room_auditor",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

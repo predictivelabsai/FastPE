@@ -1,0 +1,9 @@
+{
+  "id": "tc15",
+  "prompt": "teaser: build a co-invest teaser for DR VET",
+  "expected_agent": "deal_teaser",
+  "routed_agent": "deal_teaser",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}

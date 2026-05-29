@@ -1,0 +1,9 @@
+{
+  "id": "tc29",
+  "prompt": "outreach: write an email to Baltic Transline management",
+  "expected_agent": "outreach_email",
+  "routed_agent": "outreach_email",
+  "route_match": true,
+  "passed": true,
+  "dry_run": true
+}
