@@ -146,9 +146,39 @@ lithuania:
     - kardiolita
     - kardiolitos_klinikos
 
-# Future:
-# estonia:
-#   name: Estonia
-#   country_code: EE
-#   registry_url: https://ariregister.rik.ee
-#   ...
+estonia:
+  name: Estonia
+  country_code: EE
+  registry_url: https://ssb.ee/en
+  company_url_pattern: "{base}/{reg_code}-{slug}"
+  financials_url_pattern: "{base}/{reg_code}-{slug}/financial-assets-forecasts"
+  search_url_pattern: "{base}/search-results/companies?emtak_list={emtak}"
+  emtak_categories:
+    # Healthcare
+    "86210": {sector: healthcare, sub_sector: "General medical practice"}
+    "86220": {sector: healthcare, sub_sector: "Specialist medical practice"}
+    "86230": {sector: healthcare, sub_sector: "Dental practice"}
+    "75001": {sector: healthcare, sub_sector: "Veterinary clinics"}
+    "46462": {sector: healthcare, sub_sector: "Medical devices wholesale"}
+    # Software / Technology
+    "62011": {sector: software, sub_sector: "Software development"}
+    "62021": {sector: software, sub_sector: "IT consulting"}
+    "63111": {sector: software, sub_sector: "Data processing & hosting"}
+    "61101": {sector: software, sub_sector: "Telecom services"}
+    # Financial services
+    "65111": {sector: financial_services, sub_sector: "Life insurance"}
+    "65121": {sector: financial_services, sub_sector: "Non-life insurance"}
+    "66220": {sector: financial_services, sub_sector: "Insurance brokerage"}
+    # Industrials / Logistics
+    "49411": {sector: industrials, sub_sector: "Road freight transport"}
+    "52291": {sector: industrials, sub_sector: "Freight forwarding"}
+    "52101": {sector: industrials, sub_sector: "Warehousing"}
+    # Business services / Real estate
+    "68201": {sector: business_services, sub_sector: "Real estate rental"}
+    "41201": {sector: business_services, sub_sector: "Construction"}
+    "70221": {sector: business_services, sub_sector: "Management consulting"}
+  must_include:
+    - "12645067"  # Confido
+    - "10810826"  # Medicum
+    - "10412433"  # Fertilitas
+    - "10078457"  # Semetron
