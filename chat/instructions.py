@@ -31,6 +31,7 @@ from db.prompts import (
     get_prompt_versions, get_prompt_version,
 )
 from utils.session import get_currency, currency_symbol
+from utils.i18n import t, get_lang, agent_t
 from chat.routes import _ensure_user, _list_sessions
 from landing.components import TAILWIND_CONFIG, _favicon_links
 
@@ -74,6 +75,7 @@ def _editor_head(title: str) -> Head:
 def instructions_home(sess):
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
+    lang = get_lang(sess)
 
     items = []
     for a in AGENTS:
@@ -84,8 +86,8 @@ def instructions_home(sess):
             Div(
                 Span(a.icon, cls="instr-icon"),
                 Div(
-                    Div(a.name, cls="instr-name"),
-                    Div(a.one_liner, cls="instr-sub"),
+                    Div(agent_t(a.slug, "name", lang), cls="instr-name"),
+                    Div(agent_t(a.slug, "one_liner", lang), cls="instr-sub"),
                 ),
                 Span(f"{size}b" if exists else "missing", cls="instr-size"),
                 cls="instr-row",
@@ -97,27 +99,25 @@ def instructions_home(sess):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess)),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), lang=lang),
         Div(
             Div(
                 Div(
                     Button("☰", cls="mobile-menu-btn", onclick="toggleLeftPane()"),
-                    Span("Instructions", cls="chat-header-title"),
+                    Span(t("instr_title", lang), cls="chat-header-title"),
                     Span("·", cls="chat-header-dot"),
-                    Span(f"{len(AGENTS)} agent prompts", cls="chat-header-agent"),
+                    Span(t("instr_count", lang).format(n=len(AGENTS)), cls="chat-header-agent"),
                     cls="chat-header-left",
                 ),
                 Div(
-                    A("Back to chat", href="/app", cls="back-to-chat-btn"),
+                    A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
                 cls="chat-header",
             ),
             Div(
-                P("Edit the system prompts that drive each agent. Saves write to "
-                  "prompts/system/<slug>.md and are versioned in the database.",
-                  cls="instr-intro"),
-                A("Edit shared PE glossary",
+                P(t("instr_intro", lang), cls="instr-intro"),
+                A(t("instr_shared", lang),
                   href="/app/instructions/__shared__",
                   cls="instr-shared-link"),
                 *items,
@@ -138,11 +138,12 @@ def instructions_home(sess):
 def instruction_edit(sess, slug: str):
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
+    lang = get_lang(sess)
 
     if slug == "__shared__":
         path = SHARED_DIR / "pe_context.md"
-        title = "Shared PE glossary"
-        subtitle = "Prepended to every agent's system prompt"
+        title = t("instr_shared_title", lang)
+        subtitle = t("instr_shared_sub", lang)
     else:
         spec = AGENTS_BY_SLUG.get(slug)
         if not spec:
@@ -160,12 +161,12 @@ def instruction_edit(sess, slug: str):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess)),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), lang=lang),
         Div(
             Div(
                 Div(
                     Button("☰", cls="mobile-menu-btn", onclick="toggleLeftPane()"),
-                    A("← Instructions", href="/app/instructions", cls="back-to-chat-btn"),
+                    A(f"← {t('instr_title', lang)}", href="/app/instructions", cls="back-to-chat-btn"),
                     Span("·", cls="chat-header-dot"),
                     Span(title, cls="chat-header-title"),
                     Span(f"v{vc}", cls="instr-version-badge", id="version-badge") if vc else
@@ -178,11 +179,11 @@ def instruction_edit(sess, slug: str):
                 P(subtitle, cls="instr-sub-big"),
                 # Tab bar
                 Div(
-                    Button("Editor", cls="instr-tab active", id="tab-editor",
+                    Button(t("instr_editor", lang), cls="instr-tab active", id="tab-editor",
                            onclick="switchTab('editor')"),
-                    Button("Markdown", cls="instr-tab", id="tab-markdown",
+                    Button(t("instr_markdown", lang), cls="instr-tab", id="tab-markdown",
                            onclick="switchTab('markdown')"),
-                    Button("History", cls="instr-tab", id="tab-history",
+                    Button(t("instr_history", lang), cls="instr-tab", id="tab-history",
                            onclick="switchTab('history')"),
                     cls="instr-tab-bar",
                 ),
@@ -202,9 +203,9 @@ def instruction_edit(sess, slug: str):
                 # Actions
                 Div(
                     Div(id="save-status", cls="save-status"),
-                    Button("Save", type="button", cls="chat-send instr-save",
+                    Button(t("instr_save", lang), type="button", cls="chat-send instr-save",
                            onclick="savePrompt()"),
-                    A("Cancel", href="/app/instructions", cls="back-to-chat-btn"),
+                    A(t("instr_cancel", lang), href="/app/instructions", cls="back-to-chat-btn"),
                     cls="instr-actions",
                 ),
                 Input(type="hidden", id="instr-slug", value=slug),

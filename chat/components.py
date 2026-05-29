@@ -8,6 +8,8 @@ from fasthtml.common import (
 )
 
 from agents.registry import AGENTS, AGENTS_BY_CATEGORY, CATEGORIES, AGENTS_BY_SLUG
+from utils.i18n import t, agent_t, category_t, js_translations, LANGUAGES
+from utils.version import __version__, __version_date__
 
 
 def message_bubble(role: str, content: str, agent_slug: str | None = None):
@@ -85,7 +87,7 @@ def _render_content(content: str) -> str:
     return "\n".join(out)
 
 
-def welcome_hero():
+def welcome_hero(lang: str = "en"):
     """Empty-state hero with category chips + example prompts."""
     prompts = [
         ("triage: vertical SaaS, €8M EBITDA, 20% growth, €85M ask", "deal_triage"),
@@ -98,9 +100,8 @@ def welcome_hero():
     return Div(
         Div(
             Span("◆", cls="hero-mark"),
-            H1("PEHero", cls="welcome-title"),
-            P("Your Private Equity AI Agent Squad. Type a prompt — the router picks the right specialist.",
-              cls="welcome-sub"),
+            H1(t("chat_welcome_title", lang), cls="welcome-title"),
+            P(t("chat_welcome_sub", lang), cls="welcome-sub"),
             cls="welcome-head",
         ),
         Div(
@@ -117,7 +118,7 @@ def welcome_hero():
     )
 
 
-def agent_browser():
+def agent_browser(lang: str = "en"):
     """Left-pane browser of all 22 agents, grouped by category."""
     groups = []
     for cat in CATEGORIES:
@@ -125,18 +126,18 @@ def agent_browser():
         buttons = [
             Button(
                 Span(a.icon, cls="aitem-icon"),
-                Span(a.name, cls="aitem-name"),
+                Span(agent_t(a.slug, "name", lang), cls="aitem-name"),
                 Span(a.prefix, cls="aitem-prefix"),
                 cls="agent-item",
                 onclick=f"fillChat({a.prefix + ' '!r})",
-                title=a.one_liner,
+                title=agent_t(a.slug, "one_liner", lang),
             )
             for a in agents
         ]
         groups.append(Div(
             Button(
                 Span(cat["icon"], cls="cat-icon"),
-                Span(cat["name"], cls="cat-name"),
+                Span(category_t(cat["key"], "name", lang), cls="cat-name"),
                 Span(f"{len(agents)}", cls="cat-count"),
                 Span("▸", cls="cat-arrow"),
                 cls="cat-toggle",
@@ -149,14 +150,14 @@ def agent_browser():
     return Div(*groups, cls="agent-browser")
 
 
-def sessions_list(sessions: list[dict], current_sid: str = ""):
+def sessions_list(sessions: list[dict], current_sid: str = "", lang: str = "en"):
     """Renders the left-pane session history."""
     if not sessions:
-        return Div(P("No sessions yet — send a message to start.", cls="sessions-empty"))
+        return Div(P(t("chat_no_sessions", lang), cls="sessions-empty"))
     items = []
     for s in sessions:
         is_active = str(s["id"]) == str(current_sid)
-        title = s.get("title") or "Untitled session"
+        title = s.get("title") or t("chat_untitled", lang)
         items.append(Button(
             Span(cls=f"chat-dot{' active' if is_active else ''}"),
             Span(title[:48] + ("…" if len(title) > 48 else ""), cls="chat-session-title"),
@@ -166,7 +167,7 @@ def sessions_list(sessions: list[dict], current_sid: str = ""):
     return Div(*items, cls="session-list")
 
 
-def _config_section(current_currency: str = "EUR"):
+def _config_section(current_currency: str = "EUR", lang: str = "en"):
     """Configuration: currency selector (EUR default) + Integrations submenu."""
     from utils.session import CURRENCIES, SYMBOLS
     from utils.config import settings
@@ -209,14 +210,14 @@ def _config_section(current_currency: str = "EUR"):
 
     return Div(
         # Currency block
-        Div(Span("Currency", cls="cfg-label"),
-            Span("affects agents + displays", cls="cfg-help"),
+        Div(Span(t("cfg_currency", lang), cls="cfg-label"),
+            Span(t("cfg_currency_help", lang), cls="cfg-help"),
             cls="cfg-row"),
         Div(*pills, cls="cfg-pills"),
         # Integrations submenu
         Button(
             Span("▸", cls="cfg-arrow"),
-            Span("Integrations", cls="cfg-label"),
+            Span(t("cfg_integrations", lang), cls="cfg-label"),
             Span(f"{sum(1 for i in integrations if i[3])}/{len(integrations)}",
                  cls="cfg-count"),
             cls="cfg-integrations-toggle",
@@ -228,11 +229,11 @@ def _config_section(current_currency: str = "EUR"):
     )
 
 
-def _bottom_nav(current_path: str = ""):
+def _bottom_nav(current_path: str = "", lang: str = "en"):
     items = [
-        ("Pipeline",     "/app/pipeline",     "◆"),
-        ("Instructions", "/app/instructions", "✎"),
-        ("Analytics",    "/app/analytics",    "∑"),
+        (t("chat_pipeline", lang),     "/app/pipeline",     "◆"),
+        (t("chat_instructions", lang), "/app/instructions", "✎"),
+        (t("chat_analytics", lang),    "/app/analytics",    "∑"),
     ]
     links = []
     for label, href, icon in items:
@@ -247,17 +248,17 @@ def _bottom_nav(current_path: str = ""):
 
 
 def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str = "",
-              current_path: str = "", current_currency: str = "EUR"):
+              current_path: str = "", current_currency: str = "EUR", lang: str = "en"):
     """The full left pane composition."""
     signin_block = (
         Div(
             Span("◇", cls="user-mark"),
             Span(user_email, cls="user-email"),
-            Button("Sign out", cls="sign-out-btn", onclick="signOut()"),
+            Button(t("chat_sign_out", lang), cls="sign-out-btn", onclick="signOut()"),
             cls="signed-in-bar",
         )
         if user_email else
-        Button(Span("◇", cls="user-mark"), Span("Sign in", cls="sign-in-text"),
+        Button(Span("◇", cls="user-mark"), Span(t("chat_sign_in", lang), cls="sign-in-text"),
                cls="sign-in-btn", onclick="showSignIn()")
     )
 
@@ -265,32 +266,33 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
         Div(
             A(Span("◆", cls="brand-mark"), Span("PEHero"),
               href="/", cls="brand-link"),
-            Span("Beta", cls="brand-badge"),
+            Span(t("chat_beta", lang), cls="brand-badge"),
+            Span(f"v{__version__}", cls="brand-version"),
             cls="left-header",
         ),
         Div(
             Div(
-                Button("+ New chat", cls="new-chat-btn", onclick="newChat()"),
-                Div(Span("Sessions", cls="section-label")),
-                sessions_list(sessions, current_sid),
+                Button(t("chat_new", lang), cls="new-chat-btn", onclick="newChat()"),
+                Div(Span(t("chat_sessions", lang), cls="section-label")),
+                sessions_list(sessions, current_sid, lang=lang),
                 cls="sessions-section",
             ),
             Hr(cls="left-hr"),
             Div(
-                Div(Span("Agents", cls="section-label")),
-                agent_browser(),
+                Div(Span(t("chat_agents", lang), cls="section-label")),
+                agent_browser(lang=lang),
                 cls="agents-section",
             ),
             Hr(cls="left-hr"),
             Div(
-                Div(Span("Workspace", cls="section-label")),
-                _bottom_nav(current_path),
+                Div(Span(t("chat_workspace", lang), cls="section-label")),
+                _bottom_nav(current_path, lang=lang),
                 cls="workspace-section",
             ),
             Hr(cls="left-hr"),
             Div(
-                Div(Span("Configuration", cls="section-label")),
-                _config_section(current_currency=current_currency),
+                Div(Span(t("chat_config", lang), cls="section-label")),
+                _config_section(current_currency=current_currency, lang=lang),
                 cls="config-wrap",
             ),
             cls="left-body",
@@ -300,7 +302,7 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
     )
 
 
-def sample_cards(current_agent_slug: str | None = None):
+def sample_cards(current_agent_slug: str | None = None, lang: str = "en"):
     """Gemini-style contextual sample-question cards below the chat input.
 
     Renders the current agent's example_prompts (or a curated 6-pack when no
@@ -310,7 +312,7 @@ def sample_cards(current_agent_slug: str | None = None):
     if current_agent_slug and current_agent_slug in AGENTS_BY_SLUG:
         agent = AGENTS_BY_SLUG[current_agent_slug]
         prompts = list(agent.example_prompts[:6])
-        label = f"Try with {agent.name}"
+        label = t("js_try_with", lang) + agent_t(agent.slug, "name", lang)
     else:
         prompts = [
             "triage: vertical SaaS, €8M EBITDA, 20% growth, €85M ask",
@@ -320,7 +322,7 @@ def sample_cards(current_agent_slug: str | None = None):
             "vdr: audit the data room for Meridian Healthcare",
             "crm: top 10 LPs to reach out to for Fund V",
         ]
-        label = "Try a prompt"
+        label = t("js_try_prompt", lang)
 
     chips = [
         Button(
@@ -342,18 +344,28 @@ def sample_cards(current_agent_slug: str | None = None):
     )
 
 
-def center_pane(*, messages: list[dict], current_agent_slug: str | None = None, readonly: bool = False):
+def center_pane(*, messages: list[dict], current_agent_slug: str | None = None,
+                readonly: bool = False, lang: str = "en"):
     has_messages = bool(messages)
     bubbles = [message_bubble(m["role"], m["content"], m.get("agent_slug")) for m in messages]
 
-    input_placeholder = "Ask anything — or type a prefix like `triage:`, `memo:`, `pf:`"
+    input_placeholder = t("chat_placeholder", lang)
 
     # Embed all agents' example_prompts as JSON for the client so we can
     # refresh sample cards without a round-trip whenever the router picks a
     # different slug.
     import json
     prompts_lookup = {a.slug: list(a.example_prompts[:6]) for a in AGENTS}
-    names_lookup = {a.slug: a.name for a in AGENTS}
+    names_lookup = {a.slug: agent_t(a.slug, "name", lang) for a in AGENTS}
+
+    # Language flag buttons for the header
+    flag_buttons = []
+    for code, info in LANGUAGES.items():
+        active = "active" if code == lang else ""
+        flag_buttons.append(
+            Button(info["flag"], cls=f"lang-flag-btn {active}",
+                   onclick=f"setLang({code!r})", title=info["native"]),
+        )
 
     return Div(
         Div(
@@ -362,25 +374,27 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None, 
                 Span("PEHero", cls="chat-header-title"),
                 Span("·", cls="chat-header-dot"),
                 Span(
-                    AGENTS_BY_SLUG[current_agent_slug].name if current_agent_slug and current_agent_slug in AGENTS_BY_SLUG else "Auto-routed",
+                    agent_t(current_agent_slug, "name", lang) if current_agent_slug and current_agent_slug in AGENTS_BY_SLUG else t("chat_auto_routed", lang),
                     cls="chat-header-agent",
                     id="current-agent-label",
                 ),
                 cls="chat-header-left",
             ),
             Div(
-                Button("Copy chat", id="copy-chat-btn", cls="chat-action-btn",
+                *flag_buttons,
+                Span("·", cls="chat-header-dot"),
+                Button(t("chat_copy", lang), id="copy-chat-btn", cls="chat-action-btn",
                        onclick="copyChat()"),
-                Button("Share", id="share-chat-btn", cls="chat-action-btn",
+                Button(t("chat_share", lang), id="share-chat-btn", cls="chat-action-btn",
                        onclick="shareChat()"),
-                Button("Canvas", id="artifact-btn", cls="artifact-toggle-btn",
+                Button(t("chat_canvas", lang), id="artifact-btn", cls="artifact-toggle-btn",
                        onclick="toggleArtifactPane()"),
                 cls="chat-header-actions",
             ),
             cls="chat-header",
         ),
         Div(*bubbles, id="messages", cls="messages"),
-        welcome_hero() if not has_messages else Div(id="welcome-hero", style="display:none"),
+        welcome_hero(lang=lang) if not has_messages else Div(id="welcome-hero", style="display:none"),
         *([] if readonly else [
             Form(
                 Textarea(
@@ -391,25 +405,26 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None, 
                     onkeydown="handleKey(event)",
                     oninput="autoResize(this); onInputChange(this)",
                 ),
-                Button("Send", type="submit", cls="chat-send", id="send-btn"),
+                Button(t("chat_send", lang), type="submit", cls="chat-send", id="send-btn"),
                 id="chat-form",
                 cls="chat-form",
                 onsubmit="sendMessage(event)",
             ),
-            sample_cards(current_agent_slug),
+            sample_cards(current_agent_slug, lang=lang),
         ]),
-        # JSON blob the client reads to re-render sample cards per-agent
+        # JSON blobs the client reads
         NotStr(f'<script id="agent-prompts-data" type="application/json">{json.dumps(prompts_lookup)}</script>'),
         NotStr(f'<script id="agent-names-data" type="application/json">{json.dumps(names_lookup)}</script>'),
+        NotStr(f'<script id="i18n-data" type="application/json">{json.dumps(js_translations(lang))}</script>'),
         cls="center-pane",
     )
 
 
-def right_pane():
+def right_pane(lang: str = "en"):
     """Canvas pane — starts empty; filled by SSE artifact_show events."""
     return Div(
         Div(
-            Div(H3("Canvas", cls="right-title"),
+            Div(H3(t("chat_canvas", lang), cls="right-title"),
                 Span("", id="artifact-subtitle", cls="right-subtitle"),
                 cls="right-header-left"),
             Button("✕", cls="right-close", onclick="toggleArtifactPane()"),
@@ -418,8 +433,7 @@ def right_pane():
         Div(
             Div(
                 Div("◈", cls="artifact-empty-icon"),
-                P("Canvas renders here as agents produce them — company briefs, LBO models, comps tables, IC memo previews, RAG citations.",
-                  cls="artifact-empty-text"),
+                P(t("chat_canvas_empty", lang), cls="artifact-empty-text"),
                 id="artifact-empty",
                 cls="artifact-empty",
             ),
@@ -430,14 +444,14 @@ def right_pane():
     )
 
 
-def signin_overlay():
+def signin_overlay(lang: str = "en"):
     return Div(
         Div(
-            H3("Sign in to PEHero"),
-            P("Email only — we'll send a confirmation later.", cls="signin-sub"),
+            H3(t("chat_signin_title", lang)),
+            P(t("chat_signin_sub", lang), cls="signin-sub"),
             Input(type="email", id="signin-email", placeholder="you@firm.com",
                   onkeydown="if(event.key==='Enter')doSignIn()"),
-            Button("Continue →", onclick="doSignIn()"),
+            Button(t("chat_signin_btn", lang), onclick="doSignIn()"),
             cls="signin-box",
         ),
         cls="signin-overlay", id="signin-overlay",

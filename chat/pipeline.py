@@ -22,6 +22,7 @@ from chat.components import (
 )
 from chat.layout import _versioned
 from utils.session import get_currency, currency_symbol
+from utils.i18n import t, get_lang
 from chat.routes import _ensure_user, _list_sessions, _ensure_session, _session_messages
 from db import connect, fetch_all, fetch_one
 from landing.components import TAILWIND_CONFIG, _favicon_links
@@ -138,6 +139,7 @@ def _board(companies_by_stage: dict[str, list[dict]], sym: str = "€") -> Div:
 def pipeline_home(sess, sector: str = "", ownership: str = ""):
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
+    lang = get_lang(sess)
 
     sql = ["SELECT * FROM pehero.companies WHERE TRUE"]
     params: list = []
@@ -155,7 +157,7 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
     sectors = sorted({r["sector"] for r in rows if r["sector"]})
 
     filters = Div(
-        A("All", href="/app/pipeline",
+        A(t("pipe_all", lang), href="/app/pipeline",
           cls=f"filter-chip{' active' if not sector and not ownership else ''}"),
         *[A(s.replace("_", " ").title(),
              href=f"/app/pipeline?sector={s}",
@@ -171,18 +173,18 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess)),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), lang=lang),
         Div(
             Div(
                 Div(
                     Button("☰", cls="mobile-menu-btn", onclick="toggleLeftPane()"),
-                    Span("Pipeline", cls="chat-header-title"),
+                    Span(t("pipe_title", lang), cls="chat-header-title"),
                     Span("·", cls="chat-header-dot"),
-                    Span(f"{len(rows)} companies", cls="chat-header-agent"),
+                    Span(t("pipe_companies", lang).format(n=len(rows)), cls="chat-header-agent"),
                     cls="chat-header-left",
                 ),
                 Div(
-                    A("Back to chat", href="/app", cls="back-to-chat-btn"),
+                    A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
                 cls="chat-header",
@@ -194,13 +196,14 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
         Script(src=_versioned("chat.js")),
         cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
     )
-    return Html(_pipeline_head("Pipeline"), body, lang="en")
+    return Html(_pipeline_head(t("pipe_title", lang)), body, lang=lang)
 
 
 @rt("/app/pipeline/{slug}")
 def deal_detail(sess, slug: str):
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
+    lang = get_lang(sess)
 
     co = fetch_one("SELECT * FROM pehero.companies WHERE slug = %s", (slug,))
     if not co:

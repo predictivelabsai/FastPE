@@ -11,6 +11,7 @@
     // Agent-prompt lookup table — embedded by the server in a <script id="agent-prompts-data">.
     const AGENT_PROMPTS = readJsonScript("agent-prompts-data") || {};
     const AGENT_NAMES = readJsonScript("agent-names-data") || {};
+    const I18N = readJsonScript("i18n-data") || {};
 
     function readJsonScript(id) {
         const el = document.getElementById(id);
@@ -97,16 +98,16 @@
             const toolbar = document.createElement("div");
             toolbar.className = "table-toolbar";
             const copyBtn = document.createElement("button");
-            copyBtn.textContent = "Copy CSV";
+            copyBtn.textContent = I18N.copy_csv || "Copy CSV";
             copyBtn.className = "table-action-btn";
             copyBtn.onclick = () => {
                 navigator.clipboard.writeText(tableToCSV(table)).then(() => {
-                    copyBtn.textContent = "Copied!";
-                    setTimeout(() => { copyBtn.textContent = "Copy CSV"; }, 1500);
+                    copyBtn.textContent = I18N.copied || "Copied!";
+                    setTimeout(() => { copyBtn.textContent = I18N.copy_csv || "Copy CSV"; }, 1500);
                 });
             };
             const dlBtn = document.createElement("button");
-            dlBtn.textContent = "Download CSV";
+            dlBtn.textContent = I18N.download_csv || "Download CSV";
             dlBtn.className = "table-action-btn";
             dlBtn.onclick = () => {
                 const blob = new Blob([tableToCSV(table)], { type: "text/csv" });
@@ -133,16 +134,18 @@
             timerId: null,
         };
         thinker.el.className = "thinking-indicator";
-        thinker.el.innerHTML = `<span class="dot"></span><span class="label">Thinking… <span class="secs">0s</span></span>`;
+        thinker.el.innerHTML = `<span class="dot"></span><span class="label">${I18N.thinking || "Thinking… "}<span class="secs">0s</span></span>`;
         bubble.parentElement.insertBefore(thinker.el, bubble);
         thinker.timerId = setInterval(updateThinking, 500);
     }
     function updateThinking() {
         if (!thinker) return;
         const secs = Math.floor((Date.now() - thinker.started) / 1000);
+        const thinkText = I18N.thinking || "Thinking… ";
+        const callText = I18N.calling || "calling ";
         const label = thinker.tool
-            ? `Thinking… <span class="secs">${secs}s</span> · calling <code>${thinker.tool}</code>`
-            : `Thinking… <span class="secs">${secs}s</span>`;
+            ? `${thinkText}<span class="secs">${secs}s</span> · ${callText}<code>${thinker.tool}</code>`
+            : `${thinkText}<span class="secs">${secs}s</span>`;
         thinker.el.querySelector(".label").innerHTML = label;
     }
     function setThinkingTool(name) {
@@ -185,8 +188,8 @@
         });
         if (label) {
             label.innerHTML = slug && AGENT_NAMES[slug]
-                ? `<span class="sample-cards-label">Try with ${AGENT_NAMES[slug]}</span>`
-                : `<span class="sample-cards-label">Try a prompt</span>`;
+                ? `<span class="sample-cards-label">${I18N.try_with || "Try with "}${AGENT_NAMES[slug]}</span>`
+                : `<span class="sample-cards-label">${I18N.try_prompt || "Try a prompt"}</span>`;
         }
     };
 
@@ -263,16 +266,16 @@
         const row = document.createElement("div");
         row.className = "memo-preview-row";
         row.innerHTML = `
-            <button class="memo-preview-btn">📄 Preview PDF</button>
-            <button class="memo-download-btn" style="display:none">⬇ Download PDF</button>`;
+            <button class="memo-preview-btn">${I18N.preview_pdf || "📄 Preview PDF"}</button>
+            <button class="memo-download-btn" style="display:none">${I18N.download_pdf || "⬇ Download PDF"}</button>`;
         bubble.parentElement.appendChild(row);
         const previewBtn = row.querySelector(".memo-preview-btn");
         const dlBtn = row.querySelector(".memo-download-btn");
         previewBtn.onclick = async () => {
-            previewBtn.disabled = true; previewBtn.textContent = "Rendering…";
+            previewBtn.disabled = true; previewBtn.textContent = I18N.rendering || "Rendering…";
             try {
                 const data = await renderMemoPdf(text, docTitle);
-                previewBtn.textContent = "✓ Open PDF";
+                previewBtn.textContent = I18N.open_pdf || "✓ Open PDF";
                 dlBtn.style.display = "inline-flex";
                 dlBtn.onclick = () => {
                     const a = document.createElement("a");
@@ -281,7 +284,7 @@
                     a.click();
                 };
             } catch (e) {
-                previewBtn.textContent = "Render failed";
+                previewBtn.textContent = I18N.render_failed || "Render failed";
                 console.error(e);
             }
         };
@@ -315,8 +318,8 @@
         row.className = "followup-row";
         row.innerHTML = `
             <div class="followup-prompt">${escapeHtml(action)}</div>
-            <button class="followup-btn followup-yes">Yes, do that</button>
-            <button class="followup-btn followup-no">No thanks</button>
+            <button class="followup-btn followup-yes">${I18N.yes_do || "Yes, do that"}</button>
+            <button class="followup-btn followup-no">${I18N.no_thanks || "No thanks"}</button>
         `;
         bubble.parentElement.appendChild(row);
         row.querySelector(".followup-yes").onclick = () => {
@@ -362,7 +365,7 @@
 
         const resp = await fetch("/app/chat", { method: "POST", body });
         if (!resp.ok) {
-            addBubble("assistant", "Error: " + resp.status);
+            addBubble("assistant", (I18N.error_prefix || "Error: ") + resp.status);
             streaming = false; $("#send-btn").disabled = false;
             return;
         }
@@ -407,7 +410,7 @@
                     } else if (type === "error") {
                         hideThinking();
                         if (!bubble) bubble = addBubble("assistant", "", "");
-                        bubble.textContent = "Error: " + (payload.message || "unknown");
+                        bubble.textContent = (I18N.error_prefix || "Error: ") + (payload.message || "unknown");
                     } else if (type === "session") {
                         if (payload.sid) setSid(payload.sid);
                     } else if (type === "done") {
@@ -444,7 +447,7 @@
         $("#artifact-subtitle").textContent = payload.subtitle || "";
         const card = document.createElement("div");
         card.className = "artifact-card";
-        const title = payload.title || "Canvas";
+        const title = payload.title || (I18N.canvas || "Canvas");
         const kind = payload.kind || "note";
         card.innerHTML = `
             <div class="meta">${kind}</div>
@@ -461,7 +464,7 @@
 
     function renderArtifactHTML(p) {
         if (p.kind === "table" && Array.isArray(p.rows)) {
-            if (!p.rows.length) return "<p><em>No rows.</em></p>";
+            if (!p.rows.length) return `<p><em>${I18N.no_rows || "No rows."}</em></p>`;
             const cols = p.columns || Object.keys(p.rows[0]);
             const head = "<tr>" + cols.map(c => `<th>${c}</th>`).join("") + "</tr>";
             const body = p.rows.map(r => "<tr>" + cols.map(c => `<td>${formatCell(r[c])}</td>`).join("") + "</tr>").join("");
@@ -536,6 +539,13 @@
         const r = await fetch("/app/auth/signin", { method: "POST", body: new URLSearchParams({ email }) });
         if (r.ok) window.location.reload();
     };
+    window.setLang = async (code) => {
+        const r = await fetch("/app/config", {
+            method: "POST",
+            body: new URLSearchParams({ lang: code }),
+        });
+        if (r.ok) window.location.reload();
+    };
     window.setCurrency = async (code) => {
         const r = await fetch("/app/config", {
             method: "POST",
@@ -559,20 +569,20 @@
         const msgs = document.querySelectorAll(".msg");
         const lines = [];
         msgs.forEach(m => {
-            const role = m.classList.contains("msg-user") ? "You" : "PEHero";
+            const role = m.classList.contains("msg-user") ? (I18N.you || "You") : (I18N.pehero || "PEHero");
             const bubble = m.querySelector(".msg-bubble");
             if (bubble) lines.push(`${role}: ${bubble.textContent.trim()}`);
         });
         const text = lines.join("\n\n");
         navigator.clipboard.writeText(text).then(() => {
             const btn = document.getElementById("copy-chat-btn");
-            if (btn) { btn.textContent = "Copied!"; setTimeout(() => { btn.textContent = "Copy chat"; }, 1500); }
+            if (btn) { btn.textContent = I18N.copied || "Copied!"; setTimeout(() => { btn.textContent = I18N.copy_chat || "Copy chat"; }, 1500); }
         });
     };
     window.shareChat = async () => {
         const btn = document.getElementById("share-chat-btn");
         if (!currentSessionId) {
-            if (btn) { btn.textContent = "No session"; setTimeout(() => { btn.textContent = "Share"; }, 1500); }
+            if (btn) { btn.textContent = I18N.no_session || "No session"; setTimeout(() => { btn.textContent = I18N.share || "Share"; }, 1500); }
             return;
         }
         try {
@@ -584,13 +594,13 @@
             if (data.ok && data.url) {
                 const url = window.location.origin + data.url;
                 await navigator.clipboard.writeText(url);
-                if (btn) { btn.textContent = "Link copied!"; setTimeout(() => { btn.textContent = "Share"; }, 1500); }
+                if (btn) { btn.textContent = I18N.link_copied || "Link copied!"; setTimeout(() => { btn.textContent = I18N.share || "Share"; }, 1500); }
             } else {
-                if (btn) { btn.textContent = "Error"; setTimeout(() => { btn.textContent = "Share"; }, 1500); }
+                if (btn) { btn.textContent = I18N.error || "Error"; setTimeout(() => { btn.textContent = I18N.share || "Share"; }, 1500); }
             }
         } catch (e) {
             console.error("share failed", e);
-            if (btn) { btn.textContent = "Error"; setTimeout(() => { btn.textContent = "Share"; }, 1500); }
+            if (btn) { btn.textContent = I18N.error || "Error"; setTimeout(() => { btn.textContent = I18N.share || "Share"; }, 1500); }
         }
     };
 

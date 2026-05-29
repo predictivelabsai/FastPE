@@ -17,6 +17,24 @@ from utils.llm import build_llm
 log = logging.getLogger(__name__)
 
 
+# ── Language-intent pre-filter ─────────────────────────────────────────
+_LANG_NAMES = r"(?:lithuanian|english|lietuviškai|angliškai|lietuvių|anglų)"
+_LANG_INTENT_RE = re.compile(
+    rf"\b(?:write|respond|reply|translate|switch|change|speak|answer|draft)\b.*\b(?:in|to|into)\s+{_LANG_NAMES}\b",
+    re.IGNORECASE,
+)
+_LANG_ONLY_RE = re.compile(
+    rf"^(?:can you |please |could you )?(?:write|respond|reply|translate|switch|change|speak|answer|draft)"
+    rf".*\b(?:in|to|into)\s+{_LANG_NAMES}\b[?.!]?\s*$",
+    re.IGNORECASE,
+)
+
+
+def is_language_intent(message: str) -> bool:
+    """Return True if the message is primarily about switching language."""
+    return bool(_LANG_ONLY_RE.search(message))
+
+
 # Keyword hints per category. Tuned to be specific enough to avoid false
 # positives on generic terms like "deal" or "revenue".
 CATEGORY_HINTS: dict[str, list[str]] = {

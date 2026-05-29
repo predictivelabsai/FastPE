@@ -27,6 +27,7 @@ from app import rt
 from chat.components import left_pane, signin_overlay
 from chat.layout import _versioned
 from utils.session import get_currency, currency_symbol
+from utils.i18n import t, get_lang
 from chat.routes import _ensure_user, _list_sessions
 from db import connect
 from landing.components import TAILWIND_CONFIG, _favicon_links
@@ -221,6 +222,7 @@ def _head(title: str) -> Head:
 def analytics_home(sess):
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
+    lang = get_lang(sess)
 
     suggestions = Div(
         *[Button(q, cls="analytics-sugg", onclick=f"runAnalytics({q!r})")
@@ -231,33 +233,31 @@ def analytics_home(sess):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess)),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), lang=lang),
         Div(
             Div(
                 Div(
                     Button("☰", cls="mobile-menu-btn", onclick="toggleLeftPane()"),
-                    Span("Analytics", cls="chat-header-title"),
+                    Span(t("analytics_title", lang), cls="chat-header-title"),
                     Span("·", cls="chat-header-dot"),
-                    Span("Text → SQL → Plotly", cls="chat-header-agent"),
+                    Span(t("analytics_sub", lang), cls="chat-header-agent"),
                     cls="chat-header-left",
                 ),
-                Div(A("Back to chat", href="/app", cls="back-to-chat-btn"),
+                Div(A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions"),
                 cls="chat-header",
             ),
             Div(
                 Div(
-                    H2("Ask a question of your PE database.", cls="text-ink"),
-                    P("Questions are translated to SQL against the pehero schema, run read-only, "
-                      "and rendered as a Plotly chart plus the raw table.",
-                      cls="text-ink-muted"),
+                    H2(t("analytics_h2", lang), cls="text-ink"),
+                    P(t("analytics_body", lang), cls="text-ink-muted"),
                     cls="analytics-hero",
                 ),
                 Form(
                     Input(type="text", id="analytics-q", name="q",
                           placeholder="e.g. EV/EBITDA median by sector over the last 24 months",
                           onkeydown="if(event.key==='Enter'){event.preventDefault();runAnalytics()}"),
-                    Button("Run", type="button", onclick="runAnalytics()"),
+                    Button(t("analytics_run", lang), type="button", onclick="runAnalytics()"),
                     cls="analytics-form",
                 ),
                 suggestions,
@@ -303,7 +303,7 @@ def analytics_home(sess):
         Script(src=_versioned("chat.js")),
         cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
     )
-    return Html(_head("Analytics"), body, lang="en")
+    return Html(_head(t("analytics_title", lang)), body, lang=lang)
 
 
 @rt("/app/analytics/run", methods=["POST"])

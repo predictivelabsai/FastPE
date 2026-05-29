@@ -24,6 +24,7 @@ from utils.llm import default_llm
 from utils.session import (get_user_email, set_user_email, clear_user,
                            get_user_id, set_user_id,
                            get_currency, set_currency, SYMBOLS)
+from utils.i18n import get_lang, set_lang, LANGUAGES
 
 log = logging.getLogger(__name__)
 
@@ -133,6 +134,7 @@ def app_home(sess, sid: str = ""):
         messages=messages,
         current_agent_slug=current_agent,
         current_currency=get_currency(sess),
+        lang=get_lang(sess),
     )
 
 
@@ -162,7 +164,14 @@ async def chat_stream(request: Request):
         set_user_id(sess, uid)
 
     session_id = _ensure_session(uid, sid_str, first_message=user_msg)
-    agent_slug = agent_router.route(user_msg)
+
+    # If the message is purely about switching language, stay on the current agent
+    from agents.router import is_language_intent
+    if is_language_intent(user_msg):
+        row = fetch_one("SELECT agent_slug FROM pehero.chat_sessions WHERE id = %s", (session_id,))
+        agent_slug = (row.get("agent_slug") if row else None) or agent_router.route(user_msg)
+    else:
+        agent_slug = agent_router.route(user_msg)
     spec = by_slug(agent_slug)
 
     # Persist the user message upfront
@@ -175,10 +184,23 @@ async def chat_stream(request: Request):
     # user's preferred currency when formatting figures. Does not affect the
     # stored user message.
     currency = get_currency(sess)
+    lang = get_lang(sess)
+    lang_info = LANGUAGES.get(lang, LANGUAGES["en"])
+
+    lang_directive = ""
+    if lang != "en":
+        lang_directive = (
+            f"\nUser language: {lang} ({lang_info['name']}). "
+            f"Respond in {lang_info['name']}. All agent output including emails, "
+            f"memos, LOIs, and analysis should be in {lang_info['name']} unless "
+            f"the user explicitly requests otherwise."
+        )
+
     currency_directive = (
         f"[Session preferences] Reporting currency: {currency} "
         f"({SYMBOLS.get(currency, '€')}). Format all monetary figures in "
         f"{currency} unless the user explicitly overrides in this turn."
+        f"{lang_directive}"
     )
 
     async def event_stream():
@@ -282,7 +304,12 @@ async def app_config(request: Request):
         current = set_currency(request.session, currency)
     else:
         current = get_currency(request.session)
-    return JSONResponse({"ok": True, "currency": current, "symbol": SYMBOLS.get(current, "€")})
+    lang_code = (form.get("lang") or "").strip()
+    if lang_code:
+        set_lang(request.session, lang_code)
+    current_lang = get_lang(request.session)
+    return JSONResponse({"ok": True, "currency": current, "symbol": SYMBOLS.get(current, "€"),
+                         "lang": current_lang})
 
 
 # ── Share links ────────────────────────────────────────────────────

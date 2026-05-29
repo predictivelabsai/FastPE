@@ -6,25 +6,37 @@ from fasthtml.common import (
     Div, H1, H2, H3, H4, P, Ul, Li, Section, Article, Span, A, Form, Input, Textarea, Label, Button, NotStr,
 )
 
+from starlette.responses import RedirectResponse
+
 from app import rt
 from agents.registry import AGENTS, AGENTS_BY_CATEGORY, AGENTS_BY_SLUG, CATEGORIES
 from landing.components import (
     page, Hero, ProductTour, CategoryPillar, AgentCard, CategorySection, CaseStudyStrip, CTASection,
     Eyebrow, Heading, Body_, Button_, Pill, Section_, SITE_NAME, SITE_TAGLINE,
 )
+from utils.i18n import t, agent_t, category_t, get_lang, set_lang, LANGUAGES
+
+
+# ── Language switch ────────────────────────────────────────────────────
+@rt("/set-lang/{code}")
+def set_language(code: str, sess):
+    if code in LANGUAGES:
+        set_lang(sess, code)
+    return RedirectResponse("/", status_code=303)
 
 
 # ── / ────────────────────────────────────────────────────────────────
 @rt("/")
-def home():
+def home(sess):
+    lang = get_lang(sess)
     pillars = Section_(
         Div(
-            Eyebrow("Five stages, one system"),
-            Heading(2, "Every role your deal team plays — live inside PEHero.", cls="mt-3 max-w-4xl mb-10"),
+            Eyebrow(t("pillars_eyebrow", lang)),
+            Heading(2, t("pillars_heading", lang), cls="mt-3 max-w-4xl mb-10"),
             cls="mb-6",
         ),
         Div(
-            *[CategoryPillar(c) for c in CATEGORIES],
+            *[CategoryPillar(c, lang=lang) for c in CATEGORIES],
             cls="grid md:grid-cols-2 lg:grid-cols-5 gap-4",
         ),
         cls="border-t border-line",
@@ -32,8 +44,8 @@ def home():
 
     how = Section_(
         Div(
-            Eyebrow("How it works"),
-            Heading(2, "Source → Underwrite → Close → Hold.", cls="mt-3 max-w-3xl mb-10"),
+            Eyebrow(t("how_eyebrow", lang)),
+            Heading(2, t("how_heading", lang), cls="mt-3 max-w-3xl mb-10"),
             cls="mb-6",
         ),
         Div(
@@ -43,12 +55,9 @@ def home():
                 P(body, cls="text-ink-muted text-sm leading-relaxed"),
                 cls="p-7 rounded-2xl bg-bg-elevated border border-line h-full",
             ) for (num, title, body) in [
-                ("01", "Source deals that fit your mandate",
-                 "Market Scanner watches PitchBook, Grata, banker feeds, and proprietary founder outreach. Deal Triage returns a go/no-go on each in under 90 seconds against your fund's criteria."),
-                ("02", "Model them in hours, not weeks",
-                 "Cap Table Parser, LTM Normalizer, and LBO Model Builder take seller financials into an IC-ready 5-year model with sensitivity and debt stack — already benchmarked against live transaction comps."),
-                ("03", "Close, raise, and hold with conviction",
-                 "IC Memo Writer, Teaser Designer, LP Update Generator, and Portfolio Ops agents keep every thesis, covenant, and KPI variance in view from signing through exit."),
+                ("01", t("how_01_title", lang), t("how_01_body", lang)),
+                ("02", t("how_02_title", lang), t("how_02_body", lang)),
+                ("03", t("how_03_title", lang), t("how_03_body", lang)),
             ]],
             cls="grid md:grid-cols-3 gap-4",
         ),
@@ -56,43 +65,40 @@ def home():
     )
 
     return page(
-        "Agentic AI for private equity",
-        Hero(),
-        ProductTour(),
+        t("hero_eyebrow", lang),
+        Hero(lang=lang),
+        ProductTour(lang=lang),
         pillars,
         how,
-        CaseStudyStrip(),
-        CTASection(),
+        CaseStudyStrip(lang=lang),
+        CTASection(lang=lang),
         current_path="/",
+        lang=lang,
     )
 
 
 # ── /platform ────────────────────────────────────────────────────────
 @rt("/platform")
-def platform():
+def platform(sess):
+    lang = get_lang(sess)
     return page(
-        "Platform",
+        t("platform_title", lang),
         Section_(
-            Eyebrow("Platform"),
-            Heading(1, "One system. Every stage. All your deal data.", cls="mt-4 max-w-4xl"),
-            P(
-                "PEHero lives where your deal team already works. Twenty-two specialist "
-                "agents share a single model of your pipeline, your portfolio, and your market. "
-                "Each agent has its own tools and prompts — and they pass artifacts between each "
-                "other without the associate re-keying anything.",
-                cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed",
-            ),
+            Eyebrow(t("platform_title", lang)),
+            Heading(1, t("platform_h1", lang), cls="mt-4 max-w-4xl"),
+            P(t("platform_body", lang),
+              cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed"),
             cls="border-t border-line",
         ),
         Section_(
             Div(
                 *[Article(
                     Div(Span(c["icon"], cls="text-accent text-xl"),
-                        Span(f"{len(AGENTS_BY_CATEGORY[c['key']])} agents",
+                        Span(t("agents_count", lang).format(n=len(AGENTS_BY_CATEGORY[c['key']])),
                              cls="ml-auto font-mono text-[11px] tracking-widest uppercase text-ink-dim"),
                         cls="flex items-center mb-4"),
-                    H3(c["name"], cls="text-ink text-xl font-medium mb-2"),
-                    P(c["blurb"], cls="text-ink-muted leading-relaxed"),
+                    H3(category_t(c["key"], "name", lang), cls="text-ink text-xl font-medium mb-2"),
+                    P(category_t(c["key"], "blurb", lang), cls="text-ink-muted leading-relaxed"),
                     cls="p-7 rounded-2xl bg-bg-elevated border border-line h-full",
                 ) for c in CATEGORIES],
                 cls="grid md:grid-cols-2 lg:grid-cols-5 gap-4",
@@ -100,78 +106,81 @@ def platform():
             cls="border-t border-line",
         ),
         Section_(
-            Eyebrow("Under the hood"),
-            Heading(2, "Not a wrapper. A system.", cls="mt-3 max-w-3xl mb-10"),
+            Eyebrow(t("platform_hood", lang)),
+            Heading(2, t("platform_not_wrap", lang), cls="mt-3 max-w-3xl mb-10"),
             Div(
                 *[Article(
                     P(k, cls="text-[11px] font-mono tracking-widest uppercase text-ink-dim mb-3"),
                     P(v, cls="text-ink leading-relaxed"),
                     cls="p-7 rounded-2xl bg-bg-elevated border border-line h-full",
                 ) for (k, v) in [
-                    ("Squad", "A full squad of specialist agents, one per role, sharing a common tool registry and prompt library."),
-                    ("Tools", "70+ StructuredTools that read cap tables, financials, VDR PDFs, and sector comps directly — not through copy-paste."),
-                    ("RAG", "Postgres + pgvector index of every CIM, QoE, MSA, legal DD memo, ESG assessment, and industry report in your deal."),
-                    ("Memory", "Every conversation and every artifact persists, queryable across agents, so Week 3 of diligence still knows what Week 1 agreed."),
+                    ("Squad", t("platform_squad", lang)),
+                    ("Tools", t("platform_tools", lang)),
+                    ("RAG",   t("platform_rag", lang)),
+                    ("Memory", t("platform_memory", lang)),
                 ]],
                 cls="grid md:grid-cols-2 lg:grid-cols-4 gap-4",
             ),
             cls="border-t border-line",
         ),
-        CTASection(),
+        CTASection(lang=lang),
         current_path="/platform",
+        lang=lang,
     )
 
 
 # ── /agents ──────────────────────────────────────────────────────────
 @rt("/agents")
-def agents_page():
+def agents_page(sess):
+    lang = get_lang(sess)
     return page(
-        "Agents",
+        t("nav_agents", lang),
         Section_(
-            Eyebrow("Your Private Equity AI Agent Squad"),
-            Heading(1, "Every role already wired in.", cls="mt-4 max-w-4xl"),
-            P(
-                "Each agent has a narrow remit, deep tooling, and a prefix you can type in the chat "
-                "to call it directly. Or just ask in plain English — the router picks the right one.",
-                cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed",
-            ),
+            Eyebrow(t("agents_eyebrow", lang)),
+            Heading(1, t("agents_h1", lang), cls="mt-4 max-w-4xl"),
+            P(t("agents_body", lang),
+              cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed"),
             cls="border-t border-line",
         ),
-        *[CategorySection(c) for c in CATEGORIES],
-        CTASection(),
+        *[CategorySection(c, lang=lang) for c in CATEGORIES],
+        CTASection(lang=lang),
         current_path="/agents",
+        lang=lang,
     )
 
 
 # ── /agents/<slug> ───────────────────────────────────────────────────
 @rt("/agents/{slug}")
-def agent_detail(slug: str):
+def agent_detail(slug: str, sess):
+    lang = get_lang(sess)
     agent = AGENTS_BY_SLUG.get(slug)
     if agent is None:
         return page(
-            "Agent not found",
+            t("agent_not_found", lang),
             Section_(
-                H1("Not found", cls="text-ink text-3xl"),
-                P("No agent at that URL. See the ", A("full squad", href="/agents", cls="text-accent underline"), ".",
+                H1(t("agent_not_found", lang), cls="text-ink text-3xl"),
+                P(t("agent_no_url", lang), A(t("agent_full_squad", lang), href="/agents", cls="text-accent underline"), ".",
                   cls="text-ink-muted mt-4"),
             ),
             current_path="/agents",
+            lang=lang,
         )
     cat = next(c for c in CATEGORIES if c["key"] == agent.category)
+    agent_name = agent_t(slug, "name", lang)
     return page(
-        f"{agent.name}",
+        agent_name,
         Section_(
             Div(
-                A("← All agents", href="/agents", cls="text-ink-dim text-xs hover:text-accent"),
+                A(t("agent_all", lang), href="/agents", cls="text-ink-dim text-xs hover:text-accent"),
                 cls="mb-6",
             ),
             Div(
                 Span(agent.icon, cls="text-accent text-4xl"),
-                Span(cat["name"], cls="ml-4 font-mono text-[11px] tracking-widest uppercase text-ink-dim"),
+                Span(category_t(cat["key"], "name", lang), cls="ml-4 font-mono text-[11px] tracking-widest uppercase text-ink-dim"),
                 cls="flex items-center mb-4",
             ),
-            Heading(1, agent.name, cls="max-w-4xl"),
-            P(agent.one_liner, cls="mt-5 text-ink-muted text-lg max-w-3xl"),
+            Heading(1, agent_name, cls="max-w-4xl"),
+            P(agent_t(slug, "one_liner", lang), cls="mt-5 text-ink-muted text-lg max-w-3xl"),
             Div(Pill(f"prefix: {agent.prefix}"),
                 Pill(f"category: {cat['key']}"),
                 cls="mt-6 flex flex-wrap gap-2"),
@@ -180,12 +189,12 @@ def agent_detail(slug: str):
         Section_(
             Div(
                 Div(
-                    Eyebrow("What it does"),
+                    Eyebrow(t("agent_what", lang)),
                     P(agent.description, cls="mt-4 text-ink leading-relaxed"),
                     cls="md:col-span-2",
                 ),
                 Div(
-                    Eyebrow("Example prompts"),
+                    Eyebrow(t("agent_examples", lang)),
                     Ul(
                         *[Li(
                             Div(f'"{p}"', cls="px-4 py-3 rounded-xl bg-bg-elevated border border-line text-sm text-ink leading-relaxed"),
@@ -199,21 +208,23 @@ def agent_detail(slug: str):
             ),
             cls="border-t border-line",
         ),
-        CTASection(headline=f"Try {agent.name} now.",
-                   body="BYOD — bring your own deal data and try the example prompt above against it.",
-                   cta_label="Open the app", cta_href="/app"),
+        CTASection(headline=t("agent_try", lang).format(name=agent_name),
+                   body=t("agent_try_body", lang),
+                   cta_label=t("hero_cta_open", lang), cta_href="/app", lang=lang),
         current_path="/agents",
+        lang=lang,
     )
 
 
 # ── /how-it-works ────────────────────────────────────────────────────
 @rt("/how-it-works")
-def how_it_works():
+def how_it_works(sess):
+    lang = get_lang(sess)
     return page(
-        "How it works",
+        t("hiw_title", lang),
         Section_(
-            Eyebrow("How it works"),
-            Heading(1, "From teaser to signed SPA — in one system.", cls="mt-4 max-w-4xl"),
+            Eyebrow(t("hiw_title", lang)),
+            Heading(1, t("hiw_h1", lang), cls="mt-4 max-w-4xl"),
             cls="border-t border-line",
         ),
         *[Section_(
@@ -226,90 +237,71 @@ def how_it_works():
             Div(*[Pill(name) for name in agents], cls="flex flex-wrap gap-2"),
             cls="border-t border-line",
         ) for (num, title, body, agents) in [
-            ("01 — Source",
-             "Surface the right deals faster than the next MD.",
-             "Market Scanner watches PitchBook, Grata, banker feeds, and off-market founder-intent signals. Deal Triage returns a go/no-go in under 90 seconds. Transaction Comps tightens multiple benchmarks before you sign an NDA.",
+            (t("hiw_01_num", lang), t("hiw_01_title", lang), t("hiw_01_body", lang),
              ["Market Scanner", "Deal Triage", "Transaction Comps", "Owner Intent"]),
-            ("02 — Underwrite",
-             "Seller financials to IC-ready LBO in under an hour.",
-             "Cap Table Parser and LTM Normalizer ingest whatever format the banker sends. LBO Model Builder produces a 5-year model with sensitivity. Debt Stack Modeler sizes the capital structure. Return Metrics outputs IRR, MOIC, and the value-creation bridge.",
+            (t("hiw_02_num", lang), t("hiw_02_title", lang), t("hiw_02_body", lang),
              ["Cap Table Parser", "LTM Normalizer", "LBO Model Builder", "Debt Stack Modeler", "Return Metrics"]),
-            ("03 — Diligence",
-             "No surprises at signing.",
-             "VDR Auditor checks the seller data room against a 140-item PE checklist. Contract Abstractor reads every MSA. Legal & Regulatory, Operational Diligence, and ESG agents flag material issues with page-level citations.",
+            (t("hiw_03_num", lang), t("hiw_03_title", lang), t("hiw_03_body", lang),
              ["VDR Auditor", "Contract Abstractor", "Legal & Regulatory", "Operational Diligence", "ESG Risk"]),
-            ("04 — Raise",
-             "LP material your chair will actually sign.",
-             "IC Memo Writer drafts the investment-committee memo from your own data. Teaser Designer produces a 2-page blind teaser for co-invest distribution. LP Update Generator writes the quarterly letter. Fundraising CRM Copilot ranks prospects and drafts outreach.",
+            (t("hiw_04_num", lang), t("hiw_04_title", lang), t("hiw_04_body", lang),
              ["IC Memo Writer", "Teaser Designer", "LP Update Generator", "Fundraising CRM Copilot"]),
-            ("05 — Hold & Grow",
-             "Post-close, the agents stay on.",
-             "Pricing Optimization recommends increases at renewal. EBITDA Variance Watcher flags monthly drift. Value Creation Prioritizer ranks VCP initiatives by ROI. Customer Churn Predictor scores renewal risk across the ARR base.",
+            (t("hiw_05_num", lang), t("hiw_05_title", lang), t("hiw_05_body", lang),
              ["Pricing Optimization", "EBITDA Variance Watcher", "Value Creation Prioritizer", "Customer Churn Predictor"]),
         ]],
-        CTASection(),
+        CTASection(lang=lang),
         current_path="/how-it-works",
+        lang=lang,
     )
 
 
 # ── /pricing ─────────────────────────────────────────────────────────
 @rt("/pricing")
-def pricing():
+def pricing(sess):
+    lang = get_lang(sess)
     tiers = [
         {
-            "name": "Pilot",
-            "price": "BYOD",
-            "sub": "bring your own data · 30-day pilot",
-            "blurb": "One associate, one deal, the full squad — running against your own data.",
+            "name": t("pricing_pilot", lang),
+            "price": t("pricing_pilot_price", lang),
+            "sub": t("pricing_pilot_sub", lang),
+            "blurb": t("pricing_pilot_blurb", lang),
             "features": [
-                "Full squad of specialists",
-                "1 concurrent user",
-                "Up to 5 live deals",
-                "BYOD — connect your deal data on day one",
-                "Email support",
+                t("feat_full_squad", lang), t("feat_1_user", lang), t("feat_5_deals", lang),
+                t("feat_byod", lang), t("feat_email", lang),
             ],
-            "cta": ("Start pilot", "/contact"),
+            "cta": (t("pricing_start_pilot", lang), "/contact"),
             "primary": False,
         },
         {
-            "name": "Team",
-            "price": "Contact us",
-            "sub": "per fund",
-            "blurb": "Fund actively deploying capital with 5-25 investment professionals.",
+            "name": t("pricing_team", lang),
+            "price": t("pricing_team_price", lang),
+            "sub": t("pricing_team_sub", lang),
+            "blurb": t("pricing_team_blurb", lang),
             "features": [
-                "Full squad of specialists",
-                "Up to 25 seats",
-                "Unlimited deals + portcos",
-                "SSO + audit log",
-                "Shared memory across team",
-                "Priority support",
+                t("feat_full_squad", lang), t("feat_25_seats", lang), t("feat_unlimited", lang),
+                t("feat_sso", lang), t("feat_shared", lang), t("feat_priority", lang),
             ],
-            "cta": ("Book a demo", "/contact"),
+            "cta": (t("pricing_book_demo", lang), "/contact"),
             "primary": True,
         },
         {
-            "name": "Platform",
-            "price": "Custom",
-            "sub": "for multi-fund GPs",
-            "blurb": "Dedicated cluster, your brand, custom agents.",
+            "name": t("pricing_platform", lang),
+            "price": t("pricing_platform_price", lang),
+            "sub": t("pricing_platform_sub", lang),
+            "blurb": t("pricing_platform_blurb", lang),
             "features": [
-                "Everything in Team",
-                "Unlimited seats",
-                "Dedicated instance",
-                "Bring your own LLM provider",
-                "Custom agents and tools",
-                "Onsite training",
+                t("feat_everything", lang), t("feat_unlimited_seats", lang), t("feat_dedicated", lang),
+                t("feat_own_llm", lang), t("feat_custom", lang), t("feat_onsite", lang),
             ],
-            "cta": ("Contact sales", "/contact"),
+            "cta": (t("pricing_contact", lang), "/contact"),
             "primary": False,
         },
     ]
     return page(
-        "Pricing",
+        t("pricing_eyebrow", lang),
         Section_(
-            Eyebrow("Pricing"),
-            Heading(1, "BYOD — bring your own data. Upgrade when it sticks.", cls="mt-4 max-w-4xl"),
-            P("No setup fee. No per-seat tax. No prompt-token surprise.",
+            Eyebrow(t("pricing_eyebrow", lang)),
+            Heading(1, t("pricing_h1", lang), cls="mt-4 max-w-4xl"),
+            P(t("pricing_sub", lang),
               cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed"),
             cls="border-t border-line",
         ),
@@ -339,40 +331,42 @@ def pricing():
             ),
             cls="border-t border-line",
         ),
-        CTASection(),
+        CTASection(lang=lang),
         current_path="/pricing",
+        lang=lang,
     )
 
 
 # ── /contact ─────────────────────────────────────────────────────────
 @rt("/contact")
-def contact(sent: bool = False):
+def contact(sess, sent: bool = False):
+    lang = get_lang(sess)
     form = Form(
         Div(
-            Label("Your name", cls="block text-xs font-mono tracking-widest uppercase text-ink-dim mb-2"),
+            Label(t("contact_name", lang), cls="block text-xs font-mono tracking-widest uppercase text-ink-dim mb-2"),
             Input(name="name", type="text", required=True,
                   cls="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-line text-ink focus:border-accent focus:outline-none"),
             cls="mb-5",
         ),
         Div(
-            Label("Email", cls="block text-xs font-mono tracking-widest uppercase text-ink-dim mb-2"),
+            Label(t("contact_email", lang), cls="block text-xs font-mono tracking-widest uppercase text-ink-dim mb-2"),
             Input(name="email", type="email", required=True,
                   cls="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-line text-ink focus:border-accent focus:outline-none"),
             cls="mb-5",
         ),
         Div(
-            Label("Firm (optional)", cls="block text-xs font-mono tracking-widest uppercase text-ink-dim mb-2"),
+            Label(t("contact_firm", lang), cls="block text-xs font-mono tracking-widest uppercase text-ink-dim mb-2"),
             Input(name="firm", type="text",
                   cls="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-line text-ink focus:border-accent focus:outline-none"),
             cls="mb-5",
         ),
         Div(
-            Label("Tell us about your pipeline", cls="block text-xs font-mono tracking-widest uppercase text-ink-dim mb-2"),
+            Label(t("contact_pipeline", lang), cls="block text-xs font-mono tracking-widest uppercase text-ink-dim mb-2"),
             Textarea(name="message", rows="5", required=True,
                      cls="w-full px-4 py-3 rounded-xl bg-bg-elevated border border-line text-ink focus:border-accent focus:outline-none"),
             cls="mb-8",
         ),
-        Button("Send message →", type="submit",
+        Button(t("contact_send", lang), type="submit",
                cls="inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-medium bg-accent text-bg hover:bg-ink transition-all"),
         method="post",
         action="/contact",
@@ -383,18 +377,17 @@ def contact(sent: bool = False):
             Span("✓", cls="text-accent text-2xl"),
             cls="mb-4",
         ),
-        H3("Thanks — we'll be in touch shortly.", cls="text-ink text-xl mb-2"),
-        P("Usually within one business day.", cls="text-ink-muted"),
+        H3(t("contact_thanks", lang), cls="text-ink text-xl mb-2"),
+        P(t("contact_usually", lang), cls="text-ink-muted"),
         cls="p-8 rounded-2xl bg-bg-elevated border border-line",
     )
 
     return page(
-        "Contact",
+        t("contact_eyebrow", lang),
         Section_(
-            Eyebrow("Contact"),
-            Heading(1, "Let's look at one of your deals.", cls="mt-4 max-w-4xl"),
-            P("Send us a note and we'll set up a 20-minute walkthrough. We'll load one of your "
-              "recent deals into PEHero and show you the full agent flow — live.",
+            Eyebrow(t("contact_eyebrow", lang)),
+            Heading(1, t("contact_h1", lang), cls="mt-4 max-w-4xl"),
+            P(t("contact_body", lang),
               cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed"),
             Div(
                 success if sent else form,
@@ -403,24 +396,27 @@ def contact(sent: bool = False):
             cls="border-t border-line",
         ),
         current_path="/contact",
+        lang=lang,
     )
 
 
 @rt("/contact", methods=["POST"])
-def contact_post(name: str = "", email: str = "", firm: str = "", message: str = ""):
+def contact_post(sess, name: str = "", email: str = "", firm: str = "", message: str = ""):
+    lang = get_lang(sess)
     import logging
     logging.getLogger(__name__).info("contact form submitted: %s (%s) %s chars",
                                      name, email, len(message or ""))
     return page(
-        "Thanks",
+        t("contact_thanks", lang),
         Section_(
-            Eyebrow("Contact"),
-            Heading(1, "Thanks — we'll be in touch shortly.", cls="mt-4 max-w-4xl"),
-            P("Usually within one business day. In the meantime, ",
-              A("open the app", href="/app", cls="text-accent underline"),
-              " — BYOD: connect your deal data to see the squad on real work.",
+            Eyebrow(t("contact_eyebrow", lang)),
+            Heading(1, t("contact_thanks", lang), cls="mt-4 max-w-4xl"),
+            P(t("contact_usually", lang), " ", t("contact_meanwhile", lang),
+              A(t("contact_open_app", lang), href="/app", cls="text-accent underline"),
+              t("contact_byod_post", lang),
               cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed"),
             cls="border-t border-line",
         ),
         current_path="/contact",
+        lang=lang,
     )

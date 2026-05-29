@@ -14,6 +14,7 @@ from fasthtml.common import (
 )
 
 from agents.registry import CATEGORIES, AGENTS, AGENTS_BY_CATEGORY
+from utils.i18n import t, agent_t, category_t, LANGUAGES
 
 SITE_NAME = "PEHero"
 SITE_TAGLINE = "Agentic AI for private equity deal teams."
@@ -22,11 +23,11 @@ GITHUB_URL = "https://github.com/predictivelabsai/pehero"
 LINKEDIN_URL = "https://www.linkedin.com/company/predictive-labs-ltd/"
 
 NAV_ITEMS = [
-    ("Platform", "/platform"),
-    ("Agents", "/agents"),
-    ("How it works", "/how-it-works"),
-    ("Pricing", "/pricing"),
-    ("Contact", "/contact"),
+    ("nav_platform", "/platform"),
+    ("nav_agents", "/agents"),
+    ("nav_how", "/how-it-works"),
+    ("nav_pricing", "/pricing"),
+    ("nav_contact", "/contact"),
 ]
 
 # Lighter parchment background with a deep-forest / slate accent.
@@ -88,11 +89,18 @@ def Pill(text: str, *, cls: str = ""):
     )
 
 
-def _navbar(current_path: str = "/"):
+def _navbar(current_path: str = "/", lang: str = "en"):
     items = [
-        Li(A(label, href=href,
+        Li(A(t(key, lang), href=href,
              cls=f"text-sm text-ink-muted hover:text-ink transition-colors {'text-ink' if current_path == href or current_path.startswith(href + '/') else ''}"))
-        for label, href in NAV_ITEMS
+        for key, href in NAV_ITEMS
+    ]
+    flag_links = [
+        A(Span(info["flag"]),
+          href=f"/set-lang/{code}",
+          cls=f"text-lg leading-none {'opacity-100' if code == lang else 'opacity-40 hover:opacity-70'} transition-opacity",
+          title=info["native"])
+        for code, info in LANGUAGES.items()
     ]
     return Nav(
         Div(
@@ -104,9 +112,11 @@ def _navbar(current_path: str = "/"):
             ),
             Ul(*items, cls="hidden lg:flex items-center gap-7"),
             Div(
-                A("Book a demo", href="/contact",
+                *flag_links,
+                Span("·", cls="text-ink-dim mx-1"),
+                A(t("nav_book_demo", lang), href="/contact",
                   cls="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-ink border border-line-bright hover:border-accent hover:text-accent transition-colors"),
-                A("Open app", href="/app",
+                A(t("nav_open_app", lang), href="/app",
                   cls="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium bg-accent text-bg hover:bg-ink transition-colors"),
                 cls="flex items-center gap-3",
             ),
@@ -116,7 +126,7 @@ def _navbar(current_path: str = "/"):
     )
 
 
-def _footer():
+def _footer(lang: str = "en"):
     return Footer(
         Div(
             Div(
@@ -124,23 +134,23 @@ def _footer():
                     A(Span("◆", cls="text-accent mr-2"), Span(SITE_NAME, cls="font-medium text-ink"),
                       href="/", cls="flex items-center text-lg mb-4"),
                     P(SITE_TAGLINE, cls="text-ink-muted text-sm max-w-xs mb-5"),
-                    P("Built by a small team that's sourced, underwritten, and held the phone at 2 AM the night before IC.",
+                    P(t("footer_tagline", lang),
                       cls="text-ink-dim text-xs leading-relaxed max-w-xs"),
                 ),
                 Div(
-                    H4("Product", cls="text-xs font-mono tracking-[0.18em] uppercase text-ink-muted mb-5"),
+                    H4(t("footer_product", lang), cls="text-xs font-mono tracking-[0.18em] uppercase text-ink-muted mb-5"),
                     Ul(
-                        Li(A("Platform", href="/platform", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
-                        Li(A("Agents", href="/agents", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
-                        Li(A("How it works", href="/how-it-works", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
-                        Li(A("Pricing", href="/pricing", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
-                        Li(A("Open the app", href="/app", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
+                        Li(A(t("nav_platform", lang), href="/platform", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
+                        Li(A(t("nav_agents", lang), href="/agents", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
+                        Li(A(t("nav_how", lang), href="/how-it-works", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
+                        Li(A(t("nav_pricing", lang), href="/pricing", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
+                        Li(A(t("footer_open_app", lang), href="/app", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
                     ),
                 ),
                 Div(
-                    H4("Company", cls="text-xs font-mono tracking-[0.18em] uppercase text-ink-muted mb-5"),
+                    H4(t("footer_company", lang), cls="text-xs font-mono tracking-[0.18em] uppercase text-ink-muted mb-5"),
                     Ul(
-                        Li(A("Contact", href="/contact", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
+                        Li(A(t("nav_contact", lang), href="/contact", cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
                         Li(A("GitHub", href=GITHUB_URL, cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
                         Li(A("LinkedIn", href=LINKEDIN_URL, cls="text-sm text-ink hover:text-accent"), cls="mb-2"),
                     ),
@@ -171,7 +181,7 @@ def _favicon_links():
     ]
 
 
-def page(title: str, *content, current_path: str = "/", head_extra=None):
+def page(title: str, *content, current_path: str = "/", head_extra=None, lang: str = "en"):
     head_children = [
         Meta(charset="utf-8"),
         Meta(name="viewport", content="width=device-width, initial-scale=1"),
@@ -194,12 +204,12 @@ def page(title: str, *content, current_path: str = "/", head_extra=None):
     return Html(
         Head(*head_children),
         Body(
-            _navbar(current_path),
+            _navbar(current_path, lang=lang),
             Main(*content, cls="min-h-screen"),
-            _footer(),
+            _footer(lang=lang),
             cls="bg-bg text-ink font-sans antialiased",
         ),
-        lang="en",
+        lang=lang,
     )
 
 
@@ -210,33 +220,28 @@ def Section_(*content, bleed: bool = False, cls: str = ""):
     return Section(Div(*content, cls=inner_cls), cls=f"py-14 md:py-20 lg:py-24 {cls}".strip())
 
 
-def Hero():
+def Hero(lang: str = "en"):
     headline = (
-        Span("Your Private Equity "),
-        Span("AI Agent Squad", cls="text-accent"),
-        Span(" — "),
-        Span("sourcing, ", cls="text-accent"),
-        Span("underwriting, "),
-        Span("and closing ", cls="text-accent"),
-        Span("your next platform."),
-    )
-    lede = (
-        "Not a prompt pack. Not a build-it-yourself kit. PEHero is a full agentic system "
-        "already wired into your deal flow — scanning targets, running QoE, building LBO "
-        "models, and drafting IC memos while your team focuses on the call."
+        Span(t("hero_h1_1", lang)),
+        Span(t("hero_h1_2", lang), cls="text-accent"),
+        Span(t("hero_h1_3", lang)),
+        Span(t("hero_h1_4", lang), cls="text-accent"),
+        Span(t("hero_h1_5", lang)),
+        Span(t("hero_h1_6", lang), cls="text-accent"),
+        Span(t("hero_h1_7", lang)),
     )
     return Section(
         Div(
             Div(id="hero-grid", cls="absolute inset-0 z-10 opacity-40 pointer-events-none"),
             Div(cls="absolute inset-0 z-20 bg-gradient-to-b from-bg/40 via-transparent to-bg pointer-events-none"),
             Div(
-                Eyebrow("Agentic AI for private equity"),
+                Eyebrow(t("hero_eyebrow", lang)),
                 H1(*headline,
                    cls="mt-5 md:mt-6 text-[40px] sm:text-5xl md:text-7xl lg:text-[84px] font-medium tracking-tightest text-ink leading-[1.05] md:leading-[1.02] max-w-5xl"),
-                P(lede, cls="mt-6 md:mt-8 text-base md:text-xl text-ink-muted max-w-2xl leading-relaxed"),
+                P(t("hero_lede", lang), cls="mt-6 md:mt-8 text-base md:text-xl text-ink-muted max-w-2xl leading-relaxed"),
                 Div(
-                    Button_("Open the app", href="/app", primary=True),
-                    Button_("Meet the squad", href="/agents", primary=False),
+                    Button_(t("hero_cta_open", lang), href="/app", primary=True),
+                    Button_(t("hero_cta_meet", lang), href="/agents", primary=False),
                     cls="mt-8 md:mt-10 flex items-center gap-3 flex-wrap",
                 ),
                 cls="relative z-30 max-w-7xl mx-auto px-5 md:px-6 py-24 md:py-0",
@@ -245,10 +250,10 @@ def Hero():
         ),
         Div(
             Div(
-                _StatCell("Squad", "of PE specialists, on call"),
-                _StatCell("5", "workflow stages, end-to-end"),
-                _StatCell("<90s", "to a go / no-go decision"),
-                _StatCell("BYOD", "bring your own data"),
+                _StatCell(t("stat_squad", lang), t("stat_squad_cap", lang)),
+                _StatCell(t("stat_5", lang), t("stat_5_cap", lang)),
+                _StatCell(t("stat_90s", lang), t("stat_90s_cap", lang)),
+                _StatCell(t("stat_byod", lang), t("stat_byod_cap", lang)),
                 cls="max-w-7xl mx-auto px-5 md:px-6 py-5 md:py-6 grid grid-cols-2 md:grid-cols-4 gap-6",
             ),
             cls="border-y border-line bg-bg-elevated/60",
@@ -256,16 +261,14 @@ def Hero():
     )
 
 
-def ProductTour():
+def ProductTour(lang: str = "en"):
     """Rotating GIF preview + CTA into the app / README / PDF tour."""
     return Section(
         Div(
             Div(
-                Eyebrow("Product tour"),
-                Heading(2, "See it in motion.", cls="mt-3 max-w-3xl mb-2"),
-                P("A 30-second walk through chat, the pipeline kanban, deal detail, "
-                  "analytics and prompt editing — BYOD: bring your own data and "
-                  "see the squad in action on your deals.",
+                Eyebrow(t("tour_eyebrow", lang)),
+                Heading(2, t("tour_heading", lang), cls="mt-3 max-w-3xl mb-2"),
+                P(t("tour_body", lang),
                   cls="mt-2 text-ink-muted text-base max-w-2xl leading-relaxed mb-6"),
                 cls="mb-6",
             ),
@@ -280,20 +283,20 @@ def ProductTour():
                 title="Open the README",
             ),
             Div(
-                A(Span("Product tour (PDF)"), Span("↓", cls="ml-1"),
+                A(Span(t("tour_pdf", lang)), Span("↓", cls="ml-1"),
                   href="/docs/pehero-product-tour.pdf",
                   cls="inline-flex items-center gap-2 text-sm text-accent hover:text-ink"),
                 Span("·", cls="text-ink-dim mx-3"),
-                A(Span("Product tour (PPTX)"), Span("↓", cls="ml-1"),
+                A(Span(t("tour_pptx", lang)), Span("↓", cls="ml-1"),
                   href="/docs/pehero-product-tour.pptx",
                   cls="inline-flex items-center gap-2 text-sm text-accent hover:text-ink"),
                 Span("·", cls="text-ink-dim mx-3"),
-                A(Span("View README"), Span("→", cls="ml-1"),
+                A(Span(t("tour_readme", lang)), Span("→", cls="ml-1"),
                   href="https://github.com/predictivelabsai/pehero#readme",
                   target="_blank", rel="noopener",
                   cls="inline-flex items-center gap-2 text-sm text-accent hover:text-ink"),
                 Span("·", cls="text-ink-dim mx-3"),
-                A(Span("Open the app"), Span("→", cls="ml-1"),
+                A(Span(t("tour_open_app", lang)), Span("→", cls="ml-1"),
                   href="/app",
                   cls="inline-flex items-center gap-2 text-sm text-ink hover:text-accent"),
                 cls="mt-5 flex items-center flex-wrap gap-y-2",
@@ -310,43 +313,43 @@ def _StatCell(value: str, caption: str):
     )
 
 
-def CategoryPillar(cat: dict, *, sample_count: int = 4):
+def CategoryPillar(cat: dict, *, sample_count: int = 4, lang: str = "en"):
     agents_in_cat = AGENTS_BY_CATEGORY.get(cat["key"], [])
     sample = agents_in_cat[:sample_count]
     total = len(agents_in_cat)
     return Article(
         Div(
             Span(cat["icon"], cls="text-accent text-2xl"),
-            Span(f"{total} agents", cls="ml-auto font-mono text-[11px] tracking-widest uppercase text-ink-dim"),
+            Span(t("agents_count", lang).format(n=total), cls="ml-auto font-mono text-[11px] tracking-widest uppercase text-ink-dim"),
             cls="flex items-center mb-5",
         ),
-        Heading(3, cat["name"], cls="mb-2"),
-        P(cat["blurb"], cls="text-ink-muted text-sm leading-relaxed mb-5"),
+        Heading(3, category_t(cat["key"], "name", lang), cls="mb-2"),
+        P(category_t(cat["key"], "blurb", lang), cls="text-ink-muted text-sm leading-relaxed mb-5"),
         Ul(
             *[Li(
                 Div(
                     Span("•", cls="text-accent mr-2"),
-                    Span(a.name, cls="text-ink text-sm"),
+                    Span(agent_t(a.slug, "name", lang), cls="text-ink text-sm"),
                     cls="flex items-baseline",
                 ),
                 cls="mb-1.5",
             ) for a in sample],
             cls="space-y-1",
         ),
-        A(f"See all {total} → ", href=f"/agents#{cat['key']}", cls="text-accent text-xs font-mono tracking-wider uppercase hover:text-ink mt-6 inline-block"),
+        A(t("see_all", lang).format(n=total), href=f"/agents#{cat['key']}", cls="text-accent text-xs font-mono tracking-wider uppercase hover:text-ink mt-6 inline-block"),
         cls="p-7 rounded-2xl bg-bg-elevated border border-line hover:border-accent/50 transition-colors group h-full flex flex-col",
     )
 
 
-def AgentCard(agent, *, as_link: bool = True):
+def AgentCard(agent, *, as_link: bool = True, lang: str = "en"):
     inner = Article(
         Div(
             Span(agent.icon, cls="text-accent text-xl"),
             Span(agent.prefix, cls="ml-auto font-mono text-[11px] tracking-widest uppercase text-ink-dim"),
             cls="flex items-center mb-4",
         ),
-        H4(agent.name, cls="text-ink font-medium mb-1.5"),
-        P(agent.one_liner, cls="text-ink-muted text-sm leading-relaxed"),
+        H4(agent_t(agent.slug, "name", lang), cls="text-ink font-medium mb-1.5"),
+        P(agent_t(agent.slug, "one_liner", lang), cls="text-ink-muted text-sm leading-relaxed"),
         cls="p-6 rounded-2xl bg-bg-elevated border border-line hover:border-accent/50 transition-colors h-full",
     )
     if as_link:
@@ -354,18 +357,18 @@ def AgentCard(agent, *, as_link: bool = True):
     return inner
 
 
-def CategorySection(cat: dict):
+def CategorySection(cat: dict, lang: str = "en"):
     agents_in_cat = AGENTS_BY_CATEGORY.get(cat["key"], [])
     return Section(
         Div(id=cat["key"]),
         Div(
             Div(
-                Eyebrow(cat["name"]),
-                Heading(2, cat["blurb"], cls="mt-3 max-w-3xl"),
+                Eyebrow(category_t(cat["key"], "name", lang)),
+                Heading(2, category_t(cat["key"], "blurb", lang), cls="mt-3 max-w-3xl"),
                 cls="mb-10",
             ),
             Div(
-                *[AgentCard(a) for a in agents_in_cat],
+                *[AgentCard(a, lang=lang) for a in agents_in_cat],
                 cls="grid sm:grid-cols-2 lg:grid-cols-3 gap-4",
             ),
             cls="max-w-7xl mx-auto px-5 md:px-6",
@@ -374,15 +377,15 @@ def CategorySection(cat: dict):
     )
 
 
-def CaseStudyStrip():
+def CaseStudyStrip(lang: str = "en"):
     cases = [
-        {"label": "Sourcing → triage", "metric": "1,240 deals", "caption": "surfaced and triaged against a lower-middle-market software mandate in one week of scanning."},
-        {"label": "Underwriting", "metric": "3 days → 40 min", "caption": "from seller financials + cap table to a full 5-year LBO model with sensitivity and debt stack."},
-        {"label": "Capital", "metric": "60 LPs, ranked", "caption": "by fund-fit, staleness, and commitment size — with drafted re-engagement emails."},
+        {"label": t("case_1_label", lang), "metric": t("case_1_metric", lang), "caption": t("case_1_caption", lang)},
+        {"label": t("case_2_label", lang), "metric": t("case_2_metric", lang), "caption": t("case_2_caption", lang)},
+        {"label": t("case_3_label", lang), "metric": t("case_3_metric", lang), "caption": t("case_3_caption", lang)},
     ]
     return Section_(
-        Eyebrow("What you get"),
-        Heading(2, "Time compressed, confidence higher.", cls="mt-3 max-w-3xl mb-10"),
+        Eyebrow(t("case_eyebrow", lang)),
+        Heading(2, t("case_heading", lang), cls="mt-3 max-w-3xl mb-10"),
         Div(
             *[Article(
                 P(c["label"], cls="text-[11px] font-mono tracking-widest uppercase text-ink-dim mb-3"),
@@ -396,18 +399,20 @@ def CaseStudyStrip():
     )
 
 
-def CTASection(*, headline: str = "Stop stitching tools. Start closing deals.",
-               body: str = "Book a 20-minute walkthrough. We'll load one of your recent deals into PEHero and show you the full agent flow end-to-end.",
-               cta_label: str = "Book a demo", cta_href: str = "/contact"):
+def CTASection(*, headline: str | None = None, body: str | None = None,
+               cta_label: str | None = None, cta_href: str = "/contact", lang: str = "en"):
+    _headline = headline or t("cta_headline", lang)
+    _body = body or t("cta_body", lang)
+    _cta_label = cta_label or t("cta_book", lang)
     return Section(
         Div(
             Div(
-                Eyebrow("Talk to us"),
-                Heading(2, headline, cls="mt-3 max-w-3xl"),
-                P(body, cls="mt-5 text-ink-muted text-lg max-w-2xl leading-relaxed"),
+                Eyebrow(t("cta_eyebrow", lang)),
+                Heading(2, _headline, cls="mt-3 max-w-3xl"),
+                P(_body, cls="mt-5 text-ink-muted text-lg max-w-2xl leading-relaxed"),
                 Div(
-                    Button_(cta_label, href=cta_href, primary=True),
-                    Button_("BYOD — bring your own data", href="/app", primary=False),
+                    Button_(_cta_label, href=cta_href, primary=True),
+                    Button_(t("cta_byod", lang), href="/app", primary=False),
                     cls="mt-8 flex items-center gap-3 flex-wrap",
                 ),
                 cls="max-w-7xl mx-auto px-5 md:px-6 py-20 md:py-28 relative z-10",
