@@ -1,0 +1,21 @@
+{
+  "id": "tc01",
+  "prompt": "triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",
+  "expected_agent": "deal_triage",
+  "expected_contains": "go",
+  "timestamp": "2026-05-29T20:36:42.551837",
+  "routed_agent": "deal_triage",
+  "route_match": true,
+  "elapsed_s": 13.1,
+  "response": "**Verdict:** No-Go\n\n**Rationale (3 bullets):**\n- Valuation: Seller asking 41.7x LTM EBITDA (€11.6M EV on €277k adj. EBITDA) — multiples are absurd for a 6% margin veterinary clinic with no supporting transaction comps in the sector.\n- Growth/margin quality: 22% revenue growth is attractive but delivered at only 5.99% adj. EBITDA margin (LTM €4.63M revenue), indicating weak operating leverage and limited value-creation headroom.\n- Deal-specific risk: Founder-owned with warm intent but no market signals or precedent deals available for Lithuanian veterinary assets; price expectation is disconnected from any realistic healthcare/vet multiple range.\n\n**Next step:** Decline the ask and request a revised IOI at ≤12x EBITDA before any further diligence.",
+  "response_length": 756,
+  "tools_called": [
+    "search_companies",
+    "find_transaction_comps",
+    "fetch_market_signals",
+    "normalize_ltm"
+  ],
+  "contains_match": true,
+  "passed": true,
+  "error": null
+}

@@ -1,0 +1,19 @@
+{
+  "id": "tc02",
+  "prompt": "ltm: what are the financials of DR VET?",
+  "expected_agent": "t12_normalizer",
+  "expected_contains": "EBITDA",
+  "timestamp": "2026-05-29T20:37:21.270318",
+  "routed_agent": "t12_normalizer",
+  "route_match": true,
+  "elapsed_s": 12.1,
+  "response": "**DR VET, UAB** (slug: `gyvunu_ligonine`) — Veterinary clinics, Vilnius, Lithuania\n\n### LTM Financials (Jan 2022 – Dec 2025)\n- **LTM Revenue**: €4,630,281  \n- **LTM Reported EBITDA**: €277,341 (margin **5.99%**)  \n- **LTM Adj. EBITDA**: €277,341 (margin **5.99%**)  \n- **LTM Revenue Growth**: +21.95%\n\n### Reported → Normalized EBITDA Bridge\nNo add-backs were identified.\n\n| Item                  | Amount (€)   | Margin |\n|-----------------------|--------------|--------|\n| Reported EBITDA       | 277,341     | 5.99% |\n| **Adj. EBITDA**       | **277,341** | **5.99%** |\n| Add-back total        | 0           | — |\n\n**Add-back detail**: None (add_back_total_ltm = €0). All EBITDA is treated as recurring.\n\n### Key Ratios\n- Gross margin: 100% (service-based business)\n- Adj. EBITDA margin: 5.99%\n- Revenue growth (LTM): +21.95%\n\n### Credibility of Add-backs\n**High credibility / no adjustments needed.** The seller provided clean financials with zero non-recurring items flagged. The normalized EBITDA equals reported EBITDA, indicating strong data quality and no material one-time costs, owner compensation adjustments, or discontinued operations.",
+  "response_length": 1149,
+  "tools_called": [
+    "search_companies",
+    "normalize_ltm"
+  ],
+  "contains_match": true,
+  "passed": true,
+  "error": null
+}

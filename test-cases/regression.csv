@@ -1,6 +1,6 @@
 id,agent_slug,prompt,expect_contains,expect_agent,description
-tc01,deal_triage,"triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",DR VET,deal_triage,Triage a real Lithuanian vet clinic
-tc02,t12_normalizer,"ltm: what are the financials of DR VET?",revenue,t12_normalizer,Pull LTM financials for DR VET
+tc01,deal_triage,"triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",go,deal_triage,Triage a real Lithuanian vet clinic
+tc02,t12_normalizer,"ltm: what are the financials of DR VET?",EBITDA,t12_normalizer,Pull LTM financials for DR VET
 tc03,t12_normalizer,"ltm: normalize Kardiolita financials",Kardiolita,t12_normalizer,LTM normalization for Kardiolita hospital
 tc04,pro_forma_builder,"lbo: build a 5-year model for Kardiolita at 12% growth",IRR,pro_forma_builder,LBO model for Kardiolita
 tc05,investor_memo,"memo: draft the IC memo for Kardiolita",investment,investor_memo,IC memo for Kardiolita

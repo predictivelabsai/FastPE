@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-05-29T20:37:33.363246",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "dry_run": false,
+  "cases": [
+    {
+      "id": "tc02",
+      "passed": true,
+      "routed": "t12_normalizer",
+      "expected": "t12_normalizer",
+      "elapsed": 12.1
+    }
+  ]
+}
