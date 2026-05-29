@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.6.0 — 2026-05-30
+
+### News feed + inline artifacts
+- Right pane reworked from canvas/artifact viewer to live **news feed** panel
+- RSS feeds from FT, Bloomberg, WSJ, Reuters, BBC Business, ERR News, Baltic Times
+- News article titles auto-translated via LLM when session language is non-English
+- 5-minute server-side cache, auto-refresh every 5 minutes on the client
+- Artifact tables and citations now render **inline in the chat bubble** instead of the right pane
+- Memo PDF preview opens in a new browser tab instead of the right pane iframe
+- Pipeline deal-detail page retains its deal-brief right pane (backwards compat)
+- Added `feedparser>=6.0.0` dependency
+- News i18n: title, loading, empty, time-ago keys in all 5 languages (EN/ET/LT/FI/SV)
+
 ## v0.5.0 — 2026-05-30
 
 ### Company Search page + Estonian scraper + batch scaling

@@ -369,6 +369,16 @@ def shared_chat(token: str):
     )
 
 
+# ── News feed ──────────────────────────────────────────────────────
+
+@rt("/app/news")
+async def news_feed(request: Request):
+    lang = get_lang(request.session)
+    from utils.news import fetch_news_translated
+    articles = await fetch_news_translated(lang)
+    return JSONResponse(articles)
+
+
 # ── Debug ping (kept from Phase 0) ──────────────────────────────────
 
 @rt("/app/_debug/ping")

@@ -701,6 +701,20 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
     "chat_signin_btn":   {"en": "Continue →",        "et": "Jätka →",            "lt": "Tęsti →",
                           "fi": "Jatka →", "sv": "Fortsätt →"},
 
+    # ── News panel ───────────────────────────────────────────────
+    "news_title":        {"en": "News",              "et": "Uudised",            "lt": "Naujienos",
+                          "fi": "Uutiset", "sv": "Nyheter"},
+    "news_loading":      {"en": "Loading news...",   "et": "Uudiste laadimine...", "lt": "Kraunamos naujienos...",
+                          "fi": "Ladataan uutisia...", "sv": "Laddar nyheter..."},
+    "news_empty":        {"en": "No news available", "et": "Uudiseid pole saadaval", "lt": "Naujienų nėra",
+                          "fi": "Ei uutisia saatavilla", "sv": "Inga nyheter tillgängliga"},
+    "news_ago_min":      {"en": "{n}m ago",          "et": "{n}m tagasi",        "lt": "prieš {n}m",
+                          "fi": "{n}m sitten", "sv": "{n}m sedan"},
+    "news_ago_hour":     {"en": "{n}h ago",          "et": "{n}t tagasi",        "lt": "prieš {n}h",
+                          "fi": "{n}t sitten", "sv": "{n}t sedan"},
+    "news_ago_day":      {"en": "{n}d ago",          "et": "{n}p tagasi",        "lt": "prieš {n}d",
+                          "fi": "{n}pv sitten", "sv": "{n}d sedan"},
+
     # ── Chat config ───────────────────────────────────────────────
     "cfg_currency":      {"en": "Currency",          "et": "Valuuta",             "lt": "Valiuta",
                           "fi": "Valuutta", "sv": "Valuta"},
@@ -772,6 +786,20 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "fi": "PDF-esikatselu", "sv": "PDF-förhandsgranskning"},
     "js_memo_preview":   {"en": "Memo preview",      "et": "Memo eelvaade",      "lt": "Memo peržiūra",
                           "fi": "Muistio-esikatselu", "sv": "Memo-förhandsgranskning"},
+    "js_news":           {"en": "News",              "et": "Uudised",            "lt": "Naujienos",
+                          "fi": "Uutiset", "sv": "Nyheter"},
+    "js_news_loading":   {"en": "Loading news...",   "et": "Laadimine...",       "lt": "Kraunama...",
+                          "fi": "Ladataan...", "sv": "Laddar..."},
+    "js_news_empty":     {"en": "No news available", "et": "Uudiseid pole",      "lt": "Naujienų nėra",
+                          "fi": "Ei uutisia", "sv": "Inga nyheter"},
+    "js_news_just_now":  {"en": "just now",          "et": "just praegu",        "lt": "ką tik",
+                          "fi": "juuri nyt", "sv": "just nu"},
+    "js_news_min_ago":   {"en": "{n}m ago",          "et": "{n}m tagasi",        "lt": "prieš {n}m",
+                          "fi": "{n}m sitten", "sv": "{n}m sedan"},
+    "js_news_hour_ago":  {"en": "{n}h ago",          "et": "{n}t tagasi",        "lt": "prieš {n}val",
+                          "fi": "{n}t sitten", "sv": "{n}t sedan"},
+    "js_news_day_ago":   {"en": "{n}d ago",          "et": "{n}p tagasi",        "lt": "prieš {n}d",
+                          "fi": "{n}pv sitten", "sv": "{n}d sedan"},
 
     # ── Pipeline page ─────────────────────────────────────────────
     "pipe_title":        {"en": "Pipeline",          "et": "Pipeline",           "lt": "Pipeline",

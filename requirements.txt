@@ -30,6 +30,9 @@ pyyaml>=6.0.2
 # Analytics page — plotly charts (text-to-SQL uses pandas + existing llm)
 plotly>=6.0.0
 
+# RSS news feeds
+feedparser>=6.0.0
+
 # Web search tools (Tavily default, EXA fallback)
 tavily-python>=0.7.0
 exa-py>=2.0.0

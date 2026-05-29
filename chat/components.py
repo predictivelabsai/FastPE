@@ -395,8 +395,8 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None,
                        onclick="copyChat()"),
                 Button(t("chat_share", lang), id="share-chat-btn", cls="chat-action-btn",
                        onclick="shareChat()"),
-                Button(t("chat_canvas", lang), id="artifact-btn", cls="artifact-toggle-btn",
-                       onclick="toggleArtifactPane()"),
+                Button(t("news_title", lang), id="news-btn", cls="news-toggle-btn",
+                       onclick="toggleNewsPane()"),
                 cls="chat-header-actions",
             ),
             cls="chat-header",
@@ -429,23 +429,23 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None,
 
 
 def right_pane(lang: str = "en"):
-    """Canvas pane — starts empty; filled by SSE artifact_show events."""
+    """News feed pane — populated via /app/news JSON endpoint."""
     return Div(
         Div(
-            Div(H3(t("chat_canvas", lang), cls="right-title"),
-                Span("", id="artifact-subtitle", cls="right-subtitle"),
+            Div(H3(t("news_title", lang), cls="right-title"),
+                Span("", id="news-subtitle", cls="right-subtitle"),
                 cls="right-header-left"),
-            Button("✕", cls="right-close", onclick="toggleArtifactPane()"),
+            Button("✕", cls="right-close", onclick="toggleNewsPane()"),
             cls="right-header",
         ),
         Div(
             Div(
-                Div("◈", cls="artifact-empty-icon"),
-                P(t("chat_canvas_empty", lang), cls="artifact-empty-text"),
-                id="artifact-empty",
-                cls="artifact-empty",
+                Div("◌", cls="news-loading-icon"),
+                P(t("news_loading", lang), cls="news-loading-text"),
+                id="news-loading",
+                cls="news-loading",
             ),
-            Div(id="artifact-body", cls="artifact-body", style="display:none"),
+            Div(id="news-body", cls="news-body", style="display:none"),
             cls="right-body",
         ),
         id="right-pane", cls="right-pane",

@@ -206,9 +206,8 @@
         }
     };
 
-    // ── Memo → PDF preview (IC Memo Writer + any markdown-heavy response) ──
+    // ── Memo → PDF (opens in new tab) ──────────────────────────────
     const MEMO_AGENTS = new Set(["investor_memo", "deal_teaser", "lp_update", "outreach_email", "loi_writer"]);
-    let lastMemoFileId = null;
 
     async function renderMemoPdf(markdown, title) {
         const body = new URLSearchParams({ markdown, title: title || "IC memo" });
@@ -216,39 +215,11 @@
         if (!r.ok) throw new Error("render failed " + r.status);
         const data = await r.json();
         if (data.error) throw new Error(data.error);
-        lastMemoFileId = data.file_id;
-        openPdfInPane(data.file_url, null, data.title);
+        window.open(data.file_url, "_blank");
         return data;
     }
 
-    function openPdfInPane(fileUrl, searchText, title) {
-        const src = fileUrl.startsWith("http") ? fileUrl : fileUrl;
-        const body = $("#artifact-body");
-        const empty = $("#artifact-empty");
-        if (empty) empty.style.display = "none";
-        body.style.display = "block";
-        body.innerHTML = `
-            <div class="pdf-wrap">
-              <div class="pdf-caption">${title ? escapeHtml(title) : "Memo preview"}${searchText ? " · <i>highlighting \"" + escapeHtml(searchText.slice(0, 40)) + "\"</i>" : ""}</div>
-              <iframe id="pdf-frame" class="pdf-iframe" src="${src}" allow="fullscreen"></iframe>
-            </div>`;
-        $("#artifact-subtitle").textContent = title || "PDF preview";
-        document.querySelector(".app").classList.remove("pane-closed");
-        $("#right-pane").classList.add("open");
-        $("#artifact-btn").classList.add("active");
-    }
-
-    async function highlightInLastPdf(searchText) {
-        if (!lastMemoFileId) return false;
-        const frame = document.getElementById("pdf-frame");
-        if (frame) frame.src = `/app/memo-pdf/file/${lastMemoFileId}`;
-        const cap = document.querySelector(".pdf-caption");
-        if (cap) cap.innerHTML = `Memo preview · <i>"${escapeHtml(searchText.slice(0, 40))}"</i>`;
-        return true;
-    }
     window.renderMemoPdf = renderMemoPdf;
-    window.openPdfInPane = openPdfInPane;
-    window.highlightInLastPdf = highlightInLastPdf;
 
     const AGENT_TITLES = {
         investor_memo: "IC Memo", deal_teaser: "Teaser", lp_update: "LP Update",
@@ -290,27 +261,56 @@
         };
     }
 
-    // If the user's last message looks like a PDF-highlight intent *and* we
-    // have a memo PDF already rendered, intercept it client-side and
-    // navigate the iframe to the highlighted match — no SSE roundtrip.
-    function tryHighlightIntent(msg) {
-        if (!lastMemoFileId) return false;
-        const m = msg.match(/^\s*(?:show|find|highlight|jump to|where (?:is|does))\s+(?:me\s+)?(?:the\s+)?(.+?)[?.!]?\s*$/i);
-        if (!m) return false;
-        const term = m[1].trim();
-        if (term.length < 3 || term.length > 60) return false;
-        highlightInLastPdf(term);
-        // Also echo as a tiny user-side message so the transcript shows the action
-        const bubble = addBubble("user", msg);
-        addBubble("assistant", `Highlighted "${term}" in the memo PDF →`, null);
-        return true;
+    // ── Inline artifacts (render tables/citations in chat bubble) ──
+    function showArtifactInline(bubble, payload) {
+        if (!bubble) return;
+        const card = document.createElement("div");
+        card.className = "artifact-inline";
+        const title = payload.title || "";
+        const subtitle = payload.subtitle || "";
+        const kind = payload.kind || "note";
+        let header = "";
+        if (title) header += `<h4 class="artifact-inline-title">${escapeHtml(title)}</h4>`;
+        if (subtitle) header += `<div class="artifact-inline-sub">${escapeHtml(subtitle)}</div>`;
+        card.innerHTML = `${header}<div class="artifact-inline-body">${renderArtifactHTML(payload)}</div>`;
+        bubble.parentElement.appendChild(card);
+        enhanceTables(card);
+        scrollMessagesBottom();
     }
-    window.tryHighlightIntent = tryHighlightIntent;
+
+    function renderArtifactHTML(p) {
+        if (p.kind === "table" && Array.isArray(p.rows)) {
+            if (!p.rows.length) return `<p><em>${I18N.no_rows || "No rows."}</em></p>`;
+            const cols = p.columns || Object.keys(p.rows[0]);
+            const head = "<tr>" + cols.map(c => `<th>${escapeHtml(c)}</th>`).join("") + "</tr>";
+            const body = p.rows.map(r => "<tr>" + cols.map(c => `<td>${formatCell(r[c])}</td>`).join("") + "</tr>").join("");
+            return `<table class="artifact-table">${head}${body}</table>`;
+        }
+        if (p.kind === "citations" && Array.isArray(p.items)) {
+            return p.items.map(it => `
+                <div style="margin-bottom:.6rem;">
+                    <div style="color:var(--ink); font-size:.8rem; font-weight:500;">${escapeHtml(it.title || "")}</div>
+                    <div style="color:var(--ink-dim); font-size:.68rem; font-family:'JetBrains Mono',monospace;">${escapeHtml(it.doc_type || "")}${it.url ? ` · <a href="${escapeHtml(it.url)}" target="_blank">link</a>` : ""} · score ${(it.score||0).toFixed(2)}</div>
+                    <div style="color:var(--ink-muted); font-size:.75rem; margin-top:.25rem;">${escapeHtml(it.snippet || "").replace(/\n/g,"<br>")}</div>
+                </div>
+            `).join("");
+        }
+        if (p.body_md) {
+            return renderMarkdownLite(p.body_md);
+        }
+        return `<pre>${escapeHtml(JSON.stringify(p, null, 2))}</pre>`;
+    }
+
+    function formatCell(v) {
+        if (v === null || v === undefined) return "—";
+        if (typeof v === "number") return v.toLocaleString();
+        if (typeof v === "object") return JSON.stringify(v);
+        return String(v);
+    }
 
     // ── "Should we do that?" follow-up button ─────────────────────
     function maybeAppendFollowUp(bubble, text) {
         if (!bubble || !text) return;
-        // look for "Next step —" or "Next step:" pattern
         const m = text.match(/\*?\*?Next step\*?\*?[\s]*[—–:-][\s]*([^\n]+)/i);
         if (!m) return;
         const action = m[1].trim().replace(/\*+$/, "");
@@ -341,15 +341,6 @@
         const ta = $("#chat-input");
         const msg = ta.value.trim();
         if (!msg) return;
-
-        // Client-side fast path: if a memo PDF is already open and the user
-        // asks "show me the deal size", highlight directly in the iframe
-        // and skip the round-trip.
-        if (tryHighlightIntent(msg)) {
-            ta.value = "";
-            ta.style.height = "";
-            return;
-        }
 
         streaming = true;
         $("#send-btn").disabled = true;
@@ -406,7 +397,7 @@
                     } else if (type === "tool_end") {
                         // update thinker with "(done)" flavor; leaving tool name as-is
                     } else if (type === "artifact_show") {
-                        showArtifact(payload);
+                        showArtifactInline(bubble, payload);
                     } else if (type === "error") {
                         hideThinking();
                         if (!bubble) bubble = addBubble("assistant", "", "");
@@ -437,79 +428,83 @@
         catch (e) { console.error("bad sse line", raw, e); }
     }
 
-    // ── Artifacts ─────────────────────────────────────────────────
-    function showArtifact(payload) {
-        const body = $("#artifact-body");
-        const empty = $("#artifact-empty");
-        empty.style.display = "none";
-        body.style.display = "block";
-
-        $("#artifact-subtitle").textContent = payload.subtitle || "";
-        const card = document.createElement("div");
-        card.className = "artifact-card";
-        const title = payload.title || (I18N.canvas || "Canvas");
-        const kind = payload.kind || "note";
-        card.innerHTML = `
-            <div class="meta">${kind}</div>
-            <h4>${title}</h4>
-            <div class="body">${renderArtifactHTML(payload)}</div>
-        `;
-        body.prepend(card);
-        enhanceTables(card);
-
-        document.querySelector(".app").classList.remove("pane-closed");
-        $("#right-pane").classList.add("open");
-        $("#artifact-btn").classList.add("active");
+    // ── News panel ────────────────────────────────────────────────
+    function timeAgo(isoStr) {
+        const d = new Date(isoStr);
+        const now = new Date();
+        const diffMs = now - d;
+        const mins = Math.floor(diffMs / 60000);
+        if (mins < 1) return I18N.news_just_now || "just now";
+        if (mins < 60) return (I18N.news_min_ago || "{n}m ago").replace("{n}", mins);
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) return (I18N.news_hour_ago || "{n}h ago").replace("{n}", hours);
+        const days = Math.floor(hours / 24);
+        return (I18N.news_day_ago || "{n}d ago").replace("{n}", days);
     }
 
-    function renderArtifactHTML(p) {
-        if (p.kind === "table" && Array.isArray(p.rows)) {
-            if (!p.rows.length) return `<p><em>${I18N.no_rows || "No rows."}</em></p>`;
-            const cols = p.columns || Object.keys(p.rows[0]);
-            const head = "<tr>" + cols.map(c => `<th>${c}</th>`).join("") + "</tr>";
-            const body = p.rows.map(r => "<tr>" + cols.map(c => `<td>${formatCell(r[c])}</td>`).join("") + "</tr>").join("");
-            return `<table class="artifact-table">${head}${body}</table>`;
-        }
-        if (p.kind === "citations" && Array.isArray(p.items)) {
-            return p.items.map(it => `
-                <div style="margin-bottom:.6rem;">
-                    <div style="color:var(--ink); font-size:.8rem; font-weight:500;">${it.title || ""}</div>
-                    <div style="color:var(--ink-dim); font-size:.68rem; font-family:'JetBrains Mono',monospace;">${it.doc_type || ""}${it.url ? ` · <a href="${it.url}" target="_blank">link</a>` : ""} · score ${(it.score||0).toFixed(2)}</div>
-                    <div style="color:var(--ink-muted); font-size:.75rem; margin-top:.25rem;">${(it.snippet || "").replace(/\n/g,"<br>")}</div>
-                </div>
+    async function loadNews() {
+        const body = $("#news-body");
+        const loading = $("#news-loading");
+        if (!body) return;
+
+        try {
+            const resp = await fetch("/app/news");
+            if (!resp.ok) throw new Error(resp.status);
+            const articles = await resp.json();
+
+            if (loading) loading.style.display = "none";
+            body.style.display = "block";
+
+            if (!articles.length) {
+                body.innerHTML = `<p class="news-empty">${I18N.news_empty || "No news available"}</p>`;
+                return;
+            }
+
+            const sub = $("#news-subtitle");
+            if (sub) sub.textContent = articles.length + " articles";
+
+            body.innerHTML = articles.map(a => `
+                <a href="${escapeHtml(a.url)}" target="_blank" rel="noopener" class="news-item">
+                    <div class="news-item-header">
+                        <span class="news-source">${escapeHtml(a.icon || a.source)}</span>
+                        <span class="news-time">${timeAgo(a.published)}</span>
+                    </div>
+                    <div class="news-item-title">${escapeHtml(a.title)}</div>
+                    ${a.summary ? `<div class="news-item-summary">${escapeHtml(a.summary).slice(0, 120)}</div>` : ""}
+                </a>
             `).join("");
+        } catch (e) {
+            console.error("news load failed", e);
+            if (loading) loading.innerHTML = `<p class="news-empty">${I18N.news_empty || "No news available"}</p>`;
         }
-        if (p.body_md) {
-            return renderMarkdownLite(p.body_md);
-        }
-        return `<pre>${JSON.stringify(p, null, 2)}</pre>`;
     }
 
-    function formatCell(v) {
-        if (v === null || v === undefined) return "—";
-        if (typeof v === "number") return v.toLocaleString();
-        if (typeof v === "object") return JSON.stringify(v);
-        return String(v);
-    }
+    // Load news on page load, refresh every 5 minutes
+    loadNews();
+    setInterval(loadNews, 300000);
 
     // ── UI helpers ────────────────────────────────────────────────
     window.toggleLeftPane = () => {
         $(".left-pane").classList.toggle("open");
         $(".left-overlay").classList.toggle("visible");
     };
-    window.toggleArtifactPane = () => {
+    window.toggleNewsPane = () => {
         const r = $("#right-pane");
         const app = $(".app");
         if (r.classList.contains("open")) {
             r.classList.remove("open");
             app.classList.add("pane-closed");
-            $("#artifact-btn").classList.remove("active");
+            const nb = $("#news-btn");
+            if (nb) nb.classList.remove("active");
         } else {
             r.classList.add("open");
             app.classList.remove("pane-closed");
-            $("#artifact-btn").classList.add("active");
+            const nb = $("#news-btn");
+            if (nb) nb.classList.add("active");
         }
     };
+    // Pipeline deal-detail page uses the right pane for deal brief
+    window.toggleArtifactPane = window.toggleNewsPane;
     window.toggleGroup = (id) => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -564,7 +559,6 @@
             document.querySelectorAll(".cfg-chip").forEach(el => {
                 el.classList.toggle("active", el.textContent.trim().endsWith(code));
             });
-            // Page reloads next navigation; refresh pipeline/cards currency now.
             window.location.reload();
         }
     };

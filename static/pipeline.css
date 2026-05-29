@@ -319,4 +319,13 @@
 .analytics-table-wrap { max-height: 280px; overflow-y: auto; }
 .analytics-error { padding: .75rem; background: #FBE6E2; color: var(--red); border: 1px solid var(--red); border-radius: .4rem; font-size: .8rem; }
 
+/* Deal-brief pane (pipeline deal detail only) */
+.artifact-empty { display: none; }
+.artifact-body { color: var(--ink); font-size: .82rem; line-height: 1.55; }
+.artifact-body h3 { font-size: .9rem; margin: .8rem 0 .4rem; font-weight: 600; color: var(--ink); }
+.artifact-body h4 { font-size: .82rem; margin: .6rem 0 .3rem; font-weight: 600; }
+.artifact-body strong { color: var(--accent); }
+.artifact-body ul { padding-left: 1.1rem; margin: .35rem 0; }
+.artifact-body li { margin-bottom: .25rem; }
+
 /* Bottom-nav rules moved to static/app.css so they apply on /app too. */
