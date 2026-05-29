@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.3.1 — 2026-05-29
+
+### Add Estonian, Finnish, Swedish
+- Three new languages: Estonian (et), Finnish (fi), Swedish (sv) — all 256 UI keys + 24 agent names + 5 category names
+- Estonian IP auto-detection for first-time visitors (Telia, Elisa, Tele2, Levikom, EENet ranges)
+- Router language-intent regex expanded: Estonian, Finnish, Swedish language names now recognized
+- Five flag selectors (🇬🇧 🇪🇪 🇱🇹 🇫🇮 🇸🇪) in chat header and landing navbar
+
 ## v0.3.0 — 2026-05-29
 
 ### Internationalisation (EN + LT)
