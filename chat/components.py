@@ -232,6 +232,7 @@ def _config_section(current_currency: str = "EUR", lang: str = "en"):
 def _bottom_nav(current_path: str = "", lang: str = "en"):
     items = [
         (t("chat_pipeline", lang),     "/app/pipeline",     "◆"),
+        (t("chat_companies", lang),    "/app/companies",    "⊞"),
         (t("chat_instructions", lang), "/app/instructions", "✎"),
         (t("chat_analytics", lang),    "/app/analytics",    "∑"),
     ]

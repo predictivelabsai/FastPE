@@ -219,6 +219,63 @@
 .version-btn-revert { border-color: var(--accent); color: var(--accent-deep); }
 .version-btn-revert:hover { background: var(--accent); color: var(--bg); }
 
+/* ── Company Search page ────────────────────────────────────────── */
+.companies-wrap { padding: 1.25rem 1.5rem; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+.search-bar {
+    display: flex; gap: .5rem; margin-bottom: 1rem; flex-wrap: wrap;
+}
+.search-input {
+    flex: 1; min-width: 200px; padding: .65rem 1rem; background: var(--bg-elev);
+    border: 1px solid var(--line); border-radius: .45rem; color: var(--ink);
+    font-size: .88rem;
+}
+.search-input:focus { outline: none; border-color: var(--accent); }
+.search-select {
+    padding: .65rem .8rem; background: var(--bg-elev); border: 1px solid var(--line);
+    border-radius: .45rem; color: var(--ink); font-size: .82rem; min-width: 140px;
+}
+.search-select:focus { outline: none; border-color: var(--accent); }
+.search-submit {
+    padding: .65rem 1.4rem; background: var(--accent); color: var(--bg);
+    border: none; border-radius: .45rem; font-weight: 600; cursor: pointer;
+    font-size: .82rem;
+}
+.search-submit:hover { background: var(--ink); }
+
+.search-meta { margin-bottom: .75rem; }
+.search-count { font-size: .78rem; color: var(--ink-muted); font-family: 'JetBrains Mono', monospace; }
+.search-empty { padding: 2rem; text-align: center; color: var(--ink-dim); font-size: .88rem; }
+
+.search-table {
+    width: 100%; border-collapse: collapse; font-size: .8rem;
+}
+.search-table thead th {
+    text-align: left; padding: .55rem .7rem; font-size: .68rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .1em; color: var(--ink-dim);
+    border-bottom: 2px solid var(--line); white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+}
+.search-table thead th.text-right { text-align: right; }
+.search-table tbody td {
+    padding: .55rem .7rem; border-bottom: 1px solid var(--line);
+    color: var(--ink); vertical-align: middle;
+}
+.search-table tbody td.text-right { text-align: right; }
+.search-table tbody td.mono { font-family: 'JetBrains Mono', monospace; font-size: .76rem; }
+.search-row { transition: background .12s; }
+.search-row:hover { background: var(--bg-raise); }
+
+.company-link {
+    color: var(--accent-deep); text-decoration: none; font-weight: 500;
+}
+.company-link:hover { text-decoration: underline; }
+
+.sector-chip {
+    font-size: .68rem; color: var(--ink-muted); font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase; letter-spacing: .06em;
+}
+
 /* ── Analytics page ─────────────────────────────────────────────── */
 .analytics-wrap { padding: 1.25rem 1.5rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 .analytics-hero { margin-bottom: 1.5rem; }
