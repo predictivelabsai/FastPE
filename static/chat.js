@@ -442,6 +442,8 @@
         return (I18N.news_day_ago || "{n}d ago").replace("{n}", days);
     }
 
+    let newsInterval = 1800000; // default 30 min, overridden by server
+
     async function loadNews() {
         const body = $("#news-body");
         const loading = $("#news-loading");
@@ -450,7 +452,9 @@
         try {
             const resp = await fetch("/app/news");
             if (!resp.ok) throw new Error(resp.status);
-            const articles = await resp.json();
+            const data = await resp.json();
+            const articles = data.articles || [];
+            if (data.interval) newsInterval = data.interval * 1000;
 
             if (loading) loading.style.display = "none";
             body.style.display = "block";
@@ -479,9 +483,8 @@
         }
     }
 
-    // Load news on page load, refresh every 5 minutes
     loadNews();
-    setInterval(loadNews, 300000);
+    setInterval(() => loadNews(), newsInterval);
 
     // ── UI helpers ────────────────────────────────────────────────
     window.toggleLeftPane = () => {

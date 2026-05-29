@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     ee_ari_password: str = Field(default="", alias="EE_ARI_PASSWORD")
     ee_emta_api_key: str = Field(default="", alias="EE_EMTA_API_KEY")
 
+    # News feed
+    news_interval_seconds: int = Field(default=1800, alias="NEWS_INTERVAL_SECONDS")
+
     app_env: str = Field(default="dev", alias="APP_ENV")
     app_secret: str = Field(default="change-me", alias="APP_SECRET")
     port: int = Field(default=5058, alias="PORT")

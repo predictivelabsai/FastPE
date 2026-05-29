@@ -52,6 +52,6 @@ def chat_page(*, user_email: str | None, sessions: list, current_sid: str = "",
         center_pane(messages=messages, current_agent_slug=current_agent_slug, readonly=readonly, lang=lang),
         right_pane(lang=lang),
         Script(src=_versioned("chat.js")),
-        cls="bg-bg text-ink font-sans antialiased app pane-closed",
+        cls="bg-bg text-ink font-sans antialiased app",
     )
     return Html(head, body, lang=lang)

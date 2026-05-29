@@ -395,7 +395,7 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None,
                        onclick="copyChat()"),
                 Button(t("chat_share", lang), id="share-chat-btn", cls="chat-action-btn",
                        onclick="shareChat()"),
-                Button(t("news_title", lang), id="news-btn", cls="news-toggle-btn",
+                Button(t("news_title", lang), id="news-btn", cls="news-toggle-btn active",
                        onclick="toggleNewsPane()"),
                 cls="chat-header-actions",
             ),
@@ -448,7 +448,7 @@ def right_pane(lang: str = "en"):
             Div(id="news-body", cls="news-body", style="display:none"),
             cls="right-body",
         ),
-        id="right-pane", cls="right-pane",
+        id="right-pane", cls="right-pane open",
     )
 
 

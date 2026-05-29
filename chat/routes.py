@@ -374,9 +374,12 @@ def shared_chat(token: str):
 @rt("/app/news")
 async def news_feed(request: Request):
     lang = get_lang(request.session)
-    from utils.news import fetch_news_translated
+    from utils.news import fetch_news_translated, _cache_ttl
     articles = await fetch_news_translated(lang)
-    return JSONResponse(articles)
+    return JSONResponse({
+        "articles": articles,
+        "interval": _cache_ttl(),
+    })
 
 
 # ── Debug ping (kept from Phase 0) ──────────────────────────────────

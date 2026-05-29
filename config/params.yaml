@@ -1,0 +1,7 @@
+# PEHero runtime parameters
+# These can be overridden by environment variables (uppercase, same name).
+
+news:
+  # How often to refresh RSS feeds (seconds). Applies to both server-side
+  # cache TTL and client-side polling interval.
+  interval_seconds: 1800   # 30 minutes

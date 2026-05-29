@@ -29,7 +29,22 @@ FEEDS: list[dict] = [
 ]
 
 _cache: dict = {"articles": [], "fetched_at": None}
-CACHE_TTL = 300  # 5 minutes
+
+
+def _cache_ttl() -> int:
+    try:
+        import yaml
+        from pathlib import Path
+        p = Path(__file__).resolve().parents[1] / "config" / "params.yaml"
+        if p.exists():
+            cfg = yaml.safe_load(p.read_text()) or {}
+            val = (cfg.get("news") or {}).get("interval_seconds")
+            if val:
+                return int(val)
+    except Exception:
+        pass
+    from utils.config import settings
+    return settings().news_interval_seconds
 
 
 def _parse_date(entry) -> datetime:
@@ -86,7 +101,7 @@ def _fetch_one(feed: dict) -> list[dict]:
 async def fetch_news() -> list[dict]:
     """Fetch all RSS feeds and return merged, deduplicated, sorted list."""
     now = datetime.now(tz=timezone.utc)
-    if _cache["fetched_at"] and (now - _cache["fetched_at"]).total_seconds() < CACHE_TTL:
+    if _cache["fetched_at"] and (now - _cache["fetched_at"]).total_seconds() < _cache_ttl():
         return _cache["articles"]
 
     results = await asyncio.gather(
