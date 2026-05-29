@@ -168,11 +168,11 @@
         let prompts = (slug && AGENT_PROMPTS[slug]) || [];
         if (!prompts.length) {
             prompts = [
-                "triage: vertical SaaS, €8M EBITDA, 20% growth, €85M ask",
-                "lbo: 5-year model for Northwind at 12x entry, 12% growth",
-                "comps: software precedent M&A 2022-2024 under €500M EV",
-                "memo: draft the IC memo for Meridian Healthcare",
-                "vdr: audit the data room for Meridian Healthcare",
+                "triage: DR VET veterinary clinic, €3.8M revenue, Vilnius",
+                "lbo: 5-year model for Kardiolita at 12% rev growth",
+                "ltm: what are the financials of DR VET?",
+                "memo: draft the IC memo for Kardiolita",
+                "vdr: audit the data room for Northway",
                 "crm: top 10 LPs to reach out to for Fund V",
             ];
         }

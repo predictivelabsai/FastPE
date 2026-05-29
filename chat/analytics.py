@@ -93,14 +93,14 @@ pehero.cap_tables (company_id, as_of_date, holders JSONB, total_shares, post_mon
 
 
 SAMPLE_QUERIES = [
-    "EV/EBITDA median by sector over the last 24 months",
     "Top 10 companies by LTM revenue, show sector",
     "Company count by deal stage",
-    "LP commitments by lp_type, stacked",
-    "Monthly revenue trend for Northwind Systems",
-    "Transaction comp volume by sector, last 12 months",
-    "DD findings severity breakdown by category",
-    "Average EBITDA margin by ownership type",
+    "Average EBITDA margin by sector",
+    "Monthly revenue trend for DR VET",
+    "Company count by city",
+    "Revenue distribution by sub-sector",
+    "Largest healthcare companies by employees",
+    "Average revenue by sector, bar chart",
 ]
 
 

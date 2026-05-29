@@ -1,8 +1,8 @@
 """Web search tool — Tavily default, EXA fallback.
 
 Used by sourcing agents when they need to pull info that isn't in the PE OLTP
-corpus (e.g. "what happened to the Meridian Healthcare deal last year?",
-"find recent secondary activity in HCIT").
+corpus (e.g. "what happened to the Kardiolita deal last year?",
+"find recent M&A activity in Baltic healthcare").
 
 Hides the provider behind a single StructuredTool. If neither key is set the
 tool returns a neutral "search unavailable" string so agents can degrade

@@ -56,14 +56,14 @@ TOUR = [
 
 
 CHAT_MSGS = {
-    "triage":   "triage: vertical SaaS for auto dealers, $8M EBITDA, 20% growth, $85M ask",
-    "lbo":      "lbo: build a 5-year model for Northwind at 12% rev growth, 300bps margin exp",
-    "memo":     "memo: draft the IC memo for Meridian Healthcare",
+    "triage":   "triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",
+    "lbo":      "lbo: build a 5-year model for Kardiolita at 12% rev growth, 300bps margin exp",
+    "memo":     "memo: draft the IC memo for Kardiolita",
 }
 
 ANALYTICS_QUERIES = {
     "stages":       "Company count by deal stage",
-    "ev_by_sector": "EV/EBITDA median by sector over the last 24 months",
+    "ev_by_sector": "Average EBITDA margin by sector",
 }
 
 

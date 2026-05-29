@@ -25,17 +25,17 @@ def test_every_agent_builds(spec):
 
 
 @pytest.mark.parametrize("message,expected_slug", [
-    ("triage: vertical SaaS $8M EBITDA", "deal_triage"),
+    ("triage: DR VET veterinary clinic, €3.8M revenue", "deal_triage"),
     ("lbo: build a 5-year model", "pro_forma_builder"),
-    ("ltm: normalize Northwind Systems", "t12_normalizer"),
-    ("memo: IC memo for Meridian", "investor_memo"),
+    ("ltm: normalize DR VET financials", "t12_normalizer"),
+    ("memo: IC memo for Kardiolita", "investor_memo"),
     ("abstract: change-of-control terms across MSAs", "lease_abstractor"),
-    ("vc: rank initiatives for Northwind", "capex_prioritizer"),
+    ("vc: rank initiatives for DR VET", "capex_prioritizer"),
     ("ebitda: what's driving variance?", "opex_variance"),
     ("churn: which customers are at risk?", "tenant_churn"),
     ("price: where is pricing below market?", "rent_optimization"),
-    ("scan: lower-middle-market software", "market_scanner"),
-    ("comps: software precedent M&A", "comp_finder"),
+    ("scan: healthcare clinics in Lithuania", "market_scanner"),
+    ("comps: healthcare clinics precedent M&A", "comp_finder"),
 ])
 def test_prefix_routing(message, expected_slug):
     assert agent_router.route(message) == expected_slug

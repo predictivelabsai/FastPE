@@ -1,0 +1,21 @@
+id,agent_slug,prompt,expect_contains,expect_agent,description
+tc01,deal_triage,"triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",DR VET,deal_triage,Triage a real Lithuanian vet clinic
+tc02,t12_normalizer,"ltm: what are the financials of DR VET?",revenue,t12_normalizer,Pull LTM financials for DR VET
+tc03,t12_normalizer,"ltm: normalize Kardiolita financials",Kardiolita,t12_normalizer,LTM normalization for Kardiolita hospital
+tc04,pro_forma_builder,"lbo: build a 5-year model for Kardiolita at 12% growth",IRR,pro_forma_builder,LBO model for Kardiolita
+tc05,investor_memo,"memo: draft the IC memo for Kardiolita",investment,investor_memo,IC memo for Kardiolita
+tc06,outreach_email,"outreach: draft an intro email to the founder of DR VET",DR VET,outreach_email,Outreach email for DR VET
+tc07,loi_writer,"loi: draft an LOI for Kardiolita at €85M EV",Kardiolita,loi_writer,LOI for Kardiolita
+tc08,comp_finder,"comps: healthcare clinics precedent M&A 2022-2024",EV,comp_finder,Healthcare comps search
+tc09,market_scanner,"scan: logistics companies in Lithuania",logistics,market_scanner,Scan Lithuanian logistics
+tc10,doc_room_auditor,"vdr: audit the data room for Kardiolita",checklist,doc_room_auditor,VDR audit for Kardiolita
+tc11,rent_optimization,"price: what pricing lift can we capture at Kardiolita?",pricing,rent_optimization,Pricing analysis for Kardiolita
+tc12,opex_variance,"ebitda: show me the top 5 portco-wide EBITDA variances",EBITDA,opex_variance,EBITDA variance across portfolio
+tc13,deal_triage,"triage: Baltic Transline logistics, €397M revenue, Kaunas",Baltic,deal_triage,Triage a large logistics company
+tc14,lease_abstractor,"abstract: the top-10 customer contracts for Baltic Transline",contract,lease_abstractor,Contract abstraction for logistics
+tc15,deal_teaser,"teaser: build a co-invest teaser for DR VET",DR VET,deal_teaser,Teaser for DR VET
+tc16,fundraising_crm,"crm: who are the top 10 LPs to reach out to?",LP,fundraising_crm,LP CRM ranking
+tc17,lp_update,"lpupd: draft Q1 letter for Fund IV LPs",portfolio,lp_update,Quarterly LP letter
+tc18,tenant_churn,"churn: which DR VET customers are at highest renewal risk?",risk,tenant_churn,Churn prediction for DR VET
+tc19,environmental_risk,"esg: summarize ESG risk across my current pipeline",ESG,environmental_risk,ESG risk summary
+tc20,physical_condition,"ops: build a 100-day plan for Kardiolita post-close",100-day,physical_condition,Ops diligence for Kardiolita

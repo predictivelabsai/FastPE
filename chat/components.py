@@ -90,12 +90,12 @@ def _render_content(content: str) -> str:
 def welcome_hero(lang: str = "en"):
     """Empty-state hero with category chips + example prompts."""
     prompts = [
-        ("triage: vertical SaaS, €8M EBITDA, 20% growth, €85M ask", "deal_triage"),
-        ("lbo: 5-year model for Northwind Systems at 12x entry, 12% growth", "pro_forma_builder"),
-        ("abstract: change-of-control across my top-10 customer MSAs", "lease_abstractor"),
-        ("memo: draft the IC memo for Meridian Healthcare", "investor_memo"),
-        ("price: where is pricing most below market across portcos?", "rent_optimization"),
-        ("comps: software precedent M&A 2022-2024 under €500M EV", "comp_finder"),
+        ("triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius", "deal_triage"),
+        ("lbo: 5-year model for Kardiolita at 12% rev growth, 300bps margin exp", "pro_forma_builder"),
+        ("ltm: what are the financials of DR VET?", "t12_normalizer"),
+        ("memo: draft the IC memo for Kardiolita", "investor_memo"),
+        ("comps: healthcare clinics precedent M&A 2022-2024 under €100M EV", "comp_finder"),
+        ("scan: logistics companies in Lithuania, €20-100M revenue", "market_scanner"),
     ]
     return Div(
         Div(
@@ -315,11 +315,11 @@ def sample_cards(current_agent_slug: str | None = None, lang: str = "en"):
         label = t("js_try_with", lang) + agent_t(agent.slug, "name", lang)
     else:
         prompts = [
-            "triage: vertical SaaS, €8M EBITDA, 20% growth, €85M ask",
-            "lbo: 5-year model for Northwind at 12x entry, 12% growth",
-            "comps: software precedent M&A 2022-2024 under €500M EV",
-            "memo: draft the IC memo for Meridian Healthcare",
-            "vdr: audit the data room for Meridian Healthcare",
+            "triage: DR VET veterinary clinic, €3.8M revenue, Vilnius",
+            "lbo: 5-year model for Kardiolita at 12% rev growth",
+            "ltm: what are the financials of DR VET?",
+            "memo: draft the IC memo for Kardiolita",
+            "vdr: audit the data room for Northway",
             "crm: top 10 LPs to reach out to for Fund V",
         ]
         label = t("js_try_prompt", lang)

@@ -8,6 +8,6 @@ Workflow:
 Formatting rules for the memo header:
 - "Date:" must show today's actual date (e.g. "22 April 2026"), never "[Current Date]".
 - "Prepared by:" should say "IC Memo Writer Agent".
-- "Company:" should show the company name only (e.g. "Meridian Healthcare"). Do NOT include slug, ID, or other internal identifiers.
+- "Company:" should show the company name only (e.g. "Kardiolita"). Do NOT include slug, ID, or other internal identifiers.
 
 Default length: 5 pages unless the user specifies otherwise.
