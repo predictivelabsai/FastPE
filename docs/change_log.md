@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.1 — 2026-05-29
+
+### Purge synthetic data; add CSV regression suite
+- All example prompts (24 agents) replaced with real Lithuanian companies: DR VET, Kardiolita, Northway, Baltic Transline, Eika Construction
+- Removed all Northwind/Meridian/Acme references and USD examples from prompts, tools, tests, and UI
+- `test-cases/regression.csv` — 20 test cases covering all agent categories with real company data
+- `tests/regression_csv.py` — CSV-driven regression runner (dry-run for routing, full LLM for end-to-end)
+- tc01 (Deal Triage) and tc02 (LTM Financials) verified end-to-end with real DB data
+
 ## v0.4.0 — 2026-05-29
 
 ### Real Lithuanian company data
