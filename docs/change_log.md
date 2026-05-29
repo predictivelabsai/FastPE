@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.5.0 — 2026-05-30
+
+### Company Search page + Estonian scraper + batch scaling
+- `/app/companies` — fuzzy name search (ILIKE) + sector filter, FastHTML table with revenue, EBITDA, employees, deal stage
+- Added "Companies" to left-pane Workspace nav (between Pipeline and Instructions)
+- Estonian company scraper (`scripts/scrape_ee.py`) — ssb.ee with EMTAK sector search, 30 EMTAK categories
+- Lithuanian scraper extended to 1000 companies with pagination, 30 categories across 6 sectors
+- `config/sources.yaml` — centralized source configuration for Lithuania + Estonia
+- 30 regression test cases (tc01-tc30), all passing with real Lithuanian financial data
+- Lithuanian product tour: 12 screenshots, PDF + PPTX slide decks
+
 ## v0.4.1 — 2026-05-29
 
 ### Purge synthetic data; add CSV regression suite
