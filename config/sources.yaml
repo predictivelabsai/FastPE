@@ -1,0 +1,154 @@
+# PEHero — company data sources configuration.
+# Each country has a registry URL, categories to scrape, and sector mappings.
+# The scraper reads this file to know what to fetch.
+
+lithuania:
+  name: Lithuania
+  country_code: LT
+  registry_url: https://rekvizitai.vz.lt/en
+  company_url_pattern: "{base}/company/{slug}/"
+  financials_url_pattern: "{base}/company/{slug}/turnover/"
+  category_url_pattern: "{base}/companies/{category}/"
+  categories:
+    # Healthcare
+    health_care_institutions:
+      sector: healthcare
+      sub_sector: Health care institutions
+      priority: 1
+    veterinary_medicine:
+      sector: healthcare
+      sub_sector: Veterinary clinics
+      priority: 1
+    odonthology_services:
+      sector: healthcare
+      sub_sector: Dental clinics
+      priority: 1
+    drugs_medical_materials:
+      sector: healthcare
+      sub_sector: Pharmacy & medical materials
+      priority: 2
+
+    # Technology / Software
+    computer_software_development:
+      sector: software
+      sub_sector: Software development
+      priority: 1
+    computers_and_software:
+      sector: software
+      sub_sector: IT services & hardware
+      priority: 2
+    web_development_hosting:
+      sector: software
+      sub_sector: Web development & hosting
+      priority: 2
+    automation:
+      sector: software
+      sub_sector: Automation & robotics
+      priority: 2
+    internet_services:
+      sector: software
+      sub_sector: Internet services
+      priority: 2
+
+    # Financial services
+    insurance:
+      sector: financial_services
+      sub_sector: Insurance
+      priority: 1
+    finance_services:
+      sector: financial_services
+      sub_sector: Financial services
+      priority: 2
+    banks_banking_operations:
+      sector: financial_services
+      sub_sector: Banking
+      priority: 3
+
+    # Industrials / Logistics
+    motor_transport_services:
+      sector: industrials
+      sub_sector: Logistics services
+      priority: 1
+    freight_forwarding:
+      sector: industrials
+      sub_sector: Freight forwarding
+      priority: 1
+    transportation:
+      sector: industrials
+      sub_sector: Transportation
+      priority: 2
+    warehouses:
+      sector: industrials
+      sub_sector: Warehousing
+      priority: 2
+    manufacturing:
+      sector: industrials
+      sub_sector: Manufacturing
+      priority: 2
+
+    # Business services / Real estate
+    real_estate:
+      sector: business_services
+      sub_sector: Real estate development
+      priority: 1
+    building_services:
+      sector: business_services
+      sub_sector: Construction services
+      priority: 2
+    consulting_services:
+      sector: business_services
+      sub_sector: Consulting
+      priority: 2
+    legal_services:
+      sector: business_services
+      sub_sector: Legal services
+      priority: 3
+    audit:
+      sector: business_services
+      sub_sector: Audit & accounting
+      priority: 3
+    advertising_services:
+      sector: business_services
+      sub_sector: Advertising & marketing
+      priority: 3
+
+    # Consumer
+    food_production:
+      sector: consumer
+      sub_sector: Food production
+      priority: 2
+    coffee_bars_nightclubs_bars_restaurants:
+      sector: consumer
+      sub_sector: Restaurants & hospitality
+      priority: 3
+    hotels_motels:
+      sector: consumer
+      sub_sector: Hotels & accommodation
+      priority: 3
+    clothing:
+      sector: consumer
+      sub_sector: Fashion & apparel
+      priority: 3
+
+    # Electronics / Hardware
+    electronic_equipment_and_parts:
+      sector: software
+      sub_sector: Electronics & components
+      priority: 2
+    connection_and_telecommunication_services:
+      sector: software
+      sub_sector: Telecom services
+      priority: 2
+
+  must_include:
+    - gyvunu_ligonine       # DR VET
+    - northway_medicinos_centras
+    - kardiolita
+    - kardiolitos_klinikos
+
+# Future:
+# estonia:
+#   name: Estonia
+#   country_code: EE
+#   registry_url: https://ariregister.rik.ee
+#   ...

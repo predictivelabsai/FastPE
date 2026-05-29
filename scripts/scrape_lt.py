@@ -1,11 +1,14 @@
-"""One-off scraper: Lithuanian companies from rekvizitai.vz.lt → data/lt_companies.json.
+"""Batch scraper: Lithuanian companies from rekvizitai.vz.lt → data/lt_companies.json.
+
+Reads categories from config/sources.yaml. Supports pagination to reach 1000+ companies.
+Resumes from existing data automatically. Recovers from browser crashes.
 
 Usage:
-    python -m scripts.scrape_lt                   # scrape ~120 companies
-    python -m scripts.scrape_lt --limit 5         # quick test with 5 per category
-    python -m scripts.scrape_lt --headless false   # visible browser for debugging
-
-Requires: playwright (already installed for screenshot capture).
+    python -m scripts.scrape_lt                        # scrape all categories, default limits
+    python -m scripts.scrape_lt --target 1000          # keep going until 1000 companies
+    python -m scripts.scrape_lt --limit-per-cat 50     # max per category
+    python -m scripts.scrape_lt --pages 3              # scrape up to 3 pages per category
+    python -m scripts.scrape_lt --headless false       # visible browser for debugging
 """
 
 from __future__ import annotations
@@ -17,39 +20,24 @@ import re
 import time
 from pathlib import Path
 
+import yaml
+
 log = logging.getLogger(__name__)
 
-CATEGORIES = {
-    "health_care_institutions": "healthcare",
-    "real_estate": "business_services",
-    "insurance": "financial_services",
-    "motor_transport_services": "industrials",
-    "veterinary_medicine": "healthcare",
-    "odonthology_services": "healthcare",
-}
-
-CATEGORY_SUBSECTORS = {
-    "health_care_institutions": "Health care institutions",
-    "real_estate": "Real estate development",
-    "insurance": "Insurance",
-    "motor_transport_services": "Logistics services",
-    "veterinary_medicine": "Veterinary clinics",
-    "odonthology_services": "Dental clinics",
-}
-
-# Specific companies to always include (slug → category override)
-MUST_INCLUDE = [
-    "gyvunu_ligonine",                      # DR VET
-    "northway_medicinos_centras",           # Northway
-    "kardiolita",                            # Meliva Kardiolita (Vilnius)
-    "kardiolitos_klinikos",                 # Kardiolita Kaunas variant
-]
+ROOT = Path(__file__).resolve().parent.parent
+CONFIG_PATH = ROOT / "config" / "sources.yaml"
+DATA_PATH = ROOT / "data" / "lt_companies.json"
 
 BASE = "https://rekvizitai.vz.lt/en"
 
 
+def _load_config() -> dict:
+    with open(CONFIG_PATH) as f:
+        cfg = yaml.safe_load(f)
+    return cfg["lithuania"]
+
+
 def _parse_euros(text: str) -> float | None:
-    """Parse '3 796 775 €' or '-578 474 €' → float."""
     if not text:
         return None
     m = re.search(r"([-\d\s]+)\s*€", text.replace(" ", " "))
@@ -62,56 +50,22 @@ def _parse_euros(text: str) -> float | None:
         return None
 
 
-def _parse_int(text: str) -> int | None:
-    m = re.search(r"(\d[\d\s]*)", text.replace(" ", " "))
-    if not m:
-        return None
-    try:
-        return int(m.group(1).replace(" ", ""))
-    except ValueError:
-        return None
-
-
-def _parse_year_from_age(age_text: str) -> int | None:
-    """'3 years 7 months 4 days' → founded_year."""
-    m = re.search(r"(\d+)\s*year", age_text)
-    if m:
-        from datetime import date
-        return date.today().year - int(m.group(1))
-    return None
-
-
-def _parse_city(address: str) -> str | None:
-    if not address:
-        return None
-    parts = [p.strip() for p in address.split(",")]
-    for p in reversed(parts):
-        cleaned = re.sub(r"LT-\d+\s*", "", p).strip()
-        if cleaned and not cleaned[0].isdigit():
-            return cleaned
-    return None
-
-
 def _scrape_company_page(page, slug: str) -> dict | None:
-    """Navigate to company page, extract structured data."""
     url = f"{BASE}/company/{slug}/"
     try:
-        page.goto(url, timeout=15000)
+        page.goto(url, timeout=20000)
         page.wait_for_load_state("domcontentloaded")
         time.sleep(0.5)
     except Exception as e:
-        log.warning("Failed to load %s: %s", url, e)
+        log.warning("Failed to load %s: %s", slug, e)
         return None
 
     try:
         data = page.evaluate("""() => {
             const result = {};
-
-            // Company name from h1
             const h1 = document.querySelector('h1');
             result.name = h1 ? h1.textContent.trim() : '';
 
-            // All table rows as key-value pairs — rows have 3 cells (icon, label, value)
             const main = document.querySelector('main') || document.body;
             const tables = main.querySelectorAll('table');
             tables.forEach(t => {
@@ -119,7 +73,6 @@ def _scrape_company_page(page, slug: str) -> dict | None:
                 t.querySelectorAll('tr').forEach(tr => {
                     const cells = tr.querySelectorAll('td');
                     if (cells.length >= 2) {
-                        // Last two non-empty cells are key-value
                         const texts = [...cells].map(c => c.textContent.trim());
                         let key = '', val = '';
                         if (cells.length === 2) { key = texts[0]; val = texts[1]; }
@@ -130,44 +83,29 @@ def _scrape_company_page(page, slug: str) -> dict | None:
                 });
             });
 
-            // Try to grab revenue and profit from the summary boxes
             const allText = document.body.innerText;
             const revMatch = allText.match(/Sales revenue[\\s\\n]+([-\\d\\s]+\\s*€)\\s*\\((\\d{4})/);
-            if (revMatch) {
-                result['_sales_revenue'] = revMatch[1];
-                result['_sales_year'] = revMatch[2];
-            }
+            if (revMatch) { result['_sales_revenue'] = revMatch[1]; result['_sales_year'] = revMatch[2]; }
             const profitMatch = allText.match(/Net (?:profit|loss)[\\s\\n]+([-\\d\\s]+\\s*€)\\s*\\((\\d{4})/i);
-            if (profitMatch) {
-                result['_net_profit'] = profitMatch[1];
-                result['_profit_year'] = profitMatch[2];
-            }
+            if (profitMatch) { result['_net_profit'] = profitMatch[1]; result['_profit_year'] = profitMatch[2]; }
 
-            // Description paragraph
             const paragraphs = document.querySelectorAll('p');
             for (const p of paragraphs) {
                 const text = p.textContent.trim();
-                if (text.length > 80 && text.includes('was founded')) {
-                    result['_description'] = text;
-                    break;
-                }
+                if (text.length > 80 && text.includes('was founded')) { result['_description'] = text; break; }
             }
 
-            // Categories
             const catLinks = document.querySelectorAll('a[href*="/en/companies/"]');
             const cats = [];
             catLinks.forEach(a => {
                 const t = a.textContent.trim();
-                if (t && t.length > 2 && !['Company search','Company databases'].includes(t)) {
-                    cats.push(t);
-                }
+                if (t && t.length > 2 && !['Company search','Company databases'].includes(t)) cats.push(t);
             });
             result['_categories'] = cats.join('; ');
-
             return result;
         }""")
     except Exception as e:
-        log.warning("    JS evaluate failed for %s: %s", slug, e)
+        log.warning("JS evaluate failed for %s: %s", slug, e)
         return None
 
     if not data or not data.get("name"):
@@ -197,28 +135,30 @@ def _scrape_company_page(page, slug: str) -> dict | None:
 
 
 def _scrape_financials(page, slug: str) -> list[dict]:
-    """Navigate to financials page, extract multi-year table."""
     url = f"{BASE}/company/{slug}/turnover/"
     try:
-        page.goto(url, timeout=15000)
+        page.goto(url, timeout=20000)
         page.wait_for_load_state("domcontentloaded")
         time.sleep(0.5)
     except Exception as e:
         log.warning("Failed to load financials for %s: %s", slug, e)
         return []
 
-    raw = page.evaluate("""() => {
-        const tables = document.querySelectorAll('table');
-        if (!tables.length) return [];
-        const t = tables[0];
-        const rows = [];
-        t.querySelectorAll('tr').forEach(tr => {
-            const cells = [];
-            tr.querySelectorAll('th, td').forEach(td => cells.push(td.textContent.trim()));
-            if (cells.length > 1) rows.push(cells);
-        });
-        return rows;
-    }""")
+    try:
+        raw = page.evaluate("""() => {
+            const tables = document.querySelectorAll('table');
+            if (!tables.length) return [];
+            const t = tables[0];
+            const rows = [];
+            t.querySelectorAll('tr').forEach(tr => {
+                const cells = [];
+                tr.querySelectorAll('th, td').forEach(td => cells.push(td.textContent.trim()));
+                if (cells.length > 1) rows.push(cells);
+            });
+            return rows;
+        }""")
+    except Exception:
+        return []
 
     if not raw or len(raw) < 2:
         return []
@@ -232,8 +172,7 @@ def _scrape_financials(page, slug: str) -> list[dict]:
         for row in raw[1:]:
             if len(row) <= yi:
                 continue
-            label = row[0]
-            val = row[yi]
+            label, val = row[0], row[yi]
             if "Sales revenue" in label:
                 entry["sales_revenue"] = _parse_euros(val)
             elif "Net profit" in label and "margin" not in label.lower():
@@ -249,57 +188,73 @@ def _scrape_financials(page, slug: str) -> list[dict]:
             elif "Current assets" in label:
                 entry["current_assets"] = _parse_euros(val)
         financials.append(entry)
-
     return financials
 
 
-def _get_category_slugs(page, category_slug: str, limit: int = 30) -> list[str]:
+def _get_category_slugs(page, category_slug: str, page_num: int = 1) -> list[str]:
     """Get company slugs from a category listing page."""
     url = f"{BASE}/companies/{category_slug}/"
+    if page_num > 1:
+        url = f"{BASE}/companies/{category_slug}/{page_num}/"
     try:
-        page.goto(url, timeout=15000)
+        page.goto(url, timeout=20000)
         page.wait_for_load_state("domcontentloaded")
         time.sleep(0.5)
     except Exception as e:
-        log.warning("Failed to load category %s: %s", category_slug, e)
+        log.warning("Failed to load category %s page %d: %s", category_slug, page_num, e)
         return []
 
-    slugs = page.evaluate("""() => {
-        const items = document.querySelectorAll('a[href*="/en/company/"]');
-        const result = [];
-        const seen = new Set();
-        const skip = ['/manager/','/turnover/','/report/','/credit-risk/',
-                      '/number-of-employees/','/salary/','/legal-entity/',
-                      '/tenders/','/trademarks/','/sustainability/','/paid-taxes/'];
-        items.forEach(a => {
-            const href = a.getAttribute('href');
-            const text = a.textContent.trim();
-            if (href && text && text.length > 2 && !seen.has(href)
-                && !skip.some(s => href.includes(s))) {
-                seen.add(href);
-                const slug = href.split('/company/')[1]?.replace(/\\/$/, '');
-                if (slug) result.push(slug);
-            }
-        });
-        return result;
-    }""")
+    try:
+        slugs = page.evaluate("""() => {
+            const items = document.querySelectorAll('a[href*="/en/company/"]');
+            const result = [];
+            const seen = new Set();
+            const skip = ['/manager/','/turnover/','/report/','/credit-risk/',
+                          '/number-of-employees/','/salary/','/legal-entity/',
+                          '/tenders/','/trademarks/','/sustainability/','/paid-taxes/'];
+            items.forEach(a => {
+                const href = a.getAttribute('href');
+                const text = a.textContent.trim();
+                if (href && text && text.length > 2 && !seen.has(href)
+                    && !skip.some(s => href.includes(s))) {
+                    seen.add(href);
+                    const slug = href.split('/company/')[1]?.replace(/\\/$/, '');
+                    if (slug) result.push(slug);
+                }
+            });
+            return result;
+        }""")
+    except Exception:
+        return []
 
-    return slugs[:limit]
+    return slugs
 
 
-def scrape(limit_per_cat: int = 20, headless: bool = True):
+def scrape(target: int = 1000, limit_per_cat: int = 80, max_pages: int = 5,
+           headless: bool = True):
     from playwright.sync_api import sync_playwright
 
-    out_path = Path(__file__).resolve().parent.parent / "data" / "lt_companies.json"
+    cfg = _load_config()
+    categories = cfg["categories"]
+    must_include = cfg.get("must_include", [])
+
+    # Sort categories by priority
+    sorted_cats = sorted(categories.items(), key=lambda x: x[1].get("priority", 99))
+
+    # Resume from existing data
     all_companies = []
     seen_slugs = set()
-
-    # Resume from existing data if available
-    if out_path.exists():
-        existing = json.loads(out_path.read_text())
+    if DATA_PATH.exists():
+        existing = json.loads(DATA_PATH.read_text())
         all_companies.extend(existing)
         seen_slugs.update(c["slug"] for c in existing)
-        log.info("Resuming: loaded %d existing companies", len(existing))
+        log.info("Resuming: %d existing companies (target: %d)", len(existing), target)
+    else:
+        log.info("Starting fresh (target: %d companies)", target)
+
+    if len(all_companies) >= target:
+        log.info("Already at target (%d >= %d), nothing to do", len(all_companies), target)
+        return all_companies
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=headless)
@@ -307,7 +262,6 @@ def scrape(limit_per_cat: int = 20, headless: bool = True):
             user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             locale="en-US",
         )
-        # Pre-set Cookiebot consent cookie to skip the dialog entirely
         ctx.add_cookies([{
             "name": "CookieConsent",
             "value": "{stamp:%27-1%27%2Cnecessary:true%2Cpreferences:true%2Cstatistics:true%2Cmarketing:true%2Cmethod:%27explicit%27%2Cver:1}",
@@ -323,7 +277,7 @@ def scrape(limit_per_cat: int = 20, headless: bool = True):
             except Exception:
                 pass
             ctx = browser.new_context(
-                user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
                 locale="en-US",
             )
             ctx.add_cookies([{
@@ -335,7 +289,6 @@ def scrape(limit_per_cat: int = 20, headless: bool = True):
             page = ctx.new_page()
 
         def _safe_scrape(slug, sector, sub_sector):
-            """Scrape a company with automatic context recovery on crash."""
             nonlocal ctx, page
             for attempt in range(2):
                 try:
@@ -352,42 +305,72 @@ def scrape(limit_per_cat: int = 20, headless: bool = True):
                         log.warning("    Context crashed, recovering: %s", e)
                         _make_context()
                     else:
-                        log.warning("    Failed after retry: %s", e)
                         return None
             return None
 
-        for cat_slug, sector in CATEGORIES.items():
-            sub_sector = CATEGORY_SUBSECTORS[cat_slug]
-            log.info("Scraping category: %s → %s", cat_slug, sector)
-            try:
-                slugs = _get_category_slugs(page, cat_slug, limit=limit_per_cat + 10)
-            except Exception:
-                _make_context()
-                slugs = _get_category_slugs(page, cat_slug, limit=limit_per_cat + 10)
-            log.info("  Found %d company slugs", len(slugs))
+        def _save_checkpoint():
+            DATA_PATH.parent.mkdir(exist_ok=True)
+            DATA_PATH.write_text(json.dumps(all_companies, indent=2, ensure_ascii=False))
+            log.info("  Checkpoint: %d companies saved", len(all_companies))
 
-            count = 0
-            for slug in slugs:
-                if slug in seen_slugs:
-                    continue
-                if count >= limit_per_cat:
+        for cat_slug, cat_cfg in sorted_cats:
+            if len(all_companies) >= target:
+                break
+
+            sector = cat_cfg["sector"]
+            sub_sector = cat_cfg["sub_sector"]
+            log.info("Category: %s → %s (%d/%d total)",
+                     cat_slug, sector, len(all_companies), target)
+
+            cat_count = 0
+            for page_num in range(1, max_pages + 1):
+                if cat_count >= limit_per_cat or len(all_companies) >= target:
                     break
 
-                log.info("  [%d/%d] Scraping %s", count + 1, limit_per_cat, slug)
-                info = _safe_scrape(slug, sector, sub_sector)
-                if not info:
-                    log.warning("    Skipped (no data)")
-                    continue
+                try:
+                    slugs = _get_category_slugs(page, cat_slug, page_num)
+                except Exception:
+                    _make_context()
+                    slugs = _get_category_slugs(page, cat_slug, page_num)
 
-                all_companies.append(info)
-                seen_slugs.add(slug)
-                count += 1
+                if not slugs:
+                    log.info("  Page %d: no companies found, moving to next category", page_num)
+                    break
 
-        # Must-include companies (if not already scraped)
-        for slug in MUST_INCLUDE:
+                log.info("  Page %d: %d slugs", page_num, len(slugs))
+
+                for slug in slugs:
+                    if slug in seen_slugs:
+                        continue
+                    if cat_count >= limit_per_cat or len(all_companies) >= target:
+                        break
+
+                    info = _safe_scrape(slug, sector, sub_sector)
+                    if not info:
+                        continue
+
+                    # Filter: only keep companies with revenue data
+                    rev = _parse_euros(info.get("sales_revenue", ""))
+                    if not rev and not info.get("financials"):
+                        continue
+
+                    all_companies.append(info)
+                    seen_slugs.add(slug)
+                    cat_count += 1
+
+                    if len(all_companies) % 25 == 0:
+                        _save_checkpoint()
+
+                # Small delay between pages
+                time.sleep(0.5)
+
+            log.info("  → %d companies from %s (total: %d)", cat_count, cat_slug, len(all_companies))
+
+        # Must-include companies
+        for slug in must_include:
             if slug in seen_slugs:
                 continue
-            log.info("Scraping must-include: %s", slug)
+            log.info("Must-include: %s", slug)
             info = _safe_scrape(slug, "healthcare", "Health care institutions")
             if info:
                 all_companies.append(info)
@@ -395,16 +378,20 @@ def scrape(limit_per_cat: int = 20, headless: bool = True):
 
         browser.close()
 
-    out_path.parent.mkdir(exist_ok=True)
-    out_path.write_text(json.dumps(all_companies, indent=2, ensure_ascii=False))
-    log.info("Wrote %d companies to %s", len(all_companies), out_path)
+    # Final save
+    DATA_PATH.parent.mkdir(exist_ok=True)
+    DATA_PATH.write_text(json.dumps(all_companies, indent=2, ensure_ascii=False))
+    log.info("Done: %d companies saved to %s", len(all_companies), DATA_PATH)
     return all_companies
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S")
     ap = argparse.ArgumentParser()
-    ap.add_argument("--limit", type=int, default=20, help="companies per category")
+    ap.add_argument("--target", type=int, default=1000, help="total companies to scrape")
+    ap.add_argument("--limit-per-cat", type=int, default=80, help="max per category")
+    ap.add_argument("--pages", type=int, default=5, help="max pages per category")
     ap.add_argument("--headless", default="true", help="true/false")
     args = ap.parse_args()
-    scrape(limit_per_cat=args.limit, headless=args.headless.lower() != "false")
+    scrape(target=args.target, limit_per_cat=args.limit_per_cat,
+           max_pages=args.pages, headless=args.headless.lower() != "false")
