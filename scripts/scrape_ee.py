@@ -214,10 +214,13 @@ def _scrape_financials(page, reg_code: str, name_slug: str) -> list[dict]:
     financials = []
     for table_rows in raw:
         headers = table_rows[0] if table_rows else []
-        years = [h for h in headers if re.match(r"\d{4}", h)]
-        for year in years:
-            yi = headers.index(year)
-            entry = {"year": int(year)}
+        years = []
+        for h in headers:
+            m = re.match(r"^(\d{4})$", h.strip())
+            if m:
+                years.append((headers.index(h), int(m.group(1))))
+        for yi, year_int in years:
+            entry = {"year": year_int}
             for row in table_rows[1:]:
                 if len(row) <= yi:
                     continue
