@@ -301,6 +301,22 @@ def build() -> None:
         caption="IC memo generated from the deal data",
     )
 
+    # ── News feed ──────────────────────────────────────────────────
+    story += _slide(
+        styles,
+        eyebrow="01 · Chat",
+        title="Live news feed",
+        subtitle="PE-relevant headlines from FT, Bloomberg, WSJ, Reuters, BBC — right where you work.",
+        bullets=[
+            "RSS aggregation from 7 financial news sources, refreshed every 5 minutes.",
+            "Titles auto-translated to your session language (LT, ET, FI, SV).",
+            "Click any headline to read the full article.",
+            "Tables and data from agent tools now render inline — no context switch.",
+        ],
+        screenshot="11-chat-news.png",
+        caption="News feed alongside the chat",
+    )
+
     # ── Pipeline kanban ────────────────────────────────────────────
     story += _slide(
         styles,
@@ -313,22 +329,8 @@ def build() -> None:
             "Sector and ownership chips filter the board in a click.",
             "Click a card to open the full deal workspace.",
         ],
-        screenshot="11-pipeline-kanban.png",
+        screenshot="12-pipeline-kanban.png",
         caption="Full pipeline kanban",
-    )
-    story += _slide(
-        styles,
-        eyebrow="02 · Pipeline",
-        title="Filter to what matters",
-        subtitle="Narrow to a sector or ownership type in one click.",
-        bullets=[
-            "Filter chips: sector, and ownership (founder, family, PE, VC, carve-out).",
-            "Cards update instantly without a page jump.",
-            "Perfect for mandate conversations — 'show me lower-mid-market software only'.",
-            "Filtered views are shareable with a single URL.",
-        ],
-        screenshot="12-pipeline-software.png",
-        caption="Pipeline filtered to software",
     )
     story += _slide(
         styles,
@@ -345,6 +347,22 @@ def build() -> None:
         caption="Single-deal workspace",
     )
 
+    # ── Company search ────────────────────────────────────────────
+    story += _slide(
+        styles,
+        eyebrow="02 · Pipeline",
+        title="Company search",
+        subtitle="Fuzzy name search and sector filter across your entire company database.",
+        bullets=[
+            "ILIKE fuzzy matching — search by partial name, city, or sector.",
+            "Revenue, EBITDA, employees, and deal stage at a glance.",
+            "Click any company to jump to its deal workspace.",
+            "Sector filter narrows to healthcare, logistics, software, etc.",
+        ],
+        screenshot="14-companies.png",
+        caption="Company search with sector filter",
+    )
+
     # ── Analytics ──────────────────────────────────────────────────
     story += _slide(
         styles,
@@ -357,7 +375,7 @@ def build() -> None:
             "Curated sample questions seed the experience for first-time users.",
             "The underlying query is shown under every chart — fully auditable.",
         ],
-        screenshot="15-analytics-stages.png",
+        screenshot="17-analytics-stages.png",
         caption="Company count by deal stage",
     )
     story += _slide(
@@ -371,7 +389,7 @@ def build() -> None:
             "Answers 'what's happening to multiples in X' without opening a spreadsheet.",
             "Drops straight into the LP update or IC pre-read.",
         ],
-        screenshot="16-analytics-sector.png",
+        screenshot="18-analytics-sector.png",
         caption="Median EV/EBITDA by sector",
     )
 
@@ -387,7 +405,7 @@ def build() -> None:
             "No restarts. No deploys. Just change how the squad thinks and carry on.",
             "Perfect for onboarding a partner's preferred memo style or diligence approach.",
         ],
-        screenshot="17-instructions-list.png",
+        screenshot="19-instructions-list.png",
         caption="The full squad, editable",
     )
     story += _slide(
@@ -401,7 +419,7 @@ def build() -> None:
             "Versioned alongside the product so changes are auditable.",
             "Great for encoding your house style once and letting it apply everywhere.",
         ],
-        screenshot="18-instructions-edit.png",
+        screenshot="20-instructions-edit.png",
         caption="Editing a specialist's instructions",
     )
 

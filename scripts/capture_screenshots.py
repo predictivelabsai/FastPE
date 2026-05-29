@@ -6,11 +6,14 @@ set of frames for `make_gif.py` and `make_pdf.py`.
 
 Usage:
     # server already running on :5058
-    python -m scripts.capture_screenshots
+    python -m scripts.capture_screenshots                # English
+    python -m scripts.capture_screenshots --lang lt      # Lithuanian
+    python -m scripts.capture_screenshots --lang all     # Both EN + LT
 """
 
 from __future__ import annotations
 
+import argparse
 import logging
 import os
 import time
@@ -29,29 +32,32 @@ VIEWPORT = {"width": 1400, "height": 900}
 
 TOUR = [
     # (filename, url, wait_selector, full_page, post_action)
-    ("01-home-full.png",          "/",                       "text=22 specialist agents",    True,  None),
-    ("02-platform-full.png",      "/platform",               "text=One system. Every stage", True,  None),
-    ("03-agents-full.png",        "/agents",                 "text=Every role already",      True,  None),
-    ("04-agent-detail-triage.png","/agents/deal_triage",     "text=Deal Triage Agent",       True,  None),
-    ("05-how-it-works-full.png",  "/how-it-works",           "text=From teaser to signed",   True,  None),
-    ("06-pricing-full.png",       "/pricing",                "text=Start with synthetic",    True,  None),
+    ("01-home-full.png",          "/",                       "text=specialist agents",       True,  None),
+    ("02-platform-full.png",      "/platform",               "text=One system",              True,  None),
+    ("03-agents-full.png",        "/agents",                 "text=Every role",              True,  None),
+    ("04-agent-detail-triage.png","/agents/deal_triage",     "text=Deal Triage",             True,  None),
+    ("05-how-it-works-full.png",  "/how-it-works",           "text=From teaser",             True,  None),
+    ("06-pricing-full.png",       "/pricing",                "text=Start with",              True,  None),
     # Product screens
     ("07-chat-empty.png",         "/app",                    "#chat-input",                  False, None),
     ("08-chat-triage.png",        "/app",                    "#chat-input",                  False, "triage"),
     ("09-chat-lbo.png",           "/app",                    "#chat-input",                  False, "lbo"),
     ("10-chat-memo.png",          "/app",                    "#chat-input",                  False, "memo"),
+    # News pane
+    ("11-chat-news.png",          "/app",                    "#chat-input",                  False, "news"),
     # Pipeline (kanban + deal detail)
-    ("11-pipeline-kanban.png",    "/app/pipeline",           ".kanban-board",                False, None),
-    ("12-pipeline-software.png",  "/app/pipeline?sector=software", ".kanban-board",          False, None),
-    # Deal detail is captured via "first-card" action
+    ("12-pipeline-kanban.png",    "/app/pipeline",           ".kanban-board",                False, None),
     ("13-pipeline-deal.png",      "/app/pipeline",           ".kanban-board",                False, "first_deal"),
+    # Company search
+    ("14-companies.png",          "/app/companies",          ".search-table",                False, None),
+    ("15-companies-health.png",   "/app/companies?sector=healthcare", ".search-table",       False, None),
     # Analytics
-    ("14-analytics-empty.png",    "/app/analytics",          "#analytics-q",                 False, None),
-    ("15-analytics-stages.png",   "/app/analytics",          "#analytics-q",                 False, "stages"),
-    ("16-analytics-sector.png",   "/app/analytics",          "#analytics-q",                 False, "ev_by_sector"),
+    ("16-analytics-empty.png",    "/app/analytics",          "#analytics-q",                 False, None),
+    ("17-analytics-stages.png",   "/app/analytics",          "#analytics-q",                 False, "stages"),
+    ("18-analytics-sector.png",   "/app/analytics",          "#analytics-q",                 False, "ev_by_sector"),
     # Instructions
-    ("17-instructions-list.png",  "/app/instructions",       ".instr-list",                  False, None),
-    ("18-instructions-edit.png",  "/app/instructions/deal_triage", ".instr-textarea",        False, None),
+    ("19-instructions-list.png",  "/app/instructions",       ".instr-list",                  False, None),
+    ("20-instructions-edit.png",  "/app/instructions/deal_triage", ".instr-textarea",        False, None),
 ]
 
 
@@ -73,7 +79,6 @@ def _run_chat(page, msg: str) -> None:
         "() => document.querySelector('#chat-form').dispatchEvent("
         "new Event('submit', {cancelable: true}))"
     )
-    # wait for agent_route + at least one assistant bubble with text
     page.wait_for_function(
         """() => {
             const m = document.querySelector('#messages');
@@ -86,13 +91,23 @@ def _run_chat(page, msg: str) -> None:
         }""",
         timeout=120_000,
     )
-    time.sleep(0.5)  # let artifact pane paint
+    time.sleep(0.5)
+
+
+def _open_news_pane(page) -> None:
+    page.wait_for_selector("#news-btn", timeout=5_000)
+    page.click("#news-btn")
+    page.wait_for_function(
+        "() => document.querySelector('#news-body') && "
+        "document.querySelector('#news-body').style.display !== 'none'",
+        timeout=15_000,
+    )
+    time.sleep(1.0)
 
 
 def _run_analytics(page, question: str) -> None:
     page.fill("#analytics-q", question)
     page.evaluate("() => runAnalytics()")
-    # wait until the result card has been populated
     page.wait_for_function(
         """() => {
             const r = document.getElementById('analytics-result');
@@ -101,11 +116,10 @@ def _run_analytics(page, question: str) -> None:
         }""",
         timeout=60_000,
     )
-    time.sleep(1.0)  # let plotly finish
+    time.sleep(1.0)
 
 
 def _click_first_deal(page) -> None:
-    """On /app/pipeline, click the first deal card and wait for the deal detail to load."""
     page.wait_for_selector(".deal-card-link")
     first_href = page.eval_on_selector(".deal-card-link", "el => el.getAttribute('href')")
     page.goto(BASE_URL + first_href, wait_until="networkidle", timeout=30_000)
@@ -113,18 +127,34 @@ def _click_first_deal(page) -> None:
     time.sleep(0.5)
 
 
-def main() -> None:
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    SHOTS.mkdir(exist_ok=True)
+def _set_language(page, lang: str) -> None:
+    page.evaluate(f"""async () => {{
+        await fetch('/app/config', {{
+            method: 'POST',
+            body: new URLSearchParams({{ lang: '{lang}' }}),
+        }});
+    }}""")
+    time.sleep(0.3)
+
+
+def capture_tour(lang: str = "en") -> None:
+    suffix = f"-{lang}" if lang != "en" else ""
+    outdir = SHOTS if lang == "en" else SHOTS / lang
+    outdir.mkdir(parents=True, exist_ok=True)
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(viewport=VIEWPORT, device_scale_factor=1)
         page = ctx.new_page()
 
+        # Set language via session
+        if lang != "en":
+            page.goto(BASE_URL + "/app", wait_until="networkidle", timeout=30_000)
+            _set_language(page, lang)
+
         for fname, path, wait_for, full_page, action in TOUR:
             url = BASE_URL + path
-            log.info("→ %s", url)
+            log.info("[%s] → %s", lang, url)
             try:
                 page.goto(url, wait_until="networkidle", timeout=30_000)
             except Exception as e:
@@ -144,14 +174,30 @@ def main() -> None:
                     _run_analytics(page, ANALYTICS_QUERIES[action])
                 elif action == "first_deal":
                     _click_first_deal(page)
+                elif action == "news":
+                    _open_news_pane(page)
                 time.sleep(0.4)
 
-            out = SHOTS / fname
+            out = outdir / fname
             page.screenshot(path=str(out), full_page=full_page)
             log.info("  saved %s", out.relative_to(ROOT))
 
         browser.close()
-    log.info("done — %d frames in %s", len(TOUR), SHOTS)
+    log.info("[%s] done — %d frames in %s", lang, len(TOUR), outdir)
+
+
+def main() -> None:
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--lang", default="en", help="Language code: en, lt, et, fi, sv, or 'all' for en+lt")
+    args = parser.parse_args()
+
+    if args.lang == "all":
+        capture_tour("en")
+        capture_tour("lt")
+    else:
+        capture_tour(args.lang)
 
 
 if __name__ == "__main__":
