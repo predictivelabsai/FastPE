@@ -48,9 +48,9 @@ def test_free_form_routing_falls_back_sensibly():
 
 def test_company_search_returns_data():
     from tools.properties import search_companies
-    out = json.loads(search_companies.invoke({"sector": "software", "limit": 5}))
+    out = json.loads(search_companies.invoke({"sector": "healthcare", "limit": 5}))
     assert out["count"] >= 1
-    assert out["companies"][0]["sector"] == "software"
+    assert out["companies"][0]["sector"] == "healthcare"
 
 
 def test_rag_retrieval_returns_citations():

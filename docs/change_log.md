@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.4.0 — 2026-05-29
+
+### Real Lithuanian company data
+- Replaced all synthetic data with 157 real Lithuanian companies scraped from rekvizitai.vz.lt
+- 6 sub-sectors: health care (32), veterinary clinics (19), dental clinics (17), real estate (30), insurance (29), logistics (30)
+- Multi-year financials: 7,524 monthly rows derived from public annual reports (2020-2025)
+- Includes DR VET, Kardiolita/Meliva hospitals, Northway, Lietuvos Draudimas, Baltic Transline, and other notable companies
+- `scripts/scrape_lt.py` — Playwright-based scraper with resume support and context crash recovery
+- `scripts/load_lt_data.py` — transforms scraped JSON into PEHero schema, computes EBITDA proxy, growth rates, EV estimates
+- `data/lt_companies.json` — raw scraped data (157 companies with addresses, employees, financials, descriptions)
+
 ## v0.3.1 — 2026-05-29
 
 ### Add Estonian, Finnish, Swedish
