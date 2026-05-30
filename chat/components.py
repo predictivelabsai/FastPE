@@ -261,6 +261,7 @@ def _bottom_nav(current_path: str = "", lang: str = "en"):
     items = [
         (t("chat_pipeline", lang),     "/app/pipeline",     "◆"),
         (t("chat_companies", lang),    "/app/companies",    "⊞"),
+        (t("dr_title", lang),          "/app/dataroom",     "📁"),
         (t("chat_instructions", lang), "/app/instructions", "✎"),
         (t("chat_analytics", lang),    "/app/analytics",    "∑"),
     ]
@@ -317,6 +318,16 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
                 Div(Span(t("chat_workspace", lang), cls="section-label")),
                 _bottom_nav(current_path, lang=lang),
                 cls="workspace-section",
+            ),
+            Hr(cls="left-hr"),
+            Div(
+                A(
+                    Span("?", cls="bottom-nav-icon"),
+                    Span(t("help_title", lang), cls="bottom-nav-label"),
+                    href="/app/help",
+                    cls=f"bottom-nav-link{' active' if current_path == '/app/help' else ''}",
+                ),
+                cls="help-link",
             ),
             Hr(cls="left-hr"),
             Div(

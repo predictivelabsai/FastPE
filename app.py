@@ -28,6 +28,8 @@ from chat import analytics as _analytics_routes  # noqa: E402,F401
 from chat import companies as _companies_routes  # noqa: E402,F401
 from chat import memo_pdf as _memo_pdf_routes  # noqa: E402,F401
 from chat import exports as _export_routes  # noqa: E402,F401
+from chat import dataroom as _dataroom_routes  # noqa: E402,F401
+from chat import help as _help_routes  # noqa: E402,F401
 
 
 def _serve_default():

@@ -266,6 +266,19 @@ CREATE TABLE IF NOT EXISTS pehero.prompt_versions (
 );
 CREATE INDEX IF NOT EXISTS prompt_versions_slug_idx ON pehero.prompt_versions(slug, id DESC);
 
+-- ── data room (document uploads) ──────────────────────────────────────
+CREATE TABLE IF NOT EXISTS pehero.data_room (
+    id           BIGSERIAL PRIMARY KEY,
+    user_id      BIGINT      REFERENCES pehero.users(id) ON DELETE CASCADE,
+    company_slug TEXT,
+    filename     TEXT        NOT NULL,
+    content_type TEXT        NOT NULL DEFAULT 'application/octet-stream',
+    size_bytes   INTEGER,
+    data         BYTEA       NOT NULL,
+    uploaded_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS data_room_user_idx ON pehero.data_room(user_id, uploaded_at DESC);
+
 -- ── agent invocation log ──────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS pehero.agent_invocations (
     id           BIGSERIAL PRIMARY KEY,
