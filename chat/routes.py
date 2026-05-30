@@ -148,6 +148,7 @@ async def chat_stream(request: Request):
     form = await request.form()
     user_msg = (form.get("msg") or "").strip()
     sid_str = form.get("sid") or ""
+    context_raw = (form.get("context") or "").strip()
 
     if not user_msg:
         return JSONResponse({"error": "empty message"}, status_code=400)
@@ -215,6 +216,8 @@ async def chat_stream(request: Request):
 
         # Build LangChain messages
         lc_messages = [SystemMessage(content=currency_directive)]
+        if context_raw:
+            lc_messages.append(SystemMessage(content=f"[Page context] {context_raw}"))
         for h in history[-20:]:
             if h["role"] == "user":
                 lc_messages.append(HumanMessage(content=h["content"]))
@@ -449,6 +452,30 @@ async def news_feed_html(request: Request):
             cls="news-item",
         ))
     return Div(*items)
+
+
+# ── Copilot session ───────────────────────────────────────────────
+
+@rt("/app/copilot/session")
+def copilot_session(sess, page: str = "", company: str = ""):
+    """Return (or create) a per-page copilot chat session."""
+    uid, _ = _ensure_user(sess)
+    if not uid:
+        return JSONResponse({"sid": None})
+    title = f"Copilot: {page}" if not company else f"Copilot: {page}: {company}"
+    row = fetch_one(
+        "SELECT id FROM pehero.chat_sessions WHERE user_id = %s AND title = %s "
+        "ORDER BY updated_at DESC LIMIT 1",
+        (uid, title),
+    )
+    if row:
+        messages = _session_messages(row["id"])
+        return JSONResponse({"sid": row["id"], "messages": messages})
+    sid = _ensure_session(uid, None, first_message=title)
+    with connect() as conn, conn.cursor() as cur:
+        cur.execute("UPDATE pehero.chat_sessions SET title = %s WHERE id = %s", (title, sid))
+        conn.commit()
+    return JSONResponse({"sid": sid, "messages": []})
 
 
 # ── Debug ping (kept from Phase 0) ──────────────────────────────────

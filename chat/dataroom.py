@@ -24,7 +24,7 @@ import logging
 import threading
 
 from app import rt
-from chat.components import left_pane, signin_overlay
+from chat.components import left_pane, signin_overlay, copilot_pane, copilot_toggle_btn
 from chat.layout import _versioned, common_scripts
 from utils.session import get_currency
 from utils.i18n import t, get_lang
@@ -246,6 +246,7 @@ def dataroom_home(sess):
                     cls="chat-header-left",
                 ),
                 Div(
+                    copilot_toggle_btn(lang=lang),
                     A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
@@ -258,7 +259,17 @@ def dataroom_home(sess):
             ),
             cls="center-pane pipeline-center",
         ),
+        copilot_pane(
+            page_name="Data Room",
+            page_context={
+                "page": "Data Room",
+                "total_files": len(docs),
+                "folders": list(folders.keys()),
+            },
+            lang=lang,
+        ),
         Script(src=_versioned("chat.js")),
+        Script(src=_versioned("copilot.js")),
         cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
     )
     return Html(_head(t("dr_title", lang)), body, lang=lang)

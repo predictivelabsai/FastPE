@@ -16,7 +16,7 @@ from fasthtml.common import (
 )
 
 from app import rt
-from chat.components import left_pane, signin_overlay
+from chat.components import left_pane, signin_overlay, copilot_pane, copilot_toggle_btn
 from chat.layout import _versioned, common_scripts
 from utils.session import get_currency
 from utils.i18n import t, get_lang
@@ -254,6 +254,7 @@ def help_page(sess):
                     cls="chat-header-left",
                 ),
                 Div(
+                    copilot_toggle_btn(lang=lang),
                     A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
@@ -266,7 +267,13 @@ def help_page(sess):
             ),
             cls="center-pane pipeline-center",
         ),
+        copilot_pane(
+            page_name="Help",
+            page_context={"page": "User Guide"},
+            lang=lang,
+        ),
         Script(src=_versioned("chat.js")),
+        Script(src=_versioned("copilot.js")),
         cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
     )
     return Html(_head(), body, lang=lang)

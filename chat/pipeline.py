@@ -19,6 +19,7 @@ from app import rt
 from agents.registry import AGENTS, AGENTS_BY_SLUG
 from chat.components import (
     left_pane, right_pane, signin_overlay, sample_cards, message_bubble,
+    copilot_pane, copilot_toggle_btn,
 )
 from chat.layout import _versioned, common_scripts
 from utils.session import get_currency, currency_symbol
@@ -185,6 +186,7 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
                     cls="chat-header-left",
                 ),
                 Div(
+                    copilot_toggle_btn(lang=lang),
                     A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
@@ -194,7 +196,18 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
             _board(by_stage, currency_symbol(get_currency(sess))),
             cls="center-pane pipeline-center",
         ),
+        copilot_pane(
+            page_name="Pipeline",
+            page_context={
+                "page": "Pipeline",
+                "total_companies": len(rows),
+                "filters": {"sector": sector, "ownership": ownership},
+                "by_stage": {k: len(v) for k, v in by_stage.items()},
+            },
+            lang=lang,
+        ),
         Script(src=_versioned("chat.js")),
+        Script(src=_versioned("copilot.js")),
         cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
     )
     return Html(_pipeline_head(t("pipe_title", lang)), body, lang=lang)

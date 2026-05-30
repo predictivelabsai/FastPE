@@ -501,6 +501,53 @@ def right_pane(lang: str = "en"):
     )
 
 
+def copilot_pane(*, page_name: str, page_context: dict | None = None,
+                 company_slug: str = "", lang: str = "en"):
+    """Right-pane copilot chat — page-scoped AI assistant."""
+    import json as _json
+    context_json = _json.dumps(page_context or {})
+
+    return Div(
+        Div(
+            Div(H3("Copilot", cls="right-title"),
+                Span(page_name, id="copilot-subtitle", cls="right-subtitle"),
+                cls="right-header-left"),
+            Button("✕", cls="right-close", onclick="toggleCopilotPane()"),
+            cls="right-header",
+        ),
+        Div(
+            Div(id="copilot-messages", cls="copilot-messages"),
+            cls="right-body copilot-body",
+        ),
+        Form(
+            Input(type="hidden", id="copilot-context", value=context_json),
+            Input(type="hidden", id="copilot-page", value=page_name),
+            Input(type="hidden", id="copilot-company", value=company_slug),
+            Div(
+                Textarea(
+                    id="copilot-input", name="msg",
+                    cls="copilot-textarea",
+                    placeholder=f"Ask about {page_name.lower()}...",
+                    rows="2",
+                    onkeydown="copilotHandleKey(event)",
+                ),
+                Button("Send", type="submit", cls="copilot-send", id="copilot-send-btn"),
+                cls="copilot-input-row",
+            ),
+            id="copilot-form",
+            cls="copilot-form",
+            onsubmit="copilotSend(event)",
+        ),
+        id="right-pane", cls="right-pane copilot-pane",
+    )
+
+
+def copilot_toggle_btn(lang: str = "en"):
+    """Toggle button for the copilot pane, used in workspace page headers."""
+    return Button("Copilot", id="copilot-btn", cls="news-toggle-btn",
+                  onclick="toggleCopilotPane()")
+
+
 def signin_overlay(lang: str = "en"):
     return Div(
         Form(

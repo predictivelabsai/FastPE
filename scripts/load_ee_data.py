@@ -205,7 +205,7 @@ def _transform_financials(company_id: int, financials: list[dict]) -> list[dict]
     return rows
 
 
-def load(dry_run: bool = False):
+def load(dry_run: bool = False, min_revenue: float = 0):
     if not DATA_PATH.exists():
         log.error("Data file not found: %s", DATA_PATH)
         log.error("Run: python -m scripts.scrape_ee")
@@ -216,15 +216,19 @@ def load(dry_run: bool = False):
 
     transformed = []
     skipped_no_rev = 0
+    skipped_below = 0
     for raw in raw_companies:
         row = _transform_company(raw)
         if row:
+            if min_revenue and (not row["revenue_ltm"] or row["revenue_ltm"] < min_revenue):
+                skipped_below += 1
+                continue
             transformed.append(row)
         else:
             skipped_no_rev += 1
 
-    log.info("Transformed %d companies (skipped %d: no name/revenue)",
-             len(transformed), skipped_no_rev)
+    log.info("Transformed %d companies (skipped %d no-data, %d below €%.0f revenue)",
+             len(transformed), skipped_no_rev, skipped_below, min_revenue)
 
     if dry_run:
         for row in transformed[:10]:
@@ -299,5 +303,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="preview without writing to DB")
+    ap.add_argument("--min-revenue", type=float, default=0,
+                    help="minimum revenue in EUR (e.g. 200000)")
     args = ap.parse_args()
-    load(dry_run=args.dry_run)
+    load(dry_run=args.dry_run, min_revenue=args.min_revenue)

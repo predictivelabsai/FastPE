@@ -13,6 +13,7 @@ Product tour as a shareable deck — [PDF](docs/pehero-product-tour.pdf) · [PPT
 - **Data Room** with virtual folder tree, file upload, and automatic RAG indexing (PDF, DOCX, XLSX, PPTX).
 - **Analytics** — natural language to SQL with auto-charting (Plotly).
 - **Pipeline kanban** — deal stages from Sourced to Exited with per-deal workspaces.
+- **Copilot** — contextual AI assistant on every workspace page (Pipeline, Companies, Analytics, Valuation, Data Room, Instructions). Auto-injects page context and routes to the best specialist agent.
 - **11 languages** — EN, ET, LT, LV, FI, SV, NO, DA, FR, DE, PL.
 - **xAI Grok** as the default LLM via OpenAI-compatible endpoint.
 - **PostgreSQL** with two schemas: `pehero` (OLTP — 1,363 real companies from LT/EE registries, financials, contracts, comps, LBO models, debt stacks, LP CRM) and `pehero_rag` (pgvector — document RAG with semantic search).

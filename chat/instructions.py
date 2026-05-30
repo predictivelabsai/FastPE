@@ -24,7 +24,7 @@ from starlette.responses import JSONResponse, RedirectResponse
 
 from app import rt
 from agents.registry import AGENTS, AGENTS_BY_SLUG
-from chat.components import left_pane, signin_overlay
+from chat.components import left_pane, signin_overlay, copilot_pane, copilot_toggle_btn
 from chat.layout import _versioned, common_scripts
 from db.prompts import (
     save_prompt_version, count_prompt_versions,
@@ -111,6 +111,7 @@ def instructions_home(sess):
                     cls="chat-header-left",
                 ),
                 Div(
+                    copilot_toggle_btn(lang=lang),
                     A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
@@ -126,7 +127,16 @@ def instructions_home(sess):
             ),
             cls="center-pane",
         ),
+        copilot_pane(
+            page_name="Instructions",
+            page_context={
+                "page": "Instructions",
+                "total_agents": len(AGENTS),
+            },
+            lang=lang,
+        ),
         Script(src=_versioned("chat.js")),
+        Script(src=_versioned("copilot.js")),
         cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
     )
     return Html(_head("Instructions"), body, lang="en")

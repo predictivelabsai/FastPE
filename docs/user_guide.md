@@ -14,6 +14,7 @@ Your Private Equity AI Agent Squad — one chat interface, every PE workflow.
 - [Data Room](#data-room)
 - [Analytics](#analytics)
 - [Instructions](#instructions)
+- [Copilot](#copilot)
 - [News Feed](#news-feed)
 - [Configuration](#configuration)
 - [Data Coverage](#data-coverage)
@@ -200,6 +201,35 @@ Edit any agent's system prompt live at `/app/instructions`:
 - Changes take effect on the very next conversation
 - No restarts or deploys needed
 - Perfect for encoding your firm's house style, memo format, or diligence approach
+
+---
+
+## Copilot
+
+Every workspace page (Pipeline, Companies, Analytics, Valuation, Data Room, Instructions) includes a **Copilot** AI assistant in the right pane. Click the **Copilot** button in the top-right header to open it.
+
+### What the Copilot knows
+
+The Copilot automatically receives context from the page you're on:
+
+- **Pipeline**: stage counts, active filters, total companies
+- **Valuation**: loaded company financials (revenue, EBITDA, margin, growth), sector, employees
+- **Analytics**: schema capabilities, sample queries
+- **Companies**: current search and sector filter
+- **Data Room**: uploaded files and folder structure
+
+### Example questions
+
+- On **Valuation** with a company loaded: "If I bought this company, how do I increase value?"
+- On **Pipeline**: "Which healthcare companies should I move to screening?"
+- On **Analytics**: "Show me revenue trends by sector"
+- On **Companies**: "Find logistics companies in Vilnius above 5M revenue"
+
+### Session management
+
+Each page has its own copilot chat history. Navigate away and come back — your previous conversation is still there. Pipeline copilot and Valuation copilot are separate sessions.
+
+The Copilot routes your questions to the best specialist agent (deal triage, LBO modeler, value creation planner, etc.) using the same 24-agent routing system as the main chat.
 
 ---
 

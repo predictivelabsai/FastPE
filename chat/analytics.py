@@ -24,7 +24,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app import rt
-from chat.components import left_pane, signin_overlay
+from chat.components import left_pane, signin_overlay, copilot_pane, copilot_toggle_btn
 from chat.layout import _versioned, common_scripts
 from utils.session import get_currency, currency_symbol
 from utils.i18n import t, get_lang
@@ -231,7 +231,8 @@ def analytics_home(sess):
                     Span(t("analytics_sub", lang), cls="chat-header-agent"),
                     cls="chat-header-left",
                 ),
-                Div(A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
+                Div(copilot_toggle_btn(lang=lang),
+                    A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions"),
                 cls="chat-header",
             ),
@@ -288,7 +289,17 @@ def analytics_home(sess):
             }
             window.runAnalytics = runAnalytics;
         """)),
+        copilot_pane(
+            page_name="Analytics",
+            page_context={
+                "page": "Analytics",
+                "capabilities": "text-to-SQL against pehero schema, Plotly charts",
+                "sample_queries": list(SAMPLE_QUERIES[:4]),
+            },
+            lang=lang,
+        ),
         Script(src=_versioned("chat.js")),
+        Script(src=_versioned("copilot.js")),
         cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
     )
     return Html(_head(t("analytics_title", lang)), body, lang=lang)
