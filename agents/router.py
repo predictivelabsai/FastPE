@@ -18,7 +18,11 @@ log = logging.getLogger(__name__)
 
 
 # ── Language-intent pre-filter ─────────────────────────────────────────
-_LANG_NAMES = r"(?:lithuanian|english|estonian|finnish|swedish|lietuviškai|angliškai|lietuvių|anglų|eesti|soome|rootsi|suomeksi|ruotsiksi|finska|svenska)"
+_LANG_NAMES = (
+    r"(?:lithuanian|english|estonian|finnish|swedish|latvian|norwegian|danish|french|german|polish"
+    r"|lietuviškai|angliškai|lietuvių|anglų|eesti|soome|rootsi|suomeksi|ruotsiksi|finska|svenska"
+    r"|latviešu|latviski|norsk|dansk|français|deutsch|polski|po\s*polsku)"
+)
 _LANG_INTENT_RE = re.compile(
     rf"\b(?:write|respond|reply|translate|switch|change|speak|answer|draft)\b.*\b(?:in|to|into)\s+{_LANG_NAMES}\b",
     re.IGNORECASE,
