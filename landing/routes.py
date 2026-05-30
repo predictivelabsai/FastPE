@@ -11,7 +11,7 @@ from starlette.responses import RedirectResponse
 from app import rt
 from agents.registry import AGENTS, AGENTS_BY_CATEGORY, AGENTS_BY_SLUG, CATEGORIES
 from landing.components import (
-    page, Hero, ProductTour, CategoryPillar, AgentCard, CategorySection, CaseStudyStrip, CTASection,
+    page, Hero, ProductTour, CategoryPillar, AgentCard, CategorySection, CaseStudyStrip, PENewsSection, CTASection,
     Eyebrow, Heading, Body_, Button_, Pill, Section_, SITE_NAME, SITE_TAGLINE,
 )
 from utils.i18n import t, agent_t, category_t, get_lang, set_lang, LANGUAGES
@@ -71,6 +71,7 @@ def home(sess):
         pillars,
         how,
         CaseStudyStrip(lang=lang),
+        PENewsSection(lang=lang),
         CTASection(lang=lang),
         current_path="/",
         lang=lang,

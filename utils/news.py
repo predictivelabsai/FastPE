@@ -17,6 +17,10 @@ import feedparser
 log = logging.getLogger(__name__)
 
 FEEDS: list[dict] = [
+    # PE industry
+    {"name": "PE Hub",           "url": "https://www.pehub.com/feed/",                        "lang": "en", "icon": "PEH"},
+    {"name": "Buyouts Insider",  "url": "https://www.buyoutsinsider.com/feed/",               "lang": "en", "icon": "BUY"},
+    {"name": "PE International", "url": "https://www.privateequityinternational.com/feed/",   "lang": "en", "icon": "PEI"},
     # Global financial
     {"name": "Financial Times",  "url": "https://www.ft.com/rss/home",                       "lang": "en", "icon": "FT"},
     {"name": "Wall Street Journal", "url": "https://feeds.a.dj.com/rss/RSSWorldNews.xml",    "lang": "en", "icon": "WSJ"},

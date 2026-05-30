@@ -406,6 +406,80 @@ def CaseStudyStrip(lang: str = "en"):
     )
 
 
+def PENewsSection(lang: str = "en"):
+    """PE industry news from RSS feeds — rendered server-side from cache."""
+    from utils.news import fetch_news
+    import asyncio
+
+    try:
+        articles = asyncio.get_event_loop().run_until_complete(fetch_news())
+    except RuntimeError:
+        articles = asyncio.run(fetch_news())
+
+    pe_sources = {"PEH", "BUY", "PEI"}
+    pe_articles = [a for a in articles if a.get("icon") in pe_sources][:8]
+
+    if not pe_articles:
+        return Div()
+
+    def _time_ago(iso_str: str) -> str:
+        from datetime import datetime, timezone
+        try:
+            d = datetime.fromisoformat(iso_str)
+            now = datetime.now(tz=timezone.utc)
+            mins = int((now - d).total_seconds() / 60)
+            if mins < 60:
+                return f"{mins}m ago"
+            hours = mins // 60
+            if hours < 24:
+                return f"{hours}h ago"
+            return f"{hours // 24}d ago"
+        except Exception:
+            return ""
+
+    def _item(a):
+        pub = _time_ago(a.get("published", ""))
+        return A(
+            Div(
+                H4(a["title"],
+                   cls="text-ink text-base font-medium leading-snug mb-3 group-hover:text-accent transition-colors"),
+                Div(
+                    Span(a.get("source", a.get("icon", "")),
+                         cls="text-ink-dim text-xs font-mono"),
+                    Span("·", cls="text-ink-dim text-xs mx-2") if pub else None,
+                    Span(pub, cls="text-ink-dim text-xs") if pub else None,
+                    cls="flex items-center flex-wrap",
+                ),
+                cls="p-5 md:p-6 h-full rounded-2xl bg-bg-elevated border border-line group-hover:border-accent/60 transition-colors",
+            ),
+            href=a["url"],
+            target="_blank",
+            rel="noopener",
+            cls="block group",
+        )
+
+    return Section_(
+        Div(
+            Div(
+                Eyebrow(t("news_title", lang)),
+                Heading(2, t("news_pe_heading", lang), cls="mt-4 max-w-3xl"),
+                cls="md:flex-1",
+            ),
+            Div(
+                Span(t("news_pe_sources", lang),
+                     cls="text-ink-dim text-xs"),
+                cls="text-left md:text-right md:max-w-xs mt-4 md:mt-0",
+            ),
+            cls="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4",
+        ),
+        Div(
+            *[_item(a) for a in pe_articles],
+            cls="grid md:grid-cols-2 gap-4",
+        ),
+        cls="border-t border-line",
+    )
+
+
 def CTASection(*, headline: str | None = None, body: str | None = None,
                cta_label: str | None = None, cta_href: str = "/contact", lang: str = "en"):
     _headline = headline or t("cta_headline", lang)
