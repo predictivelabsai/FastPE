@@ -307,7 +307,7 @@
     function maybeAppendMemoPreviewButton(bubble, text, agentSlug) {
         if (!bubble || !text) return;
         if (!MEMO_AGENTS.has(agentSlug)) return;
-        const looksMemo = text.length > 400 && /(^|\n)##?\s+\w/.test(text);
+        const looksMemo = text.length > 400;
         if (!looksMemo) return;
         const existing = bubble.parentElement.querySelector(".memo-preview-row");
         if (existing) return;

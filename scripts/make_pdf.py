@@ -301,6 +301,50 @@ def build() -> None:
         caption="IC memo generated from the deal data",
     )
 
+    # ── Data tables + charts ─────────────────────────────────────────
+    story += _slide(
+        styles,
+        eyebrow="01 · Chat",
+        title="Tables that don't overwhelm",
+        subtitle="First 5 rows, then See more — plus one-click export to CSV, XLS, or chart.",
+        bullets=[
+            "Tables preview 5 rows with a 'See more' toggle — no more scrolling past 60 rows.",
+            "Download as CSV or styled XLS (with headers) from the toolbar.",
+            "Hit 'Visualize' to auto-generate the right chart type inline.",
+            "Chart type auto-detected: bar, area, pie, treemap, or grouped bar.",
+        ],
+        screenshot="21-chat-table-truncated.png",
+        caption="Truncated financials with export toolbar",
+    )
+    story += _slide(
+        styles,
+        eyebrow="01 · Chat",
+        title="One-click inline charts",
+        subtitle="Click Visualize — Plotly renders the right chart from your table data.",
+        bullets=[
+            "Time series with <20 points → bar chart. 20+ → area curve.",
+            "Categorical data → pie chart (≤8 items) or treemap (>8).",
+            "Interactive: hover for values, zoom, pan — Plotly.js loaded lazily.",
+            "Same Plotly engine as the analytics page, consistent styling.",
+        ],
+        screenshot="23-chat-chart-inline.png",
+        caption="Area chart auto-generated from LTM financials",
+    )
+    story += _slide(
+        styles,
+        eyebrow="01 · Chat",
+        title="Memo exports — PDF and Word",
+        subtitle="Download your IC memo, LOI, or teaser as a formatted PDF or editable Word doc.",
+        bullets=[
+            "Preview PDF opens in a new browser tab — print-ready layout.",
+            "Download Word (.docx) with styled headings, bold, tables, and bullets.",
+            "Both generated server-side — no copy-paste from the chat.",
+            "Available on all memo agents: IC Memo, Deal Teaser, LP Update, LOI, Outreach Email.",
+        ],
+        screenshot="24-chat-memo-exports.png",
+        caption="IC memo with PDF + Word download buttons",
+    )
+
     # ── News feed ──────────────────────────────────────────────────
     story += _slide(
         styles,
@@ -308,10 +352,10 @@ def build() -> None:
         title="Live news feed",
         subtitle="PE-relevant headlines from FT, Bloomberg, WSJ, Reuters, BBC — right where you work.",
         bullets=[
-            "RSS aggregation from 7 financial news sources, refreshed every 5 minutes.",
+            "RSS aggregation from 7 financial news sources, refreshed every 30 minutes.",
             "Titles auto-translated to your session language (LT, ET, FI, SV).",
             "Click any headline to read the full article.",
-            "Tables and data from agent tools now render inline — no context switch.",
+            "Tables and data from agent tools render inline — no context switch.",
         ],
         screenshot="11-chat-news.png",
         caption="News feed alongside the chat",
