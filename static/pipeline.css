@@ -405,20 +405,30 @@
 
 /* ── PE Valuation Simulator ───────────────────────────────────── */
 .val-selector-wrap { margin-bottom: .75rem; }
-.val-selector-row { display: flex; gap: .5rem; align-items: center; }
-.val-company-select {
-    flex: 1; padding: .6rem .8rem; background: var(--bg-elev);
-    border: 1px solid var(--line); border-radius: .5rem; color: var(--ink);
-    font-size: .85rem;
-}
-.val-company-select:focus { outline: none; border-color: var(--accent); }
+.val-ac-wrap { position: relative; }
 .val-search-input {
-    width: 200px; padding: .6rem .8rem; background: var(--bg-elev);
+    width: 100%; padding: .65rem .9rem; background: var(--bg-elev);
     border: 1px solid var(--line); border-radius: .5rem; color: var(--ink);
-    font-size: .82rem;
+    font-size: .88rem;
 }
 .val-search-input::placeholder { color: var(--ink-muted); }
 .val-search-input:focus { outline: none; border-color: var(--accent); }
+.val-ac-dropdown {
+    display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50;
+    background: var(--bg-elev); border: 1px solid var(--line); border-top: none;
+    border-radius: 0 0 .5rem .5rem; max-height: 320px; overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,.12);
+}
+.val-ac-dropdown.open { display: block; }
+.val-ac-item {
+    padding: .5rem .9rem; cursor: pointer; display: flex; flex-direction: column; gap: .1rem;
+    border-bottom: 1px solid var(--line);
+}
+.val-ac-item:last-child { border-bottom: none; }
+.val-ac-item:hover { background: var(--bg-raise); }
+.val-ac-name { font-size: .82rem; font-weight: 500; color: var(--ink); }
+.val-ac-sub { font-size: .7rem; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
+.val-ac-empty { padding: .6rem .9rem; font-size: .8rem; color: var(--ink-muted); }
 
 .val-summary { margin-bottom: 1rem; }
 .val-company-header { margin-bottom: .6rem; }

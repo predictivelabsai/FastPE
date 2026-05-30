@@ -121,11 +121,6 @@ def valuation_home(sess, company: str = ""):
     lang = get_lang(sess)
     sym = currency_symbol(get_currency(sess))
 
-    companies = fetch_all(
-        "SELECT slug, name, sector, revenue_ltm, ebitda_ltm, ebitda_margin, growth_rate "
-        "FROM pehero.companies WHERE revenue_ltm > 0 ORDER BY name LIMIT 500"
-    )
-
     selected = None
     if company:
         selected = fetch_one(
@@ -135,24 +130,19 @@ def valuation_home(sess, company: str = ""):
             "FROM pehero.companies WHERE slug = %s", (company,)
         )
 
+    selected_label = ""
+    if selected:
+        selected_label = f"{selected['name']} — {sym}{_f(selected['revenue_ltm'])/1e6:.1f}M"
+
     selector = Div(
-        Form(
-            Div(
-                Select(
-                    Option(t("val_select_company", lang), value=""),
-                    *[Option(
-                        f"{c['name'][:40]} — {sym}{_f(c['revenue_ltm'])/1e6:.1f}M",
-                        value=c["slug"],
-                        selected=c["slug"] == company,
-                    ) for c in companies],
-                    name="company", cls="val-company-select",
-                    onchange="this.form.submit()",
-                ),
-                Input(type="text", id="val-search", placeholder="Search companies...",
-                      cls="val-search-input", oninput="filterCompanies(this.value)"),
-                cls="val-selector-row",
-            ),
-            method="get", action="/app/valuation",
+        Div(
+            Input(type="text", id="val-search", placeholder="Type to search companies...",
+                  cls="val-search-input", value=selected_label,
+                  autocomplete="off",
+                  oninput="valAutocomplete(this.value)",
+                  onfocus="valAutocomplete(this.value)"),
+            Div(id="val-ac-results", cls="val-ac-dropdown"),
+            cls="val-ac-wrap",
         ),
         cls="val-selector-wrap",
     )
@@ -539,15 +529,6 @@ def valuation_home(sess, company: str = ""):
         document.body.removeChild(form);
     }};
 
-    window.filterCompanies = function(q) {{
-        var sel = document.querySelector(".val-company-select");
-        var opts = sel.options;
-        q = q.toLowerCase();
-        for (var i = 1; i < opts.length; i++) {{
-            opts[i].style.display = opts[i].textContent.toLowerCase().includes(q) ? "" : "none";
-        }}
-    }};
-
     document.querySelectorAll(".val-slider").forEach(function(s) {{
         s.addEventListener("input", calc);
     }});
@@ -584,9 +565,79 @@ def valuation_home(sess, company: str = ""):
         ),
         Script(src=_versioned("chat.js")),
         NotStr(sim_js),
+        Script(NotStr(_autocomplete_js(sym))),
         cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
     )
     return Html(_head(t("val_title", lang)), body, lang=lang)
+
+
+@rt("/app/valuation/search")
+def valuation_search(q: str = "", sess=None):
+    """Fuzzy company search for autocomplete."""
+    q = q.strip()
+    if len(q) < 1:
+        return JSONResponse([])
+    sym = currency_symbol(get_currency(sess)) if sess else "€"
+    rows = fetch_all(
+        "SELECT slug, name, sector, revenue_ltm, hq_city "
+        "FROM pehero.companies "
+        "WHERE revenue_ltm > 0 AND (name ILIKE %s OR slug ILIKE %s OR hq_city ILIKE %s) "
+        "ORDER BY revenue_ltm DESC LIMIT 12",
+        (f"%{q}%", f"%{q}%", f"%{q}%"),
+    )
+    results = [{
+        "slug": r["slug"],
+        "label": f"{r['name']} — {sym}{_f(r['revenue_ltm'])/1e6:.1f}M",
+        "sub": f"{r.get('hq_city') or ''} · {(r.get('sector') or '').replace('_', ' ').title()}",
+    } for r in rows]
+    return JSONResponse(results)
+
+
+def _autocomplete_js(sym: str) -> str:
+    return """
+(function() {
+    var debounceTimer;
+    var dropdown = document.getElementById("val-ac-results");
+    var input = document.getElementById("val-search");
+    if (!input || !dropdown) return;
+
+    window.valAutocomplete = function(q) {
+        clearTimeout(debounceTimer);
+        if (q.length < 1) { dropdown.innerHTML = ""; dropdown.classList.remove("open"); return; }
+        debounceTimer = setTimeout(function() {
+            fetch("/app/valuation/search?q=" + encodeURIComponent(q))
+                .then(function(r) { return r.json(); })
+                .then(function(items) {
+                    if (!items.length) {
+                        dropdown.innerHTML = '<div class="val-ac-empty">No matches</div>';
+                        dropdown.classList.add("open");
+                        return;
+                    }
+                    dropdown.innerHTML = items.map(function(it) {
+                        return '<div class="val-ac-item" onclick="valSelectCompany(\\'' + it.slug + '\\',\\'' + it.label.replace(/'/g, "\\\\'") + '\\')">' +
+                            '<span class="val-ac-name">' + it.label + '</span>' +
+                            '<span class="val-ac-sub">' + it.sub + '</span></div>';
+                    }).join("");
+                    dropdown.classList.add("open");
+                });
+        }, 180);
+    };
+
+    window.valSelectCompany = function(slug, label) {
+        dropdown.innerHTML = "";
+        dropdown.classList.remove("open");
+        input.value = label;
+        window.location.href = "/app/valuation?company=" + slug;
+    };
+
+    document.addEventListener("click", function(e) {
+        if (!e.target.closest(".val-ac-wrap")) {
+            dropdown.innerHTML = "";
+            dropdown.classList.remove("open");
+        }
+    });
+})();
+"""
 
 
 @rt("/app/valuation/export", methods=["POST"])
