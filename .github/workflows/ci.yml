@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: pehero
+          POSTGRES_PASSWORD: pehero
+          POSTGRES_DB: pehero
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pehero"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DB_URL: postgresql://pehero:pehero@localhost:5432/pehero
+      XAI_API_KEY: test-key-not-used-in-smoke
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run migrations
+        run: python -m db.migrate
+
+      - name: Import check
+        run: python -c "from app import app; from chat import routes, pipeline, instructions, analytics, memo_pdf, companies, exports, dataroom, help, valuation; print('OK')"
+
+      - name: Smoke tests
+        run: pytest -q tests/test_agents_smoke.py
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Trigger Coolify deploy
+        run: |
+          curl -s -X GET "${{ secrets.COOLIFY_WEBHOOK_URL }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
+            || echo "Coolify webhook not configured yet — skipping deploy"
