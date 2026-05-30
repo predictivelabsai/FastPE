@@ -291,12 +291,12 @@ details.agent-group[open] .agent-list { display: flex; flex-direction: column; g
 .copilot-expand-btn:hover { border-color: var(--accent); color: var(--accent); }
 .app.pane-closed .copilot-expand-btn { display: inline-block; }
 
-/* HTMX indicator */
-.htmx-indicator { opacity: 1; transition: opacity .2s; }
-.htmx-request .htmx-indicator, .htmx-request.htmx-indicator { opacity: 1; }
+/* HTMX indicator — hidden by default, shown only during request */
+.htmx-indicator { display: none; }
+.htmx-request .htmx-indicator, .htmx-request.htmx-indicator { display: flex; }
 
 /* News loading state */
-.news-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 3rem 2rem; color: var(--ink-dim); }
+.news-loading { flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 3rem 2rem; color: var(--ink-dim); }
 .news-loading-icon { font-size: 2.2rem; color: var(--accent); opacity: .6; margin-bottom: .9rem; animation: pulse 1.2s ease-in-out infinite; }
 .news-loading-text { color: var(--ink-dim); font-size: .78rem; }
 .news-empty { color: var(--ink-dim); font-size: .78rem; text-align: center; padding: 2rem; }
