@@ -134,12 +134,22 @@ def valuation_home(sess, company: str = ""):
     if selected:
         selected_label = f"{selected['name']} — {sym}{_f(selected['revenue_ltm'])/1e6:.1f}M"
 
+    _SAMPLE_SLUGS = [
+        "gyvunu_ligonine",         # DR VET — healthcare
+        "eurovaistine",            # Eurovaistine — healthcare
+        "eika_construction",       # Eika Construction — real estate
+        "baltic_transline_uab",    # Baltic transline — logistics
+        "vinted",                  # Vinted — software
+        "hegelmann_transporte",    # Hegelmann — logistics
+    ]
     sample_companies = fetch_all(
-        "SELECT slug, name, revenue_ltm FROM pehero.companies "
-        "WHERE revenue_ltm > 0 AND ebitda_ltm > 0 ORDER BY revenue_ltm DESC LIMIT 6"
+        "SELECT slug, name FROM pehero.companies WHERE slug = ANY(%s)",
+        (_SAMPLE_SLUGS,),
     )
+    slug_order = {s: i for i, s in enumerate(_SAMPLE_SLUGS)}
+    sample_companies.sort(key=lambda c: slug_order.get(c["slug"], 99))
     sample_chips = [
-        A(f"{c['name'][:25]}", href=f"/app/valuation?company={c['slug']}",
+        A(c["name"], href=f"/app/valuation?company={c['slug']}",
           cls="val-chip") for c in sample_companies
     ]
 
