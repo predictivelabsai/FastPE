@@ -13,14 +13,16 @@ from utils.config import settings
 
 
 def _prefetch_news():
-    """Warm the RSS cache in a background thread so the first page load is instant."""
+    """Warm the RSS cache before accepting requests."""
     from utils.news import fetch_news
     try:
         asyncio.run(fetch_news())
     except Exception:
         pass
 
-threading.Thread(target=_prefetch_news, daemon=True).start()
+_t = threading.Thread(target=_prefetch_news, daemon=True)
+_t.start()
+_t.join(timeout=8)
 
 if __name__ == "__main__":
     serve(port=settings().port)
