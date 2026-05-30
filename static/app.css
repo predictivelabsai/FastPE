@@ -387,6 +387,36 @@ details.agent-group[open] .agent-list { display: flex; flex-direction: column; g
     .left-pane.open { left: 0; }
     .mobile-menu-btn { display: inline-flex; align-items: center; justify-content: center; }
     .right-pane { width: 92vw; right: -95vw; }
+
+    /* Hide hero suggestion chips and sample cards on mobile */
+    .welcome-hero .suggestions { display: none; }
+    .sample-cards { display: none; }
+
+    /* Compact welcome hero */
+    .welcome-hero { top: 30%; }
+    .welcome-title { font-size: 1.4rem; }
+    .welcome-sub { font-size: .78rem; }
+    .hero-mark { font-size: 1.6rem; }
+
+    /* Compact header — hide Copy/Share labels, keep News */
+    .chat-header { padding: .45rem .6rem; min-height: 2.2rem; gap: .3rem; }
+    .chat-action-btn { font-size: 0; padding: .3rem; min-width: 0; }
+    .chat-action-btn::before { font-size: .75rem; }
+    #copy-chat-btn { font-size: 0; }
+    #copy-chat-btn::after { content: "⎘"; font-size: .85rem; }
+    #share-chat-btn { font-size: 0; }
+    #share-chat-btn::after { content: "↗"; font-size: .85rem; }
+    .chat-header-title { font-size: .78rem; }
+    .chat-header-agent { font-size: .68rem; }
+
+    /* Hide lang dropdown and news/copilot panes on mobile by default */
+    .lang-dropdown { display: none; }
+    .right-pane.open { right: -95vw; }
+    .copilot-expand-btn { display: none !important; }
+
+    /* Ensure chat input stays visible */
+    .chat-form { padding: .5rem .6rem; }
+    .chat-textarea { font-size: .85rem; padding: .5rem .7rem; }
 }
 
 /* ── Sample cards (Gemini-style) ───────────────────────────────── */
