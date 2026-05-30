@@ -134,18 +134,51 @@ def valuation_home(sess, company: str = ""):
     if selected:
         selected_label = f"{selected['name']} — {sym}{_f(selected['revenue_ltm'])/1e6:.1f}M"
 
-    selector = Div(
-        Div(
-            Input(type="text", id="val-search", placeholder="Type to search companies...",
-                  cls="val-search-input", value=selected_label,
-                  autocomplete="off",
-                  oninput="valAutocomplete(this.value)",
-                  onfocus="valAutocomplete(this.value)"),
-            Div(id="val-ac-results", cls="val-ac-dropdown"),
-            cls="val-ac-wrap",
-        ),
-        cls="val-selector-wrap",
+    sample_companies = fetch_all(
+        "SELECT slug, name, revenue_ltm FROM pehero.companies "
+        "WHERE revenue_ltm > 0 AND ebitda_ltm > 0 ORDER BY revenue_ltm DESC LIMIT 6"
     )
+    sample_chips = [
+        A(f"{c['name'][:25]}", href=f"/app/valuation?company={c['slug']}",
+          cls="val-chip") for c in sample_companies
+    ]
+
+    if not selected:
+        selector = Div(
+            Div(
+                Span("◈", cls="val-hero-mark"),
+                H2("PE Valuation Simulator", cls="val-hero-title"),
+                P("Select a company to run a 4-method valuation", cls="val-hero-sub"),
+                Div(
+                    Div(
+                        Input(type="text", id="val-search",
+                              placeholder="Search by company name, city, or sector...",
+                              cls="val-hero-input", value="", autocomplete="off",
+                              oninput="valAutocomplete(this.value)",
+                              onfocus="valAutocomplete(this.value)"),
+                        Div(id="val-ac-results", cls="val-ac-dropdown"),
+                        cls="val-ac-wrap",
+                    ),
+                    cls="val-hero-input-wrap",
+                ),
+                Div(*sample_chips, cls="val-chips") if sample_chips else None,
+                cls="val-hero",
+            ),
+            cls="val-selector-wrap val-hero-wrap",
+        )
+    else:
+        selector = Div(
+            Div(
+                Input(type="text", id="val-search",
+                      placeholder="Search companies...",
+                      cls="val-search-input", value=selected_label, autocomplete="off",
+                      oninput="valAutocomplete(this.value)",
+                      onfocus="valAutocomplete(this.value)"),
+                Div(id="val-ac-results", cls="val-ac-dropdown"),
+                cls="val-ac-wrap",
+            ),
+            cls="val-selector-wrap",
+        )
 
     summary = Div(cls="val-summary", id="val-summary")
     simulator = Div(cls="val-simulator", id="val-simulator")

@@ -405,14 +405,44 @@
 
 /* ── PE Valuation Simulator ───────────────────────────────────── */
 .val-selector-wrap { margin-bottom: .75rem; }
+
+/* Hero state (no company selected) */
+.val-hero-wrap { display: flex; justify-content: center; align-items: center; min-height: 60vh; }
+.val-hero { text-align: center; width: min(640px, 90%); }
+.val-hero-mark { color: var(--accent); font-size: 2.2rem; display: block; margin-bottom: .3rem; }
+.val-hero-title { color: var(--ink); font-size: 1.6rem; font-weight: 500; letter-spacing: -.025em; margin: 0; }
+.val-hero-sub { color: var(--ink-muted); font-size: .88rem; margin: .4rem 0 1.5rem; }
+.val-hero-input-wrap { max-width: 520px; margin: 0 auto; }
+.val-hero-input {
+    width: 100%; padding: .75rem 1rem; background: var(--bg);
+    border: 1px solid var(--line); border-radius: .6rem; color: var(--ink);
+    font-size: .9rem; outline: none;
+}
+.val-hero-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(31,93,67,.1); }
+.val-hero-input::placeholder { color: var(--ink-muted); }
+
+.val-chips {
+    display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center; margin-top: 1.2rem;
+}
+.val-chip {
+    display: inline-block; padding: .4rem .7rem; background: var(--bg-elev);
+    border: 1px solid var(--line); border-radius: 2rem; color: var(--ink-muted);
+    font-size: .72rem; font-family: 'JetBrains Mono', monospace;
+    text-decoration: none; cursor: pointer; transition: all .15s;
+}
+.val-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Compact search (company selected) */
 .val-ac-wrap { position: relative; }
 .val-search-input {
-    width: 100%; padding: .65rem .9rem; background: var(--bg-elev);
+    width: 100%; padding: .6rem .85rem; background: var(--bg-elev);
     border: 1px solid var(--line); border-radius: .5rem; color: var(--ink);
-    font-size: .88rem;
+    font-size: .85rem;
 }
 .val-search-input::placeholder { color: var(--ink-muted); }
 .val-search-input:focus { outline: none; border-color: var(--accent); }
+
+/* Autocomplete dropdown (shared) */
 .val-ac-dropdown {
     display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 50;
     background: var(--bg-elev); border: 1px solid var(--line); border-top: none;
