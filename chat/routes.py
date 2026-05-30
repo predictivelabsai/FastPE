@@ -422,15 +422,17 @@ def _time_ago(iso_str: str) -> str:
 
 @rt("/app/news/html")
 async def news_feed_html(request: Request):
-    """HTMX endpoint — returns rendered HTML news items."""
+    """HTMX endpoint — returns rendered HTML fragment for news items."""
     import html as _html
+    from starlette.responses import HTMLResponse
+    from fasthtml.common import to_xml
     lang = get_lang(request.session)
     from utils.news import fetch_news_translated
     from utils.i18n import t
     articles = await fetch_news_translated(lang)
 
     if not articles:
-        return P(t("news_empty", lang), cls="news-empty")
+        return HTMLResponse(to_xml(P(t("news_empty", lang), cls="news-empty")))
 
     items = []
     for a in articles:
@@ -451,7 +453,7 @@ async def news_feed_html(request: Request):
             rel="noopener",
             cls="news-item",
         ))
-    return Div(*items)
+    return HTMLResponse(to_xml(Div(*items)))
 
 
 # ── Copilot session ───────────────────────────────────────────────

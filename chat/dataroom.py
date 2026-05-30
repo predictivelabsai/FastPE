@@ -247,7 +247,6 @@ def dataroom_home(sess):
                 ),
                 Div(
                     copilot_toggle_btn(lang=lang),
-                    A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
                 cls="chat-header",
@@ -270,7 +269,7 @@ def dataroom_home(sess):
         ),
         Script(src=_versioned("chat.js")),
         Script(src=_versioned("copilot.js")),
-        cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
+        cls="bg-bg text-ink font-sans antialiased app pipeline-app",
     )
     return Html(_head(t("dr_title", lang)), body, lang=lang)
 

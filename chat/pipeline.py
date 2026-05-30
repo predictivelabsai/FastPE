@@ -187,7 +187,6 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
                 ),
                 Div(
                     copilot_toggle_btn(lang=lang),
-                    A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
                 cls="chat-header",
@@ -208,7 +207,7 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
         ),
         Script(src=_versioned("chat.js")),
         Script(src=_versioned("copilot.js")),
-        cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
+        cls="bg-bg text-ink font-sans antialiased app pipeline-app",
     )
     return Html(_pipeline_head(t("pipe_title", lang)), body, lang=lang)
 

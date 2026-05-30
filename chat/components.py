@@ -118,10 +118,10 @@ def _render_content(content: str) -> str:
 def welcome_hero(lang: str = "en"):
     """Empty-state hero with category chips + example prompts."""
     prompts = [
-        ("triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius", "deal_triage"),
-        ("lbo: 5-year model for Kardiolita at 12% rev growth, 300bps margin exp", "pro_forma_builder"),
+        ("triage: DR VET veterinary clinic, €4.6M revenue, 76 employees, Vilnius", "deal_triage"),
+        ("lbo: 5-year model for Eika Construction at 12% rev growth, 300bps margin exp", "pro_forma_builder"),
         ("ltm: what are the financials of DR VET?", "t12_normalizer"),
-        ("memo: draft the IC memo for Kardiolita", "investor_memo"),
+        ("memo: draft the IC memo for Baltic transline", "investor_memo"),
         ("comps: healthcare clinics precedent M&A 2022-2024 under €100M EV", "comp_finder"),
         ("scan: logistics companies in Lithuania, €20-100M revenue", "market_scanner"),
     ]
@@ -359,11 +359,11 @@ def sample_cards(current_agent_slug: str | None = None, lang: str = "en"):
         label = t("js_try_with", lang) + agent_t(agent.slug, "name", lang)
     else:
         prompts = [
-            "triage: DR VET veterinary clinic, €3.8M revenue, Vilnius",
-            "lbo: 5-year model for Kardiolita at 12% rev growth",
+            "triage: DR VET veterinary clinic, €4.6M revenue, Vilnius",
+            "lbo: 5-year model for Eika Construction at 12% rev growth",
             "ltm: what are the financials of DR VET?",
-            "memo: draft the IC memo for Kardiolita",
-            "vdr: audit the data room for Northway",
+            "memo: draft the IC memo for Baltic transline",
+            "vdr: audit the data room for Hegelmann transporte",
             "crm: top 10 LPs to reach out to for Fund V",
         ]
         label = t("js_try_prompt", lang)
@@ -501,18 +501,74 @@ def right_pane(lang: str = "en"):
     )
 
 
+COPILOT_PROMPTS: dict[str, list[str]] = {
+    "Pipeline": [
+        "Which companies should I move to screening?",
+        "Show me healthcare deals above €10M revenue",
+        "What's the average EBITDA margin across the pipeline?",
+        "Draft an outreach email for the top logistics company",
+    ],
+    "Companies": [
+        "Top 10 companies by revenue in healthcare",
+        "Find software companies in Vilnius above €5M revenue",
+        "Compare EBITDA margins across sectors",
+        "Which companies have the highest growth rate?",
+    ],
+    "Analytics": [
+        "Revenue distribution by sector",
+        "Company count by deal stage",
+        "Average EBITDA margin by sector",
+        "Top 20 companies by enterprise value",
+    ],
+    "Valuation": [
+        "If I bought this company, how do I increase value?",
+        "What's a fair EV/EBITDA multiple for this sector?",
+        "Build a 5-year LBO model at 12% revenue growth",
+        "What are the key risks for this acquisition?",
+    ],
+    "Data Room": [
+        "What documents are missing for due diligence?",
+        "Summarize the uploaded CIM",
+        "Are there any red flags in the legal docs?",
+        "What's in the data room for this company?",
+    ],
+    "Instructions": [
+        "How should I customize the deal triage prompt?",
+        "What does the LBO agent do?",
+        "Help me write a system prompt for sector-specific analysis",
+        "Which agent handles value creation planning?",
+    ],
+    "Help": [
+        "How do I use the valuation simulator?",
+        "What agents are available for due diligence?",
+        "How does the pipeline kanban work?",
+        "How do I upload documents to the data room?",
+    ],
+}
+
+
 def copilot_pane(*, page_name: str, page_context: dict | None = None,
                  company_slug: str = "", lang: str = "en"):
     """Right-pane copilot chat — page-scoped AI assistant."""
     import json as _json
     context_json = _json.dumps(page_context or {})
 
+    prompts = COPILOT_PROMPTS.get(page_name, COPILOT_PROMPTS.get("Pipeline", []))
+    sample_chips = [
+        Button(
+            Span(p, cls="copilot-chip-text"),
+            cls="copilot-chip",
+            onclick=f"copilotFillAndSend({p!r})",
+        )
+        for p in prompts
+    ]
+
     return Div(
         Div(
             Div(H3("Copilot", cls="right-title"),
                 Span(page_name, id="copilot-subtitle", cls="right-subtitle"),
                 cls="right-header-left"),
-            Button("✕", cls="right-close", onclick="toggleCopilotPane()"),
+            Button("»", cls="right-close copilot-collapse", onclick="toggleCopilotPane()"),
             cls="right-header",
         ),
         Div(
@@ -534,18 +590,19 @@ def copilot_pane(*, page_name: str, page_context: dict | None = None,
                 Button("Send", type="submit", cls="copilot-send", id="copilot-send-btn"),
                 cls="copilot-input-row",
             ),
+            Div(*sample_chips, id="copilot-chips", cls="copilot-chips"),
             id="copilot-form",
             cls="copilot-form",
             onsubmit="copilotSend(event)",
         ),
-        id="right-pane", cls="right-pane copilot-pane",
+        id="right-pane", cls="right-pane copilot-pane open",
     )
 
 
 def copilot_toggle_btn(lang: str = "en"):
     """Toggle button for the copilot pane, used in workspace page headers."""
-    return Button("Copilot", id="copilot-btn", cls="news-toggle-btn",
-                  onclick="toggleCopilotPane()")
+    return Button("«", id="copilot-btn", cls="copilot-expand-btn",
+                  onclick="toggleCopilotPane()", title="Open Copilot")
 
 
 def signin_overlay(lang: str = "en"):

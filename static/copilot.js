@@ -150,6 +150,13 @@
     }
 
     window.copilotSend = copilotSend;
+    window.copilotFillAndSend = (text) => {
+        const ta = $("#copilot-input");
+        if (ta) ta.value = text;
+        const chips = $("#copilot-chips");
+        if (chips) chips.style.display = "none";
+        copilotSend(null);
+    };
     window.copilotHandleKey = (ev) => {
         if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); copilotSend(ev); }
     };
@@ -161,12 +168,12 @@
             r.classList.remove("open");
             app.classList.add("pane-closed");
             const btn = $("#copilot-btn");
-            if (btn) btn.classList.remove("active");
+            if (btn) { btn.classList.remove("active"); btn.textContent = "«"; }
         } else {
             r.classList.add("open");
             app.classList.remove("pane-closed");
             const btn = $("#copilot-btn");
-            if (btn) btn.classList.add("active");
+            if (btn) { btn.classList.add("active"); btn.textContent = "»"; }
             if (!copilotSid) initSession();
         }
     };

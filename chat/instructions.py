@@ -112,7 +112,6 @@ def instructions_home(sess):
                 ),
                 Div(
                     copilot_toggle_btn(lang=lang),
-                    A(t("chat_back", lang), href="/app", cls="back-to-chat-btn"),
                     cls="chat-header-actions",
                 ),
                 cls="chat-header",
@@ -137,7 +136,7 @@ def instructions_home(sess):
         ),
         Script(src=_versioned("chat.js")),
         Script(src=_versioned("copilot.js")),
-        cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
+        cls="bg-bg text-ink font-sans antialiased app pipeline-app",
     )
     return Html(_head("Instructions"), body, lang="en")
 
@@ -226,7 +225,7 @@ def instruction_edit(sess, slug: str):
         ),
         Script(src=_versioned("chat.js")),
         Script(src="/static/instructions.js"),
-        cls="bg-bg text-ink font-sans antialiased app pane-closed pipeline-app",
+        cls="bg-bg text-ink font-sans antialiased app pipeline-app",
     )
     return Html(_editor_head(f"Edit — {title}"), body, lang="en")
 
