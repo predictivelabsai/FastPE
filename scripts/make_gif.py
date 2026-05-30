@@ -35,6 +35,10 @@ FRAMES = [
     ("18-analytics-sector.png",    3200),
     ("19-instructions-list.png",   2400),
     ("20-instructions-edit.png",   2400),
+    ("21-valuation-company.png",   3500),
+    ("22-valuation-wacc-chart.png", 3500),
+    ("23-help-page.png",           2400),
+    ("24-data-room.png",           2400),
 ]
 
 # Home page hero GIF — landing pages only

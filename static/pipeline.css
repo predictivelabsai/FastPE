@@ -501,21 +501,43 @@
 }
 
 /* ── User Guide ────────────────────────────────────────────────── */
-.guide-content { max-width: 800px; margin: 0 auto; padding: 1.5rem 0 3rem; }
-.guide-h1 { font-size: 1.8rem; font-weight: 600; color: var(--ink); margin: 0 0 .5rem; letter-spacing: -.02em; }
-.guide-h2 { font-size: 1.25rem; font-weight: 600; color: var(--accent); margin: 2rem 0 .5rem; padding-top: 1rem; border-top: 1px solid var(--line); }
-.guide-h3 { font-size: 1rem; font-weight: 600; color: var(--ink); margin: 1.2rem 0 .4rem; }
-.guide-h4 { font-size: .88rem; font-weight: 600; color: var(--ink); margin: .8rem 0 .3rem; }
-.guide-p { color: var(--ink-muted); font-size: .88rem; line-height: 1.6; margin: .4rem 0; }
-.guide-hr { border: none; border-top: 1px solid var(--line); margin: 1.5rem 0; }
-.guide-list { padding-left: 1.2rem; margin: .5rem 0; }
-.guide-list li { color: var(--ink-muted); font-size: .88rem; line-height: 1.6; margin-bottom: .3rem; }
+.guide-toc {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--bg-elev); border-bottom: 1px solid var(--line);
+    padding: .5rem 0; margin-bottom: 1rem;
+}
+.guide-toc-links {
+    max-width: 800px; margin: 0 auto;
+    display: flex; flex-wrap: wrap; gap: .3rem .5rem;
+}
+.guide-toc-link {
+    font-size: .72rem; font-weight: 500; color: var(--accent);
+    padding: .25rem .55rem; border-radius: .3rem;
+    background: var(--bg-raise); text-decoration: none;
+    white-space: nowrap; transition: background .15s;
+}
+.guide-toc-link:hover { background: var(--accent); color: white; }
+
+.guide-content { max-width: 800px; margin: 0 auto; padding: .5rem 0 3rem; }
+.guide-h1 { font-size: 1.6rem; font-weight: 600; color: var(--ink); margin: 0 0 .4rem; letter-spacing: -.02em; }
+.guide-h2 { font-size: 1.15rem; font-weight: 600; color: var(--accent); margin: 1.5rem 0 .4rem; padding-top: .8rem; border-top: 1px solid var(--line); scroll-margin-top: 3.5rem; }
+.guide-h3 { font-size: .95rem; font-weight: 600; color: var(--ink); margin: 1rem 0 .35rem; scroll-margin-top: 3.5rem; }
+.guide-h4 { font-size: .85rem; font-weight: 600; color: var(--ink); margin: .7rem 0 .25rem; }
+.guide-p { color: var(--ink-muted); font-size: .85rem; line-height: 1.6; margin: .35rem 0; }
+.guide-hr { border: none; border-top: 1px solid var(--line); margin: 1.2rem 0; }
+.guide-list { padding-left: 1.2rem; margin: .4rem 0; }
+.guide-list li { color: var(--ink-muted); font-size: .85rem; line-height: 1.6; margin-bottom: .25rem; }
 .guide-list strong { color: var(--accent); }
 .guide-link { color: var(--accent); text-decoration: underline; }
-.guide-inline-code { background: var(--bg-raise); padding: .1rem .35rem; border-radius: .25rem; font-family: 'JetBrains Mono', monospace; font-size: .82rem; color: var(--accent); }
-.guide-code { background: var(--bg); border: 1px solid var(--line); border-radius: .4rem; padding: .6rem .8rem; font-family: 'JetBrains Mono', monospace; font-size: .76rem; color: var(--ink-muted); overflow-x: auto; margin: .5rem 0; }
-.guide-table-wrap { margin: .5rem 0; overflow-x: auto; }
-.guide-img-wrap { margin: 1rem 0; text-align: center; }
+.guide-inline-code { background: var(--bg-raise); padding: .1rem .35rem; border-radius: .25rem; font-family: 'JetBrains Mono', monospace; font-size: .8rem; color: var(--accent); }
+.guide-code { background: var(--bg); border: 1px solid var(--line); border-radius: .4rem; padding: .5rem .7rem; font-family: 'JetBrains Mono', monospace; font-size: .75rem; color: var(--ink-muted); overflow-x: auto; margin: .4rem 0; }
+.guide-table-wrap { margin: .4rem 0; overflow-x: auto; }
+.guide-img-wrap { margin: .8rem 0; text-align: center; }
 .guide-img { max-width: 100%; border-radius: .5rem; border: 1px solid var(--line); }
+
+@media (max-width: 768px) {
+    .guide-toc-links { gap: .2rem .3rem; }
+    .guide-toc-link { font-size: .65rem; padding: .2rem .4rem; }
+}
 
 /* Bottom-nav rules moved to static/app.css so they apply on /app too. */

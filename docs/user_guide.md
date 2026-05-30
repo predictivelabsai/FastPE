@@ -4,13 +4,27 @@ Your Private Equity AI Agent Squad — one chat interface, every PE workflow.
 
 ---
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Chat](#chat)
+- [Pipeline](#pipeline)
+- [Company Search](#company-search)
+- [PE Valuation Simulator](#pe-valuation-simulator)
+- [Data Room](#data-room)
+- [Analytics](#analytics)
+- [Instructions](#instructions)
+- [News Feed](#news-feed)
+- [Configuration](#configuration)
+- [Data Coverage](#data-coverage)
+
+---
+
 ## Getting Started
 
-1. **Open the app** at [pehero.fyi/app](https://pehero.fyi/app)
-2. **Sign in** with your email (click the ◇ icon at the bottom of the left pane)
+1. **Open the app** at [pehero.chat/app](https://pehero.chat/app)
+2. **Sign in** with your email (click the Sign in button at the bottom of the left pane)
 3. **Type a prompt** in the chat input — PEHero automatically routes to the right specialist agent
-
-![Product tour](pehero.gif)
 
 ---
 
@@ -53,11 +67,11 @@ When agents return tabular data (financials, comps, models), the table appears i
 
 Click **Visualize** on any table to render an interactive Plotly chart:
 
-- Time series with <20 data points → **bar chart**
-- Time series with 20+ points → **area/line chart**
-- Categorical data ≤8 items → **pie chart**
-- Categorical data >8 items → **treemap**
-- Multiple numeric columns → **grouped bar chart**
+- Time series with <20 data points — **bar chart**
+- Time series with 20+ points — **area/line chart**
+- Categorical data with 8 or fewer items — **pie chart**
+- Categorical data with more than 8 items — **treemap**
+- Multiple numeric columns — **grouped bar chart**
 
 ### Memo & Document Export
 
@@ -73,7 +87,7 @@ For memo-type agents (IC Memo, Deal Teaser, LP Update, LOI, Outreach Email), thr
 
 The pipeline kanban board shows all companies across deal stages:
 
-**Sourced → Screened → LOI → Diligence → IC → Signed → Closed → Held → Exited**
+**Sourced — Screened — LOI — Diligence — IC — Signed — Closed — Held — Exited**
 
 - Filter by **sector** or **ownership** type
 - Click any card to open the **deal workspace** with a brief on the right and per-deal chat in the centre
@@ -92,14 +106,77 @@ Search your entire company database at `/app/companies`:
 
 ---
 
+## PE Valuation Simulator
+
+Interactive company valuation with four methods, WACC calculator, equity bridge, and XLS export.
+
+### Getting Started
+
+1. Open **PE Valuation Simulator** from the left-pane Workspace menu
+2. **Select a company** from the dropdown (or search by name)
+3. The simulator loads the company's financials and auto-selects an industry benchmark
+
+### Valuation Methods
+
+The simulator computes enterprise value using four approaches:
+
+- **EV/Revenue** — revenue times an industry-specific sales multiple (Damodaran data, 96 industries)
+- **EV/EBITDA** — EBITDA times the industry EV/EBITDA multiple
+- **EV/EBIT** — EBIT times the industry EV/EBIT multiple
+- **DCF** — discounted cash flow with configurable revenue growth, WACC, terminal growth, projection years, CapEx rate, and tax rate
+
+Each method has interactive sliders — adjust any parameter and all valuations update instantly.
+
+### Industry Benchmarks
+
+Select from 96 Damodaran industry categories. Changing the industry auto-fills the revenue, EBITDA, and EBIT multiples with real-world benchmarks.
+
+### WACC Calculator
+
+Build up the discount rate from first principles:
+
+- **Risk-Free Rate** — government bond yield
+- **Levered Beta** — industry beta from Damodaran
+- **Market Risk Premium** — historical equity premium
+- **Country Risk Premium** — Damodaran country CRP
+- **Size Premium** — Duff & Phelps size study
+- **D/E Ratio** — debt-to-equity
+- **Cost of Debt** — pre-tax borrowing rate
+- **Tax Rate** — marginal corporate tax rate
+
+Click **Apply to DCF** to push the calculated WACC into the DCF model.
+
+### Equity Bridge
+
+Derive equity value from the average enterprise value:
+
+- **(+) Cash** — add cash on hand
+- **(-) Debt** — subtract total debt
+- **(-) Minority Interest** — adjust for minority stakes
+
+### Comparison Chart
+
+An interactive Plotly bar chart shows all four valuations side by side, with a dashed average line.
+
+### XLS Export
+
+Click **Download XLS** to generate a multi-sheet Excel workbook:
+
+- **Valuation Summary** — all methods + equity bridge
+- **Multiples** — metric, multiple, and enterprise value detail
+- **DCF** — assumptions + year-by-year FCF projections + terminal value
+- **WACC** — full component breakdown with sources
+
+---
+
 ## Data Room
 
 Upload and manage deal documents at `/app/dataroom`:
 
 - Upload PDFs, Word docs, spreadsheets, presentations, and images
-- Documents are stored securely and linked to your user account
-- Download any uploaded file at any time
-- Documents can be referenced by RAG-enabled agents for Q&A
+- Documents are organized in a **virtual folder tree** grouped by company
+- Download or delete any uploaded file
+- Uploaded documents are **automatically indexed into RAG** — agents can search and answer questions about your uploaded documents
 
 ---
 
@@ -123,7 +200,6 @@ Edit any agent's system prompt live at `/app/instructions`:
 - Changes take effect on the very next conversation
 - No restarts or deploys needed
 - Perfect for encoding your firm's house style, memo format, or diligence approach
-- Version history tracked for auditability
 
 ---
 
@@ -147,20 +223,11 @@ Switch between **EUR** (default), **GBP**, and **USD**. All monetary figures acr
 
 ### Language
 
-Five languages supported: English, Estonian, Lithuanian, Finnish, Swedish. The language selector is in the chat header — agents respond in your chosen language.
+11 languages supported: English, Estonian, Lithuanian, Latvian, Finnish, Swedish, Norwegian, Danish, French, German, Polish. The language selector is in the chat header — agents respond in your chosen language.
 
 ### Integrations
 
 Baltic company registries (Estonia, Lithuania, Latvia) and web search (Tavily, EXA) status shown in the configuration panel.
-
----
-
-## Keyboard Shortcuts
-
-| Key | Action |
-|-----|--------|
-| **Enter** | Send message |
-| **Shift+Enter** | New line in input |
 
 ---
 

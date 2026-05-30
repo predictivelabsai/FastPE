@@ -1,4 +1,5 @@
-"""Help / User Guide page — renders docs/user_guide.md as a FastHTML page.
+"""Help / User Guide page — renders docs/user_guide.md as a FastHTML page
+with a sticky TOC at the top.
 
 /app/help → rendered user guide
 """
@@ -11,7 +12,7 @@ from pathlib import Path
 from fasthtml.common import (
     Html, Head, Body, Meta, Title, Link, Script, NotStr,
     Div, Span, H1, H2, H3, H4, P, A, Button, Img, Table, Thead, Tbody, Tr, Th, Td,
-    Ul, Li, Hr,
+    Ul, Li, Hr, Nav,
 )
 
 from app import rt
@@ -43,8 +44,29 @@ def _head():
     )
 
 
+def _extract_toc(md: str) -> list[tuple[str, str]]:
+    """Extract ## headings for table of contents."""
+    toc = []
+    for line in md.split("\n"):
+        line = line.strip()
+        if line.startswith("## ") and not line.startswith("## Table of Contents"):
+            title = line[3:]
+            slug = _slugify(title)
+            toc.append((title, slug))
+    return toc
+
+
+def _build_toc(toc: list[tuple[str, str]]) -> Nav:
+    """Build a horizontal TOC nav bar."""
+    links = [A(title, href=f"#{slug}", cls="guide-toc-link") for title, slug in toc]
+    return Nav(
+        Div(*links, cls="guide-toc-links"),
+        cls="guide-toc",
+    )
+
+
 def _md_to_components(md: str) -> list:
-    """Convert markdown to FastHTML components."""
+    """Convert markdown to FastHTML components (skips TOC section)."""
     import html as _html
 
     elements = []
@@ -56,10 +78,27 @@ def _md_to_components(md: str) -> list:
     list_items = []
     in_code = False
     code_lines = []
+    skip_toc = False
 
     while i < len(lines):
         line = lines[i]
         stripped = line.strip()
+
+        # Skip the markdown TOC section
+        if stripped == "## Table of Contents":
+            skip_toc = True
+            i += 1
+            continue
+        if skip_toc:
+            if stripped.startswith("## ") and stripped != "## Table of Contents":
+                skip_toc = False
+            elif stripped.startswith("---"):
+                skip_toc = False
+                i += 1
+                continue
+            else:
+                i += 1
+                continue
 
         # Code blocks
         if stripped.startswith("```"):
@@ -115,7 +154,16 @@ def _md_to_components(md: str) -> list:
             table_rows = []
             in_table = False
 
-        # List items
+        # Numbered lists
+        m_num = re.match(r"^(\d+)\.\s+(.+)", stripped)
+        if m_num:
+            if not in_list:
+                in_list = True
+            list_items.append(Li(NotStr(_inline_md(m_num.group(2)))))
+            i += 1
+            continue
+
+        # Bullet lists
         if stripped.startswith("- "):
             if not in_list:
                 in_list = True
@@ -131,10 +179,10 @@ def _md_to_components(md: str) -> list:
         # Headings
         if stripped.startswith("# ") and not stripped.startswith("## "):
             elements.append(H1(stripped[2:], cls="guide-h1"))
+        elif stripped.startswith("### "):
+            elements.append(H3(stripped[4:], cls="guide-h3", id=_slugify(stripped[4:])))
         elif stripped.startswith("## "):
             elements.append(H2(stripped[3:], cls="guide-h2", id=_slugify(stripped[3:])))
-        elif stripped.startswith("### "):
-            elements.append(H3(stripped[4:], cls="guide-h3"))
         elif stripped.startswith("#### "):
             elements.append(H4(stripped[5:], cls="guide-h4"))
         elif stripped == "---":
@@ -168,7 +216,6 @@ def _md_to_components(md: str) -> list:
 
 
 def _inline_md(text: str) -> str:
-    """Handle inline markdown: bold, code, links."""
     import html as _html
     text = _html.escape(text)
     text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
@@ -188,6 +235,8 @@ def help_page(sess):
     lang = get_lang(sess)
 
     md = _GUIDE_PATH.read_text() if _GUIDE_PATH.exists() else "# User Guide\n\nContent coming soon."
+    toc = _extract_toc(md)
+    toc_nav = _build_toc(toc)
     content = _md_to_components(md)
 
     body = Body(
@@ -210,6 +259,7 @@ def help_page(sess):
                 cls="chat-header",
             ),
             Div(
+                toc_nav,
                 Div(*content, cls="guide-content"),
                 cls="companies-wrap",
             ),
