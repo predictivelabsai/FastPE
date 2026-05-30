@@ -1,6 +1,8 @@
 """Data Room — upload, list, and download deal documents.
 
-/app/dataroom                  → file list + upload form
+Virtual folder tree grouped by company_slug. Untagged files go under "General".
+
+/app/dataroom                  → folder tree + upload form
 POST /app/dataroom/upload      → handle file upload
 GET  /app/dataroom/{id}/download → download a file
 POST /app/dataroom/{id}/delete  → delete a file
@@ -8,9 +10,11 @@ POST /app/dataroom/{id}/delete  → delete a file
 
 from __future__ import annotations
 
+from collections import defaultdict
+
 from fasthtml.common import (
     Html, Head, Body, Meta, Title, Link, Script, NotStr,
-    Div, Span, H2, H3, P, A, Button, Form, Input, Label,
+    Div, Span, H2, H3, P, A, Button, Form, Input, Select, Option, Label,
     Table, Thead, Tbody, Tr, Th, Td,
 )
 from starlette.requests import Request
@@ -54,19 +58,65 @@ def _fmt_size(size_bytes) -> str:
     return f"{size_bytes} B"
 
 
-def _file_icon(content_type: str) -> str:
+_ICON_MAP = {
+    "pdf": "📄", "word": "📝", "docx": "📝", "doc": "📝",
+    "sheet": "📊", "excel": "📊", "xlsx": "📊", "csv": "📊",
+    "presentation": "📋", "pptx": "📋",
+    "image": "🖼", "png": "🖼", "jpg": "🖼", "jpeg": "🖼",
+}
+
+
+def _file_icon(content_type: str, filename: str = "") -> str:
     ct = (content_type or "").lower()
-    if "pdf" in ct:
-        return "📄"
-    if "word" in ct or "docx" in ct:
-        return "📝"
-    if "sheet" in ct or "excel" in ct or "xlsx" in ct or "csv" in ct:
-        return "📊"
-    if "presentation" in ct or "pptx" in ct:
-        return "📋"
-    if "image" in ct:
-        return "🖼"
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    for key, icon in _ICON_MAP.items():
+        if key in ct or key == ext:
+            return icon
     return "📎"
+
+
+def _folder_node(folder_name: str, docs: list[dict], lang: str, folder_id: str,
+                 is_open: bool = False) -> Div:
+    """Render a collapsible folder with its file rows."""
+    total_size = sum(d.get("size_bytes") or 0 for d in docs)
+    file_rows = []
+    for d in docs:
+        file_rows.append(
+            Div(
+                Span(_file_icon(d["content_type"], d["filename"]), cls="dr-file-icon"),
+                A(d["filename"], href=f"/app/dataroom/{d['id']}/download", cls="dr-file-name"),
+                Span(_fmt_size(d["size_bytes"]), cls="dr-file-size"),
+                Span(str(d["uploaded_at"])[:16] if d["uploaded_at"] else "", cls="dr-file-date"),
+                Form(
+                    Button("✕", type="submit", cls="dr-delete-btn", title=t("dr_delete", lang)),
+                    method="post", action=f"/app/dataroom/{d['id']}/delete",
+                ),
+                cls="dr-file-row",
+            )
+        )
+
+    return Div(
+        Button(
+            Span("▸", cls="dr-folder-arrow"),
+            Span("📁", cls="dr-folder-icon"),
+            Span(folder_name, cls="dr-folder-name"),
+            Span(f"{len(docs)}", cls="dr-folder-count"),
+            Span(_fmt_size(total_size), cls="dr-folder-size"),
+            cls=f"dr-folder-toggle{' open' if is_open else ''}",
+            onclick=f"toggleGroup('{folder_id}')",
+            id=f"btn-{folder_id}",
+        ),
+        Div(*file_rows, cls=f"dr-folder-files{' open' if is_open else ''}", id=folder_id),
+        cls="dr-folder",
+    )
+
+
+def _company_display_name(slug: str) -> str:
+    """Look up company name from slug, fallback to formatted slug."""
+    row = fetch_one("SELECT name FROM pehero.companies WHERE slug = %s", (slug,))
+    if row:
+        return row["name"]
+    return slug.replace("_", " ").title()
 
 
 @rt("/app/dataroom")
@@ -83,18 +133,27 @@ def dataroom_home(sess):
             (uid,),
         )
 
+    # Build company dropdown for upload form
+    companies = fetch_all(
+        "SELECT slug, name FROM pehero.companies ORDER BY name LIMIT 100"
+    )
+
     upload_form = Form(
         Div(
             Div(
                 Label(t("dr_file", lang), cls="dr-label"),
                 Input(type="file", name="file", required=True, cls="dr-file-input",
+                      multiple=True,
                       accept=".pdf,.docx,.doc,.xlsx,.xls,.csv,.pptx,.ppt,.png,.jpg,.jpeg,.gif,.txt"),
                 cls="dr-field",
             ),
             Div(
                 Label(t("dr_company", lang), cls="dr-label"),
-                Input(type="text", name="company_slug", placeholder=t("dr_company_placeholder", lang),
-                      cls="dr-text-input"),
+                Select(
+                    Option(t("dr_general", lang), value=""),
+                    *[Option(c["name"][:40], value=c["slug"]) for c in companies],
+                    name="company_slug", cls="dr-select",
+                ),
                 cls="dr-field",
             ),
             Button(t("dr_upload_btn", lang), type="submit", cls="dr-upload-btn"),
@@ -105,41 +164,33 @@ def dataroom_home(sess):
         enctype="multipart/form-data",
     )
 
-    if docs:
-        table = Table(
-            Thead(Tr(
-                Th(""),
-                Th(t("dr_col_name", lang)),
-                Th(t("dr_col_company", lang)),
-                Th(t("dr_col_size", lang), cls="text-right"),
-                Th(t("dr_col_date", lang)),
-                Th(""),
-            )),
-            Tbody(
-                *[Tr(
-                    Td(_file_icon(d["content_type"])),
-                    Td(A(d["filename"], href=f"/app/dataroom/{d['id']}/download",
-                         cls="company-link")),
-                    Td(d["company_slug"] or "—"),
-                    Td(_fmt_size(d["size_bytes"]), cls="text-right mono"),
-                    Td(str(d["uploaded_at"])[:16] if d["uploaded_at"] else "—"),
-                    Td(
-                        Form(
-                            Button("✕", type="submit", cls="dr-delete-btn",
-                                   title=t("dr_delete", lang)),
-                            method="post",
-                            action=f"/app/dataroom/{d['id']}/delete",
-                        ),
-                    ),
-                    cls="search-row",
-                ) for d in docs],
-            ),
-            cls="search-table",
+    # Group docs into folders by company_slug
+    folders: dict[str, list[dict]] = defaultdict(list)
+    for d in docs:
+        key = d["company_slug"] or "__general__"
+        folders[key].append(d)
+
+    folder_nodes = []
+    # Company folders first (sorted by name), then general
+    company_keys = sorted([k for k in folders if k != "__general__"],
+                          key=lambda k: _company_display_name(k).lower())
+    for i, slug in enumerate(company_keys):
+        name = _company_display_name(slug)
+        folder_nodes.append(
+            _folder_node(name, folders[slug], lang, f"dr-{slug}", is_open=(i == 0))
         )
-        result_count = Span(t("dr_count", lang).format(n=len(docs)), cls="search-count")
+    if "__general__" in folders:
+        folder_nodes.append(
+            _folder_node(t("dr_general", lang), folders["__general__"], lang,
+                         "dr-general", is_open=not company_keys)
+        )
+
+    if docs:
+        total = Span(t("dr_count", lang).format(n=len(docs)), cls="search-count")
+        tree = Div(*folder_nodes, cls="dr-tree")
     else:
-        table = Div(P(t("dr_empty", lang), cls="search-empty"))
-        result_count = None
+        total = None
+        tree = Div(P(t("dr_empty", lang), cls="search-empty"))
 
     body = Body(
         signin_overlay(lang=lang),
@@ -152,6 +203,9 @@ def dataroom_home(sess):
                 Div(
                     Button("☰", cls="mobile-menu-btn", onclick="toggleLeftPane()"),
                     Span(t("dr_title", lang), cls="chat-header-title"),
+                    Span("·", cls="chat-header-dot"),
+                    Span(t("dr_count", lang).format(n=len(docs)) if docs else "",
+                         cls="chat-header-agent"),
                     cls="chat-header-left",
                 ),
                 Div(
@@ -162,8 +216,7 @@ def dataroom_home(sess):
             ),
             Div(
                 upload_form,
-                result_count,
-                table,
+                tree,
                 cls="companies-wrap",
             ),
             cls="center-pane pipeline-center",
@@ -182,22 +235,26 @@ async def dataroom_upload(request: Request):
         return RedirectResponse("/app/dataroom", status_code=303)
 
     form = await request.form()
-    upload = form.get("file")
     company_slug = (form.get("company_slug") or "").strip() or None
 
-    if not upload or not hasattr(upload, "read"):
+    files = form.getlist("file")
+    if not files:
         return RedirectResponse("/app/dataroom", status_code=303)
 
-    data = await upload.read()
-    filename = upload.filename or "untitled"
-    content_type = upload.content_type or "application/octet-stream"
-
     with connect() as conn, conn.cursor() as cur:
-        cur.execute(
-            "INSERT INTO pehero.data_room (user_id, company_slug, filename, content_type, size_bytes, data) "
-            "VALUES (%s, %s, %s, %s, %s, %s)",
-            (uid, company_slug, filename, content_type, len(data), data),
-        )
+        for upload in files:
+            if not hasattr(upload, "read"):
+                continue
+            data = await upload.read()
+            if not data:
+                continue
+            filename = upload.filename or "untitled"
+            content_type = upload.content_type or "application/octet-stream"
+            cur.execute(
+                "INSERT INTO pehero.data_room (user_id, company_slug, filename, content_type, size_bytes, data) "
+                "VALUES (%s, %s, %s, %s, %s, %s)",
+                (uid, company_slug, filename, content_type, len(data), data),
+            )
         conn.commit()
 
     return RedirectResponse("/app/dataroom", status_code=303)

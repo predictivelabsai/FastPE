@@ -659,6 +659,8 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "sv": "Inga dokument uppladdade ännu. Ladda upp din första fil."},
     "dr_delete":         {"en": "Delete",            "et": "Kustuta",            "lt": "Ištrinti",
                           "fi": "Poista", "sv": "Radera"},
+    "dr_general":        {"en": "General",           "et": "Üldine",             "lt": "Bendra",
+                          "fi": "Yleinen", "sv": "Allmänt"},
 
     # ── Company search page ──────────────────────────────────────
     "search_title":      {"en": "Company Search",   "et": "Ettevõtete otsing",  "lt": "Įmonių paieška",
