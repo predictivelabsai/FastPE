@@ -1,19 +1,22 @@
 # PEHero
 
-Agentic AI for private equity — 22 specialist agents that source, underwrite, close, and operate your deals.
+Agentic AI for private equity — specialist agents that source, underwrite, close, and operate your deals.
 
 ![PEHero product tour](docs/pehero.gif)
 
 Product tour as a shareable deck — [PDF](docs/pehero-product-tour.pdf) · [PPTX](docs/pehero-product-tour.pptx).
 
-
-- **Marketing landing** at `/` with hero, agent directory, how-it-works, pricing.
-- **3-pane chat app** at `/app` with left agent/session browser, centre chat, right artifact pane.
-- **22 LangGraph ReAct agents** across deal sourcing, LBO underwriting, due diligence, capital/LP, and portfolio operations — routed by prefix (`triage:`, `lbo:`, `memo:`…) or by keyword heuristics with an LLM fallback classifier.
+- **Marketing landing** at `/` with hero, agent directory, how-it-works, pricing, PE news feed.
+- **3-pane chat app** at `/app` — left agent/session browser, centre chat with inline tables/charts, right PE news pane.
+- **LangGraph ReAct agents** across deal sourcing, LBO underwriting, due diligence, capital/LP, and portfolio operations — routed by prefix (`triage:`, `lbo:`, `memo:`...) or by keyword heuristics with an LLM fallback classifier.
+- **PE Valuation Simulator** — 4-method valuation (EV/Revenue, EV/EBITDA, EV/EBIT, DCF) with WACC calculator, Damodaran industry multiples (96 industries), equity bridge, Plotly charts, and XLS export.
+- **Data Room** with virtual folder tree, file upload, and automatic RAG indexing (PDF, DOCX, XLSX, PPTX).
+- **Analytics** — natural language to SQL with auto-charting (Plotly).
+- **Pipeline kanban** — deal stages from Sourced to Exited with per-deal workspaces.
+- **11 languages** — EN, ET, LT, LV, FI, SV, NO, DA, FR, DE, PL.
 - **xAI Grok** as the default LLM via OpenAI-compatible endpoint.
-- **PostgreSQL** on the existing `DB_URL` with two schemas: `pehero` (OLTP — companies, funds, cap tables, financials, contracts, transaction + trading comps, LBO models, debt stacks, LP CRM, market signals, portfolio KPIs) and `pehero_rag` (pgvector — CIMs, QoE reports, MSAs, legal DD, ESG reports, industry studies).
-- **Synthetic PE dataset** out of the box: ~40 portfolio / pipeline companies across 6 sectors, 24 months of monthly financials, cap tables with realistic class structures, ~480 material contracts, transaction + trading comps, 60 LP contacts, and ~320 indexed documents.
-- **Local embeddings** via fastembed (no OpenAI key required) — BAAI/bge-small-en-v1.5 at 384 dim.
+- **PostgreSQL** with two schemas: `pehero` (OLTP — 1,363 real companies from LT/EE registries, financials, contracts, comps, LBO models, debt stacks, LP CRM) and `pehero_rag` (pgvector — document RAG with semantic search).
+- **Local embeddings** via fastembed (no API key required) — BAAI/bge-small-en-v1.5 at 384 dim.
 
 ## Running locally
 
