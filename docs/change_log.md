@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.0 — 2026-05-30
+
+### Export suite + inline charts + table truncation
+- Tables truncated to 5 preview rows with **See more / See less** toggle
+- **Download XLS** button on every table — server-side .xlsx with styled headers (openpyxl)
+- **Visualize** button on every table — auto-detects chart type (bar, area, pie, treemap, grouped bar), renders inline via Plotly.js (lazy-loaded)
+- **Download Word** button on memo/LOI agents alongside PDF — server-side .docx with formatted headings, bold, tables, bullets (python-docx)
+- New endpoints: `POST /app/export/xlsx`, `POST /app/export/docx`, `POST /app/chart`
+- News pane opens by default, RSS pre-fetched on startup
+- Refresh interval configurable via `config/params.yaml` (default 30 min)
+- Added `openpyxl>=3.1.0`, `python-docx>=1.1.0` dependencies
+
 ## v0.6.0 — 2026-05-30
 
 ### News feed + inline artifacts
