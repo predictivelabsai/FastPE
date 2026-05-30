@@ -43,20 +43,11 @@ jobs:
       - name: Run migrations
         run: python -m db.migrate
 
+      - name: Seed test data
+        run: python -m synthetic.generate --seed 42 --limit 5 --skip-rag
+
       - name: Import check
         run: python -c "from app import app; from chat import routes, pipeline, instructions, analytics, memo_pdf, companies, exports, dataroom, help, valuation; print('OK')"
 
       - name: Smoke tests
         run: pytest -q tests/test_agents_smoke.py
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    steps:
-      - name: Trigger Coolify deploy
-        run: |
-          curl -s -X GET "${{ secrets.COOLIFY_WEBHOOK_URL }}" \
-            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}" \
-            || echo "Coolify webhook not configured yet — skipping deploy"
