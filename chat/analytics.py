@@ -36,60 +36,47 @@ from utils.llm import build_llm
 log = logging.getLogger(__name__)
 
 
-SCHEMA_SNIPPET = """\
--- PEHero read-only PostgreSQL schema — target tables to query.
--- Schemas are `pehero` (OLTP) and `pehero_rag` (embedded docs).
--- ONLY generate SELECT queries. Use schema-qualified names.
+def _load_schema_snippet() -> str:
+    """Build a schema snippet for the LLM from sql/schema.json."""
+    import json as _json
+    from pathlib import Path
+    schema_path = Path(__file__).resolve().parent.parent / "sql" / "schema.json"
+    if not schema_path.exists():
+        return "-- schema.json not found; ask the user to run schema extraction"
 
-pehero.companies (
-    id, slug, name, hq_city, hq_state, country,
-    sector,        -- software | healthcare | industrials | consumer | business_services | financial_services
-    sub_sector, founded_year, employees,
-    revenue_ltm, ebitda_ltm, ebitda_margin, growth_rate,
-    ownership,     -- founder | family | pe_backed | vc_backed | corporate_carve_out | public
-    deal_stage,    -- sourced | screened | loi | diligence | ic | signed | closed | held | exited | passed
-    deal_type,     -- platform | add_on | carve_out | minority | recap | secondary
-    enterprise_value, ask_multiple, seller_intent
-)
+    schema = _json.loads(schema_path.read_text())
+    lines = [
+        "-- PEHero read-only PostgreSQL schema. ONLY SELECT queries.",
+        "-- Use schema-qualified names (pehero.*).\n",
+    ]
+    for table, info in schema.items():
+        cols = info.get("columns", [])
+        row_count = info.get("row_count", 0)
+        enums = info.get("enums", {})
 
-pehero.financials (
-    company_id, month DATE, revenue, cogs, gross_profit, opex JSONB,
-    ebitda, adjustments JSONB, adj_ebitda,
-    arr, gross_retention, net_retention
-)
+        col_parts = []
+        for c in cols:
+            part = c["name"]
+            ctype = c.get("type", "")
+            if "JSONB" in ctype:
+                part += " JSONB"
+            elif "DATE" in ctype or "TIMESTAMP" in ctype:
+                part += " DATE"
+            elif "NUMERIC" in ctype:
+                part += f" {ctype}"
+            if c["name"] in enums:
+                vals = " | ".join(enums[c["name"]])
+                part += f"  -- {vals}"
+            col_parts.append(part)
 
-pehero.contracts (
-    company_id, counterparty, contract_type, start_date, end_date,
-    annual_value, auto_renew, change_of_control_trigger,
-    termination_notice_days, exclusivity, status
-)
+        lines.append(f"{table} ({row_count} rows) (")
+        lines.append("    " + ",\n    ".join(col_parts))
+        lines.append(")\n")
 
-pehero.transaction_comps (
-    company_id, target_name, acquirer, sector, sub_sector, country,
-    announce_date, close_date, enterprise_value, revenue, ebitda,
-    ev_revenue, ev_ebitda, deal_type
-)
+    return "\n".join(lines)
 
-pehero.trading_comps (
-    ticker, peer_name, sector, market_cap, ev, revenue_ltm, ebitda_ltm,
-    ev_revenue, ev_ebitda, rev_growth, ebitda_margin, as_of_date
-)
 
-pehero.market_signals (
-    sector, sub_sector, metric, value, as_of_date
-    -- metric is one of: ev_ebitda_median | ev_revenue_median | deal_volume |
-    --                   fundraising_close_time | exit_multiples | hold_period
-)
-
-pehero.investor_crm (
-    name, firm, lp_type, commitment_size, stage, focus, geography, aum, last_touch
-)
-
-pehero.dd_findings (company_id, agent_slug, category, severity, summary)
-pehero.lbo_models (company_id, name, assumptions JSONB, projections JSONB, returns JSONB)
-pehero.debt_stacks (company_id, name, tranches JSONB, total_debt, total_leverage, dscr)
-pehero.cap_tables (company_id, as_of_date, holders JSONB, total_shares, post_money)
-"""
+SCHEMA_SNIPPET = _load_schema_snippet()
 
 
 SAMPLE_QUERIES = [

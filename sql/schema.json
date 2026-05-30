@@ -1,0 +1,751 @@
+{
+  "pehero.companies": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "hq_city",
+        "type": "TEXT"
+      },
+      {
+        "name": "hq_state",
+        "type": "TEXT"
+      },
+      {
+        "name": "country",
+        "type": "TEXT"
+      },
+      {
+        "name": "sector",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "sub_sector",
+        "type": "TEXT"
+      },
+      {
+        "name": "website",
+        "type": "TEXT"
+      },
+      {
+        "name": "founded_year",
+        "type": "INT4(32,0)"
+      },
+      {
+        "name": "employees",
+        "type": "INT4(32,0)"
+      },
+      {
+        "name": "revenue_ltm",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "ebitda_ltm",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "ebitda_margin",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "growth_rate",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "ownership",
+        "type": "TEXT"
+      },
+      {
+        "name": "deal_stage",
+        "type": "TEXT"
+      },
+      {
+        "name": "deal_type",
+        "type": "TEXT"
+      },
+      {
+        "name": "enterprise_value",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "ask_multiple",
+        "type": "NUMERIC(6,2)"
+      },
+      {
+        "name": "fund_id",
+        "type": "INT8(64,0)"
+      },
+      {
+        "name": "description",
+        "type": "TEXT"
+      },
+      {
+        "name": "seller_intent",
+        "type": "TEXT"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 1363,
+    "enums": {
+      "country": [
+        "EE",
+        "LT"
+      ],
+      "sector": [
+        "business_services",
+        "consumer",
+        "financial_services",
+        "healthcare",
+        "industrials",
+        "software"
+      ],
+      "sub_sector": [
+        "Ambulance & emergency services",
+        "Automation & robotics",
+        "Banking",
+        "Cargo handling",
+        "Computer manufacturing",
+        "Construction",
+        "Credit & lending",
+        "Data processing & hosting",
+        "Dental clinics",
+        "Dental practice",
+        "Freight forwarding",
+        "General medical practice",
+        "Health care institutions",
+        "Hotels",
+        "IT consulting",
+        "IT infrastructure",
+        "IT services & hardware",
+        "Insurance",
+        "Insurance brokerage",
+        "Internet services"
+      ],
+      "ownership": [
+        "founder"
+      ],
+      "deal_stage": [
+        "sourced"
+      ],
+      "deal_type": [
+        "platform"
+      ],
+      "seller_intent": [
+        "cold",
+        "hot",
+        "warm"
+      ]
+    }
+  },
+  "pehero.financials": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "company_id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "month",
+        "type": "DATE",
+        "nullable": false
+      },
+      {
+        "name": "revenue",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "cogs",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "gross_profit",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "opex",
+        "type": "JSONB"
+      },
+      {
+        "name": "ebitda",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "adjustments",
+        "type": "JSONB"
+      },
+      {
+        "name": "adj_ebitda",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "arr",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "gross_retention",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "net_retention",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 59220
+  },
+  "pehero.contracts": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "company_id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "counterparty",
+        "type": "TEXT"
+      },
+      {
+        "name": "contract_type",
+        "type": "TEXT"
+      },
+      {
+        "name": "start_date",
+        "type": "DATE"
+      },
+      {
+        "name": "end_date",
+        "type": "DATE"
+      },
+      {
+        "name": "annual_value",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "auto_renew",
+        "type": "BOOL"
+      },
+      {
+        "name": "change_of_control_trigger",
+        "type": "BOOL"
+      },
+      {
+        "name": "termination_notice_days",
+        "type": "INT4(32,0)"
+      },
+      {
+        "name": "exclusivity",
+        "type": "BOOL"
+      },
+      {
+        "name": "status",
+        "type": "TEXT"
+      },
+      {
+        "name": "doc_path",
+        "type": "TEXT"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 0
+  },
+  "pehero.transaction_comps": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "company_id",
+        "type": "INT8(64,0)"
+      },
+      {
+        "name": "target_name",
+        "type": "TEXT"
+      },
+      {
+        "name": "acquirer",
+        "type": "TEXT"
+      },
+      {
+        "name": "sector",
+        "type": "TEXT"
+      },
+      {
+        "name": "sub_sector",
+        "type": "TEXT"
+      },
+      {
+        "name": "country",
+        "type": "TEXT"
+      },
+      {
+        "name": "announce_date",
+        "type": "DATE"
+      },
+      {
+        "name": "close_date",
+        "type": "DATE"
+      },
+      {
+        "name": "enterprise_value",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "revenue",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "ebitda",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "ev_revenue",
+        "type": "NUMERIC(6,2)"
+      },
+      {
+        "name": "ev_ebitda",
+        "type": "NUMERIC(6,2)"
+      },
+      {
+        "name": "deal_type",
+        "type": "TEXT"
+      },
+      {
+        "name": "source",
+        "type": "TEXT"
+      }
+    ],
+    "row_count": 0
+  },
+  "pehero.trading_comps": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "company_id",
+        "type": "INT8(64,0)"
+      },
+      {
+        "name": "ticker",
+        "type": "TEXT"
+      },
+      {
+        "name": "peer_name",
+        "type": "TEXT"
+      },
+      {
+        "name": "sector",
+        "type": "TEXT"
+      },
+      {
+        "name": "market_cap",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "ev",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "revenue_ltm",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "ebitda_ltm",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "ev_revenue",
+        "type": "NUMERIC(6,2)"
+      },
+      {
+        "name": "ev_ebitda",
+        "type": "NUMERIC(6,2)"
+      },
+      {
+        "name": "rev_growth",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "ebitda_margin",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "as_of_date",
+        "type": "DATE"
+      },
+      {
+        "name": "source",
+        "type": "TEXT"
+      }
+    ],
+    "row_count": 0
+  },
+  "pehero.market_signals": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "sector",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "sub_sector",
+        "type": "TEXT"
+      },
+      {
+        "name": "metric",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "value",
+        "type": "NUMERIC(14,4)"
+      },
+      {
+        "name": "as_of_date",
+        "type": "DATE",
+        "nullable": false
+      },
+      {
+        "name": "source",
+        "type": "TEXT"
+      }
+    ],
+    "row_count": 0
+  },
+  "pehero.investor_crm": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "firm",
+        "type": "TEXT"
+      },
+      {
+        "name": "lp_type",
+        "type": "TEXT"
+      },
+      {
+        "name": "email",
+        "type": "TEXT"
+      },
+      {
+        "name": "commitment_size",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "stage",
+        "type": "TEXT"
+      },
+      {
+        "name": "focus",
+        "type": "TEXT"
+      },
+      {
+        "name": "geography",
+        "type": "TEXT"
+      },
+      {
+        "name": "aum",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "last_touch",
+        "type": "DATE"
+      },
+      {
+        "name": "notes",
+        "type": "TEXT"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 0
+  },
+  "pehero.dd_findings": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "company_id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "agent_slug",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "category",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "severity",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "summary",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "detail",
+        "type": "TEXT"
+      },
+      {
+        "name": "source_doc",
+        "type": "TEXT"
+      },
+      {
+        "name": "source_page",
+        "type": "INT4(32,0)"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 0
+  },
+  "pehero.lbo_models": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "company_id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "TEXT"
+      },
+      {
+        "name": "assumptions",
+        "type": "JSONB",
+        "nullable": false
+      },
+      {
+        "name": "projections",
+        "type": "JSONB",
+        "nullable": false
+      },
+      {
+        "name": "returns",
+        "type": "JSONB",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 1
+  },
+  "pehero.debt_stacks": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "company_id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "TEXT"
+      },
+      {
+        "name": "tranches",
+        "type": "JSONB",
+        "nullable": false
+      },
+      {
+        "name": "total_debt",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "total_leverage",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "dscr",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 0
+  },
+  "pehero.cap_tables": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "company_id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "as_of_date",
+        "type": "DATE",
+        "nullable": false
+      },
+      {
+        "name": "holders",
+        "type": "JSONB",
+        "nullable": false
+      },
+      {
+        "name": "total_shares",
+        "type": "INT8(64,0)"
+      },
+      {
+        "name": "post_money",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 0
+  },
+  "pehero.funds": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT8(64,0)",
+        "nullable": false
+      },
+      {
+        "name": "slug",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "TEXT",
+        "nullable": false
+      },
+      {
+        "name": "vintage",
+        "type": "INT4(32,0)"
+      },
+      {
+        "name": "size_usd",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "strategy",
+        "type": "TEXT"
+      },
+      {
+        "name": "dry_powder",
+        "type": "NUMERIC(14,2)"
+      },
+      {
+        "name": "called_pct",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "invested_pct",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "net_irr",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "net_moic",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "dpi",
+        "type": "NUMERIC(5,2)"
+      },
+      {
+        "name": "created_at",
+        "type": "TIMESTAMPTZ",
+        "nullable": false
+      }
+    ],
+    "row_count": 0
+  }
+}
