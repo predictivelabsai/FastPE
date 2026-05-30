@@ -264,6 +264,7 @@ def _bottom_nav(current_path: str = "", lang: str = "en"):
         (t("dr_title", lang),          "/app/dataroom",     "📁"),
         (t("chat_instructions", lang), "/app/instructions", "✎"),
         (t("chat_analytics", lang),    "/app/analytics",    "∑"),
+        (t("val_title", lang),          "/app/valuation",    "◎"),
     ]
     links = []
     for label, href, icon in items:

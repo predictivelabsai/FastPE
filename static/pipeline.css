@@ -403,6 +403,70 @@
     flex-shrink: 0; min-width: 110px;
 }
 
+/* ── Valuation Simulator ──────────────────────────────────────── */
+.val-company-select {
+    width: 100%; padding: .6rem .8rem; background: var(--bg-elev);
+    border: 1px solid var(--line); border-radius: .5rem; color: var(--ink);
+    font-size: .88rem; margin-bottom: 1rem;
+}
+.val-company-select:focus { outline: none; border-color: var(--accent); }
+
+.val-summary { margin-bottom: 1.2rem; }
+.val-company-header { margin-bottom: .75rem; }
+.val-company-name { font-size: 1.15rem; font-weight: 600; color: var(--ink); margin: 0; }
+.val-company-meta { font-size: .75rem; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
+
+.val-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; }
+.val-metric-card {
+    display: flex; flex-direction: column; gap: .15rem;
+    padding: .6rem .75rem; background: var(--bg-elev); border: 1px solid var(--line);
+    border-radius: .5rem;
+}
+.val-metric-label { font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-dim); }
+.val-metric-value { font-size: 1.1rem; font-weight: 600; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+
+.val-simulator { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+.val-method {
+    padding: .85rem 1rem; background: var(--bg-elev); border: 1px solid var(--line);
+    border-radius: .6rem;
+}
+.val-method-title { font-size: .82rem; font-weight: 600; color: var(--ink); margin: 0 0 .6rem; }
+
+.val-inputs { display: flex; flex-direction: column; gap: .5rem; }
+.val-slider-group { }
+.val-slider-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .2rem; }
+.val-slider-label { font-size: .72rem; color: var(--ink-muted); }
+.val-slider-val { font-size: .72rem; font-weight: 600; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+.val-slider {
+    width: 100%; height: 6px; -webkit-appearance: none; appearance: none;
+    background: var(--line); border-radius: 3px; outline: none; cursor: pointer;
+}
+.val-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    background: var(--accent); border-radius: 50%; cursor: pointer;
+    border: 2px solid var(--bg-elev);
+}
+
+.val-result {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-top: .75rem; padding-top: .6rem; border-top: 1px solid var(--line);
+}
+.val-result-label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-dim); }
+.val-result-value { font-size: 1.3rem; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+
+.val-comparison-section { grid-column: 1 / -1; }
+.val-bars { display: flex; flex-direction: column; gap: .5rem; }
+.val-bar-row { display: flex; align-items: center; gap: .6rem; }
+.val-bar-label { font-size: .72rem; color: var(--ink-muted); min-width: 110px; }
+.val-bar-track { flex: 1; height: 22px; background: var(--bg-raise); border-radius: .3rem; overflow: hidden; }
+.val-bar-fill { height: 100%; border-radius: .3rem; transition: width .3s ease; }
+.val-bar-value { font-size: .78rem; font-weight: 600; color: var(--ink); font-family: 'JetBrains Mono', monospace; min-width: 80px; text-align: right; }
+
+@media (max-width: 768px) {
+    .val-metrics { grid-template-columns: repeat(2, 1fr); }
+    .val-simulator { grid-template-columns: 1fr; }
+}
+
 /* ── User Guide ────────────────────────────────────────────────── */
 .guide-content { max-width: 800px; margin: 0 auto; padding: 1.5rem 0 3rem; }
 .guide-h1 { font-size: 1.8rem; font-weight: 600; color: var(--ink); margin: 0 0 .5rem; letter-spacing: -.02em; }
