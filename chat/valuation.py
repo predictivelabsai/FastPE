@@ -202,138 +202,120 @@ def valuation_home(sess, company: str = ""):
 
         industry_options = [Option(ind, value=ind, selected=ind == industry_default) for ind in INDUSTRY_LIST]
 
-        simulator = Div(
-            # Industry selector
-            Div(
-                H4("Industry Benchmark", cls="val-method-title"),
-                Select(
-                    *industry_options,
-                    id="industry_select", cls="val-industry-select",
-                    onchange="updateIndustryMultiples()",
-                ),
-                cls="val-method val-industry-section",
-            ),
-            # Method 1: EV/Revenue
+        # --- Multiples: 3-column row ---
+        multiples_row = Div(
             Div(
                 H4(t("val_method_rev", lang), cls="val-method-title"),
-                Div(
-                    _slider("rev_multiple", t("val_rev_multiple", lang), round(rev_mult_default, 1), 0.1, 25.0, 0.1),
-                    cls="val-inputs",
-                ),
-                Div(
-                    Span(t("val_ev", lang), cls="val-result-label"),
-                    Span(id="rev-ev", cls="val-result-value"),
-                    cls="val-result",
-                ),
+                _slider("rev_multiple", t("val_rev_multiple", lang), round(rev_mult_default, 1), 0.1, 25.0, 0.1),
+                Div(Span(t("val_ev", lang), cls="val-result-label"),
+                    Span(id="rev-ev", cls="val-result-value"), cls="val-result"),
                 cls="val-method",
             ),
-            # Method 2: EV/EBITDA
             Div(
                 H4(t("val_method_ebitda", lang), cls="val-method-title"),
-                Div(
-                    _slider("ebitda_multiple", t("val_ebitda_multiple", lang), round(ebitda_mult_default, 1), 1.0, 50.0, 0.5),
-                    cls="val-inputs",
-                ),
-                Div(
-                    Span(t("val_ev", lang), cls="val-result-label"),
-                    Span(id="ebitda-ev", cls="val-result-value"),
-                    cls="val-result",
-                ),
+                _slider("ebitda_multiple", t("val_ebitda_multiple", lang), round(ebitda_mult_default, 1), 1.0, 50.0, 0.5),
+                Div(Span(t("val_ev", lang), cls="val-result-label"),
+                    Span(id="ebitda-ev", cls="val-result-value"), cls="val-result"),
                 cls="val-method",
             ),
-            # Method 3: EV/EBIT
             Div(
                 H4("EV / EBIT Multiple", cls="val-method-title"),
-                Div(
-                    _slider("ebit_multiple", "EV / EBIT", round(ebit_mult_default, 1), 1.0, 60.0, 0.5),
-                    cls="val-inputs",
-                ),
-                Div(
-                    Span(t("val_ev", lang), cls="val-result-label"),
-                    Span(id="ebit-ev", cls="val-result-value"),
-                    cls="val-result",
-                ),
+                _slider("ebit_multiple", "EV / EBIT", round(ebit_mult_default, 1), 1.0, 60.0, 0.5),
+                Div(Span(t("val_ev", lang), cls="val-result-label"),
+                    Span(id="ebit-ev", cls="val-result-value"), cls="val-result"),
                 cls="val-method",
             ),
-            # Method 4: DCF
+            cls="val-row val-row-3",
+        )
+
+        # --- DCF: full-width with 3-column slider layout ---
+        dcf_section = Div(
+            H4(t("val_method_dcf", lang), cls="val-method-title"),
             Div(
-                H4(t("val_method_dcf", lang), cls="val-method-title"),
-                Div(
-                    _slider("dcf_growth", t("val_dcf_growth", lang), max(growth, 5.0), 0.0, 40.0, 0.5),
-                    _slider("dcf_wacc", "WACC", 12.0, 5.0, 30.0, 0.5),
-                    _slider("dcf_terminal", t("val_dcf_terminal", lang), 2.0, 0.0, 8.0, 0.5),
-                    _slider("dcf_years", t("val_dcf_years", lang), 5, 3, 10, 1),
-                    _slider("dcf_capex", "CapEx (% Revenue)", 3.0, 0.0, 15.0, 0.5),
-                    _slider("dcf_tax", "Tax Rate", 20.0, 0.0, 40.0, 1.0),
-                    cls="val-inputs",
-                ),
-                Div(
-                    Span(t("val_ev", lang), cls="val-result-label"),
-                    Span(id="dcf-ev", cls="val-result-value"),
-                    cls="val-result",
-                ),
-                cls="val-method",
+                _slider("dcf_growth", t("val_dcf_growth", lang), max(growth, 5.0), 0.0, 40.0, 0.5),
+                _slider("dcf_wacc", "WACC", 12.0, 5.0, 30.0, 0.5),
+                _slider("dcf_terminal", t("val_dcf_terminal", lang), 2.0, 0.0, 8.0, 0.5),
+                _slider("dcf_years", t("val_dcf_years", lang), 5, 3, 10, 1),
+                _slider("dcf_capex", "CapEx (% Revenue)", 3.0, 0.0, 15.0, 0.5),
+                _slider("dcf_tax", "Tax Rate", 20.0, 0.0, 40.0, 1.0),
+                cls="val-inputs val-inputs-grid",
             ),
-            # WACC Calculator
+            Div(Span(t("val_ev", lang), cls="val-result-label"),
+                Span(id="dcf-ev", cls="val-result-value"), cls="val-result"),
+            cls="val-method",
+        )
+
+        # --- WACC: full-width with 4-column slider layout ---
+        wacc_section = Div(
+            H4("WACC Calculator", cls="val-method-title"),
             Div(
-                H4("WACC Calculator", cls="val-method-title"),
-                Div(
-                    _slider("wacc_rfr", "Risk-Free Rate", 3.5, 0.0, 10.0, 0.1),
-                    _slider("wacc_beta", "Levered Beta", 1.1, 0.3, 3.0, 0.05),
-                    _slider("wacc_mrp", "Market Risk Premium", 5.7, 3.0, 10.0, 0.1),
-                    _slider("wacc_country", "Country Risk Premium", 0.7, 0.0, 8.0, 0.1),
-                    _slider("wacc_size", "Size Premium", 5.0, 0.0, 15.0, 0.5),
-                    _slider("wacc_de", "D/E Ratio", 0.3, 0.0, 3.0, 0.05),
-                    _slider("wacc_cod", "Cost of Debt (pre-tax)", 5.0, 1.0, 15.0, 0.5),
-                    _slider("wacc_taxr", "Tax Rate", 20.0, 0.0, 40.0, 1.0),
-                    cls="val-inputs",
-                ),
-                Div(
-                    Span("Cost of Equity", cls="val-result-label"),
-                    Span(id="wacc-ke", cls="val-result-value val-result-sub"),
-                    cls="val-result",
-                ),
-                Div(
-                    Span("WACC", cls="val-result-label"),
-                    Span(id="wacc-result", cls="val-result-value"),
-                    cls="val-result",
-                ),
-                P("Click 'Apply to DCF' to use this WACC", cls="val-wacc-hint"),
+                _slider("wacc_rfr", "Risk-Free Rate", 3.5, 0.0, 10.0, 0.1),
+                _slider("wacc_beta", "Levered Beta", 1.1, 0.3, 3.0, 0.05),
+                _slider("wacc_mrp", "Market Risk Premium", 5.7, 3.0, 10.0, 0.1),
+                _slider("wacc_country", "Country Risk Premium", 0.7, 0.0, 8.0, 0.1),
+                _slider("wacc_size", "Size Premium", 5.0, 0.0, 15.0, 0.5),
+                _slider("wacc_de", "D/E Ratio", 0.3, 0.0, 3.0, 0.05),
+                _slider("wacc_cod", "Cost of Debt (pre-tax)", 5.0, 1.0, 15.0, 0.5),
+                _slider("wacc_taxr", "Tax Rate", 20.0, 0.0, 40.0, 1.0),
+                cls="val-inputs val-inputs-grid-4",
+            ),
+            Div(
+                Div(Span("Cost of Equity", cls="val-result-label"),
+                    Span(id="wacc-ke", cls="val-result-value val-result-sub"), cls="val-result"),
+                Div(Span("WACC", cls="val-result-label"),
+                    Span(id="wacc-result", cls="val-result-value"), cls="val-result"),
                 Button("Apply to DCF", cls="val-apply-btn", onclick="applyWACC()"),
-                cls="val-method val-wacc-section",
+                cls="val-wacc-footer",
             ),
-            # Equity Bridge
+            cls="val-method",
+        )
+
+        # --- Equity Bridge: full-width, 3-column ---
+        bridge_section = Div(
+            H4("Equity Bridge", cls="val-method-title"),
             Div(
-                H4("Equity Bridge", cls="val-method-title"),
-                P("Adjust to derive equity value from enterprise value", cls="val-bridge-hint"),
                 Div(
                     _slider("bridge_cash", f"Cash ({sym}K)", 0.0, 0.0, 10000.0, 50.0),
                     _slider("bridge_debt", f"Total Debt ({sym}K)", 0.0, 0.0, 10000.0, 50.0),
                     _slider("bridge_minority", "Minority Interest (%)", 0.0, 0.0, 30.0, 0.5),
-                    cls="val-inputs",
+                    cls="val-inputs val-inputs-grid",
                 ),
                 Div(
-                    Span("Avg. Enterprise Value", cls="val-result-label"),
-                    Span(id="bridge-ev", cls="val-result-value val-result-sub"),
-                    cls="val-result",
+                    Div(Span("Avg. Enterprise Value", cls="val-result-label"),
+                        Span(id="bridge-ev", cls="val-result-value val-result-sub"), cls="val-result"),
+                    Div(Span("Equity Value", cls="val-result-label"),
+                        Span(id="bridge-equity", cls="val-result-value"), cls="val-result"),
+                    cls="val-bridge-footer",
                 ),
-                Div(
-                    Span("Equity Value", cls="val-result-label"),
-                    Span(id="bridge-equity", cls="val-result-value"),
-                    cls="val-result",
-                ),
-                cls="val-method val-bridge-section",
+                cls="val-method",
             ),
-            # Comparison chart
-            Div(
-                H4(t("val_comparison", lang), cls="val-method-title"),
-                Div(id="val-chart", cls="val-chart-container"),
-                Div(
-                    Button("Download XLS", cls="val-export-btn", onclick="exportValuation()"),
-                    cls="val-export-row",
-                ),
-                cls="val-method val-comparison-section",
-            ),
+            cls="val-bridge-row",
+        )
+
+        # --- Comparison chart ---
+        chart_section = Div(
+            H4(t("val_comparison", lang), cls="val-method-title"),
+            Div(id="val-chart", cls="val-chart-container"),
+            Div(Button("Download XLS", cls="val-export-btn", onclick="exportValuation()"),
+                cls="val-export-row"),
+            cls="val-method",
+        )
+
+        # --- Industry selector ---
+        industry_section = Div(
+            H4("Industry Benchmark", cls="val-method-title"),
+            Select(*industry_options, id="industry_select", cls="val-industry-select",
+                   onchange="updateIndustryMultiples()"),
+            cls="val-method",
+        )
+
+        simulator = Div(
+            industry_section,
+            multiples_row,
+            dcf_section,
+            wacc_section,
+            bridge_section,
+            chart_section,
             cls="val-simulator",
             id="val-simulator",
         )
