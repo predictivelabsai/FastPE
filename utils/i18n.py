@@ -1580,9 +1580,9 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "pl": "Firmy"},
 
     # ── Valuation Simulator ─────────────────────────────────────
-    "val_title":         {"en": "Valuation Simulator", "et": "Hindamise simulaator", "lt": "Vertinimo simuliatorius",
-                          "lv": "Vērtēšanas simulators", "fi": "Arvostussimulaattori", "sv": "Värderingssimulator",
-                          "no": "Verdsettelsessimulator", "da": "Værdiansættelsessimulator", "fr": "Simulateur de valorisation", "de": "Bewertungssimulator", "pl": "Symulator wyceny"},
+    "val_title":         {"en": "PE Valuation Simulator", "et": "PE hindamise simulaator", "lt": "PE vertinimo simuliatorius",
+                          "lv": "PE vērtēšanas simulators", "fi": "PE arvostussimulaattori", "sv": "PE värderingssimulator",
+                          "no": "PE verdsettelsessimulator", "da": "PE værdiansættelsessimulator", "fr": "Simulateur de valorisation PE", "de": "PE-Bewertungssimulator", "pl": "Symulator wyceny PE"},
     "val_select_company": {"en": "Select a company...", "et": "Valige ettevõte...", "lt": "Pasirinkite įmonę...",
                           "lv": "Izvēlieties uzņēmumu...", "fi": "Valitse yritys...", "sv": "Välj företag...",
                           "no": "Velg selskap...", "da": "Vælg virksomhed...", "fr": "Choisir une entreprise...", "de": "Unternehmen auswählen...", "pl": "Wybierz firmę..."},

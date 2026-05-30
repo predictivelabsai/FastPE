@@ -20,6 +20,9 @@ from fasthtml.common import (
 from starlette.requests import Request
 from starlette.responses import Response, RedirectResponse
 
+import logging
+import threading
+
 from app import rt
 from chat.components import left_pane, signin_overlay
 from chat.layout import _versioned
@@ -28,6 +31,40 @@ from utils.i18n import t, get_lang
 from chat.routes import _ensure_user, _list_sessions
 from db import connect, fetch_all, fetch_one
 from landing.components import TAILWIND_CONFIG, _favicon_links
+
+log = logging.getLogger(__name__)
+
+
+def _index_into_rag(filename: str, data: bytes, company_slug: str | None):
+    """Extract text from uploaded file and index into RAG (background thread)."""
+    try:
+        from rag.extract import extract_text, doc_type_from_filename
+        from rag.indexer import DocIn, upsert_document
+
+        text = extract_text(filename, data)
+        if not text:
+            return
+
+        company_id = None
+        if company_slug:
+            row = fetch_one(
+                "SELECT id FROM pehero.companies WHERE slug = %s", (company_slug,)
+            )
+            if row:
+                company_id = row["id"]
+
+        doc = DocIn(
+            title=filename.rsplit(".", 1)[0],
+            doc_type=doc_type_from_filename(filename),
+            text=text,
+            company_id=company_id,
+            source_path=f"dataroom/{filename}",
+            metadata={"filename": filename, "company_slug": company_slug, "size_bytes": len(data)},
+        )
+        doc_id = upsert_document(doc, replace=True)
+        log.info("RAG indexed %s → document_id=%d", filename, doc_id)
+    except Exception:
+        log.exception("RAG indexing failed for %s", filename)
 
 
 def _head(title: str):
@@ -241,6 +278,7 @@ async def dataroom_upload(request: Request):
     if not files:
         return RedirectResponse("/app/dataroom", status_code=303)
 
+    uploaded = []
     with connect() as conn, conn.cursor() as cur:
         for upload in files:
             if not hasattr(upload, "read"):
@@ -255,7 +293,13 @@ async def dataroom_upload(request: Request):
                 "VALUES (%s, %s, %s, %s, %s, %s)",
                 (uid, company_slug, filename, content_type, len(data), data),
             )
+            uploaded.append((filename, data, company_slug))
         conn.commit()
+
+    for filename, data, cs in uploaded:
+        threading.Thread(
+            target=_index_into_rag, args=(filename, data, cs), daemon=True
+        ).start()
 
     return RedirectResponse("/app/dataroom", status_code=303)
 

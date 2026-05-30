@@ -37,6 +37,9 @@ feedparser>=6.0.0
 openpyxl>=3.1.0
 python-docx>=1.1.0
 
+# Document extraction (RAG indexing)
+pymupdf>=1.25.0
+
 # Web search tools (Tavily default, EXA fallback)
 tavily-python>=0.7.0
 exa-py>=2.0.0
