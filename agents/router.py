@@ -114,6 +114,8 @@ def _best_in_category_for(message: str) -> str | None:
         return "pro_forma_builder"
     if "ic memo" in lower or "memo" in lower:
         return "investor_memo"
+    if "sequence" in lower or "multi-touch" in lower or "follow-up sequence" in lower or "email sequence" in lower:
+        return "outreach_sequencer"
     if "outreach" in lower or "cold email" in lower or "intro email" in lower or "broker email" in lower:
         return "outreach_email"
     if "loi" in lower or "letter of intent" in lower or "ioi" in lower or "indication of interest" in lower:

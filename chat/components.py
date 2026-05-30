@@ -267,6 +267,7 @@ def _bottom_nav(current_path: str = "", lang: str = "en"):
         (t("chat_instructions", lang), "/app/instructions", "✎"),
         (t("chat_analytics", lang),    "/app/analytics",    "∑"),
         (t("val_title", lang),          "/app/valuation",    "◎"),
+        ("Integrations",                "/app/integrations", "⇄"),
     ]
     links = []
     for label, href, icon in items:
@@ -543,6 +544,12 @@ COPILOT_PROMPTS: dict[str, list[str]] = {
         "What agents are available for due diligence?",
         "How does the pipeline kanban work?",
         "How do I upload documents to the data room?",
+    ],
+    "Integrations": [
+        "Sync all Lithuanian companies to Pipedrive",
+        "Which companies are not yet synced to Pipedrive?",
+        "Draft an outreach sequence for the top healthcare company",
+        "Show LP prospects that haven't been touched in 30 days",
     ],
 }
 

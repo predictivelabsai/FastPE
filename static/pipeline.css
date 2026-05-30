@@ -586,4 +586,37 @@ details.dr-folder[open] .dr-folder-files { display: flex; flex-direction: column
     .guide-toc-link { font-size: .65rem; padding: .2rem .4rem; }
 }
 
+/* ── Integrations page ─────────────────────────────────────────────── */
+.integration-card {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: .6rem;
+    padding: 1.2rem 1.5rem; margin-bottom: 1.2rem;
+}
+.integration-status-header {
+    display: flex; align-items: center; gap: .8rem; margin-bottom: .8rem;
+}
+.integration-status-header h3 { font-size: 1.05rem; font-weight: 600; color: var(--ink); margin: 0; }
+.integration-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: .6rem; margin-bottom: 1rem;
+}
+.stat-item { display: flex; flex-direction: column; gap: .15rem; }
+.stat-label { font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-dim); }
+.stat-value { font-size: .88rem; color: var(--ink); }
+.stat-value.mono { font-family: 'JetBrains Mono', monospace; font-size: .82rem; }
+.integration-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.integration-action-btn {
+    padding: .4rem .9rem; background: var(--accent); color: white; border: none;
+    border-radius: .4rem; font-size: .76rem; font-weight: 600; cursor: pointer;
+    transition: opacity .15s;
+}
+.integration-action-btn:hover { opacity: .85; }
+.integration-action-btn.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.integration-section { margin-bottom: 1rem; }
+.integration-section summary { cursor: pointer; }
+.integration-section summary h4 {
+    display: inline; font-size: .88rem; font-weight: 600; color: var(--ink);
+}
+.pd-id { font-size: .72rem; color: var(--accent); }
+.text-muted { color: var(--ink-dim); font-size: .78rem; }
+
 /* Bottom-nav rules moved to static/app.css so they apply on /app too. */

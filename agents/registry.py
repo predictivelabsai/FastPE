@@ -120,6 +120,18 @@ AGENTS: tuple[AgentSpec, ...] = (
         ),
     ),
     AgentSpec(
+        slug="outreach_sequencer", name="Outreach Sequencer",
+        category="sourcing", icon="📨", prefix="sequence:",
+        one_liner="Multi-touch outreach sequences for deal sourcing and LP fundraising.",
+        description="Plans and drafts 5-email sequences with angle rotation (SCQ, PAS, BAB frameworks). Personalizes each touch using company financials, market signals, and portfolio track record. Logs activities to Pipedrive with scheduled due dates.",
+        example_prompts=(
+            "sequence: plan a 5-touch outreach for Baltic transline founder",
+            "sequence: draft LP fundraising emails for pension fund prospects",
+            "Create a follow-up sequence for DR VET after initial screening",
+            "Plan outreach to healthcare company founders in Lithuania",
+        ),
+    ),
+    AgentSpec(
         slug="loi_writer", name="LOI Writer",
         category="sourcing", icon="✍", prefix="loi:",
         one_liner="Non-binding letter of intent — price, structure, conditions, timeline.",

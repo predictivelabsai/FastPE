@@ -41,6 +41,10 @@ class Settings(BaseSettings):
     ee_ari_password: str = Field(default="", alias="EE_ARI_PASSWORD")
     ee_emta_api_key: str = Field(default="", alias="EE_EMTA_API_KEY")
 
+    # Pipedrive CRM
+    pipedrive_api_token: str = Field(default="", alias="PIPEDRIVE_API_TOKEN")
+    pipedrive_domain: str = Field(default="", alias="PIPEDRIVE_DOMAIN")
+
     # News feed
     news_interval_seconds: int = Field(default=1800, alias="NEWS_INTERVAL_SECONDS")
 

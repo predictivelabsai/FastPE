@@ -290,3 +290,28 @@ CREATE TABLE IF NOT EXISTS pehero.agent_invocations (
     created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS agent_invocations_session_idx ON pehero.agent_invocations(session_id, created_at DESC);
+
+-- ── Pipedrive CRM sync ───────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS pehero.pipedrive_sync (
+    id             BIGSERIAL PRIMARY KEY,
+    entity_type    TEXT NOT NULL,          -- company | investor | deal | contact
+    pehero_id      BIGINT NOT NULL,
+    pipedrive_id   BIGINT NOT NULL,
+    pipedrive_type TEXT NOT NULL,          -- organization | person | deal | activity
+    last_synced    TIMESTAMPTZ NOT NULL DEFAULT now(),
+    sync_hash      TEXT,
+    UNIQUE(entity_type, pehero_id)
+);
+CREATE INDEX IF NOT EXISTS pd_sync_pd_idx ON pehero.pipedrive_sync(pipedrive_id, pipedrive_type);
+
+CREATE TABLE IF NOT EXISTS pehero.outreach_sequences (
+    id             BIGSERIAL PRIMARY KEY,
+    company_id     BIGINT REFERENCES pehero.companies(id) ON DELETE CASCADE,
+    investor_id    BIGINT REFERENCES pehero.investor_crm(id) ON DELETE CASCADE,
+    sequence_type  TEXT NOT NULL,          -- deal_sourcing | lp_fundraising
+    status         TEXT NOT NULL DEFAULT 'active',  -- active | paused | completed
+    touches        JSONB NOT NULL DEFAULT '[]',     -- [{day, subject, body, framework, sent, sent_at}]
+    created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS outreach_seq_company_idx ON pehero.outreach_sequences(company_id);
+CREATE INDEX IF NOT EXISTS outreach_seq_investor_idx ON pehero.outreach_sequences(investor_id);
