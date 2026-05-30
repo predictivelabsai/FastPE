@@ -15,7 +15,7 @@ from collections import defaultdict
 from fasthtml.common import (
     Html, Head, Body, Meta, Title, Link, Script, NotStr,
     Div, Span, H2, H3, P, A, Button, Form, Input, Select, Option, Label,
-    Table, Thead, Tbody, Tr, Th, Td,
+    Table, Thead, Tbody, Tr, Th, Td, Details, Summary,
 )
 from starlette.requests import Request
 from starlette.responses import Response, RedirectResponse
@@ -25,7 +25,7 @@ import threading
 
 from app import rt
 from chat.components import left_pane, signin_overlay
-from chat.layout import _versioned
+from chat.layout import _versioned, common_scripts
 from utils.session import get_currency
 from utils.i18n import t, get_lang
 from chat.routes import _ensure_user, _list_sessions
@@ -77,6 +77,7 @@ def _head(title: str):
         Link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin=""),
         Link(rel="stylesheet",
              href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"),
+        *common_scripts(),
         Script(src="https://cdn.tailwindcss.com"),
         Script(NotStr(TAILWIND_CONFIG)),
         Link(rel="stylesheet", href="/static/site.css"),
@@ -132,19 +133,18 @@ def _folder_node(folder_name: str, docs: list[dict], lang: str, folder_id: str,
             )
         )
 
-    return Div(
-        Button(
+    return Details(
+        Summary(
             Span("▸", cls="dr-folder-arrow"),
             Span("📁", cls="dr-folder-icon"),
             Span(folder_name, cls="dr-folder-name"),
             Span(f"{len(docs)}", cls="dr-folder-count"),
             Span(_fmt_size(total_size), cls="dr-folder-size"),
-            cls=f"dr-folder-toggle{' open' if is_open else ''}",
-            onclick=f"toggleGroup('{folder_id}')",
-            id=f"btn-{folder_id}",
+            cls="dr-folder-toggle",
         ),
-        Div(*file_rows, cls=f"dr-folder-files{' open' if is_open else ''}", id=folder_id),
+        Div(*file_rows, cls="dr-folder-files"),
         cls="dr-folder",
+        open=is_open,
     )
 
 

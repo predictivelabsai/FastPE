@@ -539,64 +539,6 @@
         catch (e) { console.error("bad sse line", raw, e); }
     }
 
-    // ── News panel ────────────────────────────────────────────────
-    function timeAgo(isoStr) {
-        const d = new Date(isoStr);
-        const now = new Date();
-        const diffMs = now - d;
-        const mins = Math.floor(diffMs / 60000);
-        if (mins < 1) return I18N.news_just_now || "just now";
-        if (mins < 60) return (I18N.news_min_ago || "{n}m ago").replace("{n}", mins);
-        const hours = Math.floor(mins / 60);
-        if (hours < 24) return (I18N.news_hour_ago || "{n}h ago").replace("{n}", hours);
-        const days = Math.floor(hours / 24);
-        return (I18N.news_day_ago || "{n}d ago").replace("{n}", days);
-    }
-
-    let newsInterval = 1800000; // default 30 min, overridden by server
-
-    async function loadNews() {
-        const body = $("#news-body");
-        const loading = $("#news-loading");
-        if (!body) return;
-
-        try {
-            const resp = await fetch("/app/news");
-            if (!resp.ok) throw new Error(resp.status);
-            const data = await resp.json();
-            const articles = data.articles || [];
-            if (data.interval) newsInterval = data.interval * 1000;
-
-            if (loading) loading.style.display = "none";
-            body.style.display = "block";
-
-            if (!articles.length) {
-                body.innerHTML = `<p class="news-empty">${I18N.news_empty || "No news available"}</p>`;
-                return;
-            }
-
-            const sub = $("#news-subtitle");
-            if (sub) sub.textContent = articles.length + " articles";
-
-            body.innerHTML = articles.map(a => `
-                <a href="${escapeHtml(a.url)}" target="_blank" rel="noopener" class="news-item">
-                    <div class="news-item-header">
-                        <span class="news-source">${escapeHtml(a.icon || a.source)}</span>
-                        <span class="news-time">${timeAgo(a.published)}</span>
-                    </div>
-                    <div class="news-item-title">${escapeHtml(a.title)}</div>
-                    ${a.summary ? `<div class="news-item-summary">${escapeHtml(a.summary).slice(0, 120)}</div>` : ""}
-                </a>
-            `).join("");
-        } catch (e) {
-            console.error("news load failed", e);
-            if (loading) loading.innerHTML = `<p class="news-empty">${I18N.news_empty || "No news available"}</p>`;
-        }
-    }
-
-    loadNews();
-    setInterval(() => loadNews(), newsInterval);
-
     // ── UI helpers ────────────────────────────────────────────────
     window.toggleLeftPane = () => {
         $(".left-pane").classList.toggle("open");
@@ -626,13 +568,6 @@
         hidden.forEach(r => r.style.display = expanded ? "none" : "");
         btn.textContent = expanded ? btn.dataset.more : btn.dataset.less;
     };
-    window.toggleGroup = (id) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.classList.toggle("open");
-        const btn = document.getElementById("btn-" + id);
-        if (btn) btn.classList.toggle("open");
-    };
     window.handleKey = (ev) => {
         if (ev.key === "Enter" && !ev.shiftKey) { ev.preventDefault(); sendMessage(ev); }
     };
@@ -642,26 +577,13 @@
     };
     window.fillChat = (text) => {
         const ta = $("#chat-input");
+        if (!ta) { window.location.href = "/app?prefill=" + encodeURIComponent(text); return; }
         ta.value = text;
         ta.focus();
         autoResize(ta);
         onInputChange(ta);
     };
-    window.newChat = () => { window.location.href = "/app"; };
     window.showSignIn = () => { $("#signin-overlay").classList.add("visible"); $("#signin-email").focus(); };
-    window.doSignIn = async () => {
-        const email = $("#signin-email").value.trim();
-        if (!email) return;
-        const r = await fetch("/app/auth/signin", { method: "POST", body: new URLSearchParams({ email }) });
-        if (r.ok) window.location.reload();
-    };
-    window.setLang = async (code) => {
-        const r = await fetch("/app/config", {
-            method: "POST",
-            body: new URLSearchParams({ lang: code }),
-        });
-        if (r.ok) window.location.reload();
-    };
     window.toggleLangDropdown = (ev) => {
         ev.stopPropagation();
         const menu = document.getElementById("lang-dd-menu");
@@ -671,22 +593,6 @@
         const menu = document.getElementById("lang-dd-menu");
         if (menu) menu.classList.remove("open");
     });
-    window.setCurrency = async (code) => {
-        const r = await fetch("/app/config", {
-            method: "POST",
-            body: new URLSearchParams({ currency: code }),
-        });
-        if (r.ok) {
-            document.querySelectorAll(".cfg-chip").forEach(el => {
-                el.classList.toggle("active", el.textContent.trim().endsWith(code));
-            });
-            window.location.reload();
-        }
-    };
-    window.signOut = async () => {
-        await fetch("/app/auth/signout", { method: "POST" });
-        window.location.reload();
-    };
 
     // ── Copy / share chat ──────────────────────────────────────────
     window.copyChat = () => {

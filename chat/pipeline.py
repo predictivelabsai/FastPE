@@ -20,7 +20,7 @@ from agents.registry import AGENTS, AGENTS_BY_SLUG
 from chat.components import (
     left_pane, right_pane, signin_overlay, sample_cards, message_bubble,
 )
-from chat.layout import _versioned
+from chat.layout import _versioned, common_scripts
 from utils.session import get_currency, currency_symbol
 from utils.i18n import t, get_lang
 from chat.routes import _ensure_user, _list_sessions, _ensure_session, _session_messages
@@ -66,6 +66,7 @@ def _pipeline_head(title: str):
         Link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin=""),
         Link(rel="stylesheet",
              href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"),
+        *common_scripts(),
         Script(src="https://cdn.tailwindcss.com"),
         Script(NotStr(TAILWIND_CONFIG)),
         Link(rel="stylesheet", href="/static/site.css"),
@@ -173,7 +174,7 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), lang=lang),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), current_path="/app/pipeline", lang=lang),
         Div(
             Div(
                 Div(
@@ -292,7 +293,7 @@ def deal_detail(sess, slug: str):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid=str(session_id) if session_id else "", current_currency=get_currency(sess)),
+        left_pane(user_email=email, sessions=sessions, current_sid=str(session_id) if session_id else "", current_currency=get_currency(sess), current_path="/app/pipeline"),
         Div(
             Div(
                 Div(

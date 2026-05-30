@@ -57,7 +57,7 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: h
 .new-chat-btn {
     width: 100%; padding: .55rem; background: var(--accent); color: var(--bg);
     border: none; border-radius: .5rem; font-weight: 600; cursor: pointer; font-size: .78rem;
-    margin-bottom: .75rem;
+    margin-bottom: .75rem; text-decoration: none; display: block; text-align: center;
 }
 .new-chat-btn:hover { background: var(--ink); }
 
@@ -69,6 +69,7 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: h
     background: transparent; border: none; color: var(--ink-muted); text-align: left;
     font-size: .74rem; cursor: pointer; border-radius: .4rem; transition: background .15s, color .15s;
     width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    text-decoration: none;
 }
 .chat-history-item:hover { background: var(--bg-raise); color: var(--ink); }
 .chat-history-item.active { background: var(--accent-dim); color: var(--accent); font-weight: 600; }
@@ -90,16 +91,18 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: h
 .cat-name { flex: 1; text-align: left; }
 .cat-count { color: var(--ink-dim); font-size: .68rem; font-weight: 400; }
 .cat-arrow { color: var(--ink-dim); font-size: .62rem; transition: transform .2s; }
-.cat-toggle.open .cat-arrow { transform: rotate(90deg); }
+details.agent-group > summary { list-style: none; cursor: pointer; }
+details.agent-group > summary::-webkit-details-marker { display: none; }
+details.agent-group[open] .cat-arrow { transform: rotate(90deg); }
 
 .agent-list { display: none; padding: .1rem .3rem .35rem 1rem; }
-.agent-list.open { display: flex; flex-direction: column; gap: .1rem; }
+details.agent-group[open] .agent-list { display: flex; flex-direction: column; gap: .1rem; }
 
 .agent-item {
     display: flex; align-items: center; gap: .45rem; padding: .3rem .4rem;
     background: transparent; border: none; color: var(--ink-muted); font-size: .7rem;
     cursor: pointer; border-radius: .35rem; text-align: left; width: 100%;
-    transition: background .15s, color .15s;
+    transition: background .15s, color .15s; text-decoration: none;
 }
 .agent-item:hover { background: var(--bg-raise); color: var(--ink); }
 .aitem-icon { color: var(--accent); width: .9rem; flex-shrink: 0; }
@@ -222,6 +225,10 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: h
 .right-close { background: transparent; border: 1px solid var(--line); color: var(--ink-dim); border-radius: .4rem; padding: .15rem .5rem; cursor: pointer; }
 .right-close:hover { color: var(--accent); border-color: var(--accent); }
 .right-body { flex: 1; overflow-y: auto; padding: .75rem; }
+
+/* HTMX indicator */
+.htmx-indicator { opacity: 1; transition: opacity .2s; }
+.htmx-request .htmx-indicator, .htmx-request.htmx-indicator { opacity: 1; }
 
 /* News loading state */
 .news-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 3rem 2rem; color: var(--ink-dim); }
@@ -440,8 +447,11 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: h
 .cfg-sym { font-size: .78rem; font-weight: 600; }
 .cfg-code { font-size: .62rem; letter-spacing: .04em; }
 
+details.config-integrations { margin-top: .65rem; }
+details.config-integrations > summary { list-style: none; cursor: pointer; }
+details.config-integrations > summary::-webkit-details-marker { display: none; }
 .cfg-integrations-toggle {
-    width: 100%; margin-top: .65rem; padding: .35rem .4rem;
+    width: 100%; padding: .35rem .4rem;
     display: flex; align-items: center; gap: .4rem;
     background: transparent; border: none; cursor: pointer; color: var(--ink);
     font-size: .72rem; font-weight: 500; border-radius: .35rem;
@@ -449,11 +459,11 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); overflow: h
 }
 .cfg-integrations-toggle:hover { background: var(--bg-raise); }
 .cfg-arrow { color: var(--ink-dim); font-size: .62rem; transition: transform .2s; }
-.cfg-integrations-toggle.open .cfg-arrow { transform: rotate(90deg); }
+details.config-integrations[open] .cfg-arrow { transform: rotate(90deg); }
 .cfg-count { margin-left: auto; color: var(--ink-dim); font-size: .62rem; font-family: 'JetBrains Mono', monospace; }
 
 .integration-list { display: none; padding: .15rem .2rem .35rem; }
-.integration-list.open { display: block; }
+details.config-integrations[open] .integration-list { display: block; }
 .integration-row {
     display: flex; align-items: center; gap: .4rem;
     padding: .3rem .4rem; border-radius: .3rem; font-size: .68rem;

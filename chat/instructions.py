@@ -25,7 +25,7 @@ from starlette.responses import JSONResponse, RedirectResponse
 from app import rt
 from agents.registry import AGENTS, AGENTS_BY_SLUG
 from chat.components import left_pane, signin_overlay
-from chat.layout import _versioned
+from chat.layout import _versioned, common_scripts
 from db.prompts import (
     save_prompt_version, count_prompt_versions,
     get_prompt_versions, get_prompt_version,
@@ -49,6 +49,7 @@ def _head(title: str) -> Head:
         Link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin=""),
         Link(rel="stylesheet",
              href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"),
+        *common_scripts(),
         Script(src="https://cdn.tailwindcss.com"),
         Script(NotStr(TAILWIND_CONFIG)),
         Link(rel="stylesheet", href="/static/site.css"),
@@ -99,7 +100,7 @@ def instructions_home(sess):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), lang=lang),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), current_path="/app/instructions", lang=lang),
         Div(
             Div(
                 Div(
@@ -161,7 +162,7 @@ def instruction_edit(sess, slug: str):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), lang=lang),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), current_path="/app/instructions", lang=lang),
         Div(
             Div(
                 Div(

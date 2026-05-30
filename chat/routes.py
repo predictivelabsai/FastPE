@@ -9,9 +9,10 @@ from typing import Optional
 
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from starlette.requests import Request
-from starlette.responses import StreamingResponse, JSONResponse, RedirectResponse
+from urllib.parse import urlparse
+from starlette.responses import StreamingResponse, JSONResponse, RedirectResponse, Response
 
-from fasthtml.common import Div, H1, P
+from fasthtml.common import Div, Span, A, H1, P
 
 from app import rt
 from agents import router as agent_router
@@ -111,7 +112,7 @@ def _persist_message(session_id: int, role: str, content: str,
 # ── GET /app ─────────────────────────────────────────────────────────
 
 @rt("/app")
-def app_home(sess, sid: str = ""):
+def app_home(sess, sid: str = "", prefill: str = ""):
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
     messages: list[dict] = []
@@ -135,6 +136,7 @@ def app_home(sess, sid: str = ""):
         current_agent_slug=current_agent,
         current_currency=get_currency(sess),
         lang=get_lang(sess),
+        prefill=prefill,
     )
 
 
@@ -277,20 +279,33 @@ async def chat_stream(request: Request):
 
 # ── Auth ─────────────────────────────────────────────────────────────
 
+def _htmx_redirect(request: Request, fallback: str = "/app") -> Response:
+    """Return an HX-Redirect response that sends the browser back to the current page."""
+    current_url = request.headers.get("HX-Current-URL", fallback)
+    path = urlparse(current_url).path or fallback
+    return Response("", headers={"HX-Redirect": path})
+
+
 @rt("/app/auth/signin", methods=["POST"])
 async def signin(request: Request):
     form = await request.form()
     email = (form.get("email") or "").strip().lower()
     if "@" not in email:
+        if request.headers.get("HX-Request"):
+            return Response("Invalid email", status_code=400)
         return JSONResponse({"ok": False, "error": "invalid email"}, status_code=400)
     set_user_email(request.session, email)
     _ensure_user(request.session)
+    if request.headers.get("HX-Request"):
+        return _htmx_redirect(request)
     return JSONResponse({"ok": True, "email": email})
 
 
 @rt("/app/auth/signout", methods=["POST"])
 async def signout(request: Request):
     clear_user(request.session)
+    if request.headers.get("HX-Request"):
+        return Response("", headers={"HX-Redirect": "/app"})
     return JSONResponse({"ok": True})
 
 
@@ -307,6 +322,8 @@ async def app_config(request: Request):
     lang_code = (form.get("lang") or "").strip()
     if lang_code:
         set_lang(request.session, lang_code)
+    if request.headers.get("HX-Request"):
+        return _htmx_redirect(request)
     current_lang = get_lang(request.session)
     return JSONResponse({"ok": True, "currency": current, "symbol": SYMBOLS.get(current, "€"),
                          "lang": current_lang})
@@ -380,6 +397,58 @@ async def news_feed(request: Request):
         "articles": articles,
         "interval": _cache_ttl(),
     })
+
+
+def _time_ago(iso_str: str) -> str:
+    from datetime import datetime, timezone
+    try:
+        d = datetime.fromisoformat(iso_str.replace("Z", "+00:00"))
+        now = datetime.now(timezone.utc)
+        mins = int((now - d).total_seconds() / 60)
+        if mins < 1:
+            return "just now"
+        if mins < 60:
+            return f"{mins}m ago"
+        hours = mins // 60
+        if hours < 24:
+            return f"{hours}h ago"
+        return f"{hours // 24}d ago"
+    except Exception:
+        return ""
+
+
+@rt("/app/news/html")
+async def news_feed_html(request: Request):
+    """HTMX endpoint — returns rendered HTML news items."""
+    import html as _html
+    lang = get_lang(request.session)
+    from utils.news import fetch_news_translated
+    from utils.i18n import t
+    articles = await fetch_news_translated(lang)
+
+    if not articles:
+        return P(t("news_empty", lang), cls="news-empty")
+
+    items = []
+    for a in articles:
+        summary_el = Div(
+            _html.escape((a.get("summary") or "")[:120]),
+            cls="news-item-summary",
+        ) if a.get("summary") else None
+        items.append(A(
+            Div(
+                Span(_html.escape(a.get("icon") or a["source"]), cls="news-source"),
+                Span(_time_ago(a.get("published", "")), cls="news-time"),
+                cls="news-item-header",
+            ),
+            Div(_html.escape(a["title"]), cls="news-item-title"),
+            summary_el,
+            href=a["url"],
+            target="_blank",
+            rel="noopener",
+            cls="news-item",
+        ))
+    return Div(*items)
 
 
 # ── Debug ping (kept from Phase 0) ──────────────────────────────────

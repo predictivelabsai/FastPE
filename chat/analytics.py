@@ -25,7 +25,7 @@ from starlette.responses import JSONResponse
 
 from app import rt
 from chat.components import left_pane, signin_overlay
-from chat.layout import _versioned
+from chat.layout import _versioned, common_scripts
 from utils.session import get_currency, currency_symbol
 from utils.i18n import t, get_lang
 from chat.routes import _ensure_user, _list_sessions
@@ -196,6 +196,7 @@ def _head(title: str) -> Head:
         Link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin=""),
         Link(rel="stylesheet",
              href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"),
+        *common_scripts(),
         Script(src="https://cdn.tailwindcss.com"),
         Script(NotStr(TAILWIND_CONFIG)),
         Script(src="https://cdn.plot.ly/plotly-2.35.2.min.js"),
@@ -220,7 +221,7 @@ def analytics_home(sess):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), lang=lang),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), current_path="/app/analytics", lang=lang),
         Div(
             Div(
                 Div(

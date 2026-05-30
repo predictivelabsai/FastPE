@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fasthtml.common import (
     Div, Span, Button, A, P, H1, H2, H3, H4, Ul, Li, NotStr,
-    Form, Textarea, Input, Hr, Article,
+    Form, Textarea, Input, Hr, Article, Details, Summary,
 )
 
 from agents.registry import AGENTS, AGENTS_BY_CATEGORY, CATEGORIES, AGENTS_BY_SLUG
@@ -148,31 +148,30 @@ def welcome_hero(lang: str = "en"):
 
 def agent_browser(lang: str = "en"):
     """Left-pane browser of all 22 agents, grouped by category."""
+    from urllib.parse import quote
     groups = []
     for cat in CATEGORIES:
         agents = AGENTS_BY_CATEGORY.get(cat["key"], [])
-        buttons = [
-            Button(
+        links = [
+            A(
                 Span(a.icon, cls="aitem-icon"),
                 Span(agent_t(a.slug, "name", lang), cls="aitem-name"),
                 Span(a.prefix, cls="aitem-prefix"),
                 cls="agent-item",
-                onclick=f"fillChat({a.prefix + ' '!r})",
+                href=f"/app?prefill={quote(a.prefix + ' ')}",
                 title=agent_t(a.slug, "one_liner", lang),
             )
             for a in agents
         ]
-        groups.append(Div(
-            Button(
+        groups.append(Details(
+            Summary(
                 Span(cat["icon"], cls="cat-icon"),
                 Span(category_t(cat["key"], "name", lang), cls="cat-name"),
                 Span(f"{len(agents)}", cls="cat-count"),
                 Span("▸", cls="cat-arrow"),
                 cls="cat-toggle",
-                onclick=f"toggleGroup('cat-{cat['key']}')",
-                id=f"btn-cat-{cat['key']}",
             ),
-            Div(*buttons, cls="agent-list", id=f"cat-{cat['key']}"),
+            Div(*links, cls="agent-list"),
             cls="agent-group",
         ))
     return Div(*groups, cls="agent-browser")
@@ -186,11 +185,11 @@ def sessions_list(sessions: list[dict], current_sid: str = "", lang: str = "en")
     for s in sessions:
         is_active = str(s["id"]) == str(current_sid)
         title = s.get("title") or t("chat_untitled", lang)
-        items.append(Button(
+        items.append(A(
             Span(cls=f"chat-dot{' active' if is_active else ''}"),
             Span(title[:48] + ("…" if len(title) > 48 else ""), cls="chat-session-title"),
             cls=f"chat-history-item{' active' if is_active else ''}",
-            onclick=f"window.location.href='/app?sid={s['id']}'",
+            href=f"/app?sid={s['id']}",
         ))
     return Div(*items, cls="session-list")
 
@@ -207,7 +206,9 @@ def _config_section(current_currency: str = "EUR", lang: str = "en"):
             Span(SYMBOLS[c], cls="cfg-sym"),
             Span(c, cls="cfg-code"),
             cls=f"cfg-chip{' active' if active else ''}",
-            onclick=f"setCurrency({c!r})",
+            hx_post="/app/config",
+            hx_vals=f'{{"currency":"{c}"}}',
+            hx_swap="none",
         ))
 
     s = settings()
@@ -243,16 +244,17 @@ def _config_section(current_currency: str = "EUR", lang: str = "en"):
             cls="cfg-row"),
         Div(*pills, cls="cfg-pills"),
         # Integrations submenu
-        Button(
-            Span("▸", cls="cfg-arrow"),
-            Span(t("cfg_integrations", lang), cls="cfg-label"),
-            Span(f"{sum(1 for i in integrations if i[3])}/{len(integrations)}",
-                 cls="cfg-count"),
-            cls="cfg-integrations-toggle",
-            onclick="toggleGroup('integrations-list')",
-            id="btn-integrations-list",
+        Details(
+            Summary(
+                Span("▸", cls="cfg-arrow"),
+                Span(t("cfg_integrations", lang), cls="cfg-label"),
+                Span(f"{sum(1 for i in integrations if i[3])}/{len(integrations)}",
+                     cls="cfg-count"),
+                cls="cfg-integrations-toggle",
+            ),
+            Div(*integration_rows, cls="integration-list"),
+            cls="config-integrations",
         ),
-        Div(*integration_rows, cls="integration-list", id="integrations-list"),
         cls="config-section",
     )
 
@@ -285,7 +287,8 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
         Div(
             Span("◇", cls="user-mark"),
             Span(user_email, cls="user-email"),
-            Button(t("chat_sign_out", lang), cls="sign-out-btn", onclick="signOut()"),
+            Button(t("chat_sign_out", lang), cls="sign-out-btn",
+                   hx_post="/app/auth/signout", hx_swap="none"),
             cls="signed-in-bar",
         )
         if user_email else
@@ -303,7 +306,7 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
         ),
         Div(
             Div(
-                Button(t("chat_new", lang), cls="new-chat-btn", onclick="newChat()"),
+                A(t("chat_new", lang), cls="new-chat-btn", href="/app"),
                 Div(Span(t("chat_sessions", lang), cls="section-label")),
                 sessions_list(sessions, current_sid, lang=lang),
                 cls="sessions-section",
@@ -406,7 +409,9 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None,
             Span(info["flag"], cls="lang-dd-flag"),
             Span(info["native"], cls="lang-dd-label"),
             cls=f"lang-dd-item{' active' if code == lang else ''}",
-            onclick=f"setLang({code!r})",
+            hx_post="/app/config",
+            hx_vals=f'{{"lang":"{code}"}}',
+            hx_swap="none",
         )
         for code, info in LANGUAGES.items()
     ]
@@ -469,7 +474,7 @@ def center_pane(*, messages: list[dict], current_agent_slug: str | None = None,
 
 
 def right_pane(lang: str = "en"):
-    """News feed pane — populated via /app/news JSON endpoint."""
+    """News feed pane — loaded via HTMX."""
     return Div(
         Div(
             Div(H3(t("news_title", lang), cls="right-title"),
@@ -483,9 +488,13 @@ def right_pane(lang: str = "en"):
                 Div("◌", cls="news-loading-icon"),
                 P(t("news_loading", lang), cls="news-loading-text"),
                 id="news-loading",
-                cls="news-loading",
+                cls="news-loading htmx-indicator",
             ),
-            Div(id="news-body", cls="news-body", style="display:none"),
+            Div(id="news-body", cls="news-body",
+                hx_get="/app/news/html",
+                hx_trigger="load, every 1800s",
+                hx_swap="innerHTML",
+                hx_indicator="#news-loading"),
             cls="right-body",
         ),
         id="right-pane", cls="right-pane open",
@@ -494,13 +503,14 @@ def right_pane(lang: str = "en"):
 
 def signin_overlay(lang: str = "en"):
     return Div(
-        Div(
+        Form(
             H3(t("chat_signin_title", lang)),
             P(t("chat_signin_sub", lang), cls="signin-sub"),
-            Input(type="email", id="signin-email", placeholder="you@firm.com",
-                  onkeydown="if(event.key==='Enter')doSignIn()"),
-            Button(t("chat_signin_btn", lang), onclick="doSignIn()"),
+            Input(type="email", name="email", id="signin-email", placeholder="you@firm.com"),
+            Button(t("chat_signin_btn", lang), type="submit"),
             cls="signin-box",
+            hx_post="/app/auth/signin",
+            hx_swap="none",
         ),
         cls="signin-overlay", id="signin-overlay",
         onclick="if(event.target===this)this.classList.remove('visible')",

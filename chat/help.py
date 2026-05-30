@@ -17,7 +17,7 @@ from fasthtml.common import (
 
 from app import rt
 from chat.components import left_pane, signin_overlay
-from chat.layout import _versioned
+from chat.layout import _versioned, common_scripts
 from utils.session import get_currency
 from utils.i18n import t, get_lang
 from chat.routes import _ensure_user, _list_sessions
@@ -36,6 +36,7 @@ def _head():
         Link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin=""),
         Link(rel="stylesheet",
              href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"),
+        *common_scripts(),
         Script(src="https://cdn.tailwindcss.com"),
         Script(NotStr(TAILWIND_CONFIG)),
         Link(rel="stylesheet", href="/static/site.css"),
