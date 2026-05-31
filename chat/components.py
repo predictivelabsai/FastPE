@@ -364,14 +364,24 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
                 cls="workspace-section",
             ),
             Hr(cls="left-hr"),
-            Div(
-                A(
+            Details(
+                Summary(A(
                     Span("?", cls="bottom-nav-icon"),
                     Span(t("help_title", lang), cls="bottom-nav-label"),
                     href="/app/help",
-                    cls=f"bottom-nav-link{' active' if current_path == '/app/help' else ''}",
+                    cls=f"bottom-nav-link{' active' if current_path.startswith('/app/help') or current_path.startswith('/app/training') else ''}",
+                )),
+                Div(
+                    A(Span("📖", cls="bottom-nav-icon"),
+                      Span("User Guide", cls="bottom-nav-label"),
+                      href="/app/help", cls="bottom-nav-link sub"),
+                    A(Span("🏈", cls="bottom-nav-icon"),
+                      Span("Training", cls="bottom-nav-label"),
+                      href="/app/training", cls="bottom-nav-link sub"),
+                    cls="bottom-nav-sub",
                 ),
-                cls="help-link",
+                open=current_path.startswith("/app/help") or current_path.startswith("/app/training"),
+                cls="bottom-nav-details",
             ),
             Hr(cls="left-hr"),
             Div(

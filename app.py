@@ -33,6 +33,7 @@ from chat import help as _help_routes  # noqa: E402,F401
 from chat import valuation as _valuation_routes  # noqa: E402,F401
 from chat import webhooks as _webhook_routes  # noqa: E402,F401
 from chat import integrations as _integrations_routes  # noqa: E402,F401
+from chat import training as _training_routes  # noqa: E402,F401
 
 
 def _serve_default():
