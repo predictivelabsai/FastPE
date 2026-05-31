@@ -2,6 +2,7 @@
     const $ = (sel) => document.querySelector(sel);
     let copilotSid = null;
     let copilotStreaming = false;
+    let sessionReady = false;
     let thinker = null;
 
     function escapeHtml(s) {
@@ -103,6 +104,7 @@
     }
 
     async function initSession() {
+        if (sessionReady) return;
         const page = ($("#copilot-page") || {}).value || "";
         const company = ($("#copilot-company") || {}).value || "";
         const params = new URLSearchParams({ page, company });
@@ -112,7 +114,9 @@
             copilotSid = data.sid;
             if (data.messages && data.messages.length) {
                 data.messages.forEach(m => addBubble(m.role, m.content, m.agent_slug));
+                hideChips();
             }
+            sessionReady = true;
         } catch (e) {
             console.error("copilot session init failed", e);
         }
@@ -136,8 +140,6 @@
         const msg = ta.value.trim();
         if (!msg) return;
 
-        if (!copilotSid) await initSession();
-
         copilotStreaming = true;
         const sendBtn = $("#copilot-send-btn");
         if (sendBtn) sendBtn.disabled = true;
@@ -145,6 +147,20 @@
         hideChips();
         addBubble("user", msg);
         ta.value = "";
+
+        if (!copilotSid) {
+            const page = ($("#copilot-page") || {}).value || "";
+            const company = ($("#copilot-company") || {}).value || "";
+            const params = new URLSearchParams({ page, company });
+            try {
+                const resp = await fetch("/app/copilot/session?" + params);
+                const data = await resp.json();
+                copilotSid = data.sid;
+                sessionReady = true;
+            } catch (e) {
+                console.error("copilot session create failed", e);
+            }
+        }
 
         const context = ($("#copilot-context") || {}).value || "";
         const body = new URLSearchParams({ msg, sid: copilotSid || "", context });
@@ -190,7 +206,7 @@
                             setThinkingTool(payload.name);
                             if (bubble) appendToolLog(bubble, payload.name, payload.args);
                         } else if (type === "tool_end") {
-                            // tool finished — thinker stays until tokens arrive
+                            // tool finished
                         } else if (type === "session") {
                             if (payload.sid) copilotSid = payload.sid;
                         } else if (type === "done") {
@@ -241,7 +257,12 @@
             app.classList.remove("pane-closed");
             const btn = $("#copilot-btn");
             if (btn) { btn.classList.add("active"); btn.textContent = "»"; }
-            if (!copilotSid) initSession();
+            if (!sessionReady) initSession();
         }
     };
+
+    // Auto-init session on page load if copilot is open
+    if ($("#right-pane") && $("#right-pane").classList.contains("open")) {
+        initSession();
+    }
 })();
