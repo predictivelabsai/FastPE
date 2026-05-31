@@ -565,6 +565,8 @@ details.config-integrations[open] .integration-list { display: block; }
     color: var(--ink-muted);
 }
 .integration-row:hover { background: var(--bg-raise); }
+a.integration-link { text-decoration: none; cursor: pointer; }
+a.integration-link:hover { background: var(--accent-bg); }
 .integration-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line-br); flex-shrink: 0; }
 .integration-dot.ok { background: var(--accent); }
 .integration-name { flex: 1; color: var(--ink); font-weight: 500; }

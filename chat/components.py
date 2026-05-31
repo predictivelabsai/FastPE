@@ -213,6 +213,7 @@ def _config_section(current_currency: str = "EUR", lang: str = "en"):
 
     s = settings()
     integrations = [
+        ("",   "CRM",     "Pipedrive",  bool(s.pipedrive_api_token), s.pipedrive_domain or None),
         ("EE", "Estonia", "Äriregister", bool(s.ee_ari_api_key), "public endpoint"),
         ("EE", "Estonia", "EMTA (tax)",  bool(s.ee_emta_api_key), None),
         ("LT", "Lithuania", "Registrų centras", bool(s.lt_cr_api_key), "public atviri duomenys"),
@@ -228,14 +229,24 @@ def _config_section(current_currency: str = "EUR", lang: str = "en"):
         dot = Span(cls=f"integration-dot {'ok' if connected else ''}")
         label_text = f"{flag} {name}" if flag else name
         note_el = Span(note, cls="integration-note") if note else Span("", cls="integration-note")
-        integration_rows.append(Div(
+        row_content = [
             dot,
             Span(label_text, cls="integration-name"),
             note_el,
             Span("connected" if connected else "off",
                  cls=f"integration-status{' ok' if connected else ''}"),
-            cls="integration-row",
-        ))
+        ]
+        if name == "Pipedrive" and connected:
+            integration_rows.append(A(
+                *row_content,
+                href="/app/integrations",
+                cls="integration-row integration-link",
+            ))
+        else:
+            integration_rows.append(Div(
+                *row_content,
+                cls="integration-row",
+            ))
 
     return Div(
         # Currency block
