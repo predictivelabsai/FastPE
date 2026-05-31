@@ -208,60 +208,69 @@ def load(dry_run: bool = False, min_revenue: float = 0):
         log.info("  ... (%d total)", len(transformed))
         return
 
+    BATCH_SIZE = 500
+
     with connect() as conn, conn.cursor() as cur:
         cur.execute("DELETE FROM pehero.financials WHERE company_id IN (SELECT id FROM pehero.companies WHERE country = 'LV')")
         cur.execute("DELETE FROM pehero.companies WHERE country = 'LV'")
+        conn.commit()
         log.info("Cleared existing Latvian companies")
 
-        companies_inserted = 0
-        financials_inserted = 0
-        slug_conflicts = 0
+    companies_inserted = 0
+    financials_inserted = 0
+    slug_conflicts = 0
 
-        for row in transformed:
-            existing = fetch_one("SELECT id FROM pehero.companies WHERE slug = %s", (row["slug"],))
-            if existing:
-                row["slug"] = row["slug"] + "_lv"
-                existing2 = fetch_one("SELECT id FROM pehero.companies WHERE slug = %s", (row["slug"],))
-                if existing2:
+    for batch_start in range(0, len(transformed), BATCH_SIZE):
+        batch = transformed[batch_start:batch_start + BATCH_SIZE]
+        with connect() as conn, conn.cursor() as cur:
+            for row in batch:
+                financials = row.pop("financials")
+                try:
+                    cur.execute(
+                        """INSERT INTO pehero.companies
+                           (slug, name, hq_city, hq_state, country, sector, sub_sector,
+                            website, founded_year, employees, revenue_ltm, ebitda_ltm,
+                            ebitda_margin, growth_rate, ownership, deal_stage, deal_type,
+                            enterprise_value, ask_multiple, description, seller_intent)
+                           VALUES (%(slug)s, %(name)s, %(hq_city)s, %(hq_state)s, %(country)s,
+                                   %(sector)s, %(sub_sector)s, %(website)s, %(founded_year)s,
+                                   %(employees)s, %(revenue_ltm)s, %(ebitda_ltm)s,
+                                   %(ebitda_margin)s, %(growth_rate)s, %(ownership)s,
+                                   %(deal_stage)s, %(deal_type)s, %(enterprise_value)s,
+                                   %(ask_multiple)s, %(description)s, %(seller_intent)s)
+                           ON CONFLICT (slug) DO NOTHING
+                           RETURNING id""",
+                        row,
+                    )
+                    result = cur.fetchone()
+                    if not result:
+                        slug_conflicts += 1
+                        continue
+                    company_id = result[0]
+                except Exception:
                     slug_conflicts += 1
                     continue
+                companies_inserted += 1
 
-            financials = row.pop("financials")
-            cur.execute(
-                """INSERT INTO pehero.companies
-                   (slug, name, hq_city, hq_state, country, sector, sub_sector,
-                    website, founded_year, employees, revenue_ltm, ebitda_ltm,
-                    ebitda_margin, growth_rate, ownership, deal_stage, deal_type,
-                    enterprise_value, ask_multiple, description, seller_intent)
-                   VALUES (%(slug)s, %(name)s, %(hq_city)s, %(hq_state)s, %(country)s,
-                           %(sector)s, %(sub_sector)s, %(website)s, %(founded_year)s,
-                           %(employees)s, %(revenue_ltm)s, %(ebitda_ltm)s,
-                           %(ebitda_margin)s, %(growth_rate)s, %(ownership)s,
-                           %(deal_stage)s, %(deal_type)s, %(enterprise_value)s,
-                           %(ask_multiple)s, %(description)s, %(seller_intent)s)
-                   RETURNING id""",
-                row,
-            )
-            company_id = cur.fetchone()[0]
-            companies_inserted += 1
+                fin_rows = _transform_financials(company_id, financials)
+                for fr in fin_rows:
+                    cur.execute(
+                        """INSERT INTO pehero.financials
+                           (company_id, month, revenue, cogs, gross_profit, opex,
+                            ebitda, adjustments, adj_ebitda, arr,
+                            gross_retention, net_retention)
+                           VALUES (%(company_id)s, %(month)s, %(revenue)s, %(cogs)s,
+                                   %(gross_profit)s, %(opex)s, %(ebitda)s, %(adjustments)s,
+                                   %(adj_ebitda)s, %(arr)s, %(gross_retention)s,
+                                   %(net_retention)s)
+                           ON CONFLICT (company_id, month) DO NOTHING""",
+                        fr,
+                    )
+                    financials_inserted += 1
 
-            fin_rows = _transform_financials(company_id, financials)
-            for fr in fin_rows:
-                cur.execute(
-                    """INSERT INTO pehero.financials
-                       (company_id, month, revenue, cogs, gross_profit, opex,
-                        ebitda, adjustments, adj_ebitda, arr,
-                        gross_retention, net_retention)
-                       VALUES (%(company_id)s, %(month)s, %(revenue)s, %(cogs)s,
-                               %(gross_profit)s, %(opex)s, %(ebitda)s, %(adjustments)s,
-                               %(adj_ebitda)s, %(arr)s, %(gross_retention)s,
-                               %(net_retention)s)
-                       ON CONFLICT (company_id, month) DO NOTHING""",
-                    fr,
-                )
-                financials_inserted += 1
-
-        conn.commit()
+            conn.commit()
+        log.info("  Batch %d-%d committed (%d companies, %d financials so far)",
+                 batch_start, batch_start + len(batch), companies_inserted, financials_inserted)
 
     if slug_conflicts:
         log.warning("Skipped %d companies due to slug conflicts", slug_conflicts)

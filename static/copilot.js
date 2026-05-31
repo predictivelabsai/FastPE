@@ -2,6 +2,7 @@
     const $ = (sel) => document.querySelector(sel);
     let copilotSid = null;
     let copilotStreaming = false;
+    let thinker = null;
 
     function escapeHtml(s) {
         return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -12,36 +13,93 @@
         return escapeHtml(text).replace(/\n/g, "<br>");
     }
 
+    function scrollBottom() {
+        const box = $("#copilot-messages");
+        if (box) box.scrollTop = box.scrollHeight;
+    }
+
     function addBubble(role, text, agentSlug) {
         const box = $("#copilot-messages");
         if (!box) return null;
         const div = document.createElement("div");
         div.className = "msg msg-" + role;
         if (role === "assistant" && agentSlug) {
-            div.innerHTML = '<div class="msg-agent"><span class="msg-agent-label">' +
-                escapeHtml(agentSlug) + '</span></div>';
+            const hdr = document.createElement("div");
+            hdr.className = "msg-agent";
+            hdr.innerHTML = '<span class="msg-agent-icon">◆</span><span class="msg-agent-label">' +
+                escapeHtml(agentSlug) + '</span>';
+            div.appendChild(hdr);
         }
         const bubble = document.createElement("div");
         bubble.className = "msg-bubble";
         if (text) bubble.innerHTML = renderMd(text);
         div.appendChild(bubble);
         box.appendChild(div);
-        box.scrollTop = box.scrollHeight;
+        scrollBottom();
         return bubble;
+    }
+
+    function appendToolLog(bubble, name, args) {
+        if (!bubble) return;
+        let log = bubble.parentElement.querySelector(".tool-log");
+        if (!log) {
+            log = document.createElement("div");
+            log.className = "tool-log";
+            bubble.parentElement.appendChild(log);
+        }
+        const step = document.createElement("div");
+        step.className = "tool-step";
+        const argStr = args ? JSON.stringify(args).slice(0, 100) : "";
+        step.innerHTML = '→ <span class="tool-name">' + escapeHtml(name) +
+            '</span> <span class="tool-args">' + escapeHtml(argStr) + '</span>';
+        log.appendChild(step);
     }
 
     function showThinking(bubble) {
         if (!bubble) return;
-        const el = document.createElement("div");
-        el.className = "copilot-thinking";
-        el.textContent = "Thinking...";
-        el.id = "copilot-thinking";
-        bubble.parentElement.insertBefore(el, bubble);
+        thinker = {
+            started: Date.now(),
+            tool: null,
+            el: document.createElement("div"),
+            timerId: null,
+        };
+        thinker.el.className = "thinking-indicator";
+        thinker.el.innerHTML = '<span class="dot"></span><span class="label">Thinking… <span class="secs">0s</span></span>';
+        bubble.parentElement.insertBefore(thinker.el, bubble);
+        thinker.timerId = setInterval(updateThinking, 500);
+    }
+
+    function updateThinking() {
+        if (!thinker) return;
+        const secs = Math.floor((Date.now() - thinker.started) / 1000);
+        const label = thinker.tool
+            ? 'Thinking… <span class="secs">' + secs + 's</span> · calling <code>' + escapeHtml(thinker.tool) + '</code>'
+            : 'Thinking… <span class="secs">' + secs + 's</span>';
+        const el = thinker.el.querySelector(".label");
+        if (el) el.innerHTML = label;
+    }
+
+    function setThinkingTool(name) {
+        if (!thinker) return;
+        thinker.tool = name;
+        updateThinking();
     }
 
     function hideThinking() {
-        const el = $("#copilot-thinking");
-        if (el) el.remove();
+        if (!thinker) return;
+        clearInterval(thinker.timerId);
+        if (thinker.el && thinker.el.parentElement) thinker.el.parentElement.removeChild(thinker.el);
+        thinker = null;
+    }
+
+    function hideChips() {
+        const chips = $("#copilot-chips");
+        if (chips) chips.style.display = "none";
+    }
+
+    function enhanceTables(container) {
+        if (!container || !window.enhanceTables) return;
+        window.enhanceTables(container);
     }
 
     async function initSession() {
@@ -84,6 +142,7 @@
         const sendBtn = $("#copilot-send-btn");
         if (sendBtn) sendBtn.disabled = true;
 
+        hideChips();
         addBubble("user", msg);
         ta.value = "";
 
@@ -117,20 +176,29 @@
                     buffer = buffer.slice(idx + 2);
                     handleEvent(raw, (type, payload) => {
                         if (type === "agent_route") {
-                            bubble = addBubble("assistant", "", payload.agent || payload.slug);
+                            const name = payload.agent || payload.slug || "";
+                            bubble = addBubble("assistant", "", name);
+                            bubble.classList.add("streaming");
                             showThinking(bubble);
                         } else if (type === "token") {
-                            if (!bubble) bubble = addBubble("assistant", "");
+                            if (!bubble) { bubble = addBubble("assistant", ""); bubble.classList.add("streaming"); }
                             if (accumulated === "") hideThinking();
                             accumulated += payload.text;
                             bubble.innerHTML = renderMd(accumulated);
-                            const box = $("#copilot-messages");
-                            if (box) box.scrollTop = box.scrollHeight;
+                            scrollBottom();
+                        } else if (type === "tool_start") {
+                            setThinkingTool(payload.name);
+                            if (bubble) appendToolLog(bubble, payload.name, payload.args);
+                        } else if (type === "tool_end") {
+                            // tool finished — thinker stays until tokens arrive
                         } else if (type === "session") {
                             if (payload.sid) copilotSid = payload.sid;
                         } else if (type === "done") {
                             hideThinking();
-                            if (bubble) bubble.classList.remove("streaming");
+                            if (bubble) {
+                                bubble.classList.remove("streaming");
+                                enhanceTables(bubble);
+                            }
                         } else if (type === "error") {
                             hideThinking();
                             if (!bubble) bubble = addBubble("assistant", "");
@@ -141,6 +209,7 @@
             }
         } catch (e) {
             console.error("copilot stream error", e);
+            hideThinking();
             addBubble("assistant", "Connection error");
         }
 
@@ -153,8 +222,6 @@
     window.copilotFillAndSend = (text) => {
         const ta = $("#copilot-input");
         if (ta) ta.value = text;
-        const chips = $("#copilot-chips");
-        if (chips) chips.style.display = "none";
         copilotSend(null);
     };
     window.copilotHandleKey = (ev) => {
