@@ -630,4 +630,14 @@ details.dr-folder[open] .dr-folder-files { display: flex; flex-direction: column
 .pd-id { font-size: .72rem; color: var(--accent); }
 .text-muted { color: var(--ink-dim); font-size: .78rem; }
 
+.integration-top-section { margin-bottom: 1.2rem; border: 1px solid var(--line-br); border-radius: .5rem; padding: .8rem 1rem; }
+.integration-top-section > summary { cursor: pointer; list-style: none; }
+.integration-top-section > summary::-webkit-details-marker { display: none; }
+.integration-top-section > summary h3 {
+    display: inline-flex; align-items: center;
+    font-size: .95rem; font-weight: 600; color: var(--ink); margin: 0;
+}
+.integration-top-section[open] > summary { margin-bottom: .8rem; border-bottom: 1px solid var(--line-br); padding-bottom: .6rem; }
+.integration-top-section .integration-card { margin-bottom: .8rem; }
+
 /* Bottom-nav rules moved to static/app.css so they apply on /app too. */
