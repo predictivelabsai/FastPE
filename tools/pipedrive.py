@@ -33,24 +33,22 @@ def _base_url() -> str:
     return f"https://{domain}.pipedrive.com"
 
 
-def _headers() -> dict:
-    return {
-        "Authorization": f"Bearer {settings().pipedrive_api_token}",
-        "Content-Type": "application/json",
-    }
+def _auth_params() -> dict:
+    return {"api_token": settings().pipedrive_api_token}
 
 
 def _client() -> httpx.Client:
-    return httpx.Client(base_url=_base_url(), headers=_headers(), timeout=20.0)
+    return httpx.Client(base_url=_base_url(), timeout=20.0)
 
 
-# ── Generic HTTP helpers ──────────────────────────────────────────────
+# ── Generic HTTP helpers (v1 API, api_token query-param auth) ────────
 
 def pd_get(path: str, params: dict | None = None) -> dict:
     if not _is_live():
         return {"success": True, "data": [], "stub": True}
+    merged = {**_auth_params(), **(params or {})}
     with _client() as c:
-        r = c.get(path, params=params or {})
+        r = c.get(path, params=merged)
         r.raise_for_status()
         return r.json()
 
@@ -62,7 +60,7 @@ def pd_post(path: str, data: dict) -> dict:
         log.info("STUB pd_post %s → id=%d", path, _STUB_COUNTER)
         return {"success": True, "data": {"id": _STUB_COUNTER, **data}, "stub": True}
     with _client() as c:
-        r = c.post(path, json=data)
+        r = c.post(path, params=_auth_params(), json=data)
         r.raise_for_status()
         return r.json()
 
@@ -72,7 +70,7 @@ def pd_patch(path: str, data: dict) -> dict:
         log.info("STUB pd_patch %s", path)
         return {"success": True, "data": data, "stub": True}
     with _client() as c:
-        r = c.patch(path, json=data)
+        r = c.put(path, params=_auth_params(), json=data)
         r.raise_for_status()
         return r.json()
 
@@ -82,7 +80,7 @@ def pd_delete(path: str) -> bool:
         log.info("STUB pd_delete %s", path)
         return True
     with _client() as c:
-        r = c.delete(path)
+        r = c.delete(path, params=_auth_params())
         r.raise_for_status()
         return True
 
@@ -115,7 +113,7 @@ def ensure_pipelines() -> dict[str, dict]:
         ("Deal Sourcing", DEAL_SOURCING_STAGES, "deal_sourcing"),
         ("LP Fundraising", LP_FUNDRAISING_STAGES, "lp_fundraising"),
     ]:
-        existing = pd_get("/api/v2/pipelines")
+        existing = pd_get("/api/v1/pipelines")
         pipeline_id = None
         for p in (existing.get("data") or []):
             if p.get("name") == name:
@@ -123,15 +121,15 @@ def ensure_pipelines() -> dict[str, dict]:
                 break
 
         if not pipeline_id:
-            resp = pd_post("/api/v2/pipelines", {"name": name})
+            resp = pd_post("/api/v1/pipelines", {"name": name})
             pipeline_id = resp["data"]["id"]
 
-        existing_stages = pd_get("/api/v2/stages", {"pipeline_id": pipeline_id})
+        existing_stages = pd_get("/api/v1/stages", {"pipeline_id": pipeline_id})
         stage_map = {s["name"]: s["id"] for s in (existing_stages.get("data") or [])}
 
         for stage_name in stages_list:
             if stage_name not in stage_map:
-                resp = pd_post("/api/v2/stages", {
+                resp = pd_post("/api/v1/stages", {
                     "name": stage_name,
                     "pipeline_id": pipeline_id,
                 })
@@ -161,13 +159,13 @@ def create_deal(title: str, pipeline_id: int, stage_id: int,
         data["value"] = value
         data["currency"] = currency
     if custom_fields:
-        data["custom_fields"] = custom_fields
-    resp = pd_post("/api/v2/deals", data)
+        data.update(custom_fields)
+    resp = pd_post("/api/v1/deals", data)
     return resp["data"]["id"]
 
 
 def update_deal(deal_id: int, **fields) -> dict:
-    resp = pd_patch(f"/api/v2/deals/{deal_id}", fields)
+    resp = pd_patch(f"/api/v1/deals/{deal_id}", fields)
     return resp.get("data", {})
 
 
@@ -176,7 +174,7 @@ def move_deal_stage(deal_id: int, stage_id: int) -> dict:
 
 
 def search_deals(term: str, limit: int = 10) -> list[dict]:
-    resp = pd_get("/api/v2/deals/search", {"term": term, "limit": limit})
+    resp = pd_get("/api/v1/deals/search", {"term": term, "limit": limit})
     items = resp.get("data", {})
     if isinstance(items, dict):
         items = items.get("items", [])
@@ -184,36 +182,36 @@ def search_deals(term: str, limit: int = 10) -> list[dict]:
 
 
 def get_deal(deal_id: int) -> dict:
-    resp = pd_get(f"/api/v2/deals/{deal_id}")
+    resp = pd_get(f"/api/v1/deals/{deal_id}")
     return resp.get("data", {})
 
 
 # ── Person CRUD ───────────────────────────────────────────────────────
 
 def create_person(name: str, org_id: int | None = None,
-                  emails: list[dict] | None = None,
-                  phones: list[dict] | None = None,
+                  emails: list[str] | None = None,
+                  phones: list[str] | None = None,
                   custom_fields: dict | None = None) -> int:
     data: dict[str, Any] = {"name": name}
     if org_id:
         data["org_id"] = org_id
     if emails:
-        data["emails"] = emails
+        data["email"] = emails
     if phones:
-        data["phones"] = phones
+        data["phone"] = phones
     if custom_fields:
-        data["custom_fields"] = custom_fields
-    resp = pd_post("/api/v2/persons", data)
+        data.update(custom_fields)
+    resp = pd_post("/api/v1/persons", data)
     return resp["data"]["id"]
 
 
 def update_person(person_id: int, **fields) -> dict:
-    resp = pd_patch(f"/api/v2/persons/{person_id}", fields)
+    resp = pd_patch(f"/api/v1/persons/{person_id}", fields)
     return resp.get("data", {})
 
 
 def search_persons(term: str, limit: int = 10) -> list[dict]:
-    resp = pd_get("/api/v2/persons/search", {"term": term, "limit": limit})
+    resp = pd_get("/api/v1/persons/search", {"term": term, "limit": limit})
     items = resp.get("data", {})
     if isinstance(items, dict):
         items = items.get("items", [])
@@ -222,24 +220,24 @@ def search_persons(term: str, limit: int = 10) -> list[dict]:
 
 # ── Organization CRUD ─────────────────────────────────────────────────
 
-def create_organization(name: str, address: dict | None = None,
+def create_organization(name: str, address: str | None = None,
                         custom_fields: dict | None = None) -> int:
     data: dict[str, Any] = {"name": name}
     if address:
         data["address"] = address
     if custom_fields:
-        data["custom_fields"] = custom_fields
-    resp = pd_post("/api/v2/organizations", data)
+        data.update(custom_fields)
+    resp = pd_post("/api/v1/organizations", data)
     return resp["data"]["id"]
 
 
 def update_organization(org_id: int, **fields) -> dict:
-    resp = pd_patch(f"/api/v2/organizations/{org_id}", fields)
+    resp = pd_patch(f"/api/v1/organizations/{org_id}", fields)
     return resp.get("data", {})
 
 
 def search_organizations(term: str, limit: int = 10) -> list[dict]:
-    resp = pd_get("/api/v2/organizations/search", {"term": term, "limit": limit})
+    resp = pd_get("/api/v1/organizations/search", {"term": term, "limit": limit})
     items = resp.get("data", {})
     if isinstance(items, dict):
         items = items.get("items", [])
@@ -258,7 +256,7 @@ def create_activity(subject: str, activity_type: str = "task",
     data: dict[str, Any] = {
         "subject": subject,
         "type": activity_type,
-        "done": done,
+        "done": 1 if done else 0,
     }
     if deal_id:
         data["deal_id"] = deal_id
@@ -270,7 +268,7 @@ def create_activity(subject: str, activity_type: str = "task",
         data["note"] = note
     if due_date:
         data["due_date"] = due_date
-    resp = pd_post("/api/v2/activities", data)
+    resp = pd_post("/api/v1/activities", data)
     return resp["data"]["id"]
 
 
@@ -282,7 +280,7 @@ def list_activities(deal_id: int | None = None,
         params["deal_id"] = deal_id
     if person_id:
         params["person_id"] = person_id
-    resp = pd_get("/api/v2/activities", params)
+    resp = pd_get("/api/v1/activities", params)
     return resp.get("data", []) or []
 
 
@@ -306,7 +304,7 @@ def create_note(content_html: str, deal_id: int | None = None,
 
 def search_all(term: str, item_types: str = "deal,person,organization",
                limit: int = 20) -> list[dict]:
-    resp = pd_get("/api/v2/itemSearch", {
+    resp = pd_get("/api/v1/itemSearch", {
         "term": term,
         "item_types": item_types,
         "limit": limit,

@@ -119,10 +119,8 @@ def push_companies(country: str | None = None, dry_run: bool = False):
             synced += 1
             continue
 
-        org_id = create_organization(
-            name=c["name"],
-            address={"locality": c["hq_city"], "country": c["country"]} if c["hq_city"] else None,
-        )
+        addr = f"{c['hq_city']}, {c['country']}" if c["hq_city"] else c.get("country")
+        org_id = create_organization(name=c["name"], address=addr)
 
         pd_stage = DEAL_STAGE_TO_PD.get(c["deal_stage"], "Sourced")
         stage_id = ds["stages"].get(pd_stage, list(ds["stages"].values())[0])
@@ -184,7 +182,7 @@ def push_lps(dry_run: bool = False):
         person_id = create_person(
             name=lp["name"],
             org_id=org_id,
-            emails=[{"label": "work", "value": lp["email"], "primary": True}] if lp["email"] else None,
+            emails=[lp["email"]] if lp.get("email") else None,
         )
 
         pd_stage = LP_STAGE_TO_PD.get(lp["stage"], "Prospect")
