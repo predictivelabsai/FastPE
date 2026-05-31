@@ -315,3 +315,16 @@ CREATE TABLE IF NOT EXISTS pehero.outreach_sequences (
 );
 CREATE INDEX IF NOT EXISTS outreach_seq_company_idx ON pehero.outreach_sequences(company_id);
 CREATE INDEX IF NOT EXISTS outreach_seq_investor_idx ON pehero.outreach_sequences(investor_id);
+
+-- ── User integrations (per-user API tokens) ─────────────────────────
+CREATE TABLE IF NOT EXISTS pehero.user_integrations (
+    id          BIGSERIAL PRIMARY KEY,
+    user_id     BIGINT      NOT NULL REFERENCES pehero.users(id) ON DELETE CASCADE,
+    provider    TEXT        NOT NULL,     -- pipedrive | hubspot | salesforce | ...
+    api_token   TEXT        NOT NULL,
+    domain      TEXT,                     -- e.g. "predictivelabsltd" for Pipedrive
+    metadata    JSONB       DEFAULT '{}', -- extra provider-specific config
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE(user_id, provider)
+);

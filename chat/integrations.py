@@ -26,6 +26,7 @@ from utils.config import settings
 from chat.routes import _ensure_user, _list_sessions
 from db import fetch_all, fetch_one
 from landing.components import TAILWIND_CONFIG, _favicon_links
+from tools.pipedrive import get_user_token, save_user_token, delete_user_token, test_connection
 
 
 def _head():
@@ -101,6 +102,18 @@ def _stage_badge(stage: str) -> Span:
     )
 
 
+def _user_pd_connected(uid: int | None) -> tuple[bool, str]:
+    """Check if user has Pipedrive connected (per-user or global fallback)."""
+    if uid:
+        row = get_user_token(uid)
+        if row and row["api_token"]:
+            return True, row["domain"] or ""
+    s = settings()
+    if s.pipedrive_api_token:
+        return True, s.pipedrive_domain or ""
+    return False, ""
+
+
 @rt("/app/integrations")
 def integrations_home(sess):
     uid, email = _ensure_user(sess)
@@ -108,7 +121,7 @@ def integrations_home(sess):
     lang = get_lang(sess)
     sym = currency_symbol(get_currency(sess))
 
-    pd_connected = bool(settings().pipedrive_api_token)
+    pd_connected, pd_domain = _user_pd_connected(uid)
 
     # Sync stats
     sync_rows = fetch_all(
@@ -150,54 +163,101 @@ def integrations_home(sess):
         "ORDER BY os.created_at DESC LIMIT 20"
     )
 
-    # Status card
-    status_card = Div(
-        Div(
-            H3("Pipedrive CRM"),
-            _status_badge(pd_connected),
-            cls="integration-status-header",
-        ),
-        Div(
+    # Status card — connected vs connect form
+    if pd_connected:
+        status_card = Div(
             Div(
-                Span("Domain", cls="stat-label"),
-                Span(settings().pipedrive_domain or "not set", cls="stat-value mono"),
-                cls="stat-item",
+                H3("Pipedrive CRM"),
+                _status_badge(True),
+                cls="integration-status-header",
             ),
             Div(
-                Span("Companies synced", cls="stat-label"),
-                Span(str(sync_stats.get("company", {}).get("count", 0)), cls="stat-value"),
-                cls="stat-item",
-            ),
-            Div(
-                Span("LPs synced", cls="stat-label"),
-                Span(str(sync_stats.get("investor", {}).get("count", 0)), cls="stat-value"),
-                cls="stat-item",
-            ),
-            Div(
-                Span("Last sync", cls="stat-label"),
-                Span(
-                    _time_ago(sync_stats.get("company", {}).get("last_sync"))
-                    if sync_stats.get("company") else "never",
-                    cls="stat-value",
+                Div(
+                    Span("Domain", cls="stat-label"),
+                    Span(pd_domain or "not set", cls="stat-value mono"),
+                    cls="stat-item",
                 ),
-                cls="stat-item",
+                Div(
+                    Span("Companies synced", cls="stat-label"),
+                    Span(str(sync_stats.get("company", {}).get("count", 0)), cls="stat-value"),
+                    cls="stat-item",
+                ),
+                Div(
+                    Span("LPs synced", cls="stat-label"),
+                    Span(str(sync_stats.get("investor", {}).get("count", 0)), cls="stat-value"),
+                    cls="stat-item",
+                ),
+                Div(
+                    Span("Last sync", cls="stat-label"),
+                    Span(
+                        _time_ago(sync_stats.get("company", {}).get("last_sync"))
+                        if sync_stats.get("company") else "never",
+                        cls="stat-value",
+                    ),
+                    cls="stat-item",
+                ),
+                cls="integration-stats",
             ),
-            cls="integration-stats",
-        ),
-        Div(
-            Button("Sync companies →", cls="integration-action-btn",
-                   hx_post="/app/integrations/sync?target=companies",
-                   hx_swap="none"),
-            Button("Sync LPs →", cls="integration-action-btn",
-                   hx_post="/app/integrations/sync?target=lps",
-                   hx_swap="none"),
-            Button("Setup pipelines →", cls="integration-action-btn secondary",
-                   hx_post="/app/integrations/sync?target=setup",
-                   hx_swap="none"),
-            cls="integration-actions",
-        ),
-        cls="integration-card",
-    )
+            Div(
+                Button("Sync companies →", cls="integration-action-btn",
+                       hx_post="/app/integrations/sync?target=companies",
+                       hx_swap="none"),
+                Button("Sync LPs →", cls="integration-action-btn",
+                       hx_post="/app/integrations/sync?target=lps",
+                       hx_swap="none"),
+                Button("Setup pipelines →", cls="integration-action-btn secondary",
+                       hx_post="/app/integrations/sync?target=setup",
+                       hx_swap="none"),
+                Button("Disconnect", cls="integration-action-btn danger",
+                       hx_post="/app/integrations/disconnect",
+                       hx_swap="none",
+                       hx_confirm="Disconnect your Pipedrive account?"),
+                cls="integration-actions",
+            ),
+            cls="integration-card",
+        )
+    else:
+        status_card = Div(
+            Div(
+                H3("Pipedrive CRM"),
+                _status_badge(False),
+                cls="integration-status-header",
+            ),
+            P("Connect your Pipedrive account by pasting your personal API token. "
+              "Find it at Settings → Personal preferences → API.",
+              style="font-size:.78rem; color:var(--ink-muted); margin:.5rem 0 .8rem;"),
+            Form(
+                Div(
+                    Div(
+                        Span("API Token", cls="stat-label"),
+                        Input(type="text", name="api_token",
+                              placeholder="e.g. fe5bd40c42dd42ef...",
+                              cls="pd-token-input",
+                              required=True),
+                        cls="pd-field",
+                    ),
+                    Div(
+                        Span("Company domain", cls="stat-label"),
+                        Input(type="text", name="domain",
+                              placeholder="e.g. yourcompany (from yourcompany.pipedrive.com)",
+                              cls="pd-token-input",
+                              required=True),
+                        cls="pd-field",
+                    ),
+                    cls="pd-form-fields",
+                ),
+                Div(
+                    Button("Connect Pipedrive →", type="submit",
+                           cls="integration-action-btn"),
+                    cls="integration-actions",
+                    style="margin-top:.6rem;",
+                ),
+                Div(id="pd-connect-error", cls="pd-error"),
+                hx_post="/app/integrations/connect",
+                hx_swap="none",
+            ),
+            cls="integration-card",
+        )
 
     # Deal sourcing table
     deal_table = Details(
@@ -357,14 +417,49 @@ def integrations_home(sess):
     return Html(_head(), body, lang=lang)
 
 
+@rt("/app/integrations/connect", methods=["POST"])
+async def integrations_connect(sess, api_token: str = "", domain: str = ""):
+    """Save user's Pipedrive API token after validating it."""
+    from starlette.responses import Response
+
+    uid, _ = _ensure_user(sess)
+    api_token = api_token.strip()
+    domain = domain.strip().lower().replace(".pipedrive.com", "")
+
+    if not api_token or not domain:
+        return Response(status_code=400, content="API token and domain are required",
+                        headers={"HX-Reswap": "innerHTML", "HX-Retarget": "#pd-connect-error"})
+
+    result = test_connection(api_token, domain)
+    if not result:
+        return Response(status_code=400, content="Invalid token or domain — could not connect",
+                        headers={"HX-Reswap": "innerHTML", "HX-Retarget": "#pd-connect-error"})
+
+    save_user_token(uid, api_token, domain)
+    return Response(status_code=200, headers={"HX-Redirect": "/app/integrations"})
+
+
+@rt("/app/integrations/disconnect", methods=["POST"])
+async def integrations_disconnect(sess):
+    """Remove user's Pipedrive token."""
+    from starlette.responses import Response
+
+    uid, _ = _ensure_user(sess)
+    delete_user_token(uid)
+    return Response(status_code=200, headers={"HX-Redirect": "/app/integrations"})
+
+
 @rt("/app/integrations/sync", methods=["POST"])
 async def integrations_sync(sess, target: str = "companies"):
     """Trigger Pipedrive sync from the UI."""
     import threading
+    uid, _ = _ensure_user(sess)
 
     def _run_sync():
         import logging
+        from tools.pipedrive import set_user_pipedrive
         logging.basicConfig(level=logging.INFO)
+        set_user_pipedrive(uid)
         if target == "setup":
             from tools.pipedrive import ensure_pipelines
             ensure_pipelines()

@@ -1,8 +1,9 @@
 """Pipedrive CRM client — thin httpx wrapper for deals, persons, organizations, activities, notes.
 
-When PIPEDRIVE_API_TOKEN is not set, all functions return stub data so agents
-and tests can run without a live Pipedrive account. Set the token in .env to
-activate real API calls.
+Resolves credentials in order:
+  1. Per-user token from pehero.user_integrations (if user_id set on thread-local)
+  2. Global PIPEDRIVE_API_TOKEN from .env
+  3. Stub mode (no token → fake responses)
 """
 
 from __future__ import annotations
@@ -10,6 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import threading
 import time
 from typing import Any, Optional
 
@@ -22,19 +24,43 @@ from utils.config import settings
 log = logging.getLogger(__name__)
 
 _STUB_COUNTER = 1000
+_thread_local = threading.local()
+
+
+def set_user_pipedrive(user_id: int | None):
+    """Set per-request user context for Pipedrive credential lookup."""
+    _thread_local.pipedrive_user_id = user_id
+
+
+def _resolve_credentials() -> tuple[str, str]:
+    """Return (api_token, domain) — checks per-user DB first, then .env."""
+    uid = getattr(_thread_local, "pipedrive_user_id", None)
+    if uid:
+        from db import fetch_one
+        row = fetch_one(
+            "SELECT api_token, domain FROM pehero.user_integrations "
+            "WHERE user_id = %s AND provider = 'pipedrive'",
+            (uid,),
+        )
+        if row and row["api_token"]:
+            return row["api_token"], row["domain"] or "api"
+    s = settings()
+    return s.pipedrive_api_token, s.pipedrive_domain or "api"
 
 
 def _is_live() -> bool:
-    return bool(settings().pipedrive_api_token)
+    token, _ = _resolve_credentials()
+    return bool(token)
 
 
 def _base_url() -> str:
-    domain = settings().pipedrive_domain or "api"
+    _, domain = _resolve_credentials()
     return f"https://{domain}.pipedrive.com"
 
 
 def _auth_params() -> dict:
-    return {"api_token": settings().pipedrive_api_token}
+    token, _ = _resolve_credentials()
+    return {"api_token": token}
 
 
 def _client() -> httpx.Client:
@@ -83,6 +109,63 @@ def pd_delete(path: str) -> bool:
         r = c.delete(path, params=_auth_params())
         r.raise_for_status()
         return True
+
+
+# ── Per-user token management ────────────────────────────────────────
+
+def save_user_token(user_id: int, api_token: str, domain: str) -> bool:
+    """Save or update a user's Pipedrive API token. Returns True on success."""
+    from db import connect
+    with connect() as conn, conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO pehero.user_integrations (user_id, provider, api_token, domain) "
+            "VALUES (%s, 'pipedrive', %s, %s) "
+            "ON CONFLICT (user_id, provider) DO UPDATE "
+            "SET api_token = EXCLUDED.api_token, domain = EXCLUDED.domain, "
+            "    updated_at = now()",
+            (user_id, api_token, domain),
+        )
+        conn.commit()
+    return True
+
+
+def get_user_token(user_id: int) -> dict | None:
+    """Get a user's Pipedrive credentials. Returns {api_token, domain} or None."""
+    from db import fetch_one
+    return fetch_one(
+        "SELECT api_token, domain FROM pehero.user_integrations "
+        "WHERE user_id = %s AND provider = 'pipedrive'",
+        (user_id,),
+    )
+
+
+def delete_user_token(user_id: int) -> bool:
+    from db import connect
+    with connect() as conn, conn.cursor() as cur:
+        cur.execute(
+            "DELETE FROM pehero.user_integrations "
+            "WHERE user_id = %s AND provider = 'pipedrive'",
+            (user_id,),
+        )
+        conn.commit()
+    return True
+
+
+def test_connection(api_token: str, domain: str) -> dict | None:
+    """Test a Pipedrive token. Returns user info dict or None on failure."""
+    try:
+        url = f"https://{domain}.pipedrive.com/api/v1/users/me"
+        with httpx.Client(timeout=10.0) as c:
+            r = c.get(url, params={"api_token": api_token})
+            if r.status_code == 200:
+                data = r.json()
+                if data.get("success"):
+                    u = data["data"]
+                    return {"name": u.get("name"), "email": u.get("email"),
+                            "company": u.get("company_name", "")}
+    except Exception:
+        pass
+    return None
 
 
 # ── Pipeline + Stage management ───────────────────────────────────────

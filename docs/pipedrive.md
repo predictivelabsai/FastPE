@@ -28,11 +28,137 @@ Two Pipedrive pipelines:
    └──────────────────────────────────┘
 ```
 
-## Authentication
+## Authentication — Current
 
-- **API token** for single-tenant (current setup). Store as `PIPEDRIVE_API_TOKEN` in `.env`.
-- **OAuth 2.0** if we later offer multi-tenant. Authorize at `https://oauth.pipedrive.com/oauth/authorize`, token exchange at `/oauth/token`. Access tokens expire in 60 min; refresh tokens in 60 days of non-use.
-- All API calls go to `https://{company_domain}.pipedrive.com/api/v2/` (v2 preferred, v1 for notes/files/mail).
+Per-user personal API tokens, resolved in this order:
+
+1. **Per-user token** from `pehero.user_integrations` (user pastes in Integrations UI)
+2. **Global fallback** from `PIPEDRIVE_API_TOKEN` in `.env` (admin/demo)
+3. **Stub mode** — no token → all functions return fake data
+
+All API calls use **v1** with `api_token` query parameter auth.
+Base URL: `https://{domain}.pipedrive.com/api/v1/`.
+
+### DB table: `pehero.user_integrations`
+
+```sql
+CREATE TABLE pehero.user_integrations (
+    id          BIGSERIAL PRIMARY KEY,
+    user_id     BIGINT NOT NULL REFERENCES pehero.users(id) ON DELETE CASCADE,
+    provider    TEXT NOT NULL,         -- pipedrive | hubspot | ...
+    api_token   TEXT NOT NULL,
+    domain      TEXT,                  -- e.g. "predictivelabsltd"
+    metadata    JSONB DEFAULT '{}',
+    created_at  TIMESTAMPTZ DEFAULT now(),
+    updated_at  TIMESTAMPTZ DEFAULT now(),
+    UNIQUE(user_id, provider)
+);
+```
+
+### Connect flow
+
+1. User navigates to `/app/integrations`
+2. Pastes personal API token + company domain
+3. `POST /app/integrations/connect` validates via `GET /api/v1/users/me`
+4. On success, saves to `user_integrations` and redirects back
+5. Disconnect removes the row
+
+## Authentication — Multi-Tenant OAuth (future upgrade)
+
+When PEHero ships as a multi-tenant SaaS, personal API tokens become impractical
+(users shouldn't need to find their Pipedrive settings page). The upgrade path:
+
+### 1. Register a Pipedrive App
+
+Go to `https://developers.pipedrive.com` → create a private app (no marketplace
+review needed for internal use; publish for public distribution).
+
+This gives you:
+- `PIPEDRIVE_CLIENT_ID`
+- `PIPEDRIVE_CLIENT_SECRET`
+- Redirect URI: `https://pehero.fyi/app/integrations/pipedrive/callback`
+
+### 2. OAuth Flow
+
+```
+User clicks "Connect Pipedrive"
+  → redirect to https://oauth.pipedrive.com/oauth/authorize
+      ?client_id={CLIENT_ID}
+      &redirect_uri={CALLBACK_URL}
+      &state={csrf_token}
+
+User authorizes on Pipedrive
+  → redirect back to /app/integrations/pipedrive/callback?code={code}&state={state}
+
+Server exchanges code for tokens:
+  POST https://oauth.pipedrive.com/oauth/token
+    grant_type=authorization_code
+    &code={code}
+    &redirect_uri={CALLBACK_URL}
+    &client_id={CLIENT_ID}
+    &client_secret={CLIENT_SECRET}
+
+Response:
+  { access_token, refresh_token, token_type, expires_in, api_domain, scope }
+```
+
+### 3. Token Storage
+
+Extend `user_integrations` or add columns:
+
+```sql
+ALTER TABLE pehero.user_integrations
+    ADD COLUMN access_token TEXT,
+    ADD COLUMN refresh_token TEXT,
+    ADD COLUMN token_expires_at TIMESTAMPTZ,
+    ADD COLUMN oauth_scope TEXT;
+```
+
+### 4. Token Refresh
+
+Access tokens expire in **60 minutes**. Refresh tokens expire after **60 days**
+of non-use. On any 401 response:
+
+```python
+def _refresh_token(user_id: int) -> str:
+    row = get_user_token(user_id)
+    resp = httpx.post("https://oauth.pipedrive.com/oauth/token", data={
+        "grant_type": "refresh_token",
+        "refresh_token": row["refresh_token"],
+        "client_id": PIPEDRIVE_CLIENT_ID,
+        "client_secret": PIPEDRIVE_CLIENT_SECRET,
+    })
+    data = resp.json()
+    # save new access_token + refresh_token + expires_at
+    return data["access_token"]
+```
+
+### 5. API Call Changes
+
+OAuth tokens use **Bearer auth** header instead of `api_token` query param:
+
+```python
+headers = {"Authorization": f"Bearer {access_token}"}
+```
+
+And can use the **v2 API** (which requires OAuth):
+
+```
+https://{api_domain}/api/v2/deals
+```
+
+### 6. Migration Path
+
+1. Add `PIPEDRIVE_CLIENT_ID` / `PIPEDRIVE_CLIENT_SECRET` to `.env`
+2. Add OAuth routes alongside existing token-paste routes
+3. Existing personal API tokens keep working (v1 api_token auth)
+4. New OAuth connections use Bearer auth + v2 API
+5. `_resolve_credentials()` checks: OAuth token → personal token → .env fallback
+
+### 7. Scopes
+
+Request minimal scopes: `deals:full, persons:full, organizations:full,
+activities:full, pipelines:full, notes:full, search:read`.
 
 ## Rate Limits
 

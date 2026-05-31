@@ -611,6 +611,17 @@ details.dr-folder[open] .dr-folder-files { display: flex; flex-direction: column
 }
 .integration-action-btn:hover { opacity: .85; }
 .integration-action-btn.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.integration-action-btn.danger { background: transparent; color: #b33; border: 1px solid #b33; }
+.integration-action-btn.danger:hover { background: #b33; color: white; }
+.pd-form-fields { display: flex; flex-direction: column; gap: .6rem; }
+.pd-field { display: flex; flex-direction: column; gap: .2rem; }
+.pd-token-input {
+    padding: .45rem .6rem; border: 1px solid var(--line-br); border-radius: .4rem;
+    font-size: .78rem; font-family: 'JetBrains Mono', monospace; background: var(--bg);
+    color: var(--ink); width: 100%;
+}
+.pd-token-input:focus { border-color: var(--accent); outline: none; }
+.pd-error { color: #b33; font-size: .72rem; margin-top: .4rem; min-height: 1rem; }
 .integration-section { margin-bottom: 1rem; }
 .integration-section summary { cursor: pointer; }
 .integration-section summary h4 {
