@@ -264,6 +264,7 @@ def _build_data_source_card(src: dict, stats: dict, sym: str) -> Div:
         P("No data loaded yet. Run the scraper to populate.",
           style="font-size:.72rem; color:var(--ink-dim); font-style:italic; margin:.4rem 0;"),
         cls="integration-card",
+        id=src["key"].lower(),
     )
 
 
@@ -517,6 +518,7 @@ def integrations_home(sess):
                                  companies, lps, sequences, sym),
         open=True,
         cls="integration-top-section",
+        id="pipedrive",
     )
 
     # Data Sources section

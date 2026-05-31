@@ -278,7 +278,6 @@ def _bottom_nav(current_path: str = "", lang: str = "en"):
         (t("chat_instructions", lang), "/app/instructions", "✎"),
         (t("chat_analytics", lang),    "/app/analytics",    "∑"),
         (t("val_title", lang),          "/app/valuation",    "◎"),
-        ("Integrations",                "/app/integrations", "⇄"),
     ]
     links = []
     for label, href, icon in items:
@@ -289,6 +288,35 @@ def _bottom_nav(current_path: str = "", lang: str = "en"):
             href=href,
             cls=f"bottom-nav-link{' active' if active else ''}",
         ))
+
+    int_active = current_path.startswith("/app/integrations")
+    int_subs = [
+        ("Pipedrive",           "/app/integrations#pipedrive",  "⇄"),
+        ("Teatmik (EE)",        "/app/integrations#ee",         "🇪🇪"),
+        ("Rekvizitai (LT)",     "/app/integrations#lt",         "🇱🇹"),
+        ("data.gov.lv (LV)",    "/app/integrations#lv",         "🇱🇻"),
+        ("ONRC + ANAF (RO)",    "/app/integrations#ro",         "🇷🇴"),
+        ("KRS (PL)",            "/app/integrations#pl",         "🇵🇱"),
+    ]
+    sub_links = [A(
+        Span(ic, cls="bottom-nav-icon"),
+        Span(lb, cls="bottom-nav-label"),
+        href=hr, cls="bottom-nav-link sub",
+    ) for lb, hr, ic in int_subs]
+
+    integrations_menu = Details(
+        Summary(A(
+            Span("⇄", cls="bottom-nav-icon"),
+            Span("Integrations", cls="bottom-nav-label"),
+            href="/app/integrations",
+            cls=f"bottom-nav-link{' active' if int_active else ''}",
+        )),
+        Div(*sub_links, cls="bottom-nav-sub"),
+        open=int_active,
+        cls="bottom-nav-details",
+    )
+    links.append(integrations_menu)
+
     return Div(*links, cls="bottom-nav")
 
 
