@@ -120,53 +120,150 @@ def _card_for(company: dict, sym: str = "€") -> Div:
     )
 
 
-def _board(companies_by_stage: dict[str, list[dict]], sym: str = "€") -> Div:
+def _stage_list(rows: list[dict], stage_key: str, stage_label: str,
+                 stage_total: int, page: int, total_pages: int,
+                 sector: str, ownership: str, sym: str = "€") -> Div:
+    """Paginated card grid for a single stage."""
+    cards = [_card_for(c, sym) for c in rows]
+
+    def _page_href(p):
+        parts = {"stage": stage_key}
+        if sector: parts["sector"] = sector
+        if ownership: parts["ownership"] = ownership
+        if p > 1: parts["page"] = str(p)
+        return "/app/pipeline?" + "&".join(f"{k}={v}" for k, v in parts.items())
+
+    pager_items = [
+        A("← Back to board", href="/app/pipeline" + (f"?sector={sector}" if sector else "") + (f"{'&' if sector else '?'}ownership={ownership}" if ownership else ""),
+          cls="filter-chip"),
+    ]
+    if page > 1:
+        pager_items.append(A("‹ Prev", href=_page_href(page - 1), cls="filter-chip"))
+    pager_items.append(Span(f"Page {page} of {total_pages:,} ({stage_total:,} deals)", cls="pager-info"))
+    if page < total_pages:
+        pager_items.append(A("Next ›", href=_page_href(page + 1), cls="filter-chip"))
+
+    return Div(
+        Div(
+            Span(f"{stage_label}", cls="col-title", style=f"font-size:1.1rem;border-bottom:3px solid {STAGE_COLORS.get(stage_key, '#CFC8B4')};padding-bottom:4px"),
+            cls="stage-list-header",
+        ),
+        Div(*cards, cls="stage-card-grid"),
+        Div(*pager_items, cls="pager-bar"),
+        cls="stage-list-view",
+    )
+
+
+def _board(companies_by_stage: dict[str, list[dict]], stage_counts: dict[str, int], sym: str = "€") -> Div:
     columns = []
     for stage_key, stage_label in STAGES:
         cards = companies_by_stage.get(stage_key, [])
+        total_in_stage = stage_counts.get(stage_key, 0)
+        shown = len(cards)
+        overflow = total_in_stage > shown
+
+        col_children = [_card_for(c, sym) for c in cards]
+        if overflow:
+            col_children.append(
+                A(f"View all {total_in_stage:,}",
+                  href=f"/app/pipeline?stage={stage_key}",
+                  cls="col-overflow-link")
+            )
+
         columns.append(Div(
             Div(
                 Span(stage_label, cls="col-title"),
-                Span(str(len(cards)), cls="col-count"),
+                Span(f"{total_in_stage:,}", cls="col-count"),
                 cls="col-head",
                 style=f"border-bottom-color:{STAGE_COLORS.get(stage_key, '#CFC8B4')}",
             ),
-            Div(*[_card_for(c, sym) for c in cards], cls="col-body"),
+            Div(*col_children, cls="col-body"),
             cls="kanban-col",
         ))
     return Div(*columns, cls="kanban-board")
 
 
+_CARD_COLS = (
+    "slug, name, sector, sub_sector, revenue_ltm, ebitda_ltm, "
+    "enterprise_value, ask_multiple, seller_intent, deal_stage"
+)
+_CARDS_PER_STAGE = 20
+
+
+_PAGE_SIZE = 50
+
+
 @rt("/app/pipeline")
-def pipeline_home(sess, sector: str = "", ownership: str = ""):
+def pipeline_home(sess, sector: str = "", ownership: str = "", stage: str = "", page: int = 1):
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
     lang = get_lang(sess)
+    page = max(1, page)
 
-    sql = ["SELECT * FROM pehero.companies WHERE TRUE"]
+    where_parts = ["TRUE"]
     params: list = []
     if sector:
-        sql.append("AND sector = %s"); params.append(sector)
+        where_parts.append("sector = %s"); params.append(sector)
     if ownership:
-        sql.append("AND ownership = %s"); params.append(ownership)
-    sql.append("ORDER BY deal_stage, name")
-    rows = fetch_all(" ".join(sql), tuple(params))
+        where_parts.append("ownership = %s"); params.append(ownership)
+    where = " AND ".join(where_parts)
 
-    by_stage: dict[str, list[dict]] = {}
-    for r in rows:
-        by_stage.setdefault(r["deal_stage"] or "sourced", []).append(r)
+    counts = fetch_all(
+        f"SELECT COALESCE(deal_stage, 'sourced') AS deal_stage, count(*) AS n "
+        f"FROM pehero.companies WHERE {where} GROUP BY 1",
+        tuple(params),
+    )
+    stage_counts = {r["deal_stage"]: r["n"] for r in counts}
+    total = sum(stage_counts.values())
 
-    sectors = sorted({r["sector"] for r in rows if r["sector"]})
+    if stage:
+        stage_label = dict(STAGES).get(stage, stage.title())
+        offset = (page - 1) * _PAGE_SIZE
+        rows = fetch_all(
+            f"SELECT {_CARD_COLS} FROM pehero.companies "
+            f"WHERE {where} AND COALESCE(deal_stage, 'sourced') = %s "
+            f"ORDER BY enterprise_value DESC NULLS LAST, name "
+            f"LIMIT {_PAGE_SIZE} OFFSET %s",
+            tuple(params) + (stage, offset),
+        )
+        stage_total = stage_counts.get(stage, 0)
+        total_pages = max(1, (stage_total + _PAGE_SIZE - 1) // _PAGE_SIZE)
+        board_content = _stage_list(rows, stage, stage_label, stage_total, page, total_pages,
+                                    sector, ownership, currency_symbol(get_currency(sess)))
+    else:
+        by_stage: dict[str, list[dict]] = {}
+        for stage_key, _ in STAGES:
+            if stage_counts.get(stage_key, 0) == 0:
+                continue
+            rows = fetch_all(
+                f"SELECT {_CARD_COLS} FROM pehero.companies "
+                f"WHERE {where} AND COALESCE(deal_stage, 'sourced') = %s "
+                f"ORDER BY enterprise_value DESC NULLS LAST, name "
+                f"LIMIT {_CARDS_PER_STAGE}",
+                tuple(params) + (stage_key,),
+            )
+            by_stage[stage_key] = rows
+        board_content = _board(by_stage, stage_counts, currency_symbol(get_currency(sess)))
+
+    sectors = sorted(
+        r["sector"] for r in fetch_all(
+            "SELECT DISTINCT sector FROM pehero.companies WHERE sector IS NOT NULL ORDER BY sector"
+        )
+    )
+
+    def _qstr(**kw):
+        parts = {k: v for k, v in {"sector": sector, "ownership": ownership, **kw}.items() if v}
+        return "?" + "&".join(f"{k}={v}" for k, v in parts.items()) if parts else ""
 
     filters = Div(
         A(t("pipe_all", lang), href="/app/pipeline",
-          cls=f"filter-chip{' active' if not sector and not ownership else ''}"),
+          cls=f"filter-chip{' active' if not sector and not ownership and not stage else ''}"),
         *[A(s.replace("_", " ").title(),
-             href=f"/app/pipeline?sector={s}",
+             href=f"/app/pipeline{_qstr(sector=s)}",
              cls=f"filter-chip{' active' if sector == s else ''}") for s in sectors],
         Span("·", cls="filter-divider"),
         *[A(o.replace("_", " ").title(),
-             href=f"/app/pipeline?ownership={o}",
+             href=f"/app/pipeline{_qstr(ownership=o)}",
              cls=f"filter-chip{' active' if ownership == o else ''}")
           for o in ["founder", "family", "pe_backed", "vc_backed", "corporate_carve_out"]],
         cls="pipeline-filters",
@@ -182,7 +279,7 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
                     Button("☰", cls="mobile-menu-btn", onclick="toggleLeftPane()"),
                     Span(t("pipe_title", lang), cls="chat-header-title"),
                     Span("·", cls="chat-header-dot"),
-                    Span(t("pipe_companies", lang).format(n=len(rows)), cls="chat-header-agent"),
+                    Span(t("pipe_companies", lang).format(n=total), cls="chat-header-agent"),
                     cls="chat-header-left",
                 ),
                 Div(
@@ -192,16 +289,16 @@ def pipeline_home(sess, sector: str = "", ownership: str = ""):
                 cls="chat-header",
             ),
             filters,
-            _board(by_stage, currency_symbol(get_currency(sess))),
+            board_content,
             cls="center-pane pipeline-center",
         ),
         copilot_pane(
             page_name="Pipeline",
             page_context={
                 "page": "Pipeline",
-                "total_companies": len(rows),
+                "total_companies": total,
                 "filters": {"sector": sector, "ownership": ownership},
-                "by_stage": {k: len(v) for k, v in by_stage.items()},
+                "by_stage": stage_counts,
             },
             lang=lang,
         ),

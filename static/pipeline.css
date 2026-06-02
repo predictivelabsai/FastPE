@@ -640,4 +640,27 @@ details.dr-folder[open] .dr-folder-files { display: flex; flex-direction: column
 .integration-top-section[open] > summary { margin-bottom: .8rem; border-bottom: 1px solid var(--line-br); padding-bottom: .6rem; }
 .integration-top-section .integration-card { margin-bottom: .8rem; }
 
+/* Overflow link in kanban column */
+.col-overflow-link {
+    display: block; text-align: center; padding: .5rem;
+    font-size: .72rem; color: var(--accent); text-decoration: none;
+    border-top: 1px solid var(--line); margin-top: .2rem;
+}
+.col-overflow-link:hover { text-decoration: underline; }
+
+/* Stage list view (single-stage expanded) */
+.stage-list-view { padding: .75rem; }
+.stage-list-header { margin-bottom: .75rem; }
+.stage-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: .6rem;
+}
+.pager-bar {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .75rem 0; margin-top: .75rem;
+    border-top: 1px solid var(--line);
+}
+.pager-info { font-size: .72rem; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
+
 /* Bottom-nav rules moved to static/app.css so they apply on /app too. */
