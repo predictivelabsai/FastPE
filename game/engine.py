@@ -153,6 +153,7 @@ class GameState:
     lp_commitments: int = 0
     special_power_used: bool = False
     events_history: list = field(default_factory=list)
+    deal_pipeline: list = field(default_factory=list)
     total_rounds: int = 5
     game_over: bool = False
     score: int = 0
@@ -187,6 +188,7 @@ class GameState:
             "lp_commitments": self.lp_commitments,
             "special_power_used": self.special_power_used,
             "events_history": self.events_history,
+            "deal_pipeline": self.deal_pipeline,
             "total_rounds": self.total_rounds,
             "game_over": self.game_over,
             "score": self.score,
@@ -213,6 +215,38 @@ def new_game(character_key: str, level: str = "associate", player_name: str = "P
         total_rounds=lvl["rounds"],
         fund_size=200_000 if level == "associate" else 500_000 if level == "vp" else 1_000_000,
     )
+
+
+def load_deal_pipeline(country: str = "LT", limit: int = 40) -> list[dict]:
+    """Load real companies from the database for the game pipeline."""
+    from db import fetch_all
+    rows = fetch_all(
+        "SELECT name, hq_city, country, sector, sub_sector, "
+        "revenue_ltm, ebitda_ltm, enterprise_value, ask_multiple, "
+        "employees, founded_year, ownership, description "
+        "FROM pehero.companies WHERE country = %s "
+        "AND revenue_ltm > 0 AND ebitda_ltm > 0 "
+        "ORDER BY random() LIMIT %s",
+        (country, limit),
+    )
+    return [
+        {
+            "name": r["name"],
+            "city": r["hq_city"] or "",
+            "country": r["country"] or country,
+            "sector": (r["sector"] or "").replace("_", " ").title(),
+            "sub_sector": (r["sub_sector"] or "").replace("_", " ").title(),
+            "revenue": round(float(r["revenue_ltm"] or 0)),
+            "ebitda": round(float(r["ebitda_ltm"] or 0)),
+            "ev": round(float(r["enterprise_value"] or 0)),
+            "multiple": round(float(r["ask_multiple"] or 0), 1),
+            "employees": r["employees"] or 0,
+            "founded": r["founded_year"] or 0,
+            "ownership": (r["ownership"] or "").replace("_", " "),
+            "description": (r["description"] or "")[:200],
+        }
+        for r in rows
+    ]
 
 
 def draw_event() -> dict:

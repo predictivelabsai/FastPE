@@ -16,7 +16,7 @@ from starlette.responses import StreamingResponse, JSONResponse
 from chat import sse
 from game.engine import (
     CHARACTERS, LEVELS, GameState, new_game, draw_event, format_status,
-    STAGES, calculate_score,
+    STAGES, calculate_score, load_deal_pipeline,
 )
 from game.prompts import (
     GAME_MASTER_SYSTEM, WELCOME, CHARACTER_SELECT_ROW,
@@ -218,6 +218,7 @@ def register_game_routes(rt):
 
                 level = sess.get("pe_hero_level", "associate")
                 state = new_game(char_key, level=level, player_name=sess.get("email", "Player"))
+                state.deal_pipeline = load_deal_pipeline(country="LT", limit=40)
                 _save_game_state(sess, state)
 
                 char = CHARACTERS[char_key]
@@ -238,9 +239,10 @@ def register_game_routes(rt):
                     async for evt in _stream_agent_turn(
                         state,
                         f"The game begins! Present Round 1, Stage 1: Deal Sourcing.\n"
-                        f"Set the scene — the player just joined a Baltic PE fund. "
-                        f"Show 3-4 potential deals in the pipeline with company names, "
-                        f"countries, sectors, revenues.\n"
+                        f"Set the scene — the player just joined a Lithuanian PE fund. "
+                        f"Call browse_pipeline to see REAL companies in the deal flow. "
+                        f"Present 3-4 of them as potential targets with their actual "
+                        f"financials (revenue, EBITDA, EV, multiple).\n"
                         f"Give your coaching intro — fire them up! "
                         f"Then end with 3 choices.",
                     ):

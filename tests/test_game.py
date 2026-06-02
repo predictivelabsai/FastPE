@@ -1108,17 +1108,56 @@ class TestGameTools:
         assert "James Whitfield" in result
         assert "Round 1/5" in result
 
-    def test_all_eight_tools_built(self):
+    def test_all_tools_built(self):
         state = new_game("dealmaker")
         from game.tools import build_game_tools
         tools = build_game_tools(state)
-        assert len(tools) == 8
+        assert len(tools) == 9
         names = {t.name for t in tools}
         assert names == {
             "advance_stage", "adjust_resources", "close_deal", "exit_deal",
             "screen_deal", "use_special_power", "update_portfolio_value",
-            "get_game_status",
+            "get_game_status", "browse_pipeline",
         }
+
+    def test_browse_pipeline_returns_matches(self):
+        state = new_game("analyst")
+        state.deal_pipeline = [
+            {"name": "Vinted, UAB", "city": "Vilnius", "country": "LT",
+             "sector": "Software", "sub_sector": "E-Commerce", "revenue": 999_000_000,
+             "ebitda": 127_000_000, "ev": 1_998_000_000, "multiple": 15.7,
+             "employees": 2000, "founded": 2008, "ownership": "vc backed",
+             "description": "Online marketplace"},
+            {"name": "Hollister Lietuva, UAB", "city": "Kaunas", "country": "LT",
+             "sector": "Industrials", "sub_sector": "Manufacturing", "revenue": 133_000_000,
+             "ebitda": 31_800_000, "ev": 160_000_000, "multiple": 5.0,
+             "employees": 500, "founded": 2005, "ownership": "corporate",
+             "description": "Medical devices"},
+        ]
+        from game.tools import build_game_tools
+        tools = build_game_tools(state)
+        browse = [t for t in tools if t.name == "browse_pipeline"][0]
+
+        result = browse.invoke({"sector": "", "min_revenue": 0, "max_ev": 0})
+        assert "Vinted" in result
+        assert "Hollister" in result
+
+        result = browse.invoke({"sector": "Software", "min_revenue": 0, "max_ev": 0})
+        assert "Vinted" in result
+        assert "Hollister" not in result
+
+        result = browse.invoke({"sector": "", "min_revenue": 0, "max_ev": 200_000_000})
+        assert "Hollister" in result
+        assert "Vinted" not in result
+
+    def test_browse_pipeline_empty(self):
+        state = new_game("analyst")
+        state.deal_pipeline = []
+        from game.tools import build_game_tools
+        tools = build_game_tools(state)
+        browse = [t for t in tools if t.name == "browse_pipeline"][0]
+        result = browse.invoke({"sector": "Pharma", "min_revenue": 0, "max_ev": 0})
+        assert "No companies" in result
 
 
 # ───────────────────────────────── Reset route test ──────────────────────────

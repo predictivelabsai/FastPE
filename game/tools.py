@@ -244,6 +244,35 @@ def build_game_tools(state: GameState):
         from game.engine import format_status
         return format_status(state)
 
+    @tool
+    def browse_pipeline(sector: str = "", min_revenue: int = 0, max_ev: int = 0) -> str:
+        """Browse the deal pipeline for companies matching criteria.
+        Returns up to 8 companies from the pipeline. Filter by sector
+        (e.g. 'Healthcare', 'Software'), minimum revenue, or max enterprise value.
+        These are REAL companies — use their exact names and financials."""
+        matches = state.deal_pipeline
+        if sector:
+            matches = [c for c in matches if sector.lower() in c["sector"].lower()]
+        if min_revenue:
+            matches = [c for c in matches if c["revenue"] >= min_revenue]
+        if max_ev and max_ev > 0:
+            matches = [c for c in matches if c["ev"] <= max_ev]
+        matches = matches[:8]
+        if not matches:
+            return "No companies match those criteria. Try broadening your search."
+        lines = []
+        for c in matches:
+            margin = round(c["ebitda"] / max(1, c["revenue"]) * 100, 1)
+            lines.append(
+                f"• **{c['name']}** ({c['city']}, {c['country']})\n"
+                f"  {c['sector']}{(' / ' + c['sub_sector']) if c['sub_sector'] else ''} | "
+                f"€{c['revenue']/1e6:.1f}M rev | €{c['ebitda']/1e6:.1f}M EBITDA ({margin}% margin) | "
+                f"EV €{c['ev']/1e6:.0f}M ({c['multiple']}x) | "
+                f"{c['employees']} employees | {c['ownership']}\n"
+                f"  {c['description']}"
+            )
+        return f"Pipeline ({len(matches)} matches):\n\n" + "\n\n".join(lines)
+
     return [
         advance_stage,
         adjust_resources,
@@ -253,4 +282,5 @@ def build_game_tools(state: GameState):
         use_special_power,
         update_portfolio_value,
         get_game_status,
+        browse_pipeline,
     ]
