@@ -1,0 +1,51 @@
+{
+  "total": 51,
+  "exact_pass": 41,
+  "category_pass": 10,
+  "fail": 0,
+  "exact_rate": 80.4,
+  "effective_rate": 100.0,
+  "avg_latency_ms": 100,
+  "by_route_type": {
+    "prefix": {
+      "total": 26,
+      "pass": 26,
+      "category": 0,
+      "fail": 0
+    },
+    "keyword": {
+      "total": 25,
+      "pass": 15,
+      "category": 10,
+      "fail": 0
+    }
+  },
+  "by_category": {
+    "sourcing": {
+      "total": 15,
+      "pass": 15,
+      "fail": 0
+    },
+    "underwriting": {
+      "total": 10,
+      "pass": 10,
+      "fail": 0
+    },
+    "diligence": {
+      "total": 10,
+      "pass": 10,
+      "fail": 0
+    },
+    "capital": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0
+    },
+    "asset_mgmt": {
+      "total": 8,
+      "pass": 8,
+      "fail": 0
+    }
+  },
+  "failures": []
+}

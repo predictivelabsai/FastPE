@@ -1,0 +1,26 @@
+question,expected_slug,agent_name,category,must_contain,must_not_contain,quality_check
+"scan: lower-middle-market healthcare clinics, €5-15M EBITDA, Baltics",market_scanner,Market Scanner,sourcing,healthcare|clinic|deal|company|target,I don't know|I cannot,Returns structured deal opportunities with company names
+"triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",deal_triage,Deal Triage Agent,sourcing,revenue|EBITDA|fit|proceed|pass|investment criteria,I don't know,Provides go/no-go recommendation with rationale
+"comps: healthcare clinics precedent M&A 2022-2024, <€100M EV",comp_finder,Transaction Comps Finder,sourcing,EV/EBITDA|multiple|transaction|comparable,I don't know,Returns comparable transactions with multiples
+"intent: founder-owned logistics companies, €50-150M revenue, Lithuania",seller_intent,Owner Intent Signal,sourcing,,I don't know|I cannot,"Agent Owner Intent Signal provides a relevant, structured response"
+outreach: draft an intro email to the founder of DR VET,outreach_email,Outreach Email Drafter,sourcing,,I don't know|I cannot,"Agent Outreach Email Drafter provides a relevant, structured response"
+sequence: plan a 5-touch outreach for Baltic transline founder,outreach_sequencer,Outreach Sequencer,sourcing,,I don't know|I cannot,"Agent Outreach Sequencer provides a relevant, structured response"
+loi: draft an LOI for Kardiolita at €85M EV,loi_writer,LOI Writer,sourcing,LOI|letter|intent|enterprise value|exclusivity,I don't know,Drafts a formal LOI with standard terms
+cap: parse the cap table for Kardiolita and show fully-diluted ownership,rent_roll_parser,Cap Table Parser,underwriting,ownership|shares|cap table|dilut,I don't know,Parses and summarizes cap table data
+ltm: normalize the LTM P&L for DR VET with standard add-backs,t12_normalizer,LTM Financials Normalizer,underwriting,EBITDA|add-back|adjusted|revenue,I don't know,Normalizes financials with standard add-backs
+"lbo: build a 5-year model for Kardiolita at 12% rev growth, 300bps margin exp",pro_forma_builder,LBO Model Builder,underwriting,IRR|MOIC|EBITDA|year|exit,I don't know,Builds a multi-year financial projection with returns
+debt: size a 5.5x unitranche on Kardiolita with a €5M revolver,debt_stack_modeler,Debt Stack Modeler,underwriting,senior|debt|leverage|DSCR|facility,I don't know,Sizes debt tranches with coverage ratios
+ret: compute returns on the Kardiolita model,return_metrics,Return Metrics,underwriting,IRR|MOIC|return|equity,I don't know,Calculates investment returns with sensitivity analysis
+vdr: audit the data room for Kardiolita,doc_room_auditor,VDR Auditor,diligence,document|data room|missing|complete,I don't know,Audits VDR completeness with checklist
+abstract: the top-10 customer contracts for Baltic Transline,lease_abstractor,Contract Abstractor,diligence,contract|clause|term|provision,I don't know,Abstracts key contract terms
+legal: summarize legal issues for Kardiolita,title_zoning,Legal & Regulatory Checker,diligence,,I don't know|I cannot,"Agent Legal & Regulatory Checker provides a relevant, structured response"
+ops: what operational gaps are flagged for DR VET?,physical_condition,Operational Diligence Reviewer,diligence,,I don't know|I cannot,"Agent Operational Diligence Reviewer provides a relevant, structured response"
+esg: any environmental liabilities at the Baltic Transline logistics deal?,environmental_risk,ESG & Compliance Risk Flagger,diligence,ESG|environmental|risk|compliance,I don't know,Flags ESG and compliance risks
+memo: draft the IC memo for Kardiolita,investor_memo,IC Memo Writer,capital,investment|thesis|risk|recommendation,I don't know,Produces a structured IC memo with sections
+teaser: build a co-invest teaser for Kardiolita,deal_teaser,Teaser Designer,capital,teaser|opportunity|highlights|overview,I don't know,Creates a 1-page deal teaser
+lpupd: draft Q1 letter for Fund IV LPs,lp_update,LP Update Generator,capital,portfolio|fund|quarter|performance,I don't know,Generates LP update letter with fund metrics
+crm: who are the top 10 LPs to reach out to for Fund V this week?,fundraising_crm,Fundraising CRM Copilot,capital,,I don't know|I cannot,"Agent Fundraising CRM Copilot provides a relevant, structured response"
+price: what pricing lift can we capture at Kardiolita at renewal?,rent_optimization,Pricing Optimization Agent,asset_mgmt,pricing|below market|increase|optimization,I don't know,Identifies pricing optimization opportunities
+ebitda: what's driving the EBITDA miss at DR VET this quarter?,opex_variance,EBITDA Variance Watcher,asset_mgmt,variance|budget|over|under|EBITDA,I don't know,Explains EBITDA variance drivers
+vc: rank initiatives across the portfolio by EBITDA impact,capex_prioritizer,Value Creation Prioritizer,asset_mgmt,value creation|initiative|priority|ROI,I don't know,Ranks value creation initiatives
+churn: which DR VET customers are at highest renewal risk?,tenant_churn,Customer Churn Predictor,asset_mgmt,churn|risk|retention|customer,I don't know,Predicts customer churn with risk factors

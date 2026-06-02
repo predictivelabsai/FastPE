@@ -366,8 +366,8 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
             Hr(cls="left-hr"),
             Details(
                 Summary(A(
-                    Span("?", cls="bottom-nav-icon"),
-                    Span(t("help_title", lang), cls="bottom-nav-label"),
+                    Span("🎓", cls="bottom-nav-icon"),
+                    Span("Training", cls="bottom-nav-label"),
                     href="/app/help",
                     cls=f"bottom-nav-link{' active' if current_path.startswith('/app/help') or current_path.startswith('/app/training') else ''}",
                 )),
@@ -376,7 +376,7 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
                       Span("User Guide", cls="bottom-nav-label"),
                       href="/app/help", cls="bottom-nav-link sub"),
                     A(Span("🏈", cls="bottom-nav-icon"),
-                      Span("Training", cls="bottom-nav-label"),
+                      Span("PE Hero Game", cls="bottom-nav-label"),
                       href="/app/training", cls="bottom-nav-link sub"),
                     cls="bottom-nav-sub",
                 ),

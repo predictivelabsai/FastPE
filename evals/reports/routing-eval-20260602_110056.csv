@@ -1,0 +1,52 @@
+question,expected_slug,actual_slug,route_type,category,agent_name,pass,elapsed_ms,reason
+"scan: lower-middle-market healthcare clinics, €5-15M EBITDA, Baltics",market_scanner,market_scanner,prefix,sourcing,Market Scanner,PASS,0,exact match
+"triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",deal_triage,deal_triage,prefix,sourcing,Deal Triage Agent,PASS,0,exact match
+"comps: healthcare clinics precedent M&A 2022-2024, <€100M EV",comp_finder,comp_finder,prefix,sourcing,Transaction Comps Finder,PASS,0,exact match
+"intent: founder-owned logistics companies, €50-150M revenue, Lithuania",seller_intent,seller_intent,prefix,sourcing,Owner Intent Signal,PASS,0,exact match
+outreach: draft an intro email to the founder of DR VET,outreach_email,outreach_email,prefix,sourcing,Outreach Email Drafter,PASS,0,exact match
+sequence: plan a 5-touch outreach for Baltic transline founder,outreach_sequencer,outreach_sequencer,prefix,sourcing,Outreach Sequencer,PASS,0,exact match
+sequence: draft LP fundraising emails for pension fund prospects,outreach_sequencer,outreach_sequencer,prefix,sourcing,Outreach Sequencer,PASS,0,exact match
+loi: draft an LOI for Kardiolita at €85M EV,loi_writer,loi_writer,prefix,sourcing,LOI Writer,PASS,0,exact match
+cap: parse the cap table for Kardiolita and show fully-diluted ownership,rent_roll_parser,rent_roll_parser,prefix,underwriting,Cap Table Parser,PASS,0,exact match
+ltm: normalize the LTM P&L for DR VET with standard add-backs,t12_normalizer,t12_normalizer,prefix,underwriting,LTM Financials Normalizer,PASS,0,exact match
+"lbo: build a 5-year model for Kardiolita at 12% rev growth, 300bps margin exp",pro_forma_builder,pro_forma_builder,prefix,underwriting,LBO Model Builder,PASS,0,exact match
+debt: size a 5.5x unitranche on Kardiolita with a €5M revolver,debt_stack_modeler,debt_stack_modeler,prefix,underwriting,Debt Stack Modeler,PASS,0,exact match
+ret: compute returns on the Kardiolita model,return_metrics,return_metrics,prefix,underwriting,Return Metrics,PASS,0,exact match
+vdr: audit the data room for Kardiolita,doc_room_auditor,doc_room_auditor,prefix,diligence,VDR Auditor,PASS,0,exact match
+abstract: the top-10 customer contracts for Baltic Transline,lease_abstractor,lease_abstractor,prefix,diligence,Contract Abstractor,PASS,0,exact match
+legal: summarize legal issues for Kardiolita,title_zoning,title_zoning,prefix,diligence,Legal & Regulatory Checker,PASS,0,exact match
+ops: what operational gaps are flagged for DR VET?,physical_condition,physical_condition,prefix,diligence,Operational Diligence Reviewer,PASS,0,exact match
+esg: any environmental liabilities at the Baltic Transline logistics deal?,environmental_risk,environmental_risk,prefix,diligence,ESG & Compliance Risk Flagger,PASS,0,exact match
+memo: draft the IC memo for Kardiolita,investor_memo,investor_memo,prefix,capital,IC Memo Writer,PASS,0,exact match
+teaser: build a co-invest teaser for Kardiolita,deal_teaser,deal_teaser,prefix,capital,Teaser Designer,PASS,0,exact match
+lpupd: draft Q1 letter for Fund IV LPs,lp_update,lp_update,prefix,capital,LP Update Generator,PASS,0,exact match
+crm: who are the top 10 LPs to reach out to for Fund V this week?,fundraising_crm,fundraising_crm,prefix,capital,Fundraising CRM Copilot,PASS,0,exact match
+price: what pricing lift can we capture at Kardiolita at renewal?,rent_optimization,rent_optimization,prefix,asset_mgmt,Pricing Optimization Agent,PASS,0,exact match
+ebitda: what's driving the EBITDA miss at DR VET this quarter?,opex_variance,opex_variance,prefix,asset_mgmt,EBITDA Variance Watcher,PASS,0,exact match
+vc: rank initiatives across the portfolio by EBITDA impact,capex_prioritizer,capex_prioritizer,prefix,asset_mgmt,Value Creation Prioritizer,PASS,0,exact match
+churn: which DR VET customers are at highest renewal risk?,tenant_churn,tenant_churn,prefix,asset_mgmt,Customer Churn Predictor,PASS,0,exact match
+What logistics deals surfaced this week?,market_scanner,market_scanner,keyword,sourcing,Market Scanner,PASS,0,exact match
+Should we pursue Baltic Transline?,deal_triage,deal_triage,keyword,sourcing,Deal Triage Agent,PASS,3541,exact match
+Find trading comps for a veterinary clinic chain,comp_finder,comp_finder,keyword,sourcing,Transaction Comps Finder,PASS,0,exact match
+Which companies in our pipeline are most likely to sell?,seller_intent,market_scanner,keyword,sourcing,Owner Intent Signal,PASS_CATEGORY,0,"category match (expected seller_intent, got market_scanner)"
+Draft an intro email to the founder of DR VET,outreach_email,outreach_email,keyword,sourcing,Outreach Email Drafter,PASS,0,exact match
+Plan a 5-touch outreach for Baltic transline founder,outreach_sequencer,outreach_email,keyword,sourcing,Outreach Sequencer,PASS_CATEGORY,0,"category match (expected outreach_sequencer, got outreach_email)"
+Draft an LOI for Kardiolita at €85M EV,loi_writer,loi_writer,keyword,sourcing,LOI Writer,PASS,0,exact match
+Parse the cap table for Kardiolita,rent_roll_parser,rent_roll_parser,keyword,underwriting,Cap Table Parser,PASS,0,exact match
+Normalize the LTM P&L for DR VET,t12_normalizer,t12_normalizer,keyword,underwriting,LTM Financials Normalizer,PASS,0,exact match
+Build a 5-year LBO model for Northway,pro_forma_builder,pro_forma_builder,keyword,underwriting,LBO Model Builder,PASS,0,exact match
+Size a unitranche facility for €15M EBITDA,debt_stack_modeler,rent_roll_parser,keyword,underwriting,Debt Stack Modeler,PASS_CATEGORY,0,"category match (expected debt_stack_modeler, got rent_roll_parser)"
+What are the IRR and MOIC at 8x exit?,return_metrics,rent_roll_parser,keyword,underwriting,Return Metrics,PASS_CATEGORY,0,"category match (expected return_metrics, got rent_roll_parser)"
+Check the data room for missing documents,doc_room_auditor,doc_room_auditor,keyword,diligence,VDR Auditor,PASS,0,exact match
+Abstract the change-of-control clauses across MSAs,lease_abstractor,lease_abstractor,keyword,diligence,Contract Abstractor,PASS,0,exact match
+Any regulatory risks for a Lithuanian healthcare target?,title_zoning,doc_room_auditor,keyword,diligence,Legal & Regulatory Checker,PASS_CATEGORY,0,"category match (expected title_zoning, got doc_room_auditor)"
+Review the operational diligence findings,physical_condition,doc_room_auditor,keyword,diligence,Operational Diligence Reviewer,PASS_CATEGORY,0,"category match (expected physical_condition, got doc_room_auditor)"
+Flag ESG and environmental compliance risks,environmental_risk,doc_room_auditor,keyword,diligence,ESG & Compliance Risk Flagger,PASS_CATEGORY,0,"category match (expected environmental_risk, got doc_room_auditor)"
+Write an IC memo for the Kardiolita investment,investor_memo,investor_memo,keyword,capital,IC Memo Writer,PASS,0,exact match
+Create a 1-page deal teaser for Baltic Transline,deal_teaser,investor_memo,keyword,capital,Teaser Designer,PASS_CATEGORY,0,"category match (expected deal_teaser, got investor_memo)"
+Draft a quarterly LP update letter,lp_update,investor_memo,keyword,capital,LP Update Generator,PASS_CATEGORY,0,"category match (expected lp_update, got investor_memo)"
+Show me the fundraising CRM pipeline status,fundraising_crm,investor_memo,keyword,capital,Fundraising CRM Copilot,PASS_CATEGORY,0,"category match (expected fundraising_crm, got investor_memo)"
+Where is pricing below market across the portfolio?,rent_optimization,rent_optimization,keyword,asset_mgmt,Pricing Optimization Agent,PASS,0,exact match
+What's driving the EBITDA variance this quarter?,opex_variance,opex_variance,keyword,asset_mgmt,EBITDA Variance Watcher,PASS,0,exact match
+Rank value creation initiatives for DR VET,capex_prioritizer,capex_prioritizer,keyword,asset_mgmt,Value Creation Prioritizer,PASS,0,exact match
+Which customers are at highest churn risk?,tenant_churn,tenant_churn,keyword,asset_mgmt,Customer Churn Predictor,PASS,1537,exact match

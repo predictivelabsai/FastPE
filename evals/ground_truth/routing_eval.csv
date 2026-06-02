@@ -1,0 +1,130 @@
+question,expected_slug,route_type,category,agent_name
+"scan: lower-middle-market healthcare clinics, €5-15M EBITDA, Baltics",market_scanner,prefix,sourcing,Market Scanner
+What logistics deals surfaced this week in Lithuania?,market_scanner,free_form,sourcing,Market Scanner
+Any founder-owned veterinary clinics under €50M EV?,market_scanner,free_form,sourcing,Market Scanner
+Find Baltic real estate development companies €20-100M EV,market_scanner,free_form,sourcing,Market Scanner
+Show me insurance companies in Lithuania past 4-year hold,market_scanner,free_form,sourcing,Market Scanner
+"triage: DR VET veterinary clinic, €3.8M revenue, 76 employees, Vilnius",deal_triage,prefix,sourcing,Deal Triage Agent
+"Should we pursue Baltic Transline? €397M revenue, logistics.",deal_triage,free_form,sourcing,Deal Triage Agent
+Triage Kardiolita — is this a fit for our healthcare fund?,deal_triage,free_form,sourcing,Deal Triage Agent
+"Go/no-go on Eika Construction, €71M revenue, real estate development",deal_triage,free_form,sourcing,Deal Triage Agent
+"comps: healthcare clinics precedent M&A 2022-2024, <€100M EV",comp_finder,prefix,sourcing,Transaction Comps Finder
+Find trading comps for a mid-market veterinary clinic chain,comp_finder,free_form,sourcing,Transaction Comps Finder
+What's the median EV/EBITDA for Baltic logistics deals?,comp_finder,free_form,sourcing,Transaction Comps Finder
+Benchmark EV/Revenue for insurance brokers in the Baltics,comp_finder,free_form,sourcing,Transaction Comps Finder
+"intent: founder-owned logistics companies, €50-150M revenue, Lithuania",seller_intent,prefix,sourcing,Owner Intent Signal
+Which healthcare companies in our pipeline are most likely to sell?,seller_intent,free_form,sourcing,Owner Intent Signal
+Rank founder-owned veterinary clinics by sale likelihood,seller_intent,free_form,sourcing,Owner Intent Signal
+Show family-owned insurance brokers with highest succession risk,seller_intent,free_form,sourcing,Owner Intent Signal
+outreach: draft an intro email to the founder of DR VET,outreach_email,prefix,sourcing,Outreach Email Drafter
+Write a broker outreach email for healthcare clinic targets in Lithuania,outreach_email,free_form,sourcing,Outreach Email Drafter
+Draft a follow-up email to the Kardiolita management after our first call,outreach_email,free_form,sourcing,Outreach Email Drafter
+Write an outreach email to a placement agent for Fund V co-invest opportunities,outreach_email,free_form,sourcing,Outreach Email Drafter
+sequence: plan a 5-touch outreach for Baltic transline founder,outreach_sequencer,prefix,sourcing,Outreach Sequencer
+sequence: draft LP fundraising emails for pension fund prospects,outreach_sequencer,prefix,sourcing,Outreach Sequencer
+Create a follow-up sequence for DR VET after initial screening,outreach_sequencer,free_form,sourcing,Outreach Sequencer
+Plan outreach to healthcare company founders in Lithuania,outreach_sequencer,free_form,sourcing,Outreach Sequencer
+loi: draft an LOI for Kardiolita at €85M EV,loi_writer,prefix,sourcing,LOI Writer
+"Write a letter of intent for Northway — 10x LTM EBITDA, 60/40 equity-debt split",loi_writer,free_form,sourcing,LOI Writer
+Draft an IOI for the Baltic Transline logistics platform with an exclusivity ask,loi_writer,free_form,sourcing,LOI Writer
+Prepare an LOI with a 90-day exclusivity period and management rollover terms,loi_writer,free_form,sourcing,LOI Writer
+cap: parse the cap table for Kardiolita and show fully-diluted ownership,rent_roll_parser,prefix,underwriting,Cap Table Parser
+Who has liquidation preference at DR VET?,rent_roll_parser,free_form,underwriting,Cap Table Parser
+What's the options overhang at Northway?,rent_roll_parser,free_form,underwriting,Cap Table Parser
+Show the top-5 holders and their capital invested for Eika Construction,rent_roll_parser,free_form,underwriting,Cap Table Parser
+ltm: normalize the LTM P&L for DR VET with standard add-backs,t12_normalizer,prefix,underwriting,LTM Financials Normalizer
+Compare Kardiolita EBITDA margin to healthcare peer median,t12_normalizer,free_form,underwriting,LTM Financials Normalizer
+Show the add-back bridge from reported to adjusted EBITDA for Northway,t12_normalizer,free_form,underwriting,LTM Financials Normalizer
+What's the revenue growth CAGR for DR VET over the last 24 months?,t12_normalizer,free_form,underwriting,LTM Financials Normalizer
+"lbo: build a 5-year model for Kardiolita at 12% rev growth, 300bps margin exp",pro_forma_builder,prefix,underwriting,LBO Model Builder
+What's the base-case MOIC on Northway at 11x exit?,pro_forma_builder,free_form,underwriting,LBO Model Builder
+"Run a downside scenario: 5% growth, 100bps margin compression",pro_forma_builder,free_form,underwriting,LBO Model Builder
+Show the sensitivity of IRR to entry vs exit multiple on DR VET,pro_forma_builder,free_form,underwriting,LBO Model Builder
+debt: size a 5.5x unitranche on Kardiolita with a €5M revolver,debt_stack_modeler,prefix,underwriting,Debt Stack Modeler
+What's the max leverage at 1.35x FCCR on Northway?,debt_stack_modeler,free_form,underwriting,Debt Stack Modeler
+Add a 1.0x mezz tranche and re-solve for DSCR,debt_stack_modeler,free_form,underwriting,Debt Stack Modeler
+How sensitive is the stack to a 200bps rate increase?,debt_stack_modeler,free_form,underwriting,Debt Stack Modeler
+ret: compute returns on the Kardiolita model,return_metrics,prefix,underwriting,Return Metrics
+Show the value-creation bridge for DR VET at 3x MOIC,return_metrics,free_form,underwriting,Return Metrics
+Decompose MOIC: EBITDA growth vs multiple arb vs debt paydown,return_metrics,free_form,underwriting,Return Metrics
+What's the unlevered IRR on Baltic Transline at the current base case?,return_metrics,free_form,underwriting,Return Metrics
+vdr: audit the data room for Kardiolita,doc_room_auditor,prefix,diligence,VDR Auditor
+Which DD items are missing in the DR VET VDR?,doc_room_auditor,free_form,diligence,VDR Auditor
+What's still outstanding on tax and legal for Northway?,doc_room_auditor,free_form,diligence,VDR Auditor
+Compare VDR completeness across our top 3 active deals,doc_room_auditor,free_form,diligence,VDR Auditor
+abstract: the top-10 customer contracts for Baltic Transline,lease_abstractor,prefix,diligence,Contract Abstractor
+Any change-of-control triggers across Kardiolita's supplier contracts?,lease_abstractor,free_form,diligence,Contract Abstractor
+List auto-renew + exclusivity clauses for Northway's top customers,lease_abstractor,free_form,diligence,Contract Abstractor
+Which DR VET contracts expire in the next 12 months?,lease_abstractor,free_form,diligence,Contract Abstractor
+legal: summarize legal issues for Kardiolita,title_zoning,prefix,diligence,Legal & Regulatory Checker
+Are there any healthcare licensure gaps flagged on the Northway deal?,title_zoning,free_form,diligence,Legal & Regulatory Checker
+Which change-of-control consents are required at DR VET close?,title_zoning,free_form,diligence,Legal & Regulatory Checker
+Any open litigation above €1M exposure in the Eika Construction DD?,title_zoning,free_form,diligence,Legal & Regulatory Checker
+ops: what operational gaps are flagged for DR VET?,physical_condition,prefix,diligence,Operational Diligence Reviewer
+Build a 100-day plan for Kardiolita post-close,physical_condition,free_form,diligence,Operational Diligence Reviewer
+Where is working capital tied up at Baltic Transline?,physical_condition,free_form,diligence,Operational Diligence Reviewer
+What systems / ERP gaps need remediation post-close?,physical_condition,free_form,diligence,Operational Diligence Reviewer
+esg: any environmental liabilities at the Baltic Transline logistics deal?,environmental_risk,prefix,diligence,ESG & Compliance Risk Flagger
+Summarize ESG risk across my current pipeline,environmental_risk,free_form,diligence,ESG & Compliance Risk Flagger
+What governance red flags were flagged for Kardiolita?,environmental_risk,free_form,diligence,ESG & Compliance Risk Flagger
+Are there any diversity / turnover risks highlighted at Eika Construction?,environmental_risk,free_form,diligence,ESG & Compliance Risk Flagger
+memo: draft the IC memo for Kardiolita,investor_memo,prefix,capital,IC Memo Writer
+Write a 5-page IC memo for DR VET,investor_memo,free_form,capital,IC Memo Writer
+Build the thesis + risks sections for Northway only,investor_memo,free_form,capital,IC Memo Writer
+Summarize the returns analysis for the IC pre-read,investor_memo,free_form,capital,IC Memo Writer
+teaser: build a co-invest teaser for Kardiolita,deal_teaser,prefix,capital,Teaser Designer
+Draft a blind LP teaser for the DR VET deal,deal_teaser,free_form,capital,Teaser Designer
+Create a 1-page executive summary for the Fund IV LPs,deal_teaser,free_form,capital,Teaser Designer
+Build a tombstone slide for the deal announcement,deal_teaser,free_form,capital,Teaser Designer
+lpupd: draft Q1 letter for Fund IV LPs,lp_update,prefix,capital,LP Update Generator
+Generate a portfolio update for the Fund III LPs,lp_update,free_form,capital,LP Update Generator
+Write the market outlook section for the quarterly letter,lp_update,free_form,capital,LP Update Generator
+Summarize capital calls and distributions for this quarter,lp_update,free_form,capital,LP Update Generator
+crm: who are the top 10 LPs to reach out to for Fund V this week?,fundraising_crm,prefix,capital,Fundraising CRM Copilot
+Draft a re-engagement email to LPs we haven't touched in 60 days,fundraising_crm,free_form,capital,Fundraising CRM Copilot
+List endowment LPs that are a fit for our buyout mandate,fundraising_crm,free_form,capital,Fundraising CRM Copilot
+Draft a Fund V first-close announcement to qualified LPs,fundraising_crm,free_form,capital,Fundraising CRM Copilot
+price: what pricing lift can we capture at Kardiolita at renewal?,rent_optimization,prefix,asset_mgmt,Pricing Optimization Agent
+Where is pricing most below market across portcos?,rent_optimization,free_form,asset_mgmt,Pricing Optimization Agent
+Rank DR VET customers by pricing headroom at renewal,rent_optimization,free_form,asset_mgmt,Pricing Optimization Agent
+Model a 7% blended increase — estimate churn risk,rent_optimization,free_form,asset_mgmt,Pricing Optimization Agent
+ebitda: what's driving the EBITDA miss at DR VET this quarter?,opex_variance,prefix,asset_mgmt,EBITDA Variance Watcher
+Show me the top 5 portco-wide EBITDA variances,opex_variance,free_form,asset_mgmt,EBITDA Variance Watcher
+Which portcos are trending to miss budget this year?,opex_variance,free_form,asset_mgmt,EBITDA Variance Watcher
+Break down the opex variance at Kardiolita by category,opex_variance,free_form,asset_mgmt,EBITDA Variance Watcher
+vc: rank initiatives across the portfolio by EBITDA impact,capex_prioritizer,prefix,asset_mgmt,Value Creation Prioritizer
+Should we prioritize pricing rollout or ERP replacement at Kardiolita?,capex_prioritizer,free_form,asset_mgmt,Value Creation Prioritizer
+What's the highest-ROI initiative in DR VET's VCP?,capex_prioritizer,free_form,asset_mgmt,Value Creation Prioritizer
+Show all 3-year VCP initiatives across the platform,capex_prioritizer,free_form,asset_mgmt,Value Creation Prioritizer
+churn: which DR VET customers are at highest renewal risk?,tenant_churn,prefix,asset_mgmt,Customer Churn Predictor
+Score renewal likelihood for Kardiolita's top 20 accounts,tenant_churn,free_form,asset_mgmt,Customer Churn Predictor
+What's the at-risk revenue across the portfolio for Q4 renewals?,tenant_churn,free_form,asset_mgmt,Customer Churn Predictor
+Draft a save play for Baltic Transline's top-3 at-risk accounts,tenant_churn,free_form,asset_mgmt,Customer Churn Predictor
+What logistics deals surfaced this week?,market_scanner,keyword,sourcing,Market Scanner
+Should we pursue Baltic Transline?,deal_triage,keyword,sourcing,Deal Triage Agent
+Find trading comps for a veterinary clinic chain,comp_finder,keyword,sourcing,Transaction Comps Finder
+Which companies in our pipeline are most likely to sell?,seller_intent,keyword,sourcing,Owner Intent Signal
+Draft an intro email to the founder of DR VET,outreach_email,keyword,sourcing,Outreach Email Drafter
+Plan a 5-touch outreach for Baltic transline founder,outreach_sequencer,keyword,sourcing,Outreach Sequencer
+Draft an LOI for Kardiolita at €85M EV,loi_writer,keyword,sourcing,LOI Writer
+Parse the cap table for Kardiolita,rent_roll_parser,keyword,underwriting,Cap Table Parser
+Normalize the LTM P&L for DR VET,t12_normalizer,keyword,underwriting,LTM Financials Normalizer
+Build a 5-year LBO model for Northway,pro_forma_builder,keyword,underwriting,LBO Model Builder
+Size a unitranche facility for €15M EBITDA,debt_stack_modeler,keyword,underwriting,Debt Stack Modeler
+What are the IRR and MOIC at 8x exit?,return_metrics,keyword,underwriting,Return Metrics
+Check the data room for missing documents,doc_room_auditor,keyword,diligence,VDR Auditor
+Abstract the change-of-control clauses across MSAs,lease_abstractor,keyword,diligence,Contract Abstractor
+Any regulatory risks for a Lithuanian healthcare target?,title_zoning,keyword,diligence,Legal & Regulatory Checker
+Review the operational diligence findings,physical_condition,keyword,diligence,Operational Diligence Reviewer
+Flag ESG and environmental compliance risks,environmental_risk,keyword,diligence,ESG & Compliance Risk Flagger
+Write an IC memo for the Kardiolita investment,investor_memo,keyword,capital,IC Memo Writer
+Create a 1-page deal teaser for Baltic Transline,deal_teaser,keyword,capital,Teaser Designer
+Draft a quarterly LP update letter,lp_update,keyword,capital,LP Update Generator
+Show me the fundraising CRM pipeline status,fundraising_crm,keyword,capital,Fundraising CRM Copilot
+Where is pricing below market across the portfolio?,rent_optimization,keyword,asset_mgmt,Pricing Optimization Agent
+What's driving the EBITDA variance this quarter?,opex_variance,keyword,asset_mgmt,EBITDA Variance Watcher
+Rank value creation initiatives for DR VET,capex_prioritizer,keyword,asset_mgmt,Value Creation Prioritizer
+Which customers are at highest churn risk?,tenant_churn,keyword,asset_mgmt,Customer Churn Predictor
+Tell me about DR VET,deal_triage,free_form,sourcing,Deal Triage Agent
+What should I know before our next board meeting?,deal_triage,free_form,sourcing,Deal Triage Agent
+Help me with this deal,deal_triage,free_form,sourcing,Deal Triage Agent

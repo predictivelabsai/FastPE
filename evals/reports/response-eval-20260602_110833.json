@@ -1,0 +1,42 @@
+{
+  "total": 25,
+  "pass": 24,
+  "fail": 1,
+  "pass_rate": 96.0,
+  "avg_latency_ms": 9546,
+  "avg_response_length": 1117,
+  "by_category": {
+    "sourcing": {
+      "total": 7,
+      "pass": 7,
+      "fail": 0
+    },
+    "underwriting": {
+      "total": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    "diligence": {
+      "total": 5,
+      "pass": 5,
+      "fail": 0
+    },
+    "capital": {
+      "total": 4,
+      "pass": 4,
+      "fail": 0
+    },
+    "asset_mgmt": {
+      "total": 4,
+      "pass": 3,
+      "fail": 1
+    }
+  },
+  "failures": [
+    {
+      "slug": "rent_optimization",
+      "question": "price: what pricing lift can we capture at Kardiolita at renewal?",
+      "reason": "negative/refusal response"
+    }
+  ]
+}
