@@ -1,0 +1,388 @@
+{
+  "total_scenarios": 3,
+  "total_turns": 21,
+  "pass": 21,
+  "fail": 0,
+  "pass_rate": 100.0,
+  "avg_latency_ms": 6479,
+  "scenarios": [
+    {
+      "scenario_id": 1,
+      "character": "Marcus Drake",
+      "character_key": "dealmaker",
+      "total_turns": 7,
+      "passed": 7,
+      "failed": 0,
+      "avg_latency_ms": 7375,
+      "avg_response_length": 673,
+      "turns": [
+        {
+          "turn": 0,
+          "turn_type": "intro",
+          "action": "(character select)",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true,
+            "has_baltic_context": true,
+            "has_company_names": true
+          },
+          "elapsed_ms": 12089,
+          "response_length": 844,
+          "response_preview": "Alright Marcus, The Dealmaker \u2014 you just stepped into the Baltic PE arena with that killer network of yours. The **Baltic Tech Boom** is lighting up SaaS valuations like a rocket. Time to source some "
+        },
+        {
+          "turn": 1,
+          "turn_type": "action",
+          "action": "I want to pursue the largest deal in the pipeline",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 7272,
+          "response_length": 751,
+          "response_preview": "BOOM, Marcus! That's how a Dealmaker thinks \u2014 swinging for the fences instead of nibbling at scraps. But listen up: the biggest deal in the pipeline isn't always the smartest. You just locked onto **N"
+        },
+        {
+          "turn": 2,
+          "turn_type": "action",
+          "action": "Build a preliminary LBO model on this target",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 7912,
+          "response_length": 657,
+          "response_preview": "BOOM, Marcus! Jumping straight into LBO modeling in Deal Sourcing? That's aggressive \u2014 I love the hunger. But rookie move: no target locked yet, so that model\u2019s just theory until you source the actual"
+        },
+        {
+          "turn": 3,
+          "turn_type": "action",
+          "action": "Run commercial due diligence on the management team",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 6340,
+          "response_length": 593,
+          "response_preview": "Marcus, are you SERIOUS? Running commercial due diligence on a management team for an add-on when your portfolio is still at zero? That's a rookie mistake \u2014 you're scouting the wrong field! Wake up an"
+        },
+        {
+          "turn": 4,
+          "turn_type": "special",
+          "action": "Use my special ability Open Door to reach the founder directly",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 5685,
+          "response_length": 751,
+          "response_preview": "**BOOM!** That's how you use your edge, Marcus! Open Door straight to the founder? Rookie move would be waiting in line like everyone else. You just skipped the gatekeepers and landed a direct line in"
+        },
+        {
+          "turn": 5,
+          "turn_type": "action",
+          "action": "Negotiate a 6x EBITDA entry multiple with earnout",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 7280,
+          "response_length": 572,
+          "response_preview": "Marcus, you're swinging for the fences in the wrong inning! Negotiating multiples before you've even sourced a target? That's a rookie mistake \u2014 the ECB rate hike already crushed leverage, and you're "
+        },
+        {
+          "turn": 6,
+          "turn_type": "action",
+          "action": "Implement pricing optimization across the portfolio company",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 5050,
+          "response_length": 540,
+          "response_preview": "Are you SERIOUS, Marcus? You\u2019ve got ZERO companies in the portfolio and you\u2019re trying to optimize pricing like some value creation wizard? That\u2019s a rookie mistake \u2014 you\u2019re swinging at air in Deal Sour"
+        }
+      ]
+    },
+    {
+      "scenario_id": 2,
+      "character": "Elena Voss",
+      "character_key": "analyst",
+      "total_turns": 7,
+      "passed": 7,
+      "failed": 0,
+      "avg_latency_ms": 5527,
+      "avg_response_length": 677,
+      "turns": [
+        {
+          "turn": 0,
+          "turn_type": "intro",
+          "action": "(character select)",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true,
+            "has_baltic_context": true,
+            "has_company_names": true
+          },
+          "elapsed_ms": 6312,
+          "response_length": 891,
+          "response_preview": "Elena Voss! You just laced up for the Baltic PE big leagues, fresh off the analyst bench and staring down a \u20ac30k war chest. The market\u2019s wide open but those new AML regs are tightening the screws on c"
+        },
+        {
+          "turn": 1,
+          "turn_type": "action",
+          "action": "2",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 5312,
+          "response_length": 523,
+          "response_preview": "Elena, that's the move of a true numbers hawk! Deep-diving the pipeline builds that edge \u2014 you're spotting risks before they bite. Knowledge up to 5. The Talent War is heating up though; don't let poa"
+        },
+        {
+          "turn": 2,
+          "turn_type": "action",
+          "action": "Use Deep Model to build a forensic LBO on the top target",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 6481,
+          "response_length": 702,
+          "response_preview": "**BOOM, Elena!** That's how you start Round 1 \u2014 dropping the Deep Model like a hammer on day one. Most associates wait and wing it. You just forced the numbers to talk. The forensic LBO on **BalticFor"
+        },
+        {
+          "turn": 3,
+          "turn_type": "action",
+          "action": "Flag the revenue quality issue to the IC",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 5525,
+          "response_length": 739,
+          "response_preview": "BOOM! That's the Analyst instinct we need, Elena. Flagging revenue quality to the IC before it blows up in diligence? Smart move \u2014 you're not chasing shiny numbers, you're protecting the fund. Most ro"
+        },
+        {
+          "turn": 4,
+          "turn_type": "action",
+          "action": "Run sensitivity analysis on downside scenarios",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 6763,
+          "response_length": 728,
+          "response_preview": "Elena, running sensitivity analysis on the downside scenarios before even sourcing a target? Smart move \u2014 most rookies charge in blind, but you're already stress-testing like a PE vet. That's how you "
+        },
+        {
+          "turn": 5,
+          "turn_type": "action",
+          "action": "Present the investment memo to the committee",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 3620,
+          "response_length": 576,
+          "response_preview": "Are you SERIOUS, Elena? You\u2019re trying to present an investment memo with zero deals sourced and an empty portfolio? That\u2019s a rookie mistake \u2014 you\u2019re swinging at air before the pitch even arrives. Wake"
+        },
+        {
+          "turn": 6,
+          "turn_type": "action",
+          "action": "Track portfolio company KPIs for quarterly review",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 4675,
+          "response_length": 582,
+          "response_preview": "Are you SERIOUS, Elena? Zero companies in the portfolio and you're tracking KPIs like it's value creation time? That's a rookie mistake \u2014 you're leaving deal flow on the table while the clock ticks on"
+        }
+      ]
+    },
+    {
+      "scenario_id": 3,
+      "character": "Raj Mehta",
+      "character_key": "investigator",
+      "total_turns": 7,
+      "passed": 7,
+      "failed": 0,
+      "avg_latency_ms": 6534,
+      "avg_response_length": 690,
+      "turns": [
+        {
+          "turn": 0,
+          "turn_type": "intro",
+          "action": "(character select)",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true,
+            "has_baltic_context": true,
+            "has_company_names": true
+          },
+          "elapsed_ms": 10771,
+          "response_length": 1006,
+          "response_preview": "Alright Raj Mehta, listen up! You just stepped into the Baltic PE arena as our new Associate, and the **Baltic Tech Boom** is exploding around us \u2014 SaaS valuations up 25% and counting. This is your sh"
+        },
+        {
+          "turn": 1,
+          "turn_type": "action",
+          "action": "Screen the pipeline for any red flags",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 6378,
+          "response_length": 617,
+          "response_preview": "Raj, you're playing your **Red Flag** ability like a pro \u2014 screening the pipeline before we even ink a term sheet? Smart move, Investigator. You just flagged a hidden \u20ac800k off-balance-sheet liability"
+        },
+        {
+          "turn": 2,
+          "turn_type": "special",
+          "action": "Use my Red Flag ability to spot hidden risks",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 4530,
+          "response_length": 530,
+          "response_preview": "Raj, that's how you use your edge! Dropping that Red Flag right in sourcing is PE gold \u2014 most associates chase shiny deals and get burned later. You just sniffed out a hidden pension liability in **Ba"
+        },
+        {
+          "turn": 3,
+          "turn_type": "action",
+          "action": "Deep dive into the target's customer concentration",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 8635,
+          "response_length": 702,
+          "response_preview": "Raj, that's a PRO move right out the gate! Customer concentration can sink a Baltic deal faster than a bad winter in Riga. You just used that Investigator edge to sniff out risk before it bites us. BO"
+        },
+        {
+          "turn": 4,
+          "turn_type": "action",
+          "action": "Review change of control clauses in key contracts",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 5375,
+          "response_length": 519,
+          "response_preview": "Raj, you're already knee-deep in contract clauses during Deal Sourcing? Smart move, Investigator \u2014 that's how you Red Flag the landmines before they blow up the fund. Most associates skip this and pay"
+        },
+        {
+          "turn": 5,
+          "turn_type": "action",
+          "action": "Recommend walking away from this deal \u2014 too risky",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 4945,
+          "response_length": 719,
+          "response_preview": "**BOOM, Raj!** That's using your Red Flag like a true Investigator \u2014 you sniffed out the risk before it blew up the fund. Rookie move would\u2019ve been forcing the deal; you just saved us from a potential"
+        },
+        {
+          "turn": 6,
+          "turn_type": "action",
+          "action": "Start sourcing a new, cleaner target",
+          "pass": "PASS",
+          "checks": {
+            "has_content": true,
+            "has_numbered_choices": true,
+            "has_coaching_tone": true,
+            "has_pe_content": true,
+            "no_refusal": true
+          },
+          "elapsed_ms": 5102,
+          "response_length": 739,
+          "response_preview": "BOOM! That's the Investigator mindset I like to see, Raj \u2014 you're not chasing the first shiny object like a rookie. With that currency volatility hanging over export plays, you're hunting cleaner targ"
+        }
+      ]
+    }
+  ]
+}
