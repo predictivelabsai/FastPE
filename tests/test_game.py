@@ -322,23 +322,70 @@ def _collect_tokens(events: list[tuple[str, dict]]) -> str:
     return "".join(d.get("text", "") for name, d in events if name == "token")
 
 
-def _mock_llm_stream(response_text: str):
-    """Return a mock LLM that streams the given text in chunks."""
-    class FakeChunk:
-        def __init__(self, text):
-            self.content = text
+def _make_fake_agent(response_text: str, tool_calls: list[dict] | None = None):
+    """Build a fake LangGraph agent that yields astream_events.
 
-    class FakeLLM:
-        def stream(self, messages):
+    tool_calls: list of {"name": "tool_name", "args": {...}} dicts.
+    Each tool is yielded as on_tool_start + on_tool_end, then the response
+    text is streamed as on_chat_model_stream chunks.
+    """
+
+    class FakeChunk:
+        def __init__(self, text, is_tool_call=False):
+            self.content = text
+            self.tool_call_chunks = [{}] if is_tool_call else None
+
+    class FakeGraph:
+        def __init__(self, state):
+            self._state = state
+
+        async def astream_events(self, inputs, version="v2"):
+            # Yield tool calls first (the agent reasons then acts)
+            for tc in (tool_calls or []):
+                yield {
+                    "event": "on_tool_start",
+                    "name": tc["name"],
+                    "data": {"input": tc.get("args", {})},
+                }
+                # Actually invoke the tool on the real state
+                from game.tools import build_game_tools
+                tools = build_game_tools(self._state)
+                tool_map = {t.name: t for t in tools}
+                tool_fn = tool_map.get(tc["name"])
+                if tool_fn:
+                    result = tool_fn.invoke(tc.get("args", {}))
+                else:
+                    result = f"unknown tool: {tc['name']}"
+                yield {
+                    "event": "on_tool_end",
+                    "name": tc["name"],
+                    "data": {"output": result},
+                }
+
+            # Stream response text
             words = response_text.split(" ")
             for i in range(0, len(words), 3):
-                yield FakeChunk(" ".join(words[i:i+3]) + " ")
+                chunk_text = " ".join(words[i:i+3]) + " "
+                yield {
+                    "event": "on_chat_model_stream",
+                    "data": {"chunk": FakeChunk(chunk_text)},
+                }
 
-    return FakeLLM()
+    return FakeGraph
 
 
-async def _run_training_chat(session: dict, msg: str, llm_response: str = "Test response. 1. **Option A** 2. **Option B** 3. **Option C**"):
-    """Invoke training_chat and collect all SSE events."""
+async def _run_training_chat(
+    session: dict,
+    msg: str,
+    llm_response: str = "Test response. 1. **Option A** 2. **Option B** 3. **Option C**",
+    tool_calls: list[dict] | None = None,
+):
+    """Invoke training_chat and collect all SSE events.
+
+    Mocks the LangGraph game agent to avoid LLM calls. If tool_calls are
+    provided, they're executed against the real game state before the
+    response text is streamed.
+    """
     from game.routes import register_game_routes
 
     captured_handler = {}
@@ -356,8 +403,12 @@ async def _run_training_chat(session: dict, msg: str, llm_response: str = "Test 
     req = _FakeRequest(session)
     req._form_data = {"msg": msg}
 
-    with patch("utils.llm.build_llm",
-               return_value=_mock_llm_stream(llm_response)):
+    FakeGraphClass = _make_fake_agent(llm_response, tool_calls)
+
+    def fake_build_game_agent(state, system_prompt):
+        return FakeGraphClass(state)
+
+    with patch("game.agent.build_game_agent", side_effect=fake_build_game_agent):
         response = await handler(req)
 
         raw = b""
@@ -409,7 +460,11 @@ class TestScenario1MarcusDrake:
 
         events, sess = await _run_training_chat(
             sess, "1",
-            llm_response="Great move! You pursued NordTech. stage complete Moving to Analysis. 1. **Build** model 2. **Review** data 3. **Call** management"
+            llm_response="Great move! 1. **Build** model 2. **Review** data 3. **Call** management",
+            tool_calls=[
+                {"name": "adjust_resources", "args": {"knowledge_change": 1, "reason": "good analysis"}},
+                {"name": "advance_stage", "args": {}},
+            ],
         )
         text = _collect_tokens(events)
         assert len(text) > 0
@@ -425,10 +480,19 @@ class TestScenario1MarcusDrake:
 
         events, sess = await _run_training_chat(
             sess, "Close the deal",
-            llm_response="BOOM! Deal closed! You acquired NordTech. Investment made at 6x EBITDA. 1. **Optimize** ops 2. **Hire** CFO 3. **Expand** to Latvia"
+            llm_response="BOOM! 1. **Optimize** ops 2. **Hire** CFO 3. **Expand** to Latvia",
+            tool_calls=[
+                {"name": "close_deal", "args": {
+                    "company_name": "NordTech", "country": "Estonia",
+                    "sector": "software", "entry_price": 10_000,
+                    "entry_multiple": 6.0, "revenue": 5_000_000, "ebitda": 1_000_000,
+                }},
+            ],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.deals_closed >= 1
+        assert len(updated.portfolio) == 1
+        assert updated.capital == 40_000
 
     @pytest.mark.asyncio
     async def test_05_special_power_usage(self):
@@ -438,7 +502,8 @@ class TestScenario1MarcusDrake:
 
         events, sess = await _run_training_chat(
             sess, "Use my special ability to bypass the gatekeeper",
-            llm_response="Open Door activated! You reached the founder directly. 1. **Pitch** 2. **Negotiate** 3. **Walk**"
+            llm_response="Open Door activated! 1. **Pitch** 2. **Negotiate** 3. **Walk**",
+            tool_calls=[{"name": "use_special_power", "args": {}}],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.special_power_used
@@ -452,7 +517,8 @@ class TestScenario1MarcusDrake:
 
         events, sess = await _run_training_chat(
             sess, "Complete value creation phase",
-            llm_response="Stage complete! Moving to next round. Deal Sourcing begins. 1. **Scan** 2. **Follow-up** 3. **Network**"
+            llm_response="Next round! 1. **Scan** 2. **Follow-up** 3. **Network**",
+            tool_calls=[{"name": "advance_stage", "args": {}}],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.round == 2
@@ -468,7 +534,8 @@ class TestScenario1MarcusDrake:
 
         events, sess = await _run_training_chat(
             sess, "Final move",
-            llm_response="Stage complete! What a run. 1. **Review** 2. **Celebrate** 3. **Replay**"
+            llm_response="What a run! 1. **Review** 2. **Celebrate** 3. **Replay**",
+            tool_calls=[{"name": "advance_stage", "args": {}}],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.game_over
@@ -513,7 +580,10 @@ class TestScenario2ElenaVoss:
 
         events, sess = await _run_training_chat(
             sess, "Deep-dive the financials",
-            llm_response="Excellent analysis! Knowledge +1. You spotted a revenue quality issue. 1. **Flag** 2. **Ignore** 3. **Investigate**"
+            llm_response="Excellent analysis! 1. **Flag** 2. **Ignore** 3. **Investigate**",
+            tool_calls=[
+                {"name": "adjust_resources", "args": {"knowledge_change": 1, "reason": "deep financial analysis"}},
+            ],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.knowledge == 5
@@ -525,7 +595,10 @@ class TestScenario2ElenaVoss:
 
         events, sess = await _run_training_chat(
             sess, "Attend Baltic PE conference",
-            llm_response="Great networking! Network +1. You met a key LP. 1. **Follow-up** 2. **Pitch** 3. **Schedule**"
+            llm_response="Great networking! 1. **Follow-up** 2. **Pitch** 3. **Schedule**",
+            tool_calls=[
+                {"name": "adjust_resources", "args": {"network_change": 1, "reason": "conference networking"}},
+            ],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.network == 2
@@ -538,7 +611,8 @@ class TestScenario2ElenaVoss:
         for i in range(4):
             events, sess = await _run_training_chat(
                 sess, f"Action {i+1}",
-                llm_response=f"Stage complete! Moving to next stage. 1. **A** 2. **B** 3. **C**"
+                llm_response="Moving on! 1. **A** 2. **B** 3. **C**",
+                tool_calls=[{"name": "advance_stage", "args": {}}],
             )
 
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
@@ -548,15 +622,24 @@ class TestScenario2ElenaVoss:
     async def test_05_exit_increments(self):
         state = new_game("analyst")
         state.deals_closed = 1
-        state.portfolio = [{"name": "TestCo", "current_value": 150_000}]
+        state.portfolio = [
+            {"name": "TestCo", "country": "Latvia", "sector": "software",
+             "revenue": 5_000_000, "ebitda": 1_000_000,
+             "entry_multiple": 6.0, "current_multiple": 6.0,
+             "entry_price": 6_000_000, "current_value": 6_000_000},
+        ]
         sess = {"pe_hero_state": json.dumps(state.to_dict())}
 
         events, sess = await _run_training_chat(
             sess, "Exit TestCo via trade sale",
-            llm_response="Sold the company for 3x MOIC! 1. **Reinvest** 2. **Distribute** 3. **Hold**"
+            llm_response="Great exit! 1. **Reinvest** 2. **Distribute** 3. **Hold**",
+            tool_calls=[
+                {"name": "exit_deal", "args": {"company_name": "TestCo", "exit_multiple": 2.5, "exit_reason": "trade sale"}},
+            ],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.deals_exited >= 1
+        assert len(updated.portfolio) == 0
 
     @pytest.mark.asyncio
     async def test_06_game_over_after_all_rounds(self):
@@ -568,7 +651,8 @@ class TestScenario2ElenaVoss:
 
         events, sess = await _run_training_chat(
             sess, "Final analysis",
-            llm_response="Stage complete! The fund term ends. 1. **Review** 2. **Next** 3. **Done**"
+            llm_response="The fund term ends! 1. **Review** 2. **Next** 3. **Done**",
+            tool_calls=[{"name": "advance_stage", "args": {}}],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.game_over
@@ -623,7 +707,8 @@ class TestScenario3RajMehta:
 
         events, sess = await _run_training_chat(
             sess, "Use my Red Flag ability to spot risks",
-            llm_response="Critical risk spotted! Revenue concentration at 80%. 1. **Walk** 2. **Renegotiate** 3. **Proceed**"
+            llm_response="Critical risk spotted! 1. **Walk** 2. **Renegotiate** 3. **Proceed**",
+            tool_calls=[{"name": "use_special_power", "args": {}}],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.special_power_used
@@ -636,7 +721,8 @@ class TestScenario3RajMehta:
 
         events, sess = await _run_training_chat(
             sess, "Use my special power again",
-            llm_response="You already used it! 1. **A** 2. **B** 3. **C**"
+            llm_response="Already used! 1. **A** 2. **B** 3. **C**",
+            tool_calls=[{"name": "use_special_power", "args": {}}],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.special_power_used
@@ -651,7 +737,8 @@ class TestScenario3RajMehta:
 
         events, sess = await _run_training_chat(
             sess, "Advance",
-            llm_response="Stage complete! Next round begins. 1. **A** 2. **B** 3. **C**"
+            llm_response="Next round! 1. **A** 2. **B** 3. **C**",
+            tool_calls=[{"name": "advance_stage", "args": {}}],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.round == 2
@@ -670,7 +757,8 @@ class TestScenario3RajMehta:
 
         events, sess = await _run_training_chat(
             sess, "Final move",
-            llm_response="Stage complete! 1. **Done** 2. **Review** 3. **Next**"
+            llm_response="Game over! 1. **Done** 2. **Review** 3. **Next**",
+            tool_calls=[{"name": "advance_stage", "args": {}}],
         )
         updated = GameState.from_dict(json.loads(sess["pe_hero_state"]))
         assert updated.game_over
@@ -746,10 +834,22 @@ class TestSSEEvents:
         assert len(done_events) >= 1
 
     @pytest.mark.asyncio
-    async def test_tool_start_and_end_on_character_select(self):
+    async def test_tool_events_on_character_select(self):
         events, _ = await _run_training_chat(
             {}, "1",
             llm_response="Welcome! 1. **A** 2. **B** 3. **C**"
+        )
+        token_events = [(n, d) for n, d in events if n == "token"]
+        assert len(token_events) > 0
+
+    @pytest.mark.asyncio
+    async def test_tool_events_on_game_turn(self):
+        state = new_game("dealmaker")
+        sess = {"pe_hero_state": json.dumps(state.to_dict())}
+        events, _ = await _run_training_chat(
+            sess, "Do something",
+            llm_response="Nice! 1. **A** 2. **B** 3. **C**",
+            tool_calls=[{"name": "adjust_resources", "args": {"knowledge_change": 1, "reason": "test"}}],
         )
         event_names = [n for n, _ in events]
         assert "tool_start" in event_names
@@ -757,17 +857,6 @@ class TestSSEEvents:
         tool_start_idx = event_names.index("tool_start")
         tool_end_idx = event_names.index("tool_end")
         assert tool_start_idx < tool_end_idx
-
-    @pytest.mark.asyncio
-    async def test_tool_start_on_game_turn(self):
-        state = new_game("dealmaker")
-        sess = {"pe_hero_state": json.dumps(state.to_dict())}
-        events, _ = await _run_training_chat(
-            sess, "Do something",
-            llm_response="Nice! 1. **A** 2. **B** 3. **C**"
-        )
-        event_names = [n for n, _ in events]
-        assert "tool_start" in event_names
 
 
 # ───────────────────────────────── Edge cases ────────────────────────────────
@@ -836,6 +925,200 @@ class TestEdgeCases:
             state = GameState.from_dict(json.loads(sess["pe_hero_state"]))
             assert state.character == key, f"Number {i} should map to {key}"
             assert state.character_name == char["name"]
+
+
+# ───────────────────────────────── Tool unit tests ───────────────────────────
+
+class TestGameTools:
+    """Test game tools directly — they mutate GameState via closure."""
+
+    def _tools(self, state):
+        from game.tools import build_game_tools
+        tools = build_game_tools(state)
+        return {t.name: t for t in tools}
+
+    def test_advance_stage_increments(self):
+        state = new_game("dealmaker")
+        tools = self._tools(state)
+        result = tools["advance_stage"].invoke({})
+        assert state.stage_idx == 1
+        assert "Analysis & Structuring" in result
+
+    def test_advance_stage_wraps_round(self):
+        state = new_game("dealmaker")
+        state.stage_idx = 4
+        state.special_power_used = True
+        tools = self._tools(state)
+        result = tools["advance_stage"].invoke({})
+        assert state.round == 2
+        assert state.stage_idx == 0
+        assert not state.special_power_used
+        assert "New round" in result
+
+    def test_advance_stage_triggers_game_over(self):
+        state = new_game("dealmaker")
+        state.stage_idx = 4
+        state.round = 5
+        tools = self._tools(state)
+        result = tools["advance_stage"].invoke({})
+        assert state.game_over
+        assert state.score > 0
+        assert "GAME OVER" in result
+
+    def test_adjust_resources_positive(self):
+        state = new_game("analyst")
+        tools = self._tools(state)
+        tools["adjust_resources"].invoke({
+            "capital_change": 5000,
+            "knowledge_change": 2,
+            "network_change": 1,
+            "reason": "good analysis",
+        })
+        assert state.capital == 35_000
+        assert state.knowledge == 6
+        assert state.network == 2
+
+    def test_adjust_resources_clamped(self):
+        state = new_game("dealmaker")
+        tools = self._tools(state)
+        tools["adjust_resources"].invoke({
+            "capital_change": 999_999,
+            "knowledge_change": 10,
+            "reason": "overflow test",
+        })
+        assert state.capital == 250_000
+        assert state.knowledge == 5
+
+    def test_adjust_resources_negative_floor(self):
+        state = new_game("analyst")  # starts with knowledge=4
+        tools = self._tools(state)
+        tools["adjust_resources"].invoke({
+            "knowledge_change": -10,  # clamped to -3
+            "reason": "floor test",
+        })
+        assert state.knowledge == 1  # 4 + (-3) = 1
+
+    def test_close_deal(self):
+        state = new_game("dealmaker")
+        tools = self._tools(state)
+        result = tools["close_deal"].invoke({
+            "company_name": "NordTech",
+            "country": "Estonia",
+            "sector": "software",
+            "entry_price": 20_000,
+            "entry_multiple": 6.0,
+            "revenue": 10_000_000,
+            "ebitda": 2_000_000,
+        })
+        assert state.deals_closed == 1
+        assert len(state.portfolio) == 1
+        assert state.capital == 30_000
+        assert "NordTech" in result
+
+    def test_close_deal_insufficient_capital(self):
+        state = new_game("investigator")
+        tools = self._tools(state)
+        result = tools["close_deal"].invoke({
+            "company_name": "BigCo",
+            "country": "Latvia",
+            "sector": "industrials",
+            "entry_price": 100_000,
+            "entry_multiple": 7.0,
+        })
+        assert state.deals_closed == 0
+        assert "Cannot close" in result
+
+    def test_exit_deal(self):
+        state = new_game("operator")
+        state.portfolio = [{
+            "name": "TestCo", "country": "Lithuania", "sector": "healthcare",
+            "revenue": 5_000_000, "ebitda": 1_000_000,
+            "entry_multiple": 5.0, "current_multiple": 5.0,
+            "entry_price": 5_000_000, "current_value": 5_000_000,
+        }]
+        state.deals_closed = 1
+        tools = self._tools(state)
+        result = tools["exit_deal"].invoke({
+            "company_name": "TestCo",
+            "exit_multiple": 2.5,
+            "exit_reason": "trade sale",
+        })
+        assert state.deals_exited == 1
+        assert len(state.portfolio) == 0
+        assert state.capital == 40_000 + 12_500_000
+
+    def test_exit_deal_not_found(self):
+        state = new_game("dealmaker")
+        tools = self._tools(state)
+        result = tools["exit_deal"].invoke({
+            "company_name": "NonExistent",
+            "exit_multiple": 2.0,
+        })
+        assert "not found" in result
+
+    def test_screen_deal(self):
+        state = new_game("dealmaker")
+        tools = self._tools(state)
+        tools["screen_deal"].invoke({
+            "company_name": "BalticSoft",
+            "country": "Latvia",
+            "sector": "software",
+            "revenue": 3_000_000,
+            "ebitda": 500_000,
+            "verdict": "promising",
+        })
+        assert state.deals_screened == 1
+
+    def test_use_special_power(self):
+        state = new_game("investigator")
+        tools = self._tools(state)
+        result = tools["use_special_power"].invoke({})
+        assert state.special_power_used
+        assert "Red Flag" in result
+
+    def test_use_special_power_already_used(self):
+        state = new_game("dealmaker")
+        state.special_power_used = True
+        tools = self._tools(state)
+        result = tools["use_special_power"].invoke({})
+        assert "already used" in result
+
+    def test_update_portfolio_value(self):
+        state = new_game("operator")
+        state.portfolio = [{
+            "name": "GrowCo", "country": "Estonia", "sector": "consumer",
+            "revenue": 8_000_000, "ebitda": 1_500_000,
+            "entry_multiple": 5.0, "current_multiple": 5.0,
+            "entry_price": 7_500_000, "current_value": 7_500_000,
+        }]
+        tools = self._tools(state)
+        tools["update_portfolio_value"].invoke({
+            "company_name": "GrowCo",
+            "new_multiple": 7.0,
+            "reason": "margin improvement",
+        })
+        co = state.portfolio[0]
+        assert co["current_multiple"] == 7.0
+        assert co["current_value"] == int(7_500_000 * (7.0 / 5.0))
+
+    def test_get_game_status(self):
+        state = new_game("fundraiser")
+        tools = self._tools(state)
+        result = tools["get_game_status"].invoke({})
+        assert "James Whitfield" in result
+        assert "Round 1/5" in result
+
+    def test_all_eight_tools_built(self):
+        state = new_game("dealmaker")
+        from game.tools import build_game_tools
+        tools = build_game_tools(state)
+        assert len(tools) == 8
+        names = {t.name for t in tools}
+        assert names == {
+            "advance_stage", "adjust_resources", "close_deal", "exit_deal",
+            "screen_deal", "use_special_power", "update_portfolio_value",
+            "get_game_status",
+        }
 
 
 # ───────────────────────────────── Reset route test ──────────────────────────

@@ -1,4 +1,9 @@
-"""PE Hero game routes — training RPG at /app/training."""
+"""PE Hero game routes — training RPG at /app/training.
+
+Uses LangGraph ReAct agent with game-state mutation tools.
+The agent reasons about the player's action, calls tools to update state
+(close deals, adjust resources, advance stages), then generates narrative.
+"""
 
 from __future__ import annotations
 
@@ -141,6 +146,36 @@ def _game_over_text(state: GameState) -> str:
     )
 
 
+async def _stream_agent_turn(state: GameState, user_content: str):
+    """Run the LangGraph game agent and yield SSE events.
+
+    Uses the same astream_events pattern as the main chat (chat/routes.py).
+    The agent calls game tools to mutate state, then generates narrative.
+    """
+    from game.agent import build_game_agent
+
+    system = _build_system_prompt(state)
+    graph = build_game_agent(state, system)
+    messages = [HumanMessage(content=user_content)]
+
+    async for event in graph.astream_events({"messages": messages}, version="v2"):
+        kind = event["event"]
+        if kind == "on_chat_model_stream":
+            chunk = event["data"].get("chunk")
+            if chunk and hasattr(chunk, "content") and isinstance(chunk.content, str) and chunk.content:
+                if not getattr(chunk, "tool_call_chunks", None):
+                    yield sse.event(sse.TOKEN, {"text": chunk.content})
+        elif kind == "on_tool_start":
+            name = event.get("name", "unknown")
+            args = event["data"].get("input", {})
+            yield sse.event(sse.TOOL_START, {"name": name, "args": args})
+        elif kind == "on_tool_end":
+            name = event.get("name", "unknown")
+            raw = event["data"].get("output", "")
+            output = getattr(raw, "content", None) or (raw if isinstance(raw, str) else str(raw))
+            yield sse.event(sse.TOOL_END, {"name": name, "output": output[:2000]})
+
+
 def register_game_routes(rt):
     """Register PE Hero training game routes."""
 
@@ -171,7 +206,6 @@ def register_game_routes(rt):
                 choice = user_msg.lower().strip().rstrip(".")
                 char_key = CHAR_MAP.get(choice)
 
-                # Check for level up command
                 if choice in ("level up", "next level"):
                     yield sse.event(sse.TOKEN, {"text": _welcome_text()})
                     yield sse.event(sse.DONE, {"slug": "pe_hero_game"})
@@ -182,7 +216,6 @@ def register_game_routes(rt):
                     yield sse.event(sse.DONE, {"slug": "pe_hero_game"})
                     return
 
-                # Determine level from session
                 level = sess.get("pe_hero_level", "associate")
                 state = new_game(char_key, level=level, player_name=sess.get("email", "Player"))
                 _save_game_state(sess, state)
@@ -201,32 +234,19 @@ def register_game_routes(rt):
                 )
                 yield sse.event(sse.TOKEN, {"text": intro})
 
-                yield sse.event(sse.TOOL_START, {
-                    "name": "coach_v",
-                    "args": {"action": "Starting Round 1", "stage": "Deal Sourcing"},
-                })
-                system = _build_system_prompt(state)
                 try:
-                    from utils.llm import build_llm
-                    llm = build_llm()
-                    messages = [
-                        SystemMessage(content=system),
-                        HumanMessage(content=(
-                            f"The game begins! Present Round 1, Stage 1: Deal Sourcing.\n"
-                            f"Set the scene — the player just joined a Baltic PE fund. "
-                            f"Show 3-4 potential deals in the pipeline with company names, countries, sectors, revenues.\n"
-                            f"Give your coaching intro — fire them up! Then end with 3 choices."
-                        )),
-                    ]
-                    first_chunk = True
-                    for chunk in llm.stream(messages):
-                        if hasattr(chunk, "content") and chunk.content:
-                            if first_chunk:
-                                yield sse.event(sse.TOOL_END, {"name": "coach_v", "output": ""})
-                                first_chunk = False
-                            yield sse.event(sse.TOKEN, {"text": chunk.content})
+                    async for evt in _stream_agent_turn(
+                        state,
+                        f"The game begins! Present Round 1, Stage 1: Deal Sourcing.\n"
+                        f"Set the scene — the player just joined a Baltic PE fund. "
+                        f"Show 3-4 potential deals in the pipeline with company names, "
+                        f"countries, sectors, revenues.\n"
+                        f"Give your coaching intro — fire them up! "
+                        f"Then end with 3 choices.",
+                    ):
+                        yield evt
                 except Exception as e:
-                    log.exception("Game master LLM failed")
+                    log.exception("Game agent failed on intro")
                     yield sse.event(sse.ERROR, {"message": str(e)})
 
                 _save_game_state(sess, state)
@@ -274,70 +294,22 @@ def register_game_routes(rt):
                 yield sse.event(sse.DONE, {"slug": "pe_hero_game"})
                 return
 
-            # ── Normal game turn ──
-            yield sse.event(sse.TOOL_START, {
-                "name": "coach_v",
-                "args": {
-                    "action": user_msg[:40],
-                    "stage": state.current_stage(),
-                    "round": state.round,
-                },
-            })
-
-            system = _build_system_prompt(state)
-            messages = [
-                SystemMessage(content=system),
-                HumanMessage(content=(
-                    f"Player action: {user_msg}\n\n"
-                    f"Process this for {state.current_stage()} (Round {state.round}/{state.total_rounds}).\n"
-                    f"React to their choice — give coaching feedback (praise great moves, roast bad ones).\n"
-                    f"Show the outcome with updated resource numbers.\n"
-                    f"Then present 3 new choices for the next action."
-                )),
-            ]
-
-            accumulated = []
+            # ── Normal game turn — LangGraph agent with tools ──
             try:
-                from utils.llm import build_llm
-                llm = build_llm()
-                first_chunk = True
-                for chunk in llm.stream(messages):
-                    if hasattr(chunk, "content") and chunk.content:
-                        if first_chunk:
-                            yield sse.event(sse.TOOL_END, {"name": "coach_v", "output": ""})
-                            first_chunk = False
-                        accumulated.append(chunk.content)
-                        yield sse.event(sse.TOKEN, {"text": chunk.content})
+                async for evt in _stream_agent_turn(
+                    state,
+                    f"Player action: {user_msg}\n\n"
+                    f"Process this for {state.current_stage()} "
+                    f"(Round {state.round}/{state.total_rounds}).\n"
+                    f"React to their choice — give coaching feedback "
+                    f"(praise great moves, roast bad ones).\n"
+                    f"Show the outcome with updated resource numbers.\n"
+                    f"Then present 3 new choices for the next action.",
+                ):
+                    yield evt
             except Exception as e:
-                log.exception("Game master LLM failed")
+                log.exception("Game agent failed")
                 yield sse.event(sse.ERROR, {"message": str(e)})
-
-            # Advance stage/round
-            response_text = "".join(accumulated).lower()
-            if any(kw in response_text for kw in ["next stage", "stage complete", "moving to", "advance to", "moving on"]):
-                state.stage_idx += 1
-                if state.stage_idx >= len(STAGES):
-                    state.stage_idx = 0
-                    state.round += 1
-                    state.special_power_used = False
-                    if state.round > state.total_rounds:
-                        state.game_over = True
-                        state.score = calculate_score(state)
-
-            if "special" in lower or "ability" in lower or "power" in lower:
-                if not state.special_power_used:
-                    state.special_power_used = True
-
-            if any(kw in response_text for kw in ["deal closed", "acquired", "investment made", "signed"]):
-                state.deals_closed += 1
-
-            if any(kw in response_text for kw in ["exited", "sold the company", "ipo"]):
-                state.deals_exited += 1
-
-            if "+1 knowledge" in response_text or "knowledge +1" in response_text:
-                state.knowledge += 1
-            if "+1 network" in response_text or "network +1" in response_text:
-                state.network += 1
 
             _save_game_state(sess, state)
 
