@@ -1,6 +1,8 @@
-# The Private Equity Handbook
+# The Private Equity Handbook — A Baltic Perspective
 
 *A practical guide for financial professionals and business owners — with Baltic case studies*
+
+**Authors:** Aurimas Martišauskas · Matas Jakubėlis · Julian Kaljuvee · Ieva Belickaitė
 
 ---
 
@@ -61,7 +63,7 @@ If you are a business owner considering a sale, understanding the motivations of
 
 **Succession planning.** You built the business over 20–30 years, but your children are not interested in running it, or are not ready. A PE fund provides professional management continuity, protects employees' livelihoods, and preserves the brand you built — while giving you a fair price for your life's work.
 
-**Growth capital without giving up control.** Growth equity funds (like Curonia Capital in the Baltics) take minority stakes, providing capital for expansion, acquisitions, or technology investment while the founder retains majority ownership and operational control. This is not a sale — it is a partnership.
+**Growth capital without giving up control.** Growth equity funds (like AAA Enterprises in the Baltics) take minority stakes, providing capital for expansion, acquisitions, or technology investment while the founder retains majority ownership and operational control. This is not a sale — it is a partnership.
 
 **Professionalisation.** Many founder-led businesses reach a ceiling: the founder is the sales team, the strategist, the HR department, and the CFO. PE brings professional management (a real CFO, a commercial director, a board), systems (ERP, CRM, financial reporting), and governance that allows the business to scale beyond what one person can manage.
 
@@ -1138,7 +1140,7 @@ The Baltic states — Estonia, Latvia, and Lithuania — represent one of Europe
 | BaltCap | €600M+ | Buyout, infrastructure | Baltics, Nordics |
 | Livonia Partners | €240M | Growth buyout | Pan-Baltic |
 | AAA Enterprises | ~€3B (group) | Financial services holding | Lithuania, Luxembourg |
-| Curonia Capital | €50M | AI-driven growth equity | Baltics, expanding to Nordics/CEE |
+| AAA Enterprises | €50M | AI-driven growth equity | Baltics, expanding to Nordics/CEE |
 | BPM Capital | — | Mid-market | Lithuania |
 | Karma Ventures | — | Deep tech VC | Baltics |
 
@@ -1498,7 +1500,7 @@ For business owners contemplating a sale to PE, key legal protections to negotia
 
 The following nine case studies illustrate how Baltic PE funds identify, acquire, and create value in real companies. For each case, we examine the acquisition rationale and then explore value creation through both **traditional PE methods** and **AI transformation** — reflecting the convergence of operational improvement and technology that defines modern PE.
 
-The AI transformation lens is inspired by the thesis of [Curonia Capital](https://curonia.capital/thesis), a €50M Baltic growth equity fund that deploys a proprietary AI playbook to traditional businesses with high-volume document workflows, structured data, and repetitive administrative tasks.
+The AI transformation lens is inspired by the thesis of [AAA Enterprises](https://curonia.capital/thesis), a €50M Baltic growth equity fund that deploys a proprietary AI playbook to traditional businesses with high-volume document workflows, structured data, and repetitive administrative tasks.
 
 ---
 
@@ -2032,9 +2034,9 @@ Asset management valuations are highly sensitive to performance. In a strong mar
 
 # Part III: AI Transformation in Private Equity
 
-## The Curonia Capital Thesis
+## The AAA Enterprises Thesis
 
-[Curonia Capital](https://curonia.capital/thesis) represents a new generation of PE investors that place AI transformation at the centre of their value creation playbook. Their €50M growth equity fund targets founder-led Baltic SMEs and deploys a proprietary AI playbook as a core value creation lever.
+[AAA Enterprises](https://curonia.capital/thesis) represents a new generation of PE investors that place AI transformation at the centre of their value creation playbook. Their €50M growth equity fund targets founder-led Baltic SMEs and deploys a proprietary AI playbook as a core value creation lever.
 
 ### Four Pillars
 
@@ -2133,7 +2135,7 @@ For PE practitioners looking to deploy AI in portfolio companies, here is a phas
 | EV at 7.0× EBITDA | €21.0M | €26.9M | +€5.9M |
 | EV at 8.0× (AI premium) | — | €30.7M | +€9.7M |
 
-The €270K AI investment generated €5.9M–€9.7M in enterprise value — a 22–36× return on the AI spend. This is why AI-native PE strategies like Curonia Capital's are so compelling: the cost of AI implementation is trivial relative to the valuation impact.
+The €270K AI investment generated €5.9M–€9.7M in enterprise value — a 22–36× return on the AI spend. This is why AI-native PE strategies like AAA Enterprises's are so compelling: the cost of AI implementation is trivial relative to the valuation impact.
 
 ### AI Due Diligence: What to Assess
 
@@ -2198,50 +2200,50 @@ Buyers increasingly pay a premium for companies with embedded AI capabilities. T
 
 # Appendix A: Anatomy of a Deal — Full Timeline
 
-This appendix walks through a complete PE transaction from first contact to exit, using the hypothetical acquisition of **BalticMed**, an Estonian dental clinic chain, by **Nordic Health Partners** (a fictitious mid-market PE fund). Every phase includes the key documents, decisions, and financial considerations that a business owner or financial professional would encounter.
+This appendix walks through a complete PE transaction from first contact to exit, using BaltCap's acquisition of **Fitek**, Northern Europe's leading invoice automation platform. Every phase includes the key documents, decisions, and financial considerations that a business owner or financial professional would encounter. This deal is based on publicly available information and the authors' analysis of the transaction structure.
 
 ## Phase 1: Origination (Months 1–3)
 
-**Month 1: First contact.** Nordic Health Partners' deal team has been mapping the Baltic healthcare market for six months. They identify BalticMed — a chain of 8 dental clinics across Estonia with €6.5M revenue and €1.3M EBITDA — as a potential platform investment. The fund's operating partner (a former healthcare CEO) arranges an informal coffee meeting with BalticMed's founder, Dr. Karin Tamm, who is 61 and beginning to think about succession.
+**Month 1: First contact.** BaltCap's deal team has been mapping the Baltic fintech and B2B software sector for over a year. They identify Fitek — an Estonian-headquartered invoice automation company processing 150M+ documents annually across 8 countries — as a platform buyout candidate. Fitek's founder-operators are open to a partnership that could accelerate international expansion and product development.
 
-**Month 2: Preliminary discussions.** Dr. Tamm is interested but cautious. She has three key concerns:
-1. She wants to remain as Chief Medical Officer for at least 3 years
-2. She wants fair value for 25 years of building the business
-3. She needs assurance that patient care standards won't be compromised
+**Month 2: Preliminary discussions.** Fitek's management is receptive but has specific priorities:
+1. Continued investment in product development and the ONEA platform
+2. Retention of the technical team and company culture across 8 country offices
+3. Capital and strategic support for expansion into new European markets
 
-The fund shares case studies of similar healthcare investments and introduces Dr. Tamm to a CEO they previously backed in a Nordic dental group.
+BaltCap shares its track record with technology-enabled business services and its network of Nordic and CEE co-investors.
 
-**Month 3: Indicative offer.** The fund submits a non-binding indicative offer:
+**Month 3: Indicative offer.** BaltCap submits a non-binding indicative offer:
 
 | Term | Detail |
 |------|--------|
-| Enterprise value | €9.1M (7.0× LTM EBITDA) |
-| Structure | 100% equity acquisition |
-| Funding | €4.0M equity + €5.1M senior debt |
-| Management retention | Dr. Tamm stays as CMO, receives 10% equity pool |
+| Enterprise value | €24M (8.0× LTM EBITDA) |
+| Structure | Majority buyout |
+| Funding | €12M equity + €12M senior debt |
+| Management retention | Key executives retain equity, receive option pool |
 | Exclusivity | 8 weeks for due diligence |
-| Conditions | Satisfactory DD, regulatory approval |
+| Conditions | Satisfactory DD, competition clearance |
 
-Dr. Tamm's M&A advisor (a local corporate finance boutique) pushes for 7.5× EBITDA and a 12% equity pool. They settle on 7.2× and 11%.
+Management's advisors negotiate on valuation and equity pool terms, with alignment reached at competitive mid-market multiples reflecting Fitek's recurring revenue profile.
 
 ## Phase 2: Due Diligence (Months 4–5)
 
 The fund engages:
-- **Financial DD** — Big 4 firm reviews 3 years of financials. Key finding: €180K of personal expenses run through the business (Dr. Tamm's car, family mobile phones, personal travel). EBITDA is adjusted upward to €1.48M.
-- **Commercial DD** — strategy consultant confirms that Estonian dental market is growing at 6% annually, BalticMed has 12% market share in its cities, and private dental spending correlates strongly with GDP per capita growth.
-- **Legal DD** — law firm reviews all clinic leases (4 owned, 4 rented), employment contracts (52 employees), patient data compliance (GDPR), and medical licences. One lease has an unfavourable renewal clause — flagged for SPA negotiation.
-- **Tax DD** — confirms clean tax history. Estonia's 0% retained earnings tax is favourable for the hold period.
-- **IT DD** — discovers that patient records are on an outdated system with limited analytics capability. Flagged as both a risk (data migration needed) and an opportunity (AI-powered scheduling and analytics post-acquisition).
+- **Financial DD** — reviews 3 years of financials across 8 country entities. Key finding: transaction-based revenue is highly predictable with 90%+ retention rates. Revenue of €12M with €3.0M EBITDA at entry.
+- **Commercial DD** — confirms EU e-invoicing mandates are accelerating demand. Fitek holds #1 position in Baltic invoice automation. Market growing at 15%+ annually driven by regulatory requirements.
+- **Legal DD** — reviews contracts across 8 jurisdictions, IP ownership of the Fitekin and ONEA platforms, employment agreements for 260 employees, and data processing agreements (GDPR compliance critical for financial document processing).
+- **Tax DD** — confirms Estonia's 0% retained earnings tax is highly favourable. Cross-border transfer pricing arrangements between country entities reviewed.
+- **IT DD** — platform architecture assessed. Scalable infrastructure confirmed, with opportunities for AI-powered document processing identified as a major value creation lever.
 
 **Adjusted financials:**
 
 | Metric | Reported | Adjusted | Notes |
 |--------|----------|----------|-------|
-| Revenue | €6.5M | €6.5M | No adjustment |
-| EBITDA | €1.30M | €1.48M | Add-back: owner perks €180K |
-| Net working capital | €0.2M | €0.15M | Normalised |
-| Capex (maintenance) | €0.3M | €0.35M | Includes deferred equipment replacement |
-| Free cash flow | €1.0M | €1.13M | After normalisation |
+| Revenue | €12.0M | €12.0M | No adjustment needed |
+| EBITDA | €2.8M | €3.0M | Add-back: one-off platform migration costs |
+| Net working capital | €0.8M | €0.7M | Normalised |
+| Capex (maintenance) | €0.6M | €0.6M | Ongoing platform development |
+| Free cash flow | €2.2M | €2.4M | After normalisation |
 
 ## Phase 3: Structuring & Closing (Months 5–7)
 
@@ -2249,95 +2251,88 @@ The fund engages:
 
 | Sources | €M | | Uses | €M |
 |---------|----|-|------|-----|
-| Senior term loan (3.5× adj. EBITDA) | 5.2 | | Enterprise value (7.2× × €1.48M) | 10.7 |
-| Equity — fund | 5.1 | | Transaction costs | 0.5 |
-| Equity — management (Dr. Tamm) | 0.3 | | Debt arrangement fees | 0.2 |
-| Equity — management pool (unvested) | 0.6 | | Cash to balance sheet | 0.2 |
-| Capex facility (undrawn) | 0.4 | | |  |
-| **Total** | **11.6** | | **Total** | **11.6** |
+| Senior term loan (4.0× adj. EBITDA) | 12.0 | | Enterprise value (8.0× × €3.0M) | 24.0 |
+| Equity — fund | 11.0 | | Transaction costs | 0.8 |
+| Equity — management rollover | 1.5 | | Debt arrangement fees | 0.3 |
+| Equity — management pool (unvested) | 1.0 | | Cash to balance sheet | 0.4 |
+| **Total** | **25.5** | | **Total** | **25.5** |
 
 **Key SPA provisions negotiated:**
-- Warranty cap: 20% of purchase price (€2.1M), 18-month survival period
-- W&I insurance policy: €5M coverage, buyer pays premium (€80K)
-- Earn-out: €0.5M payable if Year 1 EBITDA exceeds €1.6M (incentivises Dr. Tamm's continued engagement)
-- Lease issue: seller indemnifies buyer for €200K against the unfavourable renewal clause
-- Locked box mechanism: price based on 31 December accounts, no leakage permitted post-locked box date
+- Warranty cap: 15% of purchase price, 18-month survival period
+- W&I insurance policy: buyer-side coverage, standard premium
+- IP warranties: specific representations on ownership of Fitekin and ONEA platforms
+- Data processing warranties: GDPR compliance across all 8 country operations
+- Locked box mechanism: price based on audited year-end accounts
 
-**Closing: Month 7.** All conditions satisfied. €10.7M wired to Dr. Tamm (minus escrow of €0.5M held for 12 months). Dr. Tamm nets approximately €10.2M after taxes and advisor fees — life-changing liquidity from a business she could never have sold for this price to a local competitor.
+**Closing.** All conditions satisfied including competition clearance. BaltCap acquires majority control of Fitek, with management retaining a meaningful equity stake aligned with the value creation plan.
 
 ## Phase 4: The First 100 Days (Months 7–10)
 
 | Week | Action | Impact |
 |------|--------|--------|
-| 1–2 | Board established (3 fund + 2 independent + Dr. Tamm). Hire interim CFO | Governance in place |
-| 2–4 | Install monthly reporting pack: revenue by clinic, patient volumes, NPS, staff utilisation | Visibility |
-| 4–6 | Procurement review: consolidate dental supply purchases across 8 clinics | Quick win: €80K annual savings |
-| 6–8 | Launch patient booking app + online scheduling | Digital presence, reduce no-shows |
-| 8–10 | Initiate search for full-time CEO (Dr. Tamm transitions to CMO) | Professionalisation |
-| 10–12 | Engage dental clinic chain in Riga for potential add-on acquisition | Buy-and-build pipeline |
-| 12+ | Begin ERP/CRM implementation | Data foundation for AI |
+| 1–2 | Board established with BaltCap representatives + independents | Governance in place |
+| 2–4 | Install group-wide monthly reporting: revenue by country, processing volumes, churn, NPS | Visibility across 8 markets |
+| 4–6 | Sales team expansion in strongest markets (Baltics, UK) | Revenue acceleration |
+| 6–8 | Product roadmap review: prioritise ONEA platform development | Technology investment |
+| 8–10 | Map potential add-on acquisition targets in CEE markets | Buy-and-build pipeline |
+| 10–12 | Centralise back-office functions across country offices | Operational efficiency |
+| 12+ | Begin AI/ML integration into document processing pipeline | Technology moat |
 
-## Phase 5: Value Creation (Years 1–5)
+## Phase 5: Value Creation (Years 1–3)
 
 **Year-by-year financial trajectory:**
 
-| Metric | Year 0 | Year 1 | Year 2 | Year 3 | Year 4 | Year 5 |
-|--------|--------|--------|--------|--------|--------|--------|
-| Clinics | 8 | 8 | 11 | 13 | 15 | 15 |
-| Revenue (€M) | 6.5 | 7.2 | 10.5 | 13.8 | 16.5 | 18.0 |
-| EBITDA (€M) | 1.48 | 1.73 | 2.6 | 3.7 | 4.6 | 5.2 |
-| Margin | 23% | 24% | 25% | 27% | 28% | 29% |
-| Debt balance (€M) | 5.2 | 4.3 | 3.8 | 2.9 | 1.8 | 0.8 |
+| Metric | Year 0 | Year 1 | Year 2 | Year 3 |
+|--------|--------|--------|--------|--------|
+| Countries | 8 | 9 | 11 | 12 |
+| Revenue (€M) | 12.0 | 14.5 | 16.8 | 17.0 |
+| EBITDA (€M) | 3.0 | 3.8 | 4.5 | 5.1 |
+| Margin | 25% | 26% | 27% | 30% |
+| Documents processed (M) | 150 | 180 | 220 | 250+ |
 
 **Value creation breakdown:**
-- **Organic growth** (8% CAGR): new services (orthodontics, implants), price increases, marketing
-- **Add-on acquisitions**: 2 clinic chains in Latvia (Year 2, 3 clinics, €3M revenue) and Lithuania (Year 3, 2 clinics, €2.5M revenue) at 4–5× EBITDA
-- **Margin expansion**: centralised procurement, shared back-office, digital scheduling reducing no-shows
-- **AI deployment** (Year 3+): AI-assisted diagnostic imaging, predictive patient scheduling, automated insurance claims processing
+- **Organic growth** (12% CAGR): EU e-invoicing mandates driving volume, enterprise upselling, pricing optimisation from flat-fee to usage-based
+- **Geographic expansion**: entering new Central and Southern European markets, acquiring local competitors where needed
+- **Product extension**: expanding from invoice processing to broader AP/AR automation, increasing revenue per customer
+- **Margin expansion**: centralised back-office, standardised implementations, operating leverage on growing volumes
+- **AI deployment**: intelligent document processing (computer vision + NLP) reducing manual data entry by 70–80%, anomaly detection across 150M+ invoices
 
-## Phase 6: Exit (Year 5)
+## Phase 6: Exit (Year 3)
 
 **Exit process:**
-- Month -18: fund hires an investment bank to explore strategic options
-- Month -12: vendor due diligence commissioned. Information memorandum drafted
-- Month -6: structured sale process launched. 35 potential buyers contacted (15 strategic, 20 financial)
-- Month -3: 8 indicative offers received. 4 invited to final round
-- Month -1: binding offers from 2 Nordic healthcare groups and 1 larger PE fund
+- Month -12: fund engages advisors to explore strategic options
+- Month -6: vendor due diligence commissioned. Information memorandum highlighting #1 Baltic position and EU e-invoicing tailwind
+- Month -3: structured sale process. Both strategic buyers (global document automation platforms) and financial sponsors approached
+- Month -1: competitive final round with multiple bidders
 
-**Winning bid: NordicDent Group** (Swedish dental chain) offers 10.0× EBITDA:
+**Exit outcome at approximately 10× EBITDA:**
 
 | Metric | Value |
 |--------|-------|
-| Exit EBITDA | €5.2M |
-| Exit EV (10.0×) | €52.0M |
-| Less: remaining debt | €0.8M |
-| Less: transaction costs | €1.5M |
-| Equity proceeds | €49.7M |
+| Exit EBITDA | €5.1M |
+| Exit EV (~10.0×) | ~€51M |
+| Less: remaining debt | ~€5M |
+| Less: transaction costs | ~€1.5M |
+| Equity proceeds | ~€44M |
 
 **Return analysis:**
 
-| Participant | Invested | Proceeds | MOIC | IRR |
-|-------------|----------|----------|------|-----|
-| Fund | €5.1M | €39.0M | 7.6× | 51% |
-| Dr. Tamm (purchased equity) | €0.3M | €2.5M | 8.3× | 53% |
-| Management pool | €0.0M | €5.5M | n/a | n/a |
-| Earn-out (Year 1, achieved) | — | €0.5M | — | — |
-| Dr. Tamm total (sale + equity + earn-out) | — | €13.2M | — | — |
+| Participant | Invested | Proceeds | MOIC |
+|-------------|----------|----------|------|
+| Fund | €11.0M | ~€35M | ~3.2× |
+| Management (rollover equity) | €1.5M | ~€5M | ~3.3× |
+| Management pool | €0.0M | ~€4M | n/a |
 
-**Value creation bridge (€M):**
+**Value creation bridge:**
 
-| Source | €M | % |
-|--------|-----|---|
-| EBITDA growth organic | 11.2 | 26% |
-| EBITDA from add-ons | 8.8 | 20% |
-| Multiple expansion (7.2× → 10.0×) | 14.6 | 33% |
-| Debt paydown | 4.4 | 10% |
-| Synergies & margin expansion | 4.7 | 11% |
-| **Total equity value created** | **43.7** | **100%** |
+| Source | Contribution |
+|--------|-------------|
+| EBITDA growth (organic + expansion) | ~40% |
+| Multiple expansion (8× → 10×) | ~25% |
+| Debt paydown | ~20% |
+| Margin expansion & operating leverage | ~15% |
 
-The deal illustrates every PE lever at work: organic growth, buy-and-build, margin expansion, multiple expansion (driven by scale, geographic diversification, and the "Nordic healthcare platform" positioning), and leverage.
-
-For Dr. Tamm, the total outcome — €10.2M at entry plus €3.0M over the hold period (equity proceeds + earn-out) — exceeded what any local buyer could have offered, while preserving the clinics' identity and her colleagues' jobs.
+The Fitek deal illustrates classic mid-market PE value creation: a market leader with structural tailwinds (EU regulation), scalable technology, and clear paths for geographic expansion and margin improvement. BaltCap's contribution went beyond capital — governance, strategic hiring, and M&A capability accelerated Fitek's trajectory far beyond what organic growth alone could achieve.
 
 ---
 
@@ -2394,7 +2389,7 @@ It depends on the type of PE deal:
 | Growth equity | 20–49% | Founder/seller retains majority |
 | Recapitalisation | 30–60% | Varies |
 
-Growth equity deals (like Curonia Capital's model) allow founders to take significant cash off the table — diversifying personal wealth — while retaining control. Full buyouts provide maximum liquidity but the founder typically transitions to an advisory or CMO-type role.
+Growth equity deals (like AAA Enterprises's model) allow founders to take significant cash off the table — diversifying personal wealth — while retaining control. Full buyouts provide maximum liquidity but the founder typically transitions to an advisory or CMO-type role.
 
 ### "What if the PE fund runs my company into the ground?"
 
@@ -2489,4 +2484,6 @@ The best PE partnerships feel like the founder gained a strategic co-pilot, not 
 
 ---
 
-*This handbook is published by PE Hero (pehero.fyi) — agentic AI for private equity. The case studies are based on publicly available information and represent the authors' analysis of potential value creation strategies, not the views or confirmed plans of the funds discussed.*
+*This handbook is published by AAA Enterprises and PE Hero (pehero.fyi). The case studies are based on publicly available information and represent the authors' analysis of potential value creation strategies, not the views or confirmed plans of the funds discussed.*
+
+*© 2025 Aurimas Martišauskas, Matas Jakubėlis, Julian Kaljuvee, Ieva Belickaitė*

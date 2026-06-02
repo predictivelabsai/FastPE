@@ -255,7 +255,7 @@ def chart_balticmed_trajectory(out: Path):
         marker=dict(size=10, symbol="triangle-down"),
     ))
     fig.update_layout(
-        title="BalticMed — 5-Year Financial Trajectory",
+        title="Fitek — 5-Year Financial Trajectory",
         yaxis_title="€ Millions",
         template="plotly_white",
         width=900, height=500,
@@ -289,7 +289,7 @@ def chart_exit_bridge(out: Path):
         textposition="outside",
     ))
     fig.update_layout(
-        title="BalticMed — Exit Value Creation Bridge (€M)",
+        title="Fitek — Exit Value Creation Bridge (€M)",
         yaxis_title="Equity Value (€M)",
         template="plotly_white",
         width=1000, height=500,
@@ -351,10 +351,241 @@ def generate_charts():
     print(f"  {len(CHARTS)} charts saved to {CHART_DIR}/")
 
 
-def build_pdf():
-    print("\nBuilding PDF ...")
-    md_text = HANDBOOK_MD.read_text()
-    enriched = inject_charts(md_text, CHART_DIR)
+AUTHORS = "Aurimas Martišauskas, Matas Jakubėlis, Julian Kaljuvee, Ieva Belickaitė"
+TITLE = "The Private Equity Handbook — A Baltic Perspective"
+
+HANDBOOK_CSS = """\
+@page {
+    size: A4;
+    margin: 25mm 25mm 25mm 30mm;
+}
+body {
+    font-size: 11pt;
+    line-height: 1.7;
+    font-family: Georgia, "Times New Roman", serif;
+    color: #1a1a1a;
+    orphans: 3;
+    widows: 3;
+}
+
+/* ── Headings ── */
+h1 {
+    font-size: 24pt;
+    margin-top: 120pt;
+    margin-bottom: 20pt;
+    page-break-before: always;
+    page-break-after: avoid;
+    border-bottom: 3px solid #1a3c6e;
+    padding-bottom: 8pt;
+    color: #1a3c6e;
+    text-align: center;
+}
+h2 {
+    font-size: 17pt;
+    margin-top: 28pt;
+    margin-bottom: 10pt;
+    page-break-before: always;
+    page-break-after: avoid;
+    color: #1a3c6e;
+}
+h3 {
+    font-size: 14pt;
+    margin-top: 20pt;
+    margin-bottom: 8pt;
+    page-break-after: avoid;
+    color: #2c5282;
+}
+h4 {
+    font-size: 12pt;
+    margin-top: 15pt;
+    margin-bottom: 6pt;
+    page-break-after: avoid;
+}
+
+/* ── Tables ── */
+table {
+    font-size: 9.5pt;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12pt 0;
+    page-break-inside: avoid;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    text-align: left;
+}
+th {
+    background-color: #1a3c6e;
+    color: white;
+    font-weight: bold;
+}
+tr:nth-child(even) { background-color: #f8f9fa; }
+
+/* ── Images / charts ── */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 16pt 0;
+    page-break-inside: avoid;
+}
+figure, .figure {
+    page-break-inside: avoid;
+    margin: 16pt 0;
+}
+
+/* ── Block elements ── */
+blockquote {
+    border-left: 3px solid #1a3c6e;
+    padding-left: 12px;
+    color: #444;
+    margin: 14pt 0;
+    page-break-inside: avoid;
+}
+ul, ol {
+    page-break-before: avoid;
+}
+li {
+    page-break-inside: avoid;
+}
+p {
+    margin-bottom: 8pt;
+}
+
+/* ── Code ── */
+code { font-size: 9pt; }
+pre {
+    font-size: 9pt;
+    background: #f5f5f5;
+    padding: 12px;
+    page-break-inside: avoid;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+/* ── Horizontal rules (section breaks) ── */
+hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 24pt 0;
+}
+
+/* ── Keep case study sections together ── */
+h2 + h3 { page-break-before: avoid; }
+h3 + h4 { page-break-before: avoid; }
+h3 + p { page-break-before: avoid; }
+"""
+
+
+LANG_TITLES = {
+    "en": TITLE,
+    "lt": "Privataus Kapitalo Vadovas — Baltijos Perspektyva",
+    "ee": "Erakapitali Käsiraamat — Balti Perspektiiv",
+}
+
+LANG_SUBTITLES = {
+    "en": "A practical guide for financial professionals and business owners — with Baltic case studies",
+    "lt": "Praktinis vadovas finansų specialistams ir verslo savininkams — su Baltijos atvejų analizėmis",
+    "ee": "Praktiline juhend finantsspetsialistidele ja ettevõtjatele — Balti juhtumiuuringutega",
+}
+
+
+def _cover_html(title: str, subtitle: str, authors: str) -> str:
+    return f"""\
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+  @page {{ size: A4; margin: 0; }}
+  body {{
+    font-family: Georgia, "Times New Roman", serif;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    height: 100vh;
+    background: #fff;
+  }}
+  .cover {{
+    text-align: center;
+    padding: 0 50pt;
+  }}
+  h1 {{
+    font-size: 32pt; line-height: 1.25;
+    color: #1a3c6e; margin-bottom: 20pt;
+    border-bottom: 3px solid #1a3c6e;
+    padding-bottom: 16pt;
+  }}
+  .subtitle {{
+    font-size: 14pt; line-height: 1.5;
+    color: #444; font-style: italic;
+    margin-bottom: 30pt;
+  }}
+  .authors {{
+    font-size: 12pt; color: #333;
+    margin-bottom: 40pt;
+  }}
+  .publisher {{
+    font-size: 10pt; color: #888;
+    margin-top: 60pt;
+  }}
+</style></head>
+<body><div class="cover">
+  <h1>{title}</h1>
+  <div class="subtitle">{subtitle}</div>
+  <div class="authors">{authors}</div>
+  <div class="publisher">Published by AAA Enterprises &amp; PE Hero (pehero.fyi)<br>2025</div>
+</div></body></html>"""
+
+
+def _strip_title_block(md_text: str) -> str:
+    """Remove the title h1, subtitle, authors, and first --- from the markdown
+    since they're on the cover page. Keep everything from ## Table of Contents onward."""
+    lines = md_text.split("\n")
+    for i, line in enumerate(lines):
+        if line.startswith("## "):
+            return "\n".join(lines[i:])
+    return md_text
+
+
+def _get_md_for_lang(lang: str) -> str:
+    """Read the correct markdown file for the language."""
+    if lang == "en":
+        return HANDBOOK_MD.read_text()
+    translated = OUT_DIR / f"pe-handbook_{lang}.md"
+    if translated.exists():
+        return translated.read_text()
+    print(f"  WARNING: {translated} not found, falling back to English")
+    return HANDBOOK_MD.read_text()
+
+
+def _cover_md(title: str, subtitle: str, authors: str) -> str:
+    """Markdown cover page that goes at the very top of the document."""
+    return (
+        f'<div style="text-align:center; padding-top:180pt; padding-bottom:60pt;">\n'
+        f'<h1 style="font-size:30pt; color:#1a3c6e; border-bottom:3px solid #1a3c6e; '
+        f'display:inline-block; padding-bottom:12pt; page-break-before:avoid;">'
+        f'{title}</h1>\n\n'
+        f'<p style="font-size:13pt; color:#444; font-style:italic; margin-top:16pt;">'
+        f'{subtitle}</p>\n\n'
+        f'<p style="font-size:11pt; color:#333; margin-top:24pt;">'
+        f'{authors}</p>\n\n'
+        f'<p style="font-size:10pt; color:#888; margin-top:80pt;">'
+        f'Published by AAA Enterprises &amp; PE Hero (pehero.fyi)<br>2025</p>\n'
+        f'</div>\n\n'
+    )
+
+
+def build_pdf(lang: str = "en"):
+    suffix = f"_{lang}"
+    out_pdf = OUT_DIR / f"pe-handbook{suffix}.pdf"
+    title = LANG_TITLES.get(lang, TITLE)
+    subtitle = LANG_SUBTITLES.get(lang, LANG_SUBTITLES["en"])
+
+    print(f"\nBuilding PDF ({lang}) ...")
+
+    md_text = _get_md_for_lang(lang)
+    md_text = _strip_title_block(md_text)
+    cover = _cover_md(title, subtitle, AUTHORS)
+    enriched = inject_charts(cover + md_text, CHART_DIR)
 
     with tempfile.NamedTemporaryFile(
         suffix=".md", mode="w", delete=False, dir=str(OUT_DIR)
@@ -363,22 +594,8 @@ def build_pdf():
         tmp_path = Path(tmp.name)
 
     css_path = OUT_DIR / "_handbook.css"
-    css_path.write_text(
-        "body { font-size: 11pt; line-height: 1.6; font-family: Georgia, serif; }\n"
-        "h1 { font-size: 22pt; margin-top: 40pt; page-break-before: always; }\n"
-        "h2 { font-size: 18pt; margin-top: 30pt; page-break-before: always; }\n"
-        "h3 { font-size: 14pt; margin-top: 20pt; }\n"
-        "h4 { font-size: 12pt; margin-top: 15pt; }\n"
-        "table { font-size: 9.5pt; border-collapse: collapse; width: 100%; margin: 12pt 0; }\n"
-        "th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }\n"
-        "th { background-color: #1a3c6e; color: white; }\n"
-        "img { max-width: 100%; height: auto; margin: 16pt 0; }\n"
-        "code { font-size: 9pt; }\n"
-        "pre { font-size: 9pt; background: #f5f5f5; padding: 12px; }\n"
-        "blockquote { border-left: 3px solid #1a3c6e; padding-left: 12px; color: #444; }\n"
-    )
+    css_path.write_text(HANDBOOK_CSS)
 
-    out_pdf = OUT_DIR / "pe-handbook.pdf"
     cmd = [
         "pandoc", str(tmp_path),
         "-o", str(out_pdf),
@@ -389,10 +606,7 @@ def build_pdf():
         "-V", "margin-bottom=25mm",
         "-V", "margin-left=30mm",
         "-V", "margin-right=25mm",
-        "--metadata", "title=The Private Equity Handbook",
-        "--metadata", "author=PE Hero (pehero.fyi)",
-        "--toc",
-        "--toc-depth=2",
+        "-V", f"pagetitle={title}",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     tmp_path.unlink(missing_ok=True)
@@ -419,8 +633,8 @@ def build_epub():
     cmd = [
         "pandoc", str(tmp_path),
         "-o", str(out_epub),
-        "--metadata", "title=The Private Equity Handbook",
-        "--metadata", "author=PE Hero (pehero.fyi)",
+        "--metadata", f"title={TITLE}",
+        "--metadata", f"author={AUTHORS}",
         "--toc",
         "--toc-depth=2",
     ]
@@ -434,20 +648,26 @@ def build_epub():
     return True
 
 
+LANGUAGES = ["en", "lt", "ee"]
+
+
 def main():
     parser = argparse.ArgumentParser(description="Build PE Handbook PDF/EPUB")
     parser.add_argument("--pdf", action="store_true", help="PDF only")
     parser.add_argument("--epub", action="store_true", help="EPUB only")
+    parser.add_argument("--lang", choices=LANGUAGES, help="Single language (default: all)")
     args = parser.parse_args()
 
     both = not args.pdf and not args.epub
+    langs = [args.lang] if args.lang else LANGUAGES
 
     print("Generating charts ...")
     generate_charts()
 
     ok = True
     if both or args.pdf:
-        ok = build_pdf() and ok
+        for lang in langs:
+            ok = build_pdf(lang) and ok
     if both or args.epub:
         ok = build_epub() and ok
 
