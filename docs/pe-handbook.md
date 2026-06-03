@@ -371,7 +371,7 @@ The Baltic mid-market is rich with PE targets, particularly in sectors undergoin
 | Logistics & transport | 60–80 | €5–40M | 6–12% | High — consolidation play |
 | Financial services | 30–50 | €3–25M | 20–40% | Medium — regulatory barriers |
 | Technology & SaaS | 40–60 | €1–15M | 15–35% | High — Karma, VC, growth equity |
-| Education & training | 20–30 | €2–10M | 15–25% | Emerging — Curonia thesis |
+| Education & training | 20–30 | €2–10M | 15–25% | Emerging — AAA Enterprises thesis |
 | Real estate services | 30–50 | €3–20M | 10–20% | Medium — cyclical |
 
 **Why Baltic founders sell:**

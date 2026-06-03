@@ -24,7 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 HANDBOOK_MD = ROOT / "docs" / "pe-handbook.md"
 OUT_DIR = ROOT / "docs"
 
-LANG_NAMES = {"lt": "Lithuanian", "ee": "Estonian"}
+LANG_NAMES = {"lt": "Lithuanian", "ee": "Estonian", "ro": "Romanian"}
 
 TRANSLATE_SYSTEM = """\
 You are an expert financial translator. Translate the following markdown content \
@@ -43,7 +43,18 @@ dry powder). You may add the {lang_name} equivalent in parentheses on first use.
 7. Maintain the same paragraph structure and line breaks
 8. Do NOT add any commentary or notes — output ONLY the translated markdown
 9. The translation should read naturally in {lang_name}, not as a word-for-word translation
-"""
+{extra_rules}"""
+
+LANG_EXTRA_RULES = {
+    "ro": (
+        '10. IMPORTANT: Wherever the text says "Baltic Perspective", "Baltic" region, '
+        'or "Baltic case studies", replace with "Romanian Perspective", "Romanian" region, '
+        'and "Romanian case studies" respectively. The book title should be '
+        '"Manualul de Private Equity — O Perspectivă Românească". '
+        'Keep the actual case study company names and deal details unchanged — '
+        'only change the framing/perspective references from Baltic to Romanian.\n'
+    ),
+}
 
 REVIEW_SYSTEM = """\
 You are a bilingual translation reviewer for {lang_name} financial content. \
@@ -92,7 +103,8 @@ def _translate_chunk(client: OpenAI, chunk: str, lang: str, idx: int, total: int
     response = client.chat.completions.create(
         model="grok-3-mini",
         messages=[
-            {"role": "system", "content": TRANSLATE_SYSTEM.format(lang_name=lang_name)},
+            {"role": "system", "content": TRANSLATE_SYSTEM.format(
+                lang_name=lang_name, extra_rules=LANG_EXTRA_RULES.get(lang, ""))},
             {"role": "user", "content": chunk},
         ],
         temperature=0.3,
@@ -257,7 +269,7 @@ def review(
 
 def main():
     parser = argparse.ArgumentParser(description="Translate PE Handbook")
-    parser.add_argument("--lang", choices=["lt", "ee"], help="Target language (default: both)")
+    parser.add_argument("--lang", choices=["lt", "ee", "ro"], help="Target language (default: all)")
     parser.add_argument("--review-only", action="store_true", help="Only run Claude review")
     parser.add_argument("--skip-review", action="store_true", help="Skip Claude review step")
     args = parser.parse_args()

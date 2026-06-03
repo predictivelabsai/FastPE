@@ -481,16 +481,54 @@ LANG_TITLES = {
     "en": TITLE,
     "lt": "Privataus Kapitalo Vadovas — Baltijos Perspektyva",
     "ee": "Erakapitali Käsiraamat — Balti Perspektiiv",
+    "ro": "Manualul de Private Equity — O Perspectivă Românească",
 }
 
 LANG_SUBTITLES = {
     "en": "A practical guide for financial professionals and business owners — with Baltic case studies",
     "lt": "Praktinis vadovas finansų specialistams ir verslo savininkams — su Baltijos atvejų analizėmis",
     "ee": "Praktiline juhend finantsspetsialistidele ja ettevõtjatele — Balti juhtumiuuringutega",
+    "ro": "Un ghid practic pentru profesioniștii din finanțe și proprietarii de afaceri — cu studii de caz din Europa Centrală și de Est",
 }
 
+LANG_AUTHORS = {
+    "ro": "Julian Kaljuvee, Andrei Floroiu",
+}
 
-def _cover_html(title: str, subtitle: str, authors: str) -> str:
+LANG_PUBLISHERS = {
+    "ro": "Published by European Capital Markets Publishing Ltd",
+}
+
+RO_FOREWORD = """\
+
+---
+
+## Foreword
+
+*By Mihnea "Mick" Vasilache — Partner & Senior Portfolio Manager, Chenavari Investment Managers*
+
+Private equity in Central and Eastern Europe has come of age. What was once a frontier market for a handful of pioneering funds is now a vibrant ecosystem of institutional-quality GPs, sophisticated LPs, and — most importantly — exceptional entrepreneurs building companies that can compete on a global stage.
+
+This handbook arrives at precisely the right moment. As someone who has spent over two decades in European leveraged finance — from structuring some of the continent's earliest LBO facilities at JP Morgan, to building and managing CLO programmes totalling billions of euros, to running Chenavari's leveraged credit strategy today — I have watched the Romanian and broader CEE private equity market evolve from the deal side, the debt side, and the portfolio side.
+
+What strikes me about this work by Julian Kaljuvee and Andrei Floroiu is its practicality. This is not an academic treatise. It is a field guide written by practitioners who understand that PE value creation in our region demands a different playbook: one that accounts for founder-led transitions, fragmented industries ripe for consolidation, regulatory environments that are still maturing, and talent markets where the right operating partner can be transformative.
+
+Andrei brings a rare combination of Wharton-trained financial rigour and hands-on operating experience — from structuring deals at The Invus Group to leading a NASDAQ-listed biotech as CEO. Julian's deep expertise in AI-driven deal intelligence, refined through building PE Hero, adds a forward-looking dimension that reflects where our industry is heading.
+
+Whether you are an aspiring PE professional, a founder considering a partnership with a financial sponsor, or an institutional investor evaluating the CEE opportunity, this handbook will sharpen your thinking and equip you with frameworks that work in practice, not just in theory.
+
+The Romanian PE market — with firms like Morphosis Capital, Abris Capital Partners, and Enterprise Investors leading the way — is proof that world-class private equity can be built in this part of Europe. This book helps explain how.
+
+*Mihnea "Mick" Vasilache*
+*London, 2025*
+
+---
+
+"""
+
+
+def _cover_html(title: str, subtitle: str, authors: str, publisher: str | None = None) -> str:
+    pub = publisher or "Published by European Capital Markets Publishing Ltd"
     return f"""\
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
@@ -532,7 +570,7 @@ def _cover_html(title: str, subtitle: str, authors: str) -> str:
   <h1>{title}</h1>
   <div class="subtitle">{subtitle}</div>
   <div class="authors">{authors}</div>
-  <div class="publisher">Published by AAA Enterprises &amp; PE Hero (pehero.fyi)<br>2025</div>
+  <div class="publisher">{pub}<br>2025</div>
 </div></body></html>"""
 
 
@@ -557,8 +595,9 @@ def _get_md_for_lang(lang: str) -> str:
     return HANDBOOK_MD.read_text()
 
 
-def _cover_md(title: str, subtitle: str, authors: str) -> str:
+def _cover_md(title: str, subtitle: str, authors: str, publisher: str | None = None) -> str:
     """Markdown cover page that goes at the very top of the document."""
+    pub = publisher or "Published by European Capital Markets Publishing Ltd"
     return (
         f'<div style="text-align:center; padding-top:180pt; padding-bottom:60pt;">\n'
         f'<h1 style="font-size:30pt; color:#1a3c6e; border-bottom:3px solid #1a3c6e; '
@@ -569,7 +608,7 @@ def _cover_md(title: str, subtitle: str, authors: str) -> str:
         f'<p style="font-size:11pt; color:#333; margin-top:24pt;">'
         f'{authors}</p>\n\n'
         f'<p style="font-size:10pt; color:#888; margin-top:80pt;">'
-        f'Published by AAA Enterprises &amp; PE Hero (pehero.fyi)<br>2025</p>\n'
+        f'{pub}<br>2025</p>\n'
         f'</div>\n\n'
     )
 
@@ -584,8 +623,11 @@ def build_pdf(lang: str = "en"):
 
     md_text = _get_md_for_lang(lang)
     md_text = _strip_title_block(md_text)
-    cover = _cover_md(title, subtitle, AUTHORS)
-    enriched = inject_charts(cover + md_text, CHART_DIR)
+    authors = LANG_AUTHORS.get(lang, AUTHORS)
+    publisher = LANG_PUBLISHERS.get(lang)
+    cover = _cover_md(title, subtitle, authors, publisher)
+    foreword = RO_FOREWORD if lang == "ro" else ""
+    enriched = inject_charts(cover + foreword + md_text, CHART_DIR)
 
     with tempfile.NamedTemporaryFile(
         suffix=".md", mode="w", delete=False, dir=str(OUT_DIR)
@@ -648,7 +690,7 @@ def build_epub():
     return True
 
 
-LANGUAGES = ["en", "lt", "ee"]
+LANGUAGES = ["en", "lt", "ee", "ro"]
 
 
 def main():
