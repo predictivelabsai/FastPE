@@ -50,7 +50,7 @@ def _daily_deals_loop():
         time.sleep(wait_secs)
 
         try:
-            from scripts.daily_deals import _top_deals, _render_html, _render_text
+            from scripts.daily_deals import _top_deals, _render_html, _render_text, _fetch_news_sync
             from utils.email import send_email
             from datetime import date
 
@@ -59,13 +59,14 @@ def _daily_deals_loop():
                 log.warning("No active deals — skipping daily email")
                 continue
 
+            news = _fetch_news_sync(5)
             today = date.today().strftime("%b %d")
             subject = f"PEHero Daily Deals — {today} — {len(deals)} actionable opportunities"
             result = send_email(
                 to=s.daily_deals_to_email,
                 subject=subject,
-                html_body=_render_html(deals),
-                text_body=_render_text(deals),
+                html_body=_render_html(deals, news),
+                text_body=_render_text(deals, news),
             )
             log.info("Daily deals sent — MessageID: %s", result.get("MessageID"))
         except Exception:

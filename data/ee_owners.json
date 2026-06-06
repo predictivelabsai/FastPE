@@ -1,0 +1,7363 @@
+[
+  {
+    "id": 1150,
+    "name": "SWEDBANK AS",
+    "error": "Page.goto: net::ERR_ABORTED at https://ariregister.rik.ee/est/company/10060701/Swedbank-AS\nCall log:"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Stephen A. Schwarzman",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11315936",
+    "ownership": "unknown",
+    "id": 1153,
+    "db_name": "LUMINOR BANK AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Allan Parik",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10004252",
+    "ownership": "unknown",
+    "id": 1148,
+    "db_name": "SEB PANK AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Mihkel Torim",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10539549",
+    "ownership": "unknown",
+    "id": 1149,
+    "db_name": "LHV PANK AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Giedrė Kaminskaitė- Salters",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10234957",
+    "ownership": "unknown",
+    "id": 1247,
+    "db_name": "TELIA EESTI AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Måns Fredrik Mattias Edsman",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10100168",
+    "ownership": "unknown",
+    "id": 1053,
+    "db_name": "IF P&C INSURANCE AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11971924",
+    "ownership": "unknown",
+    "id": 1157,
+    "db_name": "AS CITADELE BANKA EESTI FILIAAL"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Magnus Carlehed",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11269248",
+    "ownership": "unknown",
+    "id": 1054,
+    "db_name": "SWEDBANK P&C INSURANCE AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "PARVEL PRUUNSILD",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Vahur Voll",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10183757",
+    "ownership": "unknown",
+    "id": 1155,
+    "db_name": "BIGBANK AS"
+  },
+  {
+    "id": 1055,
+    "name": "AKCINÉ DRAUDIMO BENDROVÉ GJENSIDIGE EESTI FILIAAL",
+    "error": "no_match"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Rainer Rohtla",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10237832",
+    "ownership": "unknown",
+    "id": 1154,
+    "db_name": "COOP PANK AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "89.99%",
+        "name": "Omanikukonto: Mapri OÜ",
+        "code": "14056211",
+        "pct_num": 89.99
+      },
+      {
+        "pct": "10.01%",
+        "name": "Omanikukonto: TARMO ROOS",
+        "code": "38405094237",
+        "pct_num": 10.01
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Mait Rõõmusaar",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Rasmus Jaagant",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Tarmo Roos",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Margus Väärsi",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10131080",
+    "ownership": "pe_backed",
+    "id": 1307,
+    "db_name": "MAPRI EHITUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Priit Põldoja",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "12001988",
+    "ownership": "unknown",
+    "id": 1156,
+    "db_name": "INBANK AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Harald Riener",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10055769",
+    "ownership": "unknown",
+    "id": 1042,
+    "db_name": "COMPENSA LIFE VIENNA INSURANCE GROUP SE"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Magnus Carlehed",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10142356",
+    "ownership": "unknown",
+    "id": 1043,
+    "db_name": "SWEDBANK LIFE INSURANCE SE"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10007517",
+    "ownership": "unknown",
+    "id": 1012,
+    "db_name": "MAGNUM VETERINAARIA AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10189553",
+    "ownership": "unknown",
+    "id": 1180,
+    "db_name": "HHLA TK ESTONIA AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11514417",
+    "ownership": "unknown",
+    "id": 1231,
+    "db_name": "MN MEDICAL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12613009",
+    "ownership": "unknown",
+    "id": 1105,
+    "db_name": "AERO MOTORS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10239452",
+    "ownership": "unknown",
+    "id": 1362,
+    "db_name": "FUJITSU ESTONIA AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10952552",
+    "ownership": "unknown",
+    "id": 1343,
+    "db_name": "TLG HOTELL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10078457",
+    "ownership": "unknown",
+    "id": 1230,
+    "db_name": "SEMETRON AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10097532",
+    "ownership": "unknown",
+    "id": 1167,
+    "db_name": "SMARTEN LOGISTICS AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10876331",
+    "ownership": "unknown",
+    "id": 1312,
+    "db_name": "ADVOKAADIBÜROO SORAINEN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16027283",
+    "ownership": "unknown",
+    "id": 1349,
+    "db_name": "HMP HOTELLID OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: SPA VARAD OÜ",
+        "code": "11693452",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "KALLE KUUSIK",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11693733",
+    "ownership": "pe_backed",
+    "id": 1340,
+    "db_name": "SPA TOURS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Mediq International B.V.",
+        "code": "30107227",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Priit Paiste",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Saija Heini Maria Kotkas",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Thorbjorn Hjarndal",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11946246",
+    "ownership": "pe_backed",
+    "id": 1233,
+    "db_name": "MEDIQ EESTI OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "18.87%",
+        "name": "Omanikukonto: ADVOKAADIBÜROO COBALT OÜ",
+        "code": "10188708",
+        "pct_num": 18.87
+      },
+      {
+        "pct": "18.58%",
+        "name": "Omanikukonto: SANJAY-JAANUS MODY",
+        "code": "37112292745",
+        "pct_num": 18.58
+      },
+      {
+        "pct": "12.86%",
+        "name": "Omanikukonto: MARTIN SIMOVART",
+        "code": "37012082723",
+        "pct_num": 12.86
+      },
+      {
+        "pct": "7.65%",
+        "name": "Omanikukonto: AIVAR TARO",
+        "code": "37902222749",
+        "pct_num": 7.65
+      },
+      {
+        "pct": "7.59%",
+        "name": "Omanikukonto: Kristel Raidla-Talur",
+        "code": "48107294233",
+        "pct_num": 7.59
+      },
+      {
+        "pct": "7.55%",
+        "name": "Omanikukonto: MARINA KOTKAS",
+        "code": "47909303730",
+        "pct_num": 7.55
+      },
+      {
+        "pct": "7.37%",
+        "name": "Omanikukonto: PEETER KUTMAN",
+        "code": "37306282716",
+        "pct_num": 7.37
+      },
+      {
+        "pct": "5.98%",
+        "name": "Omanikukonto: Egon Talur",
+        "code": "38101254225",
+        "pct_num": 5.98
+      },
+      {
+        "pct": "4.90%",
+        "name": "Omanikukonto: KARINA PAATSI",
+        "code": "47503182788",
+        "pct_num": 4.9
+      },
+      {
+        "pct": "4.38%",
+        "name": "Omanikukonto: ELO TAMM",
+        "code": "47607172729",
+        "pct_num": 4.38
+      },
+      {
+        "pct": "3.22%",
+        "name": "Omanikukonto: MONIKA KOOLMEISTER",
+        "code": "48108012740",
+        "pct_num": 3.22
+      },
+      {
+        "pct": "0.26%",
+        "name": "Omanikukonto: LEMBIT TEDDER",
+        "code": "39010180304",
+        "pct_num": 0.26
+      },
+      {
+        "pct": "0.26%",
+        "name": "Omanikukonto: Annika Peetsalu",
+        "code": "48607212739",
+        "pct_num": 0.26
+      },
+      {
+        "pct": "0.26%",
+        "name": "Omanikukonto: RAUNO LIGI",
+        "code": "38409160276",
+        "pct_num": 0.26
+      },
+      {
+        "pct": "0.26%",
+        "name": "Omanikukonto: JESSE SAKARI KIVISAARI",
+        "code": "-",
+        "pct_num": 0.26
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kristel Raidla-Talur",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Martin Simovart",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Sanjay-Jaanus Mody",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10188708",
+    "ownership": "founder",
+    "id": 1311,
+    "db_name": "ADVOKAADIBÜROO COBALT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "25.90%",
+        "name": "Ellex Raidla Advokaadibüroo OÜ",
+        "code": "10344152",
+        "pct_num": 25.9
+      },
+      {
+        "pct": "6.47%",
+        "name": "Gerli Kivisoo",
+        "code": "48203290279",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Martin Mäesalu",
+        "code": "38605102765",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Liis Könn",
+        "code": "48606072720",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Risto Vahimets",
+        "code": "37403080350",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Anton Sigal",
+        "code": "38207170301",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Toomas Vaher",
+        "code": "37410126024",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Ermo Kosk",
+        "code": "38212070251",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Ants Nõmper",
+        "code": "37702240355",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Antti Perli",
+        "code": "37902106521",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Arne Ots",
+        "code": "37604220037",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "6.47%",
+        "name": "Martin Käerdi",
+        "code": "37511110217",
+        "pct_num": 6.47
+      },
+      {
+        "pct": "0.72%",
+        "name": "Alla Kuznetsova",
+        "code": "48506282725",
+        "pct_num": 0.72
+      },
+      {
+        "pct": "0.72%",
+        "name": "Rutt Värk",
+        "code": "48409290325",
+        "pct_num": 0.72
+      },
+      {
+        "pct": "0.72%",
+        "name": "Ott Aava",
+        "code": "38701144230",
+        "pct_num": 0.72
+      },
+      {
+        "pct": "0.72%",
+        "name": "Merlin Liis-Toomela",
+        "code": "49201060238",
+        "pct_num": 0.72
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Gerli Kivisoo",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Toomas Vaher",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Antti Perli",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Martin Mäesalu",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10344152",
+    "ownership": "founder",
+    "id": 1313,
+    "db_name": "Ellex Raidla Advokaadibüroo OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Vjatšeslav Rabotšev",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10059388",
+    "ownership": "unknown",
+    "id": 1248,
+    "db_name": "STV AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12008366",
+    "ownership": "unknown",
+    "id": 1005,
+    "db_name": "BALTIC LOGISTIC SOLUTIONS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Kristjan Kraag",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Martti Lemendik",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10111769",
+    "ownership": "unknown",
+    "id": 1185,
+    "db_name": "STARK LOGISTICS AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: AS MAGNUM",
+        "code": "12371718",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Margus Linnamäe",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "11331792",
+    "ownership": "pe_backed",
+    "id": 1170,
+    "db_name": "MAGNUM LOGISTICS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Osaühing Ranniku Invest",
+        "code": "11314931",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Lembit Allikmets",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "11548994",
+    "ownership": "pe_backed",
+    "id": 1235,
+    "db_name": "LINUS MEDICAL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10041810",
+    "ownership": "unknown",
+    "id": 1344,
+    "db_name": "HOTELL OLÜMPIA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "B.Braun Medical Oy",
+        "code": "",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ludwig Georg Braun",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10000515",
+    "ownership": "pe_backed",
+    "id": 1232,
+    "db_name": "B.BRAUN MEDICAL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12243788",
+    "ownership": "unknown",
+    "id": 1335,
+    "db_name": "VEDELGAAS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10048350",
+    "ownership": "unknown",
+    "id": 1341,
+    "db_name": "MERITON HOTELS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "74.62%",
+        "name": "Omanikukonto: Aktsiaselts A & O",
+        "code": "10121684",
+        "pct_num": 74.62
+      },
+      {
+        "pct": "24.87%",
+        "name": "Omanikukonto: Galt Capital OÜ",
+        "code": "12630143",
+        "pct_num": 24.87
+      },
+      {
+        "pct": "0.50%",
+        "name": "Omanikukonto: Pärnu Sadam OÜ",
+        "code": "11385865",
+        "pct_num": 0.5
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Mati Einmann",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "11385865",
+    "ownership": "pe_backed",
+    "id": 1183,
+    "db_name": "PÄRNU SADAM OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Novamade OÜ",
+        "code": "12242984",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Novaviva OÜ",
+        "code": "10203603",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ivar Lindla",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Marko Kalle",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10234070",
+    "ownership": "pe_backed",
+    "id": 1237,
+    "db_name": "AB MEDICAL GROUP EESTI OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: OLYMPIC ENTERTAINMENT GROUP AS",
+        "code": "14437516",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Finbarr O'Connor",
+        "control": "Muul viisil kontroll või mõju (lepingulised, perekondlikud vm suhted)"
+      },
+      {
+        "name": "Gavin Farrell",
+        "control": "Muul viisil kontroll või mõju (lepingulised, perekondlikud vm suhted)"
+      }
+    ],
+    "reg_code": "10591404",
+    "ownership": "pe_backed",
+    "id": 1352,
+    "db_name": "FORTUNA TRAVEL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14466191",
+    "ownership": "unknown",
+    "id": 1188,
+    "db_name": "KUNDA SADAM AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Evgeni Beliaev",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10918288",
+    "ownership": "unknown",
+    "id": 1242,
+    "db_name": "TRIMIX POINT AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16829108",
+    "ownership": "unknown",
+    "id": 1168,
+    "db_name": "NG LOGISTICS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10132895",
+    "ownership": "unknown",
+    "id": 1039,
+    "db_name": "LAJOS AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Ivar Värsi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Mart Uusküla",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Martin Lepiku",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Toomas Arike",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10832463",
+    "ownership": "unknown",
+    "id": 1234,
+    "db_name": "QUANTUM EESTI AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Kristel Voltenberg",
+        "control": "Õigus nimetada või tagasi kutsuda enamikku tegevjuhtkonnast või kõrgema juhtorgani liikmeist"
+      }
+    ],
+    "reg_code": "10275471",
+    "ownership": "unknown",
+    "id": 1346,
+    "db_name": "ESTONIA SPA HOTELS AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Ants Ratas",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Tarmo Nurmetalo",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Tõnis Pohla",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Üllar Raad",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "14253182",
+    "ownership": "unknown",
+    "id": 1187,
+    "db_name": "ESTEVE AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10484631",
+    "ownership": "unknown",
+    "id": 1236,
+    "db_name": "HANSA MEDICAL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Sander Kärson",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10288628",
+    "ownership": "unknown",
+    "id": 1314,
+    "db_name": "ADVOKAADIBÜROO TEGOS AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11112305",
+    "ownership": "unknown",
+    "id": 1358,
+    "db_name": "SWISSOTEL ESTONIA OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10496054",
+    "ownership": "unknown",
+    "id": 1189,
+    "db_name": "KATOEN NATIE EESTI AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: TIITER OÜ",
+        "code": "10845342",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Feliks Mägus",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11149337",
+    "ownership": "pe_backed",
+    "id": 1356,
+    "db_name": "NORDIC HOTELS OÜ"
+  },
+  {
+    "id": 1244,
+    "name": "JOHNSON & JOHNSON AB EESTI FILIAAL",
+    "error": "no_match"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Vladimir Buliura",
+        "code": "38604150479",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Vladimir Buliura",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16662996",
+    "ownership": "founder",
+    "id": 1259,
+    "db_name": "ROCKETCONNECT OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11969394",
+    "ownership": "unknown",
+    "id": 1106,
+    "db_name": "EVIDENSIA LOOMAKLIINIKUD OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Toomas Värton",
+        "control": "suurem kui 50%-line osalus konsolideeritava üksuse hääleõiguses"
+      }
+    ],
+    "reg_code": "10195499",
+    "ownership": "unknown",
+    "id": 1238,
+    "db_name": "MEDITSIINIGRUPP AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Olympus Europa SE &Co. KG",
+        "code": "HRA 116518",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Joanna Szwiec",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Lars Georg Rust",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Piippa Sonia Väänänen",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10951954",
+    "ownership": "pe_backed",
+    "id": 1239,
+    "db_name": "OLYMPUS ESTONIA OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11236415",
+    "ownership": "unknown",
+    "id": 1348,
+    "db_name": "AQVA HOTELS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Karl Ader",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Jaan Ratnik",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Rein Tiik",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Toomas Arumäe",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10044777",
+    "ownership": "unknown",
+    "id": 1347,
+    "db_name": "SANATOORIUM TERVIS AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10364192",
+    "ownership": "unknown",
+    "id": 1169,
+    "db_name": "LOGISTIKA PLUSS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Tiit Vähi",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "11130332",
+    "ownership": "unknown",
+    "id": 1190,
+    "db_name": "SILSTEVE AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Arvigrat Holding AG",
+        "code": "CHE-345.905.212",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Mathias Bernhard Naumann",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Christel Rumkorf",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Helmuth Tschütscher",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10672769",
+    "ownership": "pe_backed",
+    "id": 1140,
+    "db_name": "OBO BETTERMANN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10089395",
+    "ownership": "unknown",
+    "id": 1057,
+    "db_name": "ELAMA KINDLUSTUS AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "95.00%",
+        "name": "Omanikukonto: NNHOLDING OÜ",
+        "code": "14983414",
+        "pct_num": 95.0
+      },
+      {
+        "pct": "5.00%",
+        "name": "Omanikukonto: VIA 3L OÜ",
+        "code": "10731489",
+        "pct_num": 5.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andri Jõema",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Madis Laansalu",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "12058696",
+    "ownership": "pe_backed",
+    "id": 1171,
+    "db_name": "NORDNET OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10545025",
+    "ownership": "unknown",
+    "id": 1345,
+    "db_name": "HAVELI INVEST OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "aktsiaselts Sanatoorium Tervis",
+        "code": "10044777",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Karl Ader",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Jaan Ratnik",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Rein Tiik",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Toomas Arumäe",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10559955",
+    "ownership": "pe_backed",
+    "id": 1350,
+    "db_name": "TERVISE PARADIIS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Prof Unit OÜ",
+        "code": "17333378",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Indrek Raudsaar",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "14576169",
+    "ownership": "pe_backed",
+    "id": 1075,
+    "db_name": "LUNA GROUP ESTONIA OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Nikolaus von der Decken",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10338119",
+    "ownership": "unknown",
+    "id": 1353,
+    "db_name": "TOILA SANATOORIUM AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14024560",
+    "ownership": "unknown",
+    "id": 1315,
+    "db_name": "Advokaadibüroo WALLESS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: MUSTI GROUP NORDIC OY",
+        "code": "FI2339317-7",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kadri Ulla",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Robert Erik Ragnar Berglund",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "12871585",
+    "ownership": "pe_backed",
+    "id": 1107,
+    "db_name": "EESTI VETERINAARIA KLIINIKUM OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11256346",
+    "ownership": "unknown",
+    "id": 1173,
+    "db_name": "RIMI LOGISTICS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: AS ESTKO",
+        "code": "10239788",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Alar Aasjõe",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Liina Kikas",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Priit Lõhmus",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Hainer Õunapuu",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10621695",
+    "ownership": "pe_backed",
+    "id": 1336,
+    "db_name": "NORDIC GROUP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "25.00%",
+        "name": "Omanikukonto: OÜ ADVOKAADIBÜROO EVERSHEDS SUTHERLAND OTS&CO",
+        "code": "10639559",
+        "pct_num": 25.0
+      },
+      {
+        "pct": "12.50%",
+        "name": "Omanikukonto: RAIKO LIPSTOK",
+        "code": "37810304715",
+        "pct_num": 12.5
+      },
+      {
+        "pct": "12.50%",
+        "name": "Omanikukonto: RISTO RÜÜTEL",
+        "code": "37611170284",
+        "pct_num": 12.5
+      },
+      {
+        "pct": "12.50%",
+        "name": "Omanikukonto: DMITRI ZDOBNÕH",
+        "code": "38608040344",
+        "pct_num": 12.5
+      },
+      {
+        "pct": "12.50%",
+        "name": "Omanikukonto: TOOMAS PIKAMÄE",
+        "code": "37511270210",
+        "pct_num": 12.5
+      },
+      {
+        "pct": "12.50%",
+        "name": "Omanikukonto: MAIVI OTS",
+        "code": "47405200339",
+        "pct_num": 12.5
+      },
+      {
+        "pct": "12.50%",
+        "name": "Omanikukonto: TAMBET TOOMELA",
+        "code": "38202170307",
+        "pct_num": 12.5
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Maivi Ots",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10639559",
+    "ownership": "founder",
+    "id": 1318,
+    "db_name": "ADVOKAADIBÜROO EVERSHEDS SUTHERLAND OTS&CO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "51.00%",
+        "name": "Rita Pukk",
+        "code": "46908160272",
+        "pct_num": 51.0
+      },
+      {
+        "pct": "49.00%",
+        "name": "Osaühing REMMELG & POJAD",
+        "code": "10396559",
+        "pct_num": 49.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rita Pukk",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16320344",
+    "ownership": "founder",
+    "id": 1133,
+    "db_name": "EESTI PÄIKESEVÄGI OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10223439",
+    "ownership": "unknown",
+    "id": 1361,
+    "db_name": "TKM GRUPP AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Olav Arus",
+        "code": "37612296029",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Olav Arus",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11185818",
+    "ownership": "founder",
+    "id": 1019,
+    "db_name": "VALMA SAEVESKI OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "80.00%",
+        "name": "Omanikukonto: Marius Vahter",
+        "code": "37903174929",
+        "pct_num": 80.0
+      },
+      {
+        "pct": "20.00%",
+        "name": "Omanikukonto: Rasmus Leibur",
+        "code": "38901130252",
+        "pct_num": 20.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rasmus Leibur",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Marius Vahter",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11451585",
+    "ownership": "founder",
+    "id": 1202,
+    "db_name": "AIT-NORD OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Toivo Ninnas",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10002098",
+    "ownership": "unknown",
+    "id": 1351,
+    "db_name": "TAASTUSRAVIKESKUS VIIKING AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "SJM Coordination Center BVBA",
+        "code": "0888.256.714",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Mika Tapio Mustonen",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11992890",
+    "ownership": "pe_backed",
+    "id": 1246,
+    "db_name": "ABBOTT MEDICAL ESTONIA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Sergei Polonski",
+        "code": "36210230319",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Sergei Polonski",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10935602",
+    "ownership": "founder",
+    "id": 1071,
+    "db_name": "REALSTEN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10922249",
+    "ownership": "unknown",
+    "id": 1355,
+    "db_name": "CENTRAL HOTELL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "8.58%",
+        "name": "Villu Otsmann",
+        "code": "37304220246",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Karmen Turk",
+        "code": "48202052736",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Tanel Kalaus",
+        "code": "37805174217",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Erki Vabamets",
+        "code": "37409140216",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Tõnis Tamme",
+        "code": "37204092710",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Ramil Pärdi",
+        "code": "37406202718",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Siim Maripuu",
+        "code": "38908152752",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Ergo Blumfeldt",
+        "code": "37512100313",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Klen Laus",
+        "code": "38112220280",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "8.58%",
+        "name": "Maarja Pild-Freiberg",
+        "code": "49102192729",
+        "pct_num": 8.58
+      },
+      {
+        "pct": "2.24%",
+        "name": "Valter Võhma",
+        "code": "38505240349",
+        "pct_num": 2.24
+      },
+      {
+        "pct": "2.24%",
+        "name": "Karin Oras",
+        "code": "48312035713",
+        "pct_num": 2.24
+      },
+      {
+        "pct": "2.24%",
+        "name": "Sandor Elias",
+        "code": "39005076011",
+        "pct_num": 2.24
+      },
+      {
+        "pct": "1.49%",
+        "name": "Advokaadibüroo TRINITI OÜ",
+        "code": "11984324",
+        "pct_num": 1.49
+      },
+      {
+        "pct": "0.75%",
+        "name": "Mikk Põld",
+        "code": "38611290327",
+        "pct_num": 0.75
+      },
+      {
+        "pct": "0.75%",
+        "name": "Ain Kalme",
+        "code": "37109180279",
+        "pct_num": 0.75
+      },
+      {
+        "pct": "0.75%",
+        "name": "Risto Käbi",
+        "code": "37701030282",
+        "pct_num": 0.75
+      },
+      {
+        "pct": "0.75%",
+        "name": "Sten-Andrus Veidebaum",
+        "code": "37401020299",
+        "pct_num": 0.75
+      },
+      {
+        "pct": "0.75%",
+        "name": "Katri Tomson",
+        "code": "48109070301",
+        "pct_num": 0.75
+      },
+      {
+        "pct": "0.75%",
+        "name": "Peeter Paul Mõtsküla",
+        "code": "37112290239",
+        "pct_num": 0.75
+      },
+      {
+        "pct": "0.75%",
+        "name": "Maarja Lehemets",
+        "code": "49011136519",
+        "pct_num": 0.75
+      },
+      {
+        "pct": "0.75%",
+        "name": "Martin Järve",
+        "code": "39512150254",
+        "pct_num": 0.75
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Karmen Turk",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Siim Maripuu",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Ergo Blumfeldt",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Erki Vabamets",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11984324",
+    "ownership": "founder",
+    "id": 1317,
+    "db_name": "Advokaadibüroo TRINITI OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "9.43%",
+        "name": "Rauno Kinkar",
+        "code": "38906302763",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Magnus Braun",
+        "code": "38702095217",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Ants Karu",
+        "code": "37106132724",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Urmas Ustav",
+        "code": "37410045231",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Oliver Nääs",
+        "code": "38608070278",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Marge Männiko",
+        "code": "47802222714",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Olavi-Jüri Luik",
+        "code": "37312290223",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Margus Reiland",
+        "code": "38603264224",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Diana Minumets",
+        "code": "48411260225",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "9.43%",
+        "name": "Kristi Sild",
+        "code": "47605094220",
+        "pct_num": 9.43
+      },
+      {
+        "pct": "1.89%",
+        "name": "Ksenia Kravtšenko",
+        "code": "48009230261",
+        "pct_num": 1.89
+      },
+      {
+        "pct": "1.89%",
+        "name": "Henri Ratnik",
+        "code": "39304124210",
+        "pct_num": 1.89
+      },
+      {
+        "pct": "1.89%",
+        "name": "Triin Biesinger",
+        "code": "48007302731",
+        "pct_num": 1.89
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rainer Ratnik",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10992652",
+    "ownership": "founder",
+    "id": 1316,
+    "db_name": "ADVOKAADIBÜROO WIDEN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12519859",
+    "ownership": "unknown",
+    "id": 1191,
+    "db_name": "PK TERMINAL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "JN-WIC Holding OÜ",
+        "code": "11539570",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "David Mathisen",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Tanja Susanna Mathisen",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "11073083",
+    "ownership": "pe_backed",
+    "id": 1101,
+    "db_name": "WOOD IMPORT COMPANY OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: KÜLLI JOONSON",
+        "code": "46706112757",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Külli Joonson",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10958649",
+    "ownership": "founder",
+    "id": 1240,
+    "db_name": "ISIS MEDICAL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Artur Matsas",
+        "code": "37609100369",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Artur Matsas",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10042844",
+    "ownership": "founder",
+    "id": 1175,
+    "db_name": "MIRAMIS OÜ"
+  },
+  {
+    "id": 1088,
+    "name": "COLUMBIA-KIVI AS",
+    "error": "no_match"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11051880",
+    "ownership": "unknown",
+    "id": 1243,
+    "db_name": "TERVISE ABI OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Hanna Kaplan",
+        "control": "Muul viisil kontroll või mõju (lepingulised, perekondlikud vm suhted)"
+      }
+    ],
+    "reg_code": "80361841",
+    "ownership": "unknown",
+    "id": 1250,
+    "db_name": "EESTI ANDMESIDEVÕRK MTÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "CMA CGM AGENCIES WORLDWIDE SAS",
+        "code": "384350534 R.C.S MARSEILLE",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rodolphe SAADE",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "11298095",
+    "ownership": "pe_backed",
+    "id": 1363,
+    "db_name": "CMA CGM ESTONIA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "80.00%",
+        "name": "Bulteno OÜ",
+        "code": "12442051",
+        "pct_num": 80.0
+      },
+      {
+        "pct": "20.00%",
+        "name": "OÜ MAE",
+        "code": "14045325",
+        "pct_num": 20.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kalev Vist",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "12278054",
+    "ownership": "pe_backed",
+    "id": 1095,
+    "db_name": "OSMO BALTIC OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "80.00%",
+        "name": "Viia Parv",
+        "code": "45605182711",
+        "pct_num": 80.0
+      },
+      {
+        "pct": "20.00%",
+        "name": "Raigo Põder",
+        "code": "38403072731",
+        "pct_num": 20.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Viia Parv",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Raigo Põder",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11910656",
+    "ownership": "founder",
+    "id": 1245,
+    "db_name": "ORTOLINK INVEST OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Ljubov-Luule Emmar",
+        "code": "48108214919",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ljubov-Luule Emmar",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11296015",
+    "ownership": "founder",
+    "id": 1274,
+    "db_name": "LUUTAR OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10358725",
+    "ownership": "unknown",
+    "id": 1357,
+    "db_name": "WASA AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "42.50%",
+        "name": "Ivo Kask",
+        "code": "37808082740",
+        "pct_num": 42.5
+      },
+      {
+        "pct": "42.50%",
+        "name": "Veiko Märtin",
+        "code": "37711142739",
+        "pct_num": 42.5
+      },
+      {
+        "pct": "15.00%",
+        "name": "Mait Märtin",
+        "code": "37208302750",
+        "pct_num": 15.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ivo Kask",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Veiko Märtin",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10851880",
+    "ownership": "founder",
+    "id": 1325,
+    "db_name": "MÄNNIKÄBI JA PUIT OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11176771",
+    "ownership": "unknown",
+    "id": 1324,
+    "db_name": "NJORD ADVOKAADIBÜROO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "42.50%",
+        "name": "Ingrid Suuder",
+        "code": "47309070240",
+        "pct_num": 42.5
+      },
+      {
+        "pct": "29.75%",
+        "name": "Laur Kelder",
+        "code": "37612220238",
+        "pct_num": 29.75
+      },
+      {
+        "pct": "22.75%",
+        "name": "Ilmar Kelder",
+        "code": "38112190287",
+        "pct_num": 22.75
+      },
+      {
+        "pct": "5.00%",
+        "name": "Irja Tamkivi",
+        "code": "48208272722",
+        "pct_num": 5.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ilmar Kelder",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Ingrid Suuder",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Irja Tamkivi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Laur Kelder",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10144295",
+    "ownership": "founder",
+    "id": 1241,
+    "db_name": "AB TECHNOLOGY OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "OLIVER TATAR",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10079652",
+    "ownership": "unknown",
+    "id": 1062,
+    "db_name": "ATV TRANSPORDI AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11239572",
+    "ownership": "unknown",
+    "id": 1184,
+    "db_name": "KV SERVICE OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10239765",
+    "ownership": "unknown",
+    "id": 1212,
+    "db_name": "ATLAS SEGUD AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10248876",
+    "ownership": "unknown",
+    "id": 1065,
+    "db_name": "KV TRANSPORT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "BLRT Grupp AS",
+        "code": "10068499",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Igor Berman",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Mark Berman",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Fjodor Berman",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10668561",
+    "ownership": "pe_backed",
+    "id": 1196,
+    "db_name": "BLRT TRANSIIT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aivar Juhandi",
+        "code": "37608120225",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aivar Juhandi",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10879507",
+    "ownership": "founder",
+    "id": 1040,
+    "db_name": "DOMINOS PROJEKT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aktsiaselts Logman Invest",
+        "code": "10361696",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Endel Siff",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Kadri Siff",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10375907",
+    "ownership": "pe_backed",
+    "id": 1198,
+    "db_name": "TALLINNA BEKKERI SADAM OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11374175",
+    "ownership": "unknown",
+    "id": 1135,
+    "db_name": "SKONE GRUPP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "37.50%",
+        "name": "GRISCHA - TRADING E INTERNATIONAL SERVICES, SOCIEDADE UNIPESSOAL LDA",
+        "code": "511119542",
+        "pct_num": 37.5
+      },
+      {
+        "pct": "37.50%",
+        "name": "GRAINFORCE OÜ",
+        "code": "12903871",
+        "pct_num": 37.5
+      },
+      {
+        "pct": "25.00%",
+        "name": "Renaisco B.V.",
+        "code": "24257792",
+        "pct_num": 25.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Jan Lipinski",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Glencore Agriculture Ltd",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Uwe Jertrum",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10347526",
+    "ownership": "pe_backed",
+    "id": 1172,
+    "db_name": "MGT MUUGA GRAIN TERMINAAL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aktsiaselts Mainor",
+        "code": "10099531",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Guido Pärnits",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "14092164",
+    "ownership": "pe_backed",
+    "id": 1080,
+    "db_name": "TALLINN INTERNATIONAL SCHOOL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11301354",
+    "ownership": "unknown",
+    "id": 1192,
+    "db_name": "MUUGA STORAGE TERMINAL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Kalev Tulits",
+        "code": "37605066018",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kalev Tulits",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11972315",
+    "ownership": "founder",
+    "id": 1177,
+    "db_name": "NAPFLION OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Baltic Maritime Logistics Group AS",
+        "code": "10682650",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Üllar Raad",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "10031869",
+    "ownership": "pe_backed",
+    "id": 1193,
+    "db_name": "STIVIS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aleksei Boitsov",
+        "code": "37608182239",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aleksei Boitsov",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12404211",
+    "ownership": "founder",
+    "id": 1038,
+    "db_name": "METALSET OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "34.00%",
+        "name": "Urmas Mägi",
+        "code": "36207140253",
+        "pct_num": 34.0
+      },
+      {
+        "pct": "20.00%",
+        "name": "Marten Mägi",
+        "code": "38901060256",
+        "pct_num": 20.0
+      },
+      {
+        "pct": "16.00%",
+        "name": "Rainer Mägi",
+        "code": "38511220232",
+        "pct_num": 16.0
+      },
+      {
+        "pct": "14.00%",
+        "name": "Villu Mägi",
+        "code": "35802210262",
+        "pct_num": 14.0
+      },
+      {
+        "pct": "14.00%",
+        "name": "Sirje Mägi",
+        "code": "46111150265",
+        "pct_num": 14.0
+      },
+      {
+        "pct": "2.00%",
+        "name": "Vahur Mägi",
+        "code": "36005014917",
+        "pct_num": 2.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rainer Mägi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Marten Mägi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Sirje Mägi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Urmas Mägi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Vahur Mägi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Villu Mägi",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10265900",
+    "ownership": "founder",
+    "id": 1205,
+    "db_name": "NELICO OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12603716",
+    "ownership": "unknown",
+    "id": 1066,
+    "db_name": "KOROTER OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "14.71%",
+        "name": "Omanikukonto: ANDRUS KATTEL",
+        "code": "37211060215",
+        "pct_num": 14.71
+      },
+      {
+        "pct": "14.71%",
+        "name": "Omanikukonto: VEIKKO PUOLAKAINEN",
+        "code": "37412206516",
+        "pct_num": 14.71
+      },
+      {
+        "pct": "14.71%",
+        "name": "Omanikukonto: ARSI PAVELTS",
+        "code": "38305080370",
+        "pct_num": 14.71
+      },
+      {
+        "pct": "14.71%",
+        "name": "Omanikukonto: MARI PAST",
+        "code": "48610272717",
+        "pct_num": 14.71
+      },
+      {
+        "pct": "14.71%",
+        "name": "Omanikukonto: KRISTJAN TAMM",
+        "code": "37707070306",
+        "pct_num": 14.71
+      },
+      {
+        "pct": "14.71%",
+        "name": "Omanikukonto: Mart Parind",
+        "code": "39203096544",
+        "pct_num": 14.71
+      },
+      {
+        "pct": "2.35%",
+        "name": "Omanikukonto: Heili Püümann",
+        "code": "49102280310",
+        "pct_num": 2.35
+      },
+      {
+        "pct": "2.35%",
+        "name": "Omanikukonto: Laura Raadik",
+        "code": "49410132026",
+        "pct_num": 2.35
+      },
+      {
+        "pct": "2.35%",
+        "name": "Omanikukonto: Sten Tikerpe",
+        "code": "39301190223",
+        "pct_num": 2.35
+      },
+      {
+        "pct": "2.35%",
+        "name": "Omanikukonto: MARIS VUTT",
+        "code": "49302200815",
+        "pct_num": 2.35
+      },
+      {
+        "pct": "2.35%",
+        "name": "Omanikukonto: Marika Mugur",
+        "code": "48102260283",
+        "pct_num": 2.35
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrus Kattel",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Arsi Pavelts",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Kristjan Tamm",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Mari Past",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Veikko Puolakainen",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "12984303",
+    "ownership": "founder",
+    "id": 1320,
+    "db_name": "ADVOKAADIBÜROO NOVE OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Alar Aitsam",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10014486",
+    "ownership": "unknown",
+    "id": 1098,
+    "db_name": "RTT AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14334851",
+    "ownership": "unknown",
+    "id": 1096,
+    "db_name": "GHOST GROUP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "75.00%",
+        "name": "Suomen Satamavarastot Oy",
+        "code": "2477442-2",
+        "pct_num": 75.0
+      },
+      {
+        "pct": "25.00%",
+        "name": "AML Kinnisvara AS",
+        "code": "10203939",
+        "pct_num": 25.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Anne Laaksonen",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Jussi Laaksonen",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10355796",
+    "ownership": "pe_backed",
+    "id": 1194,
+    "db_name": "BULK & TANK OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12018287",
+    "ownership": "unknown",
+    "id": 1010,
+    "db_name": "SCHBOT ROBOTICS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "MARGUS LENSMENT",
+        "code": "37607146031",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Vaiper Veod Osaühing",
+        "code": "11121698",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Margus Lensment",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Mark Saar",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10069100",
+    "ownership": "founder",
+    "id": 1146,
+    "db_name": "VV AUTO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "90.00%",
+        "name": "Vastglobe OÜ",
+        "code": "16144646",
+        "pct_num": 90.0
+      },
+      {
+        "pct": "10.00%",
+        "name": "Sergei Buzak",
+        "code": "37702110388",
+        "pct_num": 10.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Anthony Rivshin",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "14422354",
+    "ownership": "pe_backed",
+    "id": 1254,
+    "db_name": "CSC TELECOM ESTONIA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Tanoma OY",
+        "code": "1500006-2",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kari Talvitie",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Michael Stefan Mayer",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Viacheslav Novikov",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "12115607",
+    "ownership": "pe_backed",
+    "id": 1179,
+    "db_name": "ITT BALTIC OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "52.75%",
+        "name": "Toivo Viilup",
+        "code": "37807310286",
+        "pct_num": 52.75
+      },
+      {
+        "pct": "21.25%",
+        "name": "Jüri Ploom",
+        "code": "37012242732",
+        "pct_num": 21.25
+      },
+      {
+        "pct": "15.00%",
+        "name": "Martin Männik",
+        "code": "38011130229",
+        "pct_num": 15.0
+      },
+      {
+        "pct": "10.00%",
+        "name": "Osaühing Advokaadibüroo Pohla & Hallmägi",
+        "code": "10139182",
+        "pct_num": 10.0
+      },
+      {
+        "pct": "1.00%",
+        "name": "Asko Pohla",
+        "code": "36408100280",
+        "pct_num": 1.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Toivo Viilup",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10139182",
+    "ownership": "founder",
+    "id": 1322,
+    "db_name": "ADVOKAADIBÜROO POHLA & HALLMÄGI OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Ursel Velve",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Hele-Liis Viirsalu",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Erkki Keldo",
+        "control": "Õigus nimetada või tagasi kutsuda enamikku tegevjuhtkonnast või kõrgema juhtorgani liikmeist"
+      },
+      {
+        "name": "Katrin Savi",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Martti Kalvik",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Signe Rähesoo",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11948506",
+    "ownership": "unknown",
+    "id": 1056,
+    "db_name": "KREDEX KREDIIDIKINDLUSTUS AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Lauri Rebane",
+        "code": "37912290348",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Lauri Rebane",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14580745",
+    "ownership": "founder",
+    "id": 1123,
+    "db_name": "ENERPRO SOLUTIONS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Martin Tiitson",
+        "code": "38204230230",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [],
+    "reg_code": "10226113",
+    "ownership": "founder",
+    "id": 1270,
+    "db_name": "INKWELL DESIGN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12139453",
+    "ownership": "unknown",
+    "id": 1186,
+    "db_name": "LÕVI VEOD OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "70.03%",
+        "name": "Ranno Viitmaa",
+        "code": "37208220252",
+        "pct_num": 70.03
+      },
+      {
+        "pct": "29.97%",
+        "name": "Osaühing Solventum",
+        "code": "10276890",
+        "pct_num": 29.97
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ranno Viitmaa",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10348916",
+    "ownership": "founder",
+    "id": 1112,
+    "db_name": "ERIVET OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "52.82%",
+        "name": "Reet Pähn",
+        "code": "48907086544",
+        "pct_num": 52.82
+      },
+      {
+        "pct": "47.18%",
+        "name": "Vallo Kurss",
+        "code": "37603264211",
+        "pct_num": 47.18
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Reet Pähn",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Vallo Kurss",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10991196",
+    "ownership": "founder",
+    "id": 1199,
+    "db_name": "MÄGISTE PÕLLUMEES OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "24.00%",
+        "name": "Omanikukonto: Tanel Tark",
+        "code": "38411060354",
+        "pct_num": 24.0
+      },
+      {
+        "pct": "24.00%",
+        "name": "Omanikukonto: HANNES KÜÜN",
+        "code": "38504220276",
+        "pct_num": 24.0
+      },
+      {
+        "pct": "14.50%",
+        "name": "Omanikukonto: TAUNO TARK",
+        "code": "38710160309",
+        "pct_num": 14.5
+      },
+      {
+        "pct": "11.00%",
+        "name": "Omanikukonto: MARIT SAVI",
+        "code": "47903312732",
+        "pct_num": 11.0
+      },
+      {
+        "pct": "11.00%",
+        "name": "Omanikukonto: TANEL KÜÜN",
+        "code": "38702040252",
+        "pct_num": 11.0
+      },
+      {
+        "pct": "10.50%",
+        "name": "Omanikukonto: ALLAR ARU",
+        "code": "37809294714",
+        "pct_num": 10.5
+      },
+      {
+        "pct": "5.00%",
+        "name": "Omanikukonto: AARE TARK",
+        "code": "35904040229",
+        "pct_num": 5.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aare Tark",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Allar Aru",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Hannes Küün",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Marit Savi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Tanel Küün",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Tanel Tark",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Tauno Tark",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10223698",
+    "ownership": "founder",
+    "id": 1321,
+    "db_name": "ADVOKAADIBÜROO TARK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Vitali Atjunkin",
+        "code": "37809120225",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Vitali Atjunkin",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11192439",
+    "ownership": "founder",
+    "id": 1220,
+    "db_name": "BALTIMIR GROUP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "85.00%",
+        "name": "Merlin Seeman",
+        "code": "48002175211",
+        "pct_num": 85.0
+      },
+      {
+        "pct": "10.00%",
+        "name": "Toomas Seppel",
+        "code": "37902110274",
+        "pct_num": 10.0
+      },
+      {
+        "pct": "5.00%",
+        "name": "Advokaadibüroo Hedman Partners & CO OÜ",
+        "code": "11978387",
+        "pct_num": 5.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Merlin Seeman",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Toomas Seppel",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11978387",
+    "ownership": "founder",
+    "id": 1323,
+    "db_name": "Advokaadibüroo Hedman Partners & CO OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Marko Pilv",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Aivar Pilv",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Merilin Ojasaar",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Pirkka-Marja Põldvere",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10361578",
+    "ownership": "unknown",
+    "id": 1319,
+    "db_name": "LEADELL Pilv Advokaadibüroo AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Raimond Parko",
+        "code": "37809200315",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Osaühing AmEst Invest",
+        "code": "10822306",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Raimond Parko",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11022393",
+    "ownership": "founder",
+    "id": 1139,
+    "db_name": "EESTI PUU OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "52.00%",
+        "name": "Mait Hommik",
+        "code": "37007130231",
+        "pct_num": 52.0
+      },
+      {
+        "pct": "24.00%",
+        "name": "Karin Hommik",
+        "code": "47405076012",
+        "pct_num": 24.0
+      },
+      {
+        "pct": "24.00%",
+        "name": "Piret Hommik",
+        "code": "46809246019",
+        "pct_num": 24.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Karin Hommik",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Mait Hommik",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Piret Hommik",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10248646",
+    "ownership": "founder",
+    "id": 1064,
+    "db_name": "ANTS VILJANDI OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11481014",
+    "ownership": "unknown",
+    "id": 1251,
+    "db_name": "FILL NETWORKS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "44.99%",
+        "name": "Pavel Razumov",
+        "code": "39001170310",
+        "pct_num": 44.99
+      },
+      {
+        "pct": "44.99%",
+        "name": "Albert Reimann",
+        "code": "38912080333",
+        "pct_num": 44.99
+      },
+      {
+        "pct": "10.02%",
+        "name": "Andrei Volõnski",
+        "code": "39008160261",
+        "pct_num": 10.02
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrei Volõnski",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Albert Reimann",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Pavel Razumov",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11715452",
+    "ownership": "founder",
+    "id": 1275,
+    "db_name": "HEA VALIK OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12657780",
+    "ownership": "unknown",
+    "id": 1020,
+    "db_name": "GLOBALREADER OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: Vet Ventures Europe, UAB",
+        "code": "305949929",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "ERNESTAS KAZBARAS, 1987-06",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "MARIUS MIŠKINIS",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "MARTYNAS KAVALIAUSKAS",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Mindaugas Strelis",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "SIMONAS Jurgionis",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10406513",
+    "ownership": "pe_backed",
+    "id": 1118,
+    "db_name": "TIINA TOOMETI KLIINIK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Tagmar Tigane",
+        "code": "38611286514",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Tagmar Tigane",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12278278",
+    "ownership": "founder",
+    "id": 1033,
+    "db_name": "METSARU OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: VetMinds Invest OÜ",
+        "code": "14644037",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Erme Evard",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Ilkka Antero Suomela",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "14821628",
+    "ownership": "pe_backed",
+    "id": 1109,
+    "db_name": "TARTU LOOMAKLIINIK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Pandora Holding OÜ",
+        "code": "14689755",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "PK Holding OÜ",
+        "code": "14921815",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Alar Tammela",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Priit Kivestu",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "11226807",
+    "ownership": "pe_backed",
+    "id": 1134,
+    "db_name": "KAARDIEKSPERT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "72.50%",
+        "name": "Marti Lasn",
+        "code": "37106094210",
+        "pct_num": 72.5
+      },
+      {
+        "pct": "17.50%",
+        "name": "Marika Veelaid",
+        "code": "47011092726",
+        "pct_num": 17.5
+      },
+      {
+        "pct": "10.00%",
+        "name": "Piret Osi",
+        "code": "48207166014",
+        "pct_num": 10.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marti Lasn",
+        "control": "suurem kui 50%-line osalus konsolideeritava üksuse hääleõiguses"
+      },
+      {
+        "name": "Piret Osi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Marika Veelaid",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10276890",
+    "ownership": "founder",
+    "id": 1117,
+    "db_name": "SOLVENTUM OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "51.19%",
+        "name": "Eeri Rässa",
+        "code": "36301252244",
+        "pct_num": 51.19
+      },
+      {
+        "pct": "48.81%",
+        "name": "Dmitri Varfolomejev",
+        "code": "37004022227",
+        "pct_num": 48.81
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Dmitri Varfolomejev",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Eeri Rässa",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10132949",
+    "ownership": "founder",
+    "id": 1252,
+    "db_name": "UUS PROGRAMM OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10250790",
+    "ownership": "unknown",
+    "id": 1119,
+    "db_name": "LEMMIKLOOMATEENUSED OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "REGISTER OÜ",
+        "code": "11735006",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marie Rosin",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14636888",
+    "ownership": "pe_backed",
+    "id": 1004,
+    "db_name": "STORYBOOK OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14416247",
+    "ownership": "unknown",
+    "id": 1201,
+    "db_name": "TLG STIVIDOR OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "92.35%",
+        "name": "Tarmo Kajandi",
+        "code": "35704092742",
+        "pct_num": 92.35
+      },
+      {
+        "pct": "7.65%",
+        "name": "Tiina Kajandi",
+        "code": "46104136015",
+        "pct_num": 7.65
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Tarmo Kajandi",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10124619",
+    "ownership": "founder",
+    "id": 1008,
+    "db_name": "BALTIMPEKS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Indrek Truu",
+        "code": "39604220858",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Indrek Truu",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14652172",
+    "ownership": "founder",
+    "id": 1094,
+    "db_name": "INITEX GRUPP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "OÜ TABLEROON",
+        "code": "10262066",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "JM PÅLGÅRD AB",
+        "code": "556555-3608",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Bo Michael Pålgård",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Jarl Ingemar Pålgård",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Kady Metsis",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Lembit Rannala",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Rain Rannala",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10258930",
+    "ownership": "pe_backed",
+    "id": 1195,
+    "db_name": "PALGARDI KRAANA OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Arko Kurtmann",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "14790046",
+    "ownership": "unknown",
+    "id": 1059,
+    "db_name": "COOP KINDLUSTUSMAAKLER AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Omanikukonto: Londoner OÜ",
+        "code": "17238496",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Indrek Hääl",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Martin Kõdar",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Peeter Saks",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "14017731",
+    "ownership": "pe_backed",
+    "id": 1085,
+    "db_name": "Workland Estonia OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Katre Alas",
+        "code": "46806200016",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Jaan Alas",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Katre Alas",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11364633",
+    "ownership": "founder",
+    "id": 1067,
+    "db_name": "J.A SAARE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Tuulekotkas OÜ",
+        "code": "16755232",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Helen Reimus",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Kaspar Hioväin",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Jüri Hioväin",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Lea Hioväin",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10248787",
+    "ownership": "pe_backed",
+    "id": 1113,
+    "db_name": "TALUAPTEEK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Silver Rooger",
+        "code": "39001196044",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Silver Rooger",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12990232",
+    "ownership": "founder",
+    "id": 1027,
+    "db_name": "DOMINATE SALES OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Toomas Tarang",
+        "code": "37611184736",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Toomas Tarang",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16532288",
+    "ownership": "founder",
+    "id": 1268,
+    "db_name": "KONE AGRO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "osaühing Lutsu Turismitalu",
+        "code": "10696416",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "30.00%",
+        "name": "Piret Tobias",
+        "code": "47907266539",
+        "pct_num": 30.0
+      },
+      {
+        "pct": "20.00%",
+        "name": "Jaan Konks",
+        "code": "37410226520",
+        "pct_num": 20.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Leander Konks",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Jaan Konks",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Piret Tobias",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11201598",
+    "ownership": "founder",
+    "id": 1111,
+    "db_name": "SODALIS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Reigo Kask",
+        "code": "38509060240",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Reigo Kask",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14325622",
+    "ownership": "founder",
+    "id": 1029,
+    "db_name": "KATEND OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11476668",
+    "ownership": "unknown",
+    "id": 1068,
+    "db_name": "AG.WEILEM OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Igor Aksjonov",
+        "code": "38407185210",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Igor Aksjonov",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "14064601",
+    "ownership": "founder",
+    "id": 1255,
+    "db_name": "ANDIGO EESTI OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12340617",
+    "ownership": "unknown",
+    "id": 1108,
+    "db_name": "ARMAVEN OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "55.56%",
+        "name": "Marko Tolmusk",
+        "code": "36112136512",
+        "pct_num": 55.56
+      },
+      {
+        "pct": "44.44%",
+        "name": "Tõnu Lippo",
+        "code": "39611106810",
+        "pct_num": 44.44
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Tõnu Lippo",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Marko Tolmusk",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12597842",
+    "ownership": "founder",
+    "id": 1104,
+    "db_name": "KIVAKU OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "82.96%",
+        "name": "Olga Sjatkovskaja",
+        "code": "47302242713",
+        "pct_num": 82.96
+      },
+      {
+        "pct": "17.04%",
+        "name": "Irina Sjatkovskaja",
+        "code": "44807110247",
+        "pct_num": 17.04
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Olga Sjatkovskaja",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10223511",
+    "ownership": "founder",
+    "id": 1110,
+    "db_name": "HAABERSTI LOOMAKLIINIK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Erich Unt",
+        "code": "39212222747",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Erich Unt",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14624000",
+    "ownership": "founder",
+    "id": 1063,
+    "db_name": "PRESTIN OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Kai Laars",
+        "code": "48304280225",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kai Laars",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14228534",
+    "ownership": "founder",
+    "id": 1116,
+    "db_name": "TALLINNA LOOMAKLIINIK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "",
+        "code": "",
+        "pct_num": 100.0
+      },
+      {
+        "pct": "",
+        "name": "Hendrik Koldits",
+        "code": "50006290284",
+        "pct_num": 0
+      },
+      {
+        "pct": "",
+        "name": "Zaara Koldits",
+        "code": "61308020049",
+        "pct_num": 0
+      },
+      {
+        "pct": "",
+        "name": "Ester Aasmaa",
+        "code": "47511022213",
+        "pct_num": 0
+      },
+      {
+        "pct": "",
+        "name": "Janno Koldits",
+        "code": "39303120217",
+        "pct_num": 0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ester Aasmaa",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Hendrik Koldits",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Janno Koldits",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Zaara Koldits",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12223716",
+    "ownership": "pe_backed",
+    "id": 1217,
+    "db_name": "ALLCAR OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Eve Põldemaa",
+        "code": "47210034712",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Eve Põldemaa",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11091655",
+    "ownership": "founder",
+    "id": 1058,
+    "db_name": "FIX KINDLUSTUSMAAKLER OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Urve Truubon",
+        "code": "44402170252",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Urve Truubon",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Ülar Truubon",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11032486",
+    "ownership": "founder",
+    "id": 1145,
+    "db_name": "ELIDOR ELEKTRITÖÖD OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11155220",
+    "ownership": "unknown",
+    "id": 1115,
+    "db_name": "MAXI LEMMIKLOOMAKLIINIK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Erki Unt",
+        "code": "38912052786",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Erki Unt",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14020165",
+    "ownership": "founder",
+    "id": 1070,
+    "db_name": "WOLF TRUCK OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14459957",
+    "ownership": "unknown",
+    "id": 1197,
+    "db_name": "FAST BALTIC OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Arkko Pakkas",
+        "code": "38810162227",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "20.00%",
+        "name": "Raiko Matsalu",
+        "code": "38703290325",
+        "pct_num": 20.0
+      },
+      {
+        "pct": "15.00%",
+        "name": "Risto Jamnes",
+        "code": "38106084923",
+        "pct_num": 15.0
+      },
+      {
+        "pct": "15.00%",
+        "name": "Ragnar Klavan",
+        "code": "38510306016",
+        "pct_num": 15.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Arkko Pakkas",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12450748",
+    "ownership": "founder",
+    "id": 1044,
+    "db_name": "SPORDIHOOLDUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Margus Silm",
+        "code": "38009246521",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Margus Uibo",
+        "code": "38411165715",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Margus Silm",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Margus Uibo",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12701185",
+    "ownership": "founder",
+    "id": 1089,
+    "db_name": "HARTCOM OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "51.00%",
+        "name": "Martin Peterson",
+        "code": "38407114230",
+        "pct_num": 51.0
+      },
+      {
+        "pct": "49.00%",
+        "name": "Siim Sein",
+        "code": "38307150332",
+        "pct_num": 49.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Martin Peterson",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Siim Sein",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16786965",
+    "ownership": "founder",
+    "id": 1334,
+    "db_name": "HENDERSONS WORKERS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "60.00%",
+        "name": "Anton Dolgorukov",
+        "code": "38507120110",
+        "pct_num": 60.0
+      },
+      {
+        "pct": "40.00%",
+        "name": "Dmitri Aleksandrov",
+        "code": "38608182241",
+        "pct_num": 40.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Anton Dolgorukov",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14773065",
+    "ownership": "founder",
+    "id": 1114,
+    "db_name": "ESTEETVET OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "43.00%",
+        "name": "Redport OÜ",
+        "code": "11411640",
+        "pct_num": 43.0
+      },
+      {
+        "pct": "43.00%",
+        "name": "Ramarke OÜ",
+        "code": "11452662",
+        "pct_num": 43.0
+      },
+      {
+        "pct": "14.00%",
+        "name": "HSC Invest OÜ",
+        "code": "17231850",
+        "pct_num": 14.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marko Kutser",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Rait Marken",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "14160693",
+    "ownership": "pe_backed",
+    "id": 1260,
+    "db_name": "REDNET OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11321902",
+    "ownership": "unknown",
+    "id": 1298,
+    "db_name": "UMMACAR AUTO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Ainar Siht",
+        "code": "38609112829",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ainar Siht",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12874721",
+    "ownership": "founder",
+    "id": 1011,
+    "db_name": "ALDREHT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Kristjan Kasemaa",
+        "code": "38601292753",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kristjan Kasemaa",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11282906",
+    "ownership": "founder",
+    "id": 1305,
+    "db_name": "AMBRIESTO OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10134049",
+    "ownership": "unknown",
+    "id": 1120,
+    "db_name": "FARMAX OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "",
+        "code": "",
+        "pct_num": 100.0
+      },
+      {
+        "pct": "",
+        "name": "Kristina Lagoutine",
+        "code": "48103130337",
+        "pct_num": 0
+      },
+      {
+        "pct": "",
+        "name": "Vyacheslav Lagutin",
+        "code": "37407160297",
+        "pct_num": 0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kristina Lagutina",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Vyacheslav Lagutin",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12314873",
+    "ownership": "pe_backed",
+    "id": 1024,
+    "db_name": "LASKKO EXPERT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "51.00%",
+        "name": "Juri Pugatšov",
+        "code": "36602072238",
+        "pct_num": 51.0
+      },
+      {
+        "pct": "49.00%",
+        "name": "Andrey Rumyantsev",
+        "code": "37512032224",
+        "pct_num": 49.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrey Rumyantsev",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Juri Pugatšov",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10176042",
+    "ownership": "founder",
+    "id": 1253,
+    "db_name": "INTERFRAME OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14269800",
+    "ownership": "unknown",
+    "id": 1097,
+    "db_name": "STELLANA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Ain Rootsmaa",
+        "code": "38310234913",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Asko Pärl",
+        "code": "39007164919",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ain Rootsmaa",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Asko Pärl",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12600490",
+    "ownership": "founder",
+    "id": 1224,
+    "db_name": "RAAP EHITUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10228551",
+    "ownership": "unknown",
+    "id": 1174,
+    "db_name": "KUNDA TRANS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "43.00%",
+        "name": "Redport OÜ",
+        "code": "11411640",
+        "pct_num": 43.0
+      },
+      {
+        "pct": "43.00%",
+        "name": "Ramarke OÜ",
+        "code": "11452662",
+        "pct_num": 43.0
+      },
+      {
+        "pct": "14.00%",
+        "name": "HSC Invest OÜ",
+        "code": "17231850",
+        "pct_num": 14.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marko Kutser",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Rait Marken",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "12611884",
+    "ownership": "pe_backed",
+    "id": 1262,
+    "db_name": "RADIONET OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16022038",
+    "ownership": "unknown",
+    "id": 1332,
+    "db_name": "SUPERVIVENT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Crevi Investeeringud OÜ",
+        "code": "10901566",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Urmas Nimmerfeldt",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10941886",
+    "ownership": "pe_backed",
+    "id": 1082,
+    "db_name": "FONDE HOLDING OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Aivar Verro",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Indrek Reitsak",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Kati Reitsak",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Kristi Berman",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10055261",
+    "ownership": "unknown",
+    "id": 1214,
+    "db_name": "ENTRAMO AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14213060",
+    "ownership": "unknown",
+    "id": 1333,
+    "db_name": "HALINGA PLEKIKODA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "23.00%",
+        "name": "Stronghold Holding OÜ",
+        "code": "14511721",
+        "pct_num": 23.0
+      },
+      {
+        "pct": "23.00%",
+        "name": "Märt Leiman",
+        "code": "39110242737",
+        "pct_num": 23.0
+      },
+      {
+        "pct": "20.00%",
+        "name": "Varakeskus OÜ",
+        "code": "16213057",
+        "pct_num": 20.0
+      },
+      {
+        "pct": "14.00%",
+        "name": "We Made IT OÜ",
+        "code": "14750035",
+        "pct_num": 14.0
+      },
+      {
+        "pct": "10.00%",
+        "name": "Toomas Matvejev",
+        "code": "39003132710",
+        "pct_num": 10.0
+      },
+      {
+        "pct": "10.00%",
+        "name": "Tehingukeskus OÜ",
+        "code": "14389728",
+        "pct_num": 10.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Henno Olljum",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Mart-Sander Mõts",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Taavi Lellep",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Toomas Matvejev",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Märt Leiman",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16213057",
+    "ownership": "pe_backed",
+    "id": 1092,
+    "db_name": "VARAKESKUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11694098",
+    "ownership": "unknown",
+    "id": 1282,
+    "db_name": "KRIOL GRUPP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Ever Patlep",
+        "code": "38609125729",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Aiko Patlep",
+        "code": "38311015715",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aiko Patlep",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Ever Patlep",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14496401",
+    "ownership": "founder",
+    "id": 1049,
+    "db_name": "TERAS/PRESS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Erkki Eerme",
+        "code": "37604180301",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Erkki Eerme",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14041853",
+    "ownership": "founder",
+    "id": 1050,
+    "db_name": "QUALITY BLINDS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "75.00%",
+        "name": "Rivo Kütt",
+        "code": "38102122765",
+        "pct_num": 75.0
+      },
+      {
+        "pct": "25.00%",
+        "name": "Toomas Kaares",
+        "code": "37910070271",
+        "pct_num": 25.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rivo Kütt",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Toomas Kaares",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12939722",
+    "ownership": "founder",
+    "id": 1204,
+    "db_name": "ENTRO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Sandra Raud",
+        "code": "49608190834",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Kristjan Kuill",
+        "code": "37812250243",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kristjan Kuill",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Sandra Raud",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10823748",
+    "ownership": "founder",
+    "id": 1138,
+    "db_name": "AUTODISAINI OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11686979",
+    "ownership": "unknown",
+    "id": 1256,
+    "db_name": "TEETORMAJA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Igor Nikolajev",
+        "code": "36804130271",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Igor Nikolajev",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10449830",
+    "ownership": "founder",
+    "id": 1229,
+    "db_name": "TELNER SPECIAL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11706364",
+    "ownership": "unknown",
+    "id": 1264,
+    "db_name": "AMARANTH OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Christi Verte",
+        "code": "49312240825",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Christi Verte",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14791873",
+    "ownership": "founder",
+    "id": 1326,
+    "db_name": "EKSPRESSKULLER GRUPP OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12414273",
+    "ownership": "unknown",
+    "id": 1308,
+    "db_name": "IMBREX EHITUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14597243",
+    "ownership": "unknown",
+    "id": 1249,
+    "db_name": "SKARCON MACHINING OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Irina Albert",
+        "code": "47605205243",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Irina Albert",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Eduard Ilus",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16615614",
+    "ownership": "founder",
+    "id": 1007,
+    "db_name": "METSASTAJA OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11707852",
+    "ownership": "unknown",
+    "id": 1006,
+    "db_name": "KAREDOR OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Siim Sarapuu",
+        "code": "39101300210",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Siim Sarapuu",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14163734",
+    "ownership": "founder",
+    "id": 1051,
+    "db_name": "FLYBIRD OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Rainer Paavel",
+        "code": "38510174926",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rainer Paavel",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12693592",
+    "ownership": "founder",
+    "id": 1269,
+    "db_name": "RAIVEL SOLUTIONS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11082337",
+    "ownership": "unknown",
+    "id": 1084,
+    "db_name": "VIJUS GROUP AS"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Vadim Romanovitš",
+        "code": "36702120000",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Vadim Romanovitš",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10367322",
+    "ownership": "founder",
+    "id": 1277,
+    "db_name": "MEZOLA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Tiit Nuut",
+        "code": "38508140014",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Priit Rahula",
+        "code": "38502020014",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Priit Rahula",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Tiit Nuut",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12537573",
+    "ownership": "founder",
+    "id": 1017,
+    "db_name": "T & P EHITUS GRUPP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Silver Gukov",
+        "code": "38402040221",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Silver Gukov",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12179754",
+    "ownership": "founder",
+    "id": 1137,
+    "db_name": "HEATEX EESTI OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "62.50%",
+        "name": "Margus Rohtla",
+        "code": "38208225228",
+        "pct_num": 62.5
+      },
+      {
+        "pct": "37.50%",
+        "name": "Triinu Rohtla",
+        "code": "48801086054",
+        "pct_num": 37.5
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Margus Rohtla",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Triinu Rohtla",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11994156",
+    "ownership": "founder",
+    "id": 1297,
+    "db_name": "MP MOTORS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "99.00%",
+        "name": "Janek Kirjutaja",
+        "code": "37806052720",
+        "pct_num": 99.0
+      },
+      {
+        "pct": "1.00%",
+        "name": "Kaubatänav OÜ",
+        "code": "16285522",
+        "pct_num": 1.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Janek Kirjutaja",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10698220",
+    "ownership": "founder",
+    "id": 1276,
+    "db_name": "INCASSOR OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Philip Mägi",
+        "code": "37502160253",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Philip Mägi",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10047014",
+    "ownership": "founder",
+    "id": 1284,
+    "db_name": "T.K.E. PAWNSHOP OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14898985",
+    "ownership": "unknown",
+    "id": 1124,
+    "db_name": "ARMASTUSETEE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Jaak Jõks",
+        "code": "37007252713",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Jaak Jõks",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11483450",
+    "ownership": "founder",
+    "id": 1121,
+    "db_name": "LOOMAARST OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Timo Arto Sakari Huttunen",
+        "code": "110259-025R",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Timo Arto Sakari Huttunen",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10221506",
+    "ownership": "pe_backed",
+    "id": 1304,
+    "db_name": "GUIDE MARKETING OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12087816",
+    "ownership": "unknown",
+    "id": 1299,
+    "db_name": "SIMUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "INFEST OÜ",
+        "code": "11967751",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrus-Mattias Soone",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "11970919",
+    "ownership": "pe_backed",
+    "id": 1045,
+    "db_name": "KLIENDIHALDUSE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Ingvar Põld",
+        "code": "38101270382",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Mait Õim",
+        "code": "37805040290",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ingvar Põld",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Mait Õim",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12725808",
+    "ownership": "founder",
+    "id": 1072,
+    "db_name": "FOXTRANS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Adeele Nurk",
+        "code": "60703190274",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Marcus Koitjärv",
+        "code": "50505120860",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Adeele Nurk",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Marcus Koitjärv",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "17414482",
+    "ownership": "founder",
+    "id": 1031,
+    "db_name": "A&M OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14183607",
+    "ownership": "unknown",
+    "id": 1048,
+    "db_name": "ANMARO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "33.34%",
+        "name": "Vladimir Kotskin",
+        "code": "36406180293",
+        "pct_num": 33.34
+      },
+      {
+        "pct": "33.33%",
+        "name": "Vladimir Smirnov",
+        "code": "35702260239",
+        "pct_num": 33.33
+      },
+      {
+        "pct": "33.33%",
+        "name": "Maksim Tsõmbaljuk",
+        "code": "38003050374",
+        "pct_num": 33.33
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Maksim Tsõmbaljuk",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Vladimir Kotskin",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Vladimir Smirnov",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10714344",
+    "ownership": "founder",
+    "id": 1200,
+    "db_name": "ANTARI TRADE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Martti Teder",
+        "code": "39907242748",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Martti Teder",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16549751",
+    "ownership": "founder",
+    "id": 1003,
+    "db_name": "NUTIKAS VALIK OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12788542",
+    "ownership": "unknown",
+    "id": 1330,
+    "db_name": "ACCOUNTING RESOURCES NOLA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Alvar Trei",
+        "code": "38902042764",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Martin Henrikson",
+        "code": "39006272759",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Alvar Trei",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      },
+      {
+        "name": "Martin Henrikson",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "12865805",
+    "ownership": "founder",
+    "id": 1025,
+    "db_name": "FULLDRIVE SERVICE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aleksei Laanemets",
+        "code": "37810054217",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aleksei Laanemets",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12618113",
+    "ownership": "founder",
+    "id": 1091,
+    "db_name": "ELIITEHITUS JA VIIMISTLUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Andrus Ulpus",
+        "code": "38106220361",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrus Ulpus",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11980125",
+    "ownership": "founder",
+    "id": 1126,
+    "db_name": "SOODNEGARDEROOB OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10006392",
+    "ownership": "unknown",
+    "id": 1087,
+    "db_name": "EMAJÕE HALDUSE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Margo Konts",
+        "code": "37609052718",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Margo Konts",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12494243",
+    "ownership": "founder",
+    "id": 1272,
+    "db_name": "TORUVANA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "45.00%",
+        "name": "Omanikukonto: ABC Bailor OÜ",
+        "code": "11690315",
+        "pct_num": 45.0
+      },
+      {
+        "pct": "35.00%",
+        "name": "Omanikukonto: Peep Sau",
+        "code": "37312050254",
+        "pct_num": 35.0
+      },
+      {
+        "pct": "20.00%",
+        "name": "Omanikukonto: GOLDENVIOLETT OSAÜHING",
+        "code": "11726131",
+        "pct_num": 20.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrus Kaurson",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Peep Sau",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10776121",
+    "ownership": "pe_backed",
+    "id": 1281,
+    "db_name": "ABC LAENUDE OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12642011",
+    "ownership": "unknown",
+    "id": 1069,
+    "db_name": "ANDMAR MEDSERVICE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Urmas Kentel",
+        "code": "38905192710",
+        "pct_num": 100.0
+      },
+      {
+        "pct": "Keelumärge: Täiteasi 182/2010/257, kohtutäitur Anne Böckler, sissenõudja Sotsiaalkindlustusamet (kood 70001975)",
+        "name": "",
+        "code": "",
+        "pct_num": 0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Urmas Kentel",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "16104463",
+    "ownership": "founder",
+    "id": 1122,
+    "db_name": "KIIRLAMMUTUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Rannet Kodar",
+        "code": "37012262732",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rannet Kodar",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11735880",
+    "ownership": "founder",
+    "id": 1001,
+    "db_name": "TOP CONCEPTUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Hedy Õispuu",
+        "code": "47511114228",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Hedy Õispuu",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11426191",
+    "ownership": "founder",
+    "id": 1219,
+    "db_name": "EDIP TRADE OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14999272",
+    "ownership": "unknown",
+    "id": 1280,
+    "db_name": "EXPERT SOLUTIONS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Andrus Martma",
+        "code": "38110234221",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrus Martma",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12382780",
+    "ownership": "founder",
+    "id": 1273,
+    "db_name": "LEDIMEISTER OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Margus Guitar",
+        "code": "36512010269",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Margus Guitar",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10086480",
+    "ownership": "founder",
+    "id": 1083,
+    "db_name": "COMMON OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16179254",
+    "ownership": "unknown",
+    "id": 1266,
+    "db_name": "MCR PROJEKTID OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "54.79%",
+        "name": "Andrei Uzun-Hassan-Oglõ",
+        "code": "35603093731",
+        "pct_num": 54.79
+      },
+      {
+        "pct": "30.68%",
+        "name": "Andrey Ivanov",
+        "code": "35404193714",
+        "pct_num": 30.68
+      },
+      {
+        "pct": "5.48%",
+        "name": "Nikolai Jazev",
+        "code": "35112063716",
+        "pct_num": 5.48
+      },
+      {
+        "pct": "4.25%",
+        "name": "Vitali Aleksandrov",
+        "code": "38106053731",
+        "pct_num": 4.25
+      },
+      {
+        "pct": "4.11%",
+        "name": "Viktoria Jegorova",
+        "code": "47906093727",
+        "pct_num": 4.11
+      },
+      {
+        "pct": "0.68%",
+        "name": "Tatiana Belyakova",
+        "code": "46903253716",
+        "pct_num": 0.68
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrei Uzun-Hassan-Oglõ",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Andrey Ivanov",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10176237",
+    "ownership": "founder",
+    "id": 1283,
+    "db_name": "TOIMING OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Vladislav Slontševski",
+        "code": "37410250319",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Vladislav Slontševski",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "16925007",
+    "ownership": "founder",
+    "id": 1221,
+    "db_name": "SISUSTUSMARKET OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Reelika Reingold",
+        "code": "48102170305",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Sven Haggi",
+        "code": "37007116014",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [],
+    "reg_code": "12083238",
+    "ownership": "founder",
+    "id": 1162,
+    "db_name": "RS PAINTBOOK OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11723782",
+    "ownership": "unknown",
+    "id": 1226,
+    "db_name": "EXPERTAUTO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Julija Hohrjakova",
+        "code": "47610170389",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Julija Hohrjakova",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11213779",
+    "ownership": "founder",
+    "id": 1285,
+    "db_name": "AUTOBALT GRUPP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "AS Smarten Logistics",
+        "code": "10097532",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Armin Kõomägi",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Guido Kundla",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Indrek Prants",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Mait Miller",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Martin Petjärv",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Sven Mansberg",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10761964",
+    "ownership": "pe_backed",
+    "id": 1178,
+    "db_name": "S-MARTEN LADU OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12149552",
+    "ownership": "unknown",
+    "id": 1002,
+    "db_name": "VISIOM OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Janno Kümnik",
+        "code": "37307020358",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Janno Kümnik",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16639170",
+    "ownership": "founder",
+    "id": 1218,
+    "db_name": "HANNELIS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Rando Tamm",
+        "code": "38807044246",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rando Tamm",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16362389",
+    "ownership": "founder",
+    "id": 1102,
+    "db_name": "KARIMAC OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14333248",
+    "ownership": "unknown",
+    "id": 1073,
+    "db_name": "JPROOF OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Marten Ermast",
+        "code": "37707060278",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [],
+    "reg_code": "14314268",
+    "ownership": "founder",
+    "id": 1166,
+    "db_name": "LAOPIND OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16306787",
+    "ownership": "unknown",
+    "id": 1211,
+    "db_name": "INGRAD KINNISVARA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Margus Kruusvall",
+        "code": "38110130227",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Margus Kruusvall",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11225943",
+    "ownership": "founder",
+    "id": 1093,
+    "db_name": "HMS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Riina Rooteman",
+        "code": "46604280230",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Riina Rooteman",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16236513",
+    "ownership": "founder",
+    "id": 1061,
+    "db_name": "FBS DELIVERY OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Ivar Koll",
+        "code": "37210162744",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ivar Koll",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16526750",
+    "ownership": "founder",
+    "id": 1143,
+    "db_name": "METSAMAST OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Vello Kivimägi",
+        "code": "35610050266",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Vello Kivimägi",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10331896",
+    "ownership": "founder",
+    "id": 1047,
+    "db_name": "KAUNTIS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aldo Mihkra",
+        "code": "36306142746",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aldo Mihkra",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11673185",
+    "ownership": "founder",
+    "id": 1296,
+    "db_name": "TRIPLEX EESTI OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Maanus Truumeel",
+        "code": "37807150051",
+        "pct_num": 100.0
+      },
+      {
+        "pct": "Keelumärge: Kohtutäituri avalduse alusel täielik osa käsutamise keelumärge Insafety OÜ (12176709) ja kohtutäitur Risto Sepp (14117651) kasuks (täiteasja nr 027/2026/222).",
+        "name": "",
+        "code": "",
+        "pct_num": 0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Maanus Truumeel",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12664627",
+    "ownership": "founder",
+    "id": 1301,
+    "db_name": "ROSENKAPF CAPITAL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Ahti Koort",
+        "code": "37111272748",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Karl Koort",
+        "code": "39103192711",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ahti Koort",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Karl Koort",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16709611",
+    "ownership": "founder",
+    "id": 1203,
+    "db_name": "HYPOCREDIT OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16457641",
+    "ownership": "unknown",
+    "id": 1079,
+    "db_name": "MP EHITUSTÖÖD OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Priit Raudsepp",
+        "code": "36207050232",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Priit Raudsepp",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12620883",
+    "ownership": "founder",
+    "id": 1141,
+    "db_name": "AG KLAASIAEG OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aivo Kääramees",
+        "code": "36411260318",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aivo Kääramees",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11083153",
+    "ownership": "founder",
+    "id": 1302,
+    "db_name": "LASERLINK OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16071551",
+    "ownership": "unknown",
+    "id": 1013,
+    "db_name": "OHUTU EHITUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Marek Saksing",
+        "code": "37506092761",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marek Saksing",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12391891",
+    "ownership": "founder",
+    "id": 1225,
+    "db_name": "JKE EHITUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16034662",
+    "ownership": "unknown",
+    "id": 1032,
+    "db_name": "FIXZONE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Paul Sarapuu",
+        "code": "37603046027",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Martin Kaasik",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Paul Sarapuu",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12959713",
+    "ownership": "founder",
+    "id": 1099,
+    "db_name": "HANTEL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Erko Hermanson",
+        "code": "36909064911",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Erko Hermanson",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11524479",
+    "ownership": "founder",
+    "id": 1090,
+    "db_name": "ERKO PLEKITÖÖD OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16586735",
+    "ownership": "unknown",
+    "id": 1030,
+    "db_name": "BLUNTCUTS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Reigo Alp",
+        "code": "38810264219",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Reigo Alp",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "14680091",
+    "ownership": "founder",
+    "id": 1342,
+    "db_name": "FIVERTER OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14550017",
+    "ownership": "unknown",
+    "id": 1227,
+    "db_name": "JAH EHITUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Marina Domova",
+        "code": "46304253714",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marina Domova",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10660714",
+    "ownership": "founder",
+    "id": 1261,
+    "db_name": "IBSD TECHNOLOGY OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Kristina Mätlik",
+        "code": "48607276017",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kristina Mätlik",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16287647",
+    "ownership": "founder",
+    "id": 1130,
+    "db_name": "EJV OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16540715",
+    "ownership": "unknown",
+    "id": 1014,
+    "db_name": "USSIMO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Juan Ramon Saenz-Diez Molina",
+        "code": "37104020119",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Juan Ramon Saenz-Diez Molina",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12537455",
+    "ownership": "founder",
+    "id": 1206,
+    "db_name": "ALGATUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Aarne Vallimäe",
+        "code": "36505260294",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Timo Vallimäe",
+        "code": "38901100318",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aarne Vallimäe",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Timo Vallimäe",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11664200",
+    "ownership": "founder",
+    "id": 1142,
+    "db_name": "NOVAFIELD OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12771903",
+    "ownership": "unknown",
+    "id": 1354,
+    "db_name": "GVP INVEST ESTONIA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Juri Kutištšev",
+        "code": "36707140322",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Juri Kutištšev",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10283335",
+    "ownership": "founder",
+    "id": 1176,
+    "db_name": "MAARDU KALATÖÖSTUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12882407",
+    "ownership": "unknown",
+    "id": 1263,
+    "db_name": "TEZ TELECOM GLOBAL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Kristina Petina",
+        "code": "48709300055",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kristina Petina",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12724631",
+    "ownership": "founder",
+    "id": 1210,
+    "db_name": "4U KINNISVARA OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "80056078",
+    "ownership": "unknown",
+    "id": 1036,
+    "db_name": "VÕITLUSKUNSTIDE KLUBI BUDOKAN MTÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Rait Tammemägi",
+        "code": "37209276513",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rait Tammemägi",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12375662",
+    "ownership": "founder",
+    "id": 1215,
+    "db_name": "RAIKEM OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16284086",
+    "ownership": "unknown",
+    "id": 1300,
+    "db_name": "SANLEN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11924090",
+    "ownership": "unknown",
+    "id": 1023,
+    "db_name": "OLIVE SPA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Kalle Kuusik",
+        "code": "37601040329",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kalle Kuusik",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Merli Kuusik",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14373503",
+    "ownership": "founder",
+    "id": 1131,
+    "db_name": "KHEM PROJEKTID OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16500644",
+    "ownership": "unknown",
+    "id": 1338,
+    "db_name": "SPEEDCARGO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Toomas Rahnel",
+        "code": "39404010027",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Toomas Rahnel",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "17144737",
+    "ownership": "founder",
+    "id": 1128,
+    "db_name": "58NORTHMERGEN OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Ahto Sirendi",
+        "code": "35310172739",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ahto Sirendi",
+        "control": "suurem kui 50%-line osalus konsolideeritava üksuse hääleõiguses"
+      }
+    ],
+    "reg_code": "14348155",
+    "ownership": "founder",
+    "id": 1310,
+    "db_name": "AHTO SIRENDI ADVOKAADIBÜROO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Madis Paju",
+        "code": "38608120216",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Madis Paju",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14609006",
+    "ownership": "founder",
+    "id": 1271,
+    "db_name": "MPTORUTÖÖD OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14182921",
+    "ownership": "unknown",
+    "id": 1129,
+    "db_name": "ÄRI-INFO KOOLITUSKESKUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Maie Sander",
+        "code": "45907064726",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Maie Sander",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12157184",
+    "ownership": "founder",
+    "id": 1015,
+    "db_name": "MAIE RAAMID OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16433882",
+    "ownership": "unknown",
+    "id": 1279,
+    "db_name": "360 EHITUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Mehis Jaagura",
+        "code": "36412152718",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Mehis Jaagura",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14449927",
+    "ownership": "founder",
+    "id": 1132,
+    "db_name": "KVALITEETKOOLITUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12547956",
+    "ownership": "unknown",
+    "id": 1328,
+    "db_name": "VERSIT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Marianne Beilmann",
+        "code": "46607060241",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marianne Beilmann",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "14952891",
+    "ownership": "founder",
+    "id": 1163,
+    "db_name": "HOMEDECO OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11122568",
+    "ownership": "unknown",
+    "id": 1021,
+    "db_name": "HJ OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Marek Tukk",
+        "code": "37402260354",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marek Tukk",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11593539",
+    "ownership": "founder",
+    "id": 1222,
+    "db_name": "COFFEE BEAN OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "90.00%",
+        "name": "Jaan Meerits",
+        "code": "35109185216",
+        "pct_num": 90.0
+      },
+      {
+        "pct": "10.00%",
+        "name": "",
+        "code": "",
+        "pct_num": 10.0
+      },
+      {
+        "pct": "",
+        "name": "Mare Meerits",
+        "code": "45506255210",
+        "pct_num": 0
+      },
+      {
+        "pct": "",
+        "name": "Jaan Meerits",
+        "code": "35109185216",
+        "pct_num": 0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Jaan Meerits",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10268212",
+    "ownership": "founder",
+    "id": 1257,
+    "db_name": "ELEKS TELEFON OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11392428",
+    "ownership": "unknown",
+    "id": 1331,
+    "db_name": "HALTEN OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Marika Uus",
+        "code": "47706252719",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marika Uus",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14357542",
+    "ownership": "founder",
+    "id": 1100,
+    "db_name": "KRISTALLIMARI RMP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aivo Ernits",
+        "code": "38905272757",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aivo Ernits",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14333107",
+    "ownership": "founder",
+    "id": 1016,
+    "db_name": "GARAGE66 OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Andres Kink",
+        "code": "36903266027",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Annekatrin Ott",
+        "code": "47410066014",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Annekatrin Ott",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Andres Kink",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14645605",
+    "ownership": "founder",
+    "id": 1034,
+    "db_name": "ANDRESE PUIDUKODA OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16698379",
+    "ownership": "unknown",
+    "id": 1052,
+    "db_name": "BÜROOKORISTUS PLUSS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Janek Ivanitski",
+        "code": "38404170323",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Janek Ivanitski",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12868519",
+    "ownership": "founder",
+    "id": 1292,
+    "db_name": "HEAABI OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16826140",
+    "ownership": "unknown",
+    "id": 1161,
+    "db_name": "CARMARK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "66.67%",
+        "name": "Galina Galitšenko",
+        "code": "47509090282",
+        "pct_num": 66.67
+      },
+      {
+        "pct": "33.33%",
+        "name": "German Bubin",
+        "code": "37505030274",
+        "pct_num": 33.33
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Galina Galitšenko",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "German Bubin",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11052419",
+    "ownership": "founder",
+    "id": 1287,
+    "db_name": "FINETEST PANDIMAJA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Alvar Uus",
+        "code": "38803162717",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Alvar Uus",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14927835",
+    "ownership": "founder",
+    "id": 1022,
+    "db_name": "VECTROP OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "",
+        "code": "",
+        "pct_num": 100.0
+      },
+      {
+        "pct": "",
+        "name": "Riho Suurmets",
+        "code": "36106082731",
+        "pct_num": 0
+      },
+      {
+        "pct": "",
+        "name": "Marika Suurmets",
+        "code": "46403182723",
+        "pct_num": 0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Riho Suurmets",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10085138",
+    "ownership": "pe_backed",
+    "id": 1286,
+    "db_name": "RAAKEL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Aivar Kalda",
+        "code": "37305014917",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Aivar Kalda",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14675612",
+    "ownership": "founder",
+    "id": 1018,
+    "db_name": "KATUSESEIRE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Sven Lehtmets",
+        "code": "37608110316",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Sven Lehtmets",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12243558",
+    "ownership": "founder",
+    "id": 1306,
+    "db_name": "SAUTELE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Mareliis Raid",
+        "code": "47208214223",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Mareliis Raid",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10898640",
+    "ownership": "founder",
+    "id": 1078,
+    "db_name": "KULDNE MUNA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Ivo Vahkal",
+        "code": "37110022762",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ivo Vahkal",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12603761",
+    "ownership": "founder",
+    "id": 1228,
+    "db_name": "LIHVIMEISTER OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12145436",
+    "ownership": "unknown",
+    "id": 1290,
+    "db_name": "A-PANT OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "87.50%",
+        "name": "Ele Läänmäe",
+        "code": "45903190266",
+        "pct_num": 87.5
+      },
+      {
+        "pct": "12.50%",
+        "name": "Traugott Läänmäe",
+        "code": "35210160212",
+        "pct_num": 12.5
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ele Läänmäe",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10018053",
+    "ownership": "founder",
+    "id": 1327,
+    "db_name": "A-ARLET OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Airi Soopalu-Lepp",
+        "code": "47203062739",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Andrus Lepp",
+        "code": "36904262741",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Airi Soopalu-Lepp",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Andrus Lepp",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "11205484",
+    "ownership": "founder",
+    "id": 1303,
+    "db_name": "AIRUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11428988",
+    "ownership": "unknown",
+    "id": 1265,
+    "db_name": "PROWATER OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Kadri Treial",
+        "code": "49312026510",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kadri Treial",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12717588",
+    "ownership": "founder",
+    "id": 1267,
+    "db_name": "PSÜHHOBUSS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12655732",
+    "ownership": "unknown",
+    "id": 1209,
+    "db_name": "TIPPMAAKLER OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Märt Riiner",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "14192799",
+    "ownership": "unknown",
+    "id": 1159,
+    "db_name": "ÜHISARVELDUSED AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11537832",
+    "ownership": "unknown",
+    "id": 1164,
+    "db_name": "SOLAMERK OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10849883",
+    "ownership": "unknown",
+    "id": 1295,
+    "db_name": "RAAKLI ÄRI OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Kalle Koppel",
+        "code": "35911150297",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kalle Koppel",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12338276",
+    "ownership": "founder",
+    "id": 1151,
+    "db_name": "KALLE AUTOKOOL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10012487",
+    "ownership": "unknown",
+    "id": 1288,
+    "db_name": "PELGURANNA PANDIMAJA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Steven Kraus",
+        "code": "38809260283",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Steven Kraus",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "14934462",
+    "ownership": "founder",
+    "id": 1041,
+    "db_name": "KRAMAN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12407988",
+    "ownership": "unknown",
+    "id": 1291,
+    "db_name": "BENEFIT LAEN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11641908",
+    "ownership": "unknown",
+    "id": 1360,
+    "db_name": "RÄHNAPUU OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Üllar Randmäe",
+        "code": "38307125710",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Üllar Randmäe",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14745548",
+    "ownership": "founder",
+    "id": 1216,
+    "db_name": "SIMONE CRAFTFURN OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Jevgeni Matvejev",
+        "code": "36208200280",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Jevgeni Matvejev",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12624705",
+    "ownership": "founder",
+    "id": 1294,
+    "db_name": "PREMIUM LOMBARD OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "12442039",
+    "ownership": "unknown",
+    "id": 1339,
+    "db_name": "DORPAT KOOLITUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Andres Laasma",
+        "code": "37501210219",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andres Laasma",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14376157",
+    "ownership": "founder",
+    "id": 1035,
+    "db_name": "SNCO OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11307397",
+    "ownership": "unknown",
+    "id": 1081,
+    "db_name": "AKTOSEIDON OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "STENECO Ventilatsioon OÜ",
+        "code": "14749167",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Egert Tomberg",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "16889808",
+    "ownership": "pe_backed",
+    "id": 1152,
+    "db_name": "STENECO HALDUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11148496",
+    "ownership": "unknown",
+    "id": 1278,
+    "db_name": "OSSIK OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Roland Lükk",
+        "code": "37306100236",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Roland Lükk",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14117674",
+    "ownership": "founder",
+    "id": 1359,
+    "db_name": "DENGE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Saulius Teder",
+        "code": "50009287020",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Saulius Teder",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16662909",
+    "ownership": "founder",
+    "id": 1037,
+    "db_name": "SAUA REVENTOR OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Katrin Treksler",
+        "code": "47606280275",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Katrin Treksler",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14609207",
+    "ownership": "founder",
+    "id": 1009,
+    "db_name": "POLSTRITUBA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Margus Reha",
+        "code": "36104150215",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Margus Reha",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14665051",
+    "ownership": "founder",
+    "id": 1060,
+    "db_name": "ALEKS KINDLUSTUS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Allan Oras",
+        "code": "38002066020",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "50.00%",
+        "name": "Reelika Oras",
+        "code": "48210026015",
+        "pct_num": 50.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Allan Oras",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Reelika Oras",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14897229",
+    "ownership": "founder",
+    "id": 1028,
+    "db_name": "SARO OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Märt Reinbusch",
+        "code": "39006052766",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Märt Reinbusch",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16032746",
+    "ownership": "founder",
+    "id": 1077,
+    "db_name": "KAIMI LINNUTALU OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16290187",
+    "ownership": "unknown",
+    "id": 1076,
+    "db_name": "HELUKAN OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Svetlana Kozlova",
+        "code": "47209072231",
+        "pct_num": 100.0
+      },
+      {
+        "pct": "Keelumärge: Kohtutäitur Andrei Kreki 04.11.2024 täiteasi 066/2024/4382 Pärnu Maakohtu 04.11.2024 kohtumäärus 2-24-134095 alusel kohtutäitur Andrei Krek ja B2 Impact OÜ kasuks.",
+        "name": "",
+        "code": "",
+        "pct_num": 0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Svetlana Kozlova",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12124249",
+    "ownership": "founder",
+    "id": 1293,
+    "db_name": "NATOL OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16267981",
+    "ownership": "unknown",
+    "id": 1144,
+    "db_name": "TRAVELCARAVAN OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [
+      {
+        "name": "Viatcheslav Kantor",
+        "control": "kaudne osalus"
+      }
+    ],
+    "reg_code": "10237594",
+    "ownership": "unknown",
+    "id": 1182,
+    "db_name": "DBT AS"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "14427601",
+    "ownership": "unknown",
+    "id": 1086,
+    "db_name": "A-MEDITSIIN OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Rivo Raamat",
+        "code": "38309192745",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Rivo Raamat",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14215069",
+    "ownership": "founder",
+    "id": 1074,
+    "db_name": "TAMM PROJEKT OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11963084",
+    "ownership": "unknown",
+    "id": 1136,
+    "db_name": "SANKIVIMAA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Asko Uibu",
+        "code": "37103305724",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Asko Uibu",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14019612",
+    "ownership": "founder",
+    "id": 1213,
+    "db_name": "KIPE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Eliis Aunap",
+        "code": "48606144917",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [],
+    "reg_code": "14461420",
+    "ownership": "founder",
+    "id": 1208,
+    "db_name": "FIDELIS KINNISVARA OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "11577568",
+    "ownership": "unknown",
+    "id": 1207,
+    "db_name": "BALTREAL OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Sander Veskimäe",
+        "code": "39204073511",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Sander Veskimäe",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "16922182",
+    "ownership": "founder",
+    "id": 1337,
+    "db_name": "MIIAKAS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Andrus Lein",
+        "code": "37404125228",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Andrus Lein",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16724237",
+    "ownership": "founder",
+    "id": 1127,
+    "db_name": "A.L HALJASTUS OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10495511",
+    "ownership": "unknown",
+    "id": 1258,
+    "db_name": "RTC FEELER OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "50.00%",
+        "name": "Vassili Vereštšagin",
+        "code": "35711012305",
+        "pct_num": 50.0
+      },
+      {
+        "pct": "37.50%",
+        "name": "",
+        "code": "",
+        "pct_num": 37.5
+      },
+      {
+        "pct": "",
+        "name": "Natalia Vereštšagina",
+        "code": "45702043750",
+        "pct_num": 0
+      },
+      {
+        "pct": "",
+        "name": "Vassili Vereštšagin",
+        "code": "35711012305",
+        "pct_num": 0
+      },
+      {
+        "pct": "12.50%",
+        "name": "Natalia Vereštšagina",
+        "code": "45702043750",
+        "pct_num": 12.5
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Natalia Vereštšagina",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Vassili Vereštšagin",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10549603",
+    "ownership": "founder",
+    "id": 1289,
+    "db_name": "VLASKON OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Susanna Kiitsak",
+        "code": "49101052712",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Susanna Kiitsak",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16092694",
+    "ownership": "founder",
+    "id": 1147,
+    "db_name": "SUSTAR OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Pjotr Potjomkin",
+        "code": "35409250270",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Pjotr Potjomkin",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "10376769",
+    "ownership": "founder",
+    "id": 1046,
+    "db_name": "ASPU-AGENTUUR OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Harvester Shipmanagement Limited",
+        "code": "HE 87757",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Dimitrios Droutsas",
+        "control": "Muul viisil kontroll või mõju (lepingulised, perekondlikud vm suhted)"
+      },
+      {
+        "name": "Ilia Tipunin",
+        "control": "Muul viisil kontroll või mõju (lepingulised, perekondlikud vm suhted)"
+      },
+      {
+        "name": "Aristeiana Stylianou",
+        "control": "kaudne osalus"
+      },
+      {
+        "name": "Irina Loutchina Skittides",
+        "control": "Muul viisil kontroll või mõju (lepingulised, perekondlikud vm suhted)"
+      },
+      {
+        "name": "Yiorgos Lillikas",
+        "control": "Muul viisil kontroll või mõju (lepingulised, perekondlikud vm suhted)"
+      }
+    ],
+    "reg_code": "11014598",
+    "ownership": "pe_backed",
+    "id": 1181,
+    "db_name": "EUROCHEM TERMINAL SILLAMÄE OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "16634632",
+    "ownership": "unknown",
+    "id": 1223,
+    "db_name": "GRIDLAND OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Mart Saun",
+        "code": "38402150049",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Mart Saun",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "16854572",
+    "ownership": "founder",
+    "id": 1329,
+    "db_name": "S MART SERVICE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Siim Luisk",
+        "code": "39002136029",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Siim Luisk",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12805223",
+    "ownership": "founder",
+    "id": 1165,
+    "db_name": "TELLIKOLIMINE OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Marti Hollman",
+        "code": "37810080242",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Marti Hollman",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "12762301",
+    "ownership": "founder",
+    "id": 1026,
+    "db_name": "HEMSONS OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "33.36%",
+        "name": "Gunnar Paalman",
+        "code": "37609116510",
+        "pct_num": 33.36
+      },
+      {
+        "pct": "33.32%",
+        "name": "Peeter Paalman",
+        "code": "37804286524",
+        "pct_num": 33.32
+      },
+      {
+        "pct": "33.32%",
+        "name": "Kristi Paalman",
+        "code": "47509136511",
+        "pct_num": 33.32
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Kristi Paalman",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Gunnar Paalman",
+        "control": "otsene osalus"
+      },
+      {
+        "name": "Peeter Paalman",
+        "control": "otsene osalus"
+      }
+    ],
+    "reg_code": "14175513",
+    "ownership": "founder",
+    "id": 1125,
+    "db_name": "ÕLIMEISTRID OÜ"
+  },
+  {
+    "shareholders": [],
+    "beneficial_owners": [],
+    "reg_code": "10970372",
+    "ownership": "unknown",
+    "id": 1160,
+    "db_name": "P.Õ.M.M. OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Merle Ivanova",
+        "code": "48701284221",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Merle Ivanova",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "16895460",
+    "ownership": "founder",
+    "id": 1309,
+    "db_name": "MERLE ILUTUBA OÜ"
+  },
+  {
+    "shareholders": [
+      {
+        "pct": "100.00%",
+        "name": "Ragnar Anijalg",
+        "code": "38306276525",
+        "pct_num": 100.0
+      }
+    ],
+    "beneficial_owners": [
+      {
+        "name": "Ragnar Anijalg",
+        "control": "kõrgema juhtorgani liige. s.o juhatuse liige või nõukogu liige"
+      }
+    ],
+    "reg_code": "14997333",
+    "ownership": "founder",
+    "id": 1103,
+    "db_name": "ESTOVE OÜ"
+  },
+  {
+    "id": 1158,
+    "name": "KAMBJA HOIU-LAENUÜHISTU TÜH",
+    "error": "no_match"
+  }
+]

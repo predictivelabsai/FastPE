@@ -40,8 +40,12 @@ python -m tests.regression_suite --slug deal_triage
 python -m scripts.daily_deals                    # send to DAILY_DEALS_TO_EMAIL
 python -m scripts.daily_deals --to me@firm.com   # override recipient
 python -m scripts.daily_deals --dry-run          # preview HTML, don't send
-# Cron (8:00 AM EET daily):
-#   0 8 * * * cd /path/to/pehero && .venv/bin/python -m scripts.daily_deals
+# Scheduler runs at 08:00 EET via daemon thread in main.py (no cron needed)
+
+# Estonian ownership data (scrapes ariregister.rik.ee)
+python -m scripts.scrape_ee_owners               # scrape + update DB
+python -m scripts.scrape_ee_owners --dry-run     # preview, don't write
+python -m scripts.scrape_ee_owners --limit 20    # first N companies
 
 # Demo artifacts (requires a running server on :5058 and playwright chromium)
 playwright install chromium                      # one-off

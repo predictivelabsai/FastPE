@@ -9,6 +9,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import asyncio
 import html as _html
 from datetime import date
 
@@ -36,13 +37,17 @@ def _top_deals(n: int = 5) -> list[dict]:
             ORDER BY as_of_date DESC LIMIT 1
         ) ms ON TRUE
         WHERE c.deal_stage IN ('sourced', 'screened', 'loi', 'diligence', 'ic')
+          AND c.ebitda_margin > 0 AND c.ebitda_margin < 60
+          AND (c.growth_rate IS NULL OR (c.growth_rate > -30 AND c.growth_rate < 100))
+          AND c.revenue_ltm > 1000000
+          AND c.ebitda_ltm > 0 AND c.ebitda_ltm <= c.revenue_ltm
         ORDER BY
             CASE c.seller_intent
                 WHEN 'hot'  THEN 0
                 WHEN 'warm' THEN 1
                 ELSE 2
             END,
-            COALESCE(c.ebitda_margin, 0) * COALESCE(c.growth_rate, 0) DESC
+            COALESCE(c.ebitda_margin, 0) * GREATEST(COALESCE(c.growth_rate, 0), 0) DESC
         LIMIT %s
     """, (n,))
     return rows
@@ -59,30 +64,84 @@ def _fmt_eur(v) -> str:
 def _pct(v) -> str:
     if v is None:
         return "n/a"
-    return f"{v:.0%}" if abs(v) < 1 else f"{v:.1f}%"
+    return f"{v:.1f}%"
 
 
 def _deal_rationale(d: dict) -> str:
     parts = []
     if d["seller_intent"] in ("hot", "warm"):
         parts.append(f"Seller intent is **{d['seller_intent']}**")
-    if d["ebitda_margin"] and d["ebitda_margin"] > 0.20:
+    if d["ebitda_margin"] and d["ebitda_margin"] > 20:
         parts.append(f"strong {_pct(d['ebitda_margin'])} EBITDA margin")
-    if d["growth_rate"] and d["growth_rate"] > 0.10:
+    if d["growth_rate"] and 0 < d["growth_rate"] < 500 and d["growth_rate"] > 10:
         parts.append(f"{_pct(d['growth_rate'])} revenue growth")
     if d["ask_multiple"] and d["sector_ev_ebitda"]:
         ask = float(d["ask_multiple"])
         median = float(d["sector_ev_ebitda"])
         if ask < median:
             parts.append(f"asking {ask:.1f}x vs {median:.1f}x sector median")
-    if d["ownership"] in ("founder", "family"):
+    if d["country"] not in ("LV", "LT", "EE") and d["ownership"] in ("founder", "family"):
         parts.append(f"{d['ownership']}-owned (succession opportunity)")
     if not parts:
         parts.append(f"{d['sector']} sector, {d['deal_stage']} stage")
     return "; ".join(parts)
 
 
-def _render_html(deals: list[dict]) -> str:
+def _fetch_news_sync(n: int = 5) -> list[dict]:
+    from utils.news import fetch_news
+    try:
+        articles = asyncio.run(fetch_news())
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        articles = loop.run_until_complete(fetch_news())
+        loop.close()
+    pe_icons = {"PEH", "BUY", "PEI", "FT", "BBG", "WSJ"}
+    pe_articles = [a for a in articles if a.get("icon") in pe_icons]
+    if len(pe_articles) < n:
+        pe_articles = articles
+    return pe_articles[:n]
+
+
+def _render_news_html(articles: list[dict]) -> str:
+    if not articles:
+        return ""
+    rows = ""
+    for a in articles:
+        esc = _html.escape
+        title = esc(a["title"][:100])
+        source = esc(a.get("source", ""))
+        url = esc(a.get("url", "#"))
+        summary = esc((a.get("summary") or "")[:120])
+        if len(a.get("summary") or "") > 120:
+            summary += "..."
+        rows += f"""
+        <tr>
+            <td style="padding:10px 20px;border-bottom:1px solid #E5E7EB;">
+                <a href="{url}" style="text-decoration:none;color:#14231B;font-size:13px;font-weight:600;line-height:1.3;">{title}</a>
+                <div style="font-size:11px;color:#9CA3AF;margin-top:3px;">{source}</div>
+            </td>
+        </tr>"""
+
+    return f"""
+    <!-- News Section -->
+    <tr>
+        <td style="padding:20px 28px 8px;">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr><td style="border-top:2px solid #E5E7EB;padding-top:16px;">
+                    <span style="font-size:14px;font-weight:700;color:#14231B;">Market News</span>
+                    <span style="font-size:11px;color:#9CA3AF;margin-left:8px;">PE &amp; Financial</span>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <tr><td style="padding:0 8px;">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        {rows}
+        </table>
+    </td></tr>"""
+
+
+def _render_html(deals: list[dict], news: list[dict] | None = None) -> str:
     today = date.today().strftime("%B %d, %Y")
     rows_html = ""
     for i, d in enumerate(deals, 1):
@@ -192,6 +251,7 @@ def _render_html(deals: list[dict]) -> str:
             <a href="https://pehero.fyi/app/pipeline" style="display:inline-block;background:#1F5D43;color:#FFFFFF;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Open Pipeline →</a>
         </td>
     </tr>
+    {_render_news_html(news) if news else ""}
     <!-- Footer -->
     <tr>
         <td style="background:#F9FAFB;padding:16px 28px;border-top:1px solid #E5E7EB;">
@@ -210,7 +270,7 @@ def _render_html(deals: list[dict]) -> str:
 </html>"""
 
 
-def _render_text(deals: list[dict]) -> str:
+def _render_text(deals: list[dict], news: list[dict] | None = None) -> str:
     today = date.today().strftime("%B %d, %Y")
     lines = [f"PEHero Daily Deals — {today}", "=" * 40, ""]
     for i, d in enumerate(deals, 1):
@@ -220,6 +280,14 @@ def _render_text(deals: list[dict]) -> str:
         lines.append(f"    Why: {_deal_rationale(d)}")
         lines.append("")
     lines.append("Open pipeline: https://pehero.fyi/app/pipeline")
+    if news:
+        lines.append("")
+        lines.append("Market News")
+        lines.append("-" * 40)
+        for a in news:
+            lines.append(f"  {a['source']}: {a['title']}")
+            lines.append(f"  {a['url']}")
+            lines.append("")
     return "\n".join(lines)
 
 
@@ -235,8 +303,9 @@ def main():
         print("No active deals in pipeline — skipping email.")
         return
 
-    html_body = _render_html(deals)
-    text_body = _render_text(deals)
+    news = _fetch_news_sync(5)
+    html_body = _render_html(deals, news)
+    text_body = _render_text(deals, news)
     today = date.today().strftime("%b %d")
     subject = f"PEHero Daily Deals — {today} — {len(deals)} actionable opportunities"
 

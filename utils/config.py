@@ -47,7 +47,7 @@ class Settings(BaseSettings):
 
     # Postmark email
     postmark_api_token: str = Field(default="", alias="POSTMARK_API_TOKEN")
-    postmark_from_email: str = Field(default="info@pehero.chat", alias="POSTMARK_FROM_EMAIL")
+    postmark_from_email: str = Field(default="PE Hero Ltd <info@pehero.chat>", alias="POSTMARK_FROM_EMAIL")
     daily_deals_to_email: str = Field(default="", alias="DAILY_DEALS_TO_EMAIL")
 
     # News feed
