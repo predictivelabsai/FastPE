@@ -381,6 +381,14 @@ details.agent-group[open] .agent-list { display: flex; flex-direction: column; g
 .left-overlay.visible { display: block; }
 
 /* ── Responsive ── */
+
+/* Medium desktop — center pane < ~560px when both side panes are open */
+@media (max-width: 1280px) {
+    .welcome-hero .suggestions { display: none; }
+    .welcome-hero { top: 38%; }
+    .sample-cards { max-height: 5.5rem; overflow: hidden; }
+}
+
 @media (max-width: 960px) {
     .app { padding-right: 0; grid-template-columns: 1fr; }
     .left-pane { position: fixed; left: -320px; top: 0; bottom: 0; width: 300px; transition: left .3s ease; }
