@@ -29,7 +29,7 @@ python -m synthetic.generate --limit 5           # small subset for fast iterati
 PORT=5058 python main.py                         # :5058 is the default
 
 # Smoke tests (no LLM)
-pytest -q tests/test_agents_smoke.py             # 38 tests; build-every-agent, route, tool shape
+pytest -q tests/test_agents_smoke.py             # 41 tests; build-every-agent, route, tool shape
 pytest -q tests/test_agents_smoke.py::test_lbo_round_trip
 
 # Full regression — HITS the LLM, writes docs/regression-latest.md
@@ -56,7 +56,8 @@ python -m scripts.make_pptx                      # → docs/pehero-product-tour.
 
 # Docker / Coolify deploy
 docker compose up --build                        # local bring-up
-# Coolify: just DB_URL + XAI_API_KEY; domain → pehero.fyi, port 5058.
+# Coolify: DB_URL + XAI_API_KEY + GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET
+#          + SERVICE_URL + POSTMARK_API_TOKEN; domain → pehero.chat, port 5058.
 # docker-entrypoint.sh runs db.migrate on start. Synthetic seed stays manual:
 #   docker compose exec web python -m synthetic.generate --seed 42
 ```
@@ -71,6 +72,8 @@ docker compose up --build                        # local bring-up
 - `/app/instructions` + `/app/instructions/<slug>` → live-edit each agent's prompt. Writes to `prompts/system/<slug>.md`, clears the agent cache. `chat/instructions.py`.
 - `/app/analytics` + `POST /app/analytics/run` → text → SELECT SQL (guarded) → Plotly figure. `chat/analytics.py`.
 - `POST /app/config` → session currency preference (EUR default; GBP / USD available).
+- `/app/training` → PE Hero RPG game. SSE streaming at `POST /app/training/chat`. `game/routes.py`.
+- `/auth/*` → registration, login, email verification, password reset, Google OAuth. `auth/routes.py`.
 - `/app/_debug/ping` → LLM health check.
 
 ### Agents (`agents/`)
@@ -100,6 +103,21 @@ Core tables all live in `pehero.*`:
 - Left pane: New-chat + session list, agent browser (5 categories × 24 agents), Workspace (Pipeline / Instructions / Analytics), Configuration (currency switcher). All routes pass `current_currency=get_currency(sess)` to `left_pane()`.
 - `static/app.css` holds base chat + left-pane + thinking indicator + follow-up + sample-cards + currency-chip rules. `static/pipeline.css` holds kanban + deal-detail + instructions + analytics rules (pipeline.css is only loaded on those routes; anything that also appears on `/app` must live in `app.css`).
 - `static/chat.js` handles SSE streaming, thinking-indicator (timer + rotating tool name), contextual sample cards (per agent — prompt tables embedded as `<script id="agent-prompts-data">`), the "Next step — Yes / No" follow-up pattern, and the currency selector (`POST /app/config`, reload).
+
+### Auth (`auth/`)
+
+- `routes.py` — register (bcrypt), login, email verify (token), forgot/reset password (1-hr token), Google OAuth 2.0 (code → userinfo → upsert). All DB via `db.connect()` + `fetch_one()`.
+- `utils.py` — `hash_password()`, `verify_password()`, `generate_token()`, Postmark email senders (`send_verification_email`, `send_reset_email`).
+- `utils/email.py` — generic Postmark `send_email()` wrapper.
+- Auth columns on `pehero.users`: `password_hash`, `name`, `is_verified`, `verify_token`, `reset_token`, `reset_token_expires`. Added via `ALTER TABLE … ADD COLUMN IF NOT EXISTS` in `db/migrate.py`.
+
+### Game (`game/`)
+
+- PE Hero — an RPG training game at `/app/training`. Players pick a character, navigate PE deal scenarios with real companies from the DB, make decisions, and earn scores.
+- `engine.py` — game state, levels, characters, deal pipeline, scoring.
+- `agent.py` — LangGraph ReAct agent with 8 game tools (close deals, advance stages, adjust resources, etc.).
+- `prompts.py` — game master system prompt, welcome/game-over templates.
+- `routes.py` — SSE streaming chat + reset endpoint. Registered via `register_game_routes(rt)` in `app.py`.
 
 ### Session state
 
@@ -163,7 +181,7 @@ for p in direct: expand(p)
 
 # Map top-level import name → distribution name(s) on this machine.
 dists = {k: [norm(d) for d in v] for k, v in packages_distributions().items()}
-INTERNAL = {'agents','app','chat','db','landing','prompts','rag','scripts','static','synthetic','tests','tools','utils'}
+INTERNAL = {'agents','app','auth','chat','db','game','landing','prompts','rag','scripts','static','synthetic','tests','tools','utils'}
 stdlib = set(sys.stdlib_module_names)
 missing = set()
 for p in ROOT.rglob('*.py'):
@@ -188,7 +206,7 @@ pytest -q tests/test_agents_smoke.py
 
 # 3. Offline boot check — every route module that app.py imports at
 #    startup must import cleanly with only what's installed.
-.venv/bin/python -c "from app import app; from chat import routes, pipeline, instructions, analytics, memo_pdf; print('app imports OK')"
+.venv/bin/python -c "from app import app; from chat import routes, pipeline, instructions, analytics, memo_pdf; from auth import routes as _auth; print('app imports OK')"
 ```
 
 Only push once all three pass. If you added a new dependency, pin it with a lower bound (`pkg>=X.Y.0`) in `requirements.txt` in the same commit that introduces the import.

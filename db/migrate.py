@@ -48,6 +48,21 @@ def migrate(drop: bool = False) -> None:
             ADD COLUMN IF NOT EXISTS share_token TEXT UNIQUE;
     """)
 
+    _apply("""
+        ALTER TABLE pehero.users
+            ADD COLUMN IF NOT EXISTS password_hash TEXT;
+        ALTER TABLE pehero.users
+            ADD COLUMN IF NOT EXISTS name VARCHAR(200);
+        ALTER TABLE pehero.users
+            ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT FALSE;
+        ALTER TABLE pehero.users
+            ADD COLUMN IF NOT EXISTS verify_token VARCHAR(64);
+        ALTER TABLE pehero.users
+            ADD COLUMN IF NOT EXISTS reset_token VARCHAR(64);
+        ALTER TABLE pehero.users
+            ADD COLUMN IF NOT EXISTS reset_token_expires TIMESTAMPTZ;
+    """)
+
     # Seed existing prompt files as v1 if prompt_versions is empty.
     _seed_prompt_versions()
 

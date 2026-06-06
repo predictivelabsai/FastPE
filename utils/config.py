@@ -48,6 +48,8 @@ class Settings(BaseSettings):
     # Postmark email
     postmark_api_token: str = Field(default="", alias="POSTMARK_API_TOKEN")
     postmark_from_email: str = Field(default="PE Hero Ltd <info@pehero.chat>", alias="POSTMARK_FROM_EMAIL")
+    from_email: str = Field(default="info@pehero.chat", alias="FROM_EMAIL")
+    from_name: str = Field(default="PE Hero", alias="FROM_NAME")
     daily_deals_to_email: str = Field(default="", alias="DAILY_DEALS_TO_EMAIL")
 
     # News feed
@@ -56,6 +58,11 @@ class Settings(BaseSettings):
     app_env: str = Field(default="dev", alias="APP_ENV")
     app_secret: str = Field(default="change-me", alias="APP_SECRET")
     port: int = Field(default=5058, alias="PORT")
+    service_url: str = Field(default="https://pehero.chat", alias="SERVICE_URL")
+
+    # Google OAuth
+    google_client_id: str = Field(default="", alias="GOOGLE_CLIENT_ID")
+    google_client_secret: str = Field(default="", alias="GOOGLE_CLIENT_SECRET")
 
 
 @lru_cache(maxsize=1)

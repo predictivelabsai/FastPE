@@ -583,7 +583,7 @@
         autoResize(ta);
         onInputChange(ta);
     };
-    window.showSignIn = () => { $("#signin-overlay").classList.add("visible"); $("#signin-email").focus(); };
+    window.showSignIn = () => { document.getElementById('signin-overlay').classList.add('visible'); switchAuthTab('login'); };
     window.toggleLangDropdown = (ev) => {
         ev.stopPropagation();
         const menu = document.getElementById("lang-dd-menu");
@@ -641,3 +641,102 @@
     window.renderMarkdownLite = renderMarkdownLite;
     window.enhanceTables = enhanceTables;
 })();
+
+/* ── Auth functions ─────────────────────────────────────────────────── */
+
+function switchAuthTab(tab) {
+    document.getElementById('auth-form-login').style.display = tab === 'login' ? '' : 'none';
+    document.getElementById('auth-form-register').style.display = tab === 'register' ? '' : 'none';
+    document.getElementById('auth-form-forgot').style.display = tab === 'forgot' ? '' : 'none';
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    const tabEl = document.getElementById('auth-tab-' + tab);
+    if (tabEl) tabEl.classList.add('active');
+}
+
+function showForgotPassword(e) {
+    e && e.preventDefault();
+    switchAuthTab('forgot');
+}
+
+async function doLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errEl = document.getElementById('login-error');
+    errEl.textContent = '';
+    if (!email || !password) { errEl.textContent = 'Email and password required'; return; }
+
+    const resp = await fetch('/auth/login', {
+        method: 'POST',
+        body: new URLSearchParams({ email, password }),
+    });
+    const data = await resp.json();
+    if (data.ok) {
+        location.reload();
+    } else if (data.error === 'no_password') {
+        errEl.innerHTML = 'No password set. <a href="#" onclick="showSetPassword(\'' + email + '\');return false" style="color:var(--accent);font-weight:600;">Set one now</a>';
+    } else {
+        errEl.textContent = data.error || 'Login failed';
+    }
+}
+
+async function doRegister() {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const errEl = document.getElementById('reg-error');
+    const okEl = document.getElementById('reg-success');
+    errEl.textContent = ''; okEl.textContent = '';
+    if (!email || !password) { errEl.textContent = 'Email and password required'; return; }
+
+    const resp = await fetch('/auth/register', {
+        method: 'POST',
+        body: new URLSearchParams({ email, password, name }),
+    });
+    const data = await resp.json();
+    if (data.ok) {
+        okEl.textContent = data.message || 'Check your email to verify';
+    } else {
+        errEl.textContent = data.error || 'Registration failed';
+    }
+}
+
+async function doForgot() {
+    const email = document.getElementById('forgot-email').value.trim();
+    const msgEl = document.getElementById('forgot-msg');
+    msgEl.textContent = '';
+    if (!email) { msgEl.textContent = 'Enter your email'; msgEl.style.color = '#DC2626'; return; }
+
+    const resp = await fetch('/auth/forgot', {
+        method: 'POST',
+        body: new URLSearchParams({ email }),
+    });
+    const data = await resp.json();
+    msgEl.style.color = '#16A34A';
+    msgEl.textContent = data.message || 'Reset link sent if account exists';
+}
+
+function showSetPassword(email) {
+    const form = document.getElementById('auth-form-login');
+    form.innerHTML = '<p style="font-size:13px;color:var(--ink-dim);margin-bottom:12px;">Set a password for <strong>' + email + '</strong></p>'
+        + '<input type="password" id="set-pw-input" placeholder="New password (min 6 chars)" style="width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:6px;font-size:14px;margin-bottom:12px;box-sizing:border-box;">'
+        + '<div id="set-pw-error" style="color:#DC2626;font-size:12px;margin-bottom:8px;"></div>'
+        + '<button onclick="doSetPassword(\'' + email + '\')" class="auth-primary-btn">Set Password</button>';
+}
+
+async function doSetPassword(email) {
+    const password = document.getElementById('set-pw-input').value;
+    const errEl = document.getElementById('set-pw-error');
+    if (!password || password.length < 6) { errEl.textContent = 'Min 6 characters'; return; }
+
+    const resp = await fetch('/auth/set-password', {
+        method: 'POST',
+        body: new URLSearchParams({ email, password }),
+    });
+    const data = await resp.json();
+    if (data.ok) location.reload();
+    else errEl.textContent = data.error || 'Failed';
+}
+
+function signOut() {
+    fetch('/auth/logout', { method: 'POST' }).then(() => location.reload());
+}

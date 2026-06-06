@@ -291,6 +291,7 @@ def _htmx_redirect(request: Request, fallback: str = "/app") -> Response:
 
 @rt("/app/auth/signin", methods=["POST"])
 async def signin(request: Request):
+    """Legacy email-only signin — kept for backward compatibility."""
     form = await request.form()
     email = (form.get("email") or "").strip().lower()
     if "@" not in email:
