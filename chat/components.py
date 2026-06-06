@@ -327,13 +327,12 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
         Div(
             Span("◇", cls="user-mark"),
             Span(user_email, cls="user-email"),
+            A("Profile", href="/app/profile", cls="profile-link"),
             Button(t("chat_sign_out", lang), cls="sign-out-btn",
                    onclick="signOut()"),
             cls="signed-in-bar",
         )
-        if user_email else
-        Button(Span("◇", cls="user-mark"), Span(t("chat_sign_in", lang), cls="sign-in-text"),
-               cls="sign-in-btn", onclick="showSignIn()")
+        if user_email else None
     )
 
     return Div(
@@ -391,7 +390,7 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
             ),
             cls="left-body",
         ),
-        Div(signin_block, cls="left-footer"),
+        Div(signin_block, cls="left-footer") if signin_block else None,
         cls="left-pane", id="left-pane",
     )
 

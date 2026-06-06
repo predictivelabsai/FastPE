@@ -1,7 +1,8 @@
-"""Authentication routes: register, login, verify, forgot password, reset, Google OAuth."""
+"""Authentication routes: register, login, verify, forgot password, reset, Google OAuth, profile."""
 
 from __future__ import annotations
 
+import json as _json
 import logging
 import os
 import urllib.parse
@@ -10,7 +11,8 @@ from datetime import datetime, timedelta
 import httpx
 
 from fasthtml.common import (
-    Html, Head, Body, Div, H2, H3, P, A, Button, Form, Input, Label, Script, NotStr, Meta, Link,
+    Html, Head, Body, Div, H2, H3, P, A, Button, Form, Input, Label,
+    Script, NotStr, Meta, Link, Style, Span,
 )
 from starlette.responses import RedirectResponse, JSONResponse, Response
 
@@ -359,3 +361,379 @@ def auth_google_callback(request, sess):
     set_user_email(sess, email)
     set_user_id(sess, uid)
     return RedirectResponse("/app", status_code=303)
+
+
+# ── Profile & Preferences ──────────────────────────────────────────
+
+SECTORS = [
+    "Technology", "Healthcare", "Financial Services", "Consumer",
+    "Industrials", "Energy", "Real Estate", "Infrastructure", "TMT",
+]
+DEAL_TYPES = [
+    "Buyout", "Growth Equity", "Venture", "Secondaries",
+    "Distressed", "Mezzanine", "Co-Investment",
+]
+GEOGRAPHIES = [
+    "Baltics", "Nordics", "CEE", "Western Europe",
+    "UK", "US", "Global",
+]
+STAGES = [
+    ("", "Any"), ("seed", "Seed"), ("series_a", "Series A"),
+    ("series_b", "Series B"), ("growth", "Growth"),
+    ("late_stage", "Late Stage"), ("pre_ipo", "Pre-IPO"),
+]
+PROFILE_CURRENCIES = [("EUR", "EUR — Euro"), ("GBP", "GBP — Pound"), ("USD", "USD — Dollar")]
+PROFILE_LANGUAGES = [
+    ("en", "English"), ("de", "Deutsch"), ("fr", "Francais"),
+    ("et", "Eesti"), ("lv", "Latviesu"), ("lt", "Lietuviu"),
+    ("ro", "Romana"), ("pl", "Polski"),
+]
+
+
+def _checkbox_group(name, options, selected):
+    items = []
+    for opt in options:
+        checked = "checked" if opt in selected else ""
+        items.append(NotStr(
+            f'<label class="cb-pill"><input type="checkbox" name="{name}" value="{opt}" {checked}>'
+            f'<span>{opt}</span></label>'
+        ))
+    return Div(*items, cls="cb-group")
+
+
+def _select(name, options, selected, cls="prf-input"):
+    opts_html = "".join(
+        f'<option value="{v}"{" selected" if v == selected else ""}>{label}</option>'
+        for v, label in options
+    )
+    return NotStr(f'<select name="{name}" class="{cls}">{opts_html}</select>')
+
+
+def _toggle(name, label_text, checked):
+    chk = "checked" if checked else ""
+    return Div(NotStr(
+        f'<label class="toggle-row"><input type="checkbox" name="{name}" value="1" {chk}>'
+        f'<span class="toggle-label">{label_text}</span></label>'
+    ), cls="prf-toggle-wrap")
+
+
+@rt("/app/profile")
+def profile_page(sess):
+    email = get_user_email(sess)
+    if not email:
+        return RedirectResponse("/app", status_code=303)
+
+    uid = get_user_id(sess)
+    user = fetch_one("SELECT name, email FROM pehero.users WHERE id = %s", (uid,))
+    prefs = fetch_one("SELECT * FROM pehero.user_preferences WHERE user_id = %s", (uid,))
+
+    name = user["name"] or "" if user else ""
+    user_email = user["email"] if user else email
+
+    p_phone = prefs["phone"] or "" if prefs else ""
+    p_company = prefs["company"] or "" if prefs else ""
+    p_role = prefs["role"] or "" if prefs else ""
+    p_country = prefs["country"] or "" if prefs else ""
+    p_city = prefs["city"] or "" if prefs else ""
+    p_currency = prefs["currency"] or "EUR" if prefs else "EUR"
+    p_lang = prefs["language"] or "en" if prefs else "en"
+
+    p_dsmin = str(prefs["deal_size_min"] or "") if prefs else ""
+    p_dsmax = str(prefs["deal_size_max"] or "") if prefs else ""
+    p_rmin = str(prefs["revenue_min"] or "") if prefs else ""
+    p_rmax = str(prefs["revenue_max"] or "") if prefs else ""
+    p_emin = str(prefs["ebitda_min"] or "") if prefs else ""
+    p_emax = str(prefs["ebitda_max"] or "") if prefs else ""
+
+    p_sectors = _json.loads(prefs["preferred_sectors"]) if prefs and prefs["preferred_sectors"] else []
+    p_deal_types = _json.loads(prefs["preferred_deal_types"]) if prefs and prefs["preferred_deal_types"] else []
+    p_geos = _json.loads(prefs["preferred_geographies"]) if prefs and prefs["preferred_geographies"] else []
+    p_stage = prefs["preferred_stage"] or "" if prefs else ""
+
+    p_notify_new = prefs["notify_new_deals"] if prefs else True
+    p_notify_updates = prefs["notify_deal_updates"] if prefs else True
+    p_notify_digest = prefs["notify_weekly_digest"] if prefs else True
+
+    inp = "prf-input"
+    lbl = "prf-label"
+    half = "prf-half"
+
+    return Html(_head("Profile & Preferences"), Body(
+        Div(
+            A("< Back to chat", href="/app", cls="prf-back"),
+
+            # ─── Account ────
+            H2("Account", cls="prf-h2"),
+            P("Your account details and password.", cls="prf-sub"),
+            Form(
+                Div(
+                    Div(Label("Name", cls=lbl), Input(type="text", name="name", value=name, placeholder="Your name", cls=inp), cls=half),
+                    Div(Label("Email", cls=lbl), Input(type="email", value=user_email, disabled=True, cls=f"{inp} prf-disabled"), cls=half),
+                    cls="prf-row",
+                ),
+                Div(
+                    Div(Label("Company", cls=lbl), Input(type="text", name="company", value=p_company, placeholder="e.g. Baltic Capital", cls=inp), cls=half),
+                    Div(Label("Role / Title", cls=lbl), Input(type="text", name="role", value=p_role, placeholder="e.g. Investment Director", cls=inp), cls=half),
+                    cls="prf-row",
+                ),
+                Div(
+                    Div(Label("Phone", cls=lbl), Input(type="tel", name="phone", value=p_phone, placeholder="+370...", cls=inp), cls=half),
+                    Div(Label("Country", cls=lbl), Input(type="text", name="country", value=p_country, placeholder="e.g. LT, EE", maxlength="5", cls=inp), cls=half),
+                    Div(Label("City", cls=lbl), Input(type="text", name="city", value=p_city, placeholder="e.g. Vilnius", cls=inp), cls=half),
+                    cls="prf-row prf-row-3",
+                ),
+                Div(
+                    Div(Label("Currency", cls=lbl), _select("currency", PROFILE_CURRENCIES, p_currency), cls=half),
+                    Div(Label("Language", cls=lbl), _select("language", PROFILE_LANGUAGES, p_lang), cls=half),
+                    cls="prf-row",
+                ),
+                H3("Change Password", cls="prf-h3"),
+                Div(
+                    Div(Input(type="password", name="current_password", placeholder="Current password", cls=inp), cls=half),
+                    Div(Input(type="password", name="new_password", placeholder="New password (min 6 chars)", cls=inp), cls=half),
+                    cls="prf-row",
+                ),
+                Div(
+                    Button("Save Account", type="submit", cls="prf-save-btn"),
+                    Span(id="profile-msg", cls="prf-msg"),
+                    cls="prf-btn-row",
+                ),
+                id="profile-form",
+                onsubmit="return submitProfile(event)",
+            ),
+
+            # ─── Deal Preferences ────
+            NotStr('<hr class="prf-hr">'),
+            H2("Deal Preferences", cls="prf-h2"),
+            P("Set your investment criteria — agents will tailor recommendations to your mandate.", cls="prf-sub"),
+            Form(
+                H3("Deal Size Range (EUR)", cls="prf-section-label"),
+                Div(
+                    Div(Label("Min", cls=lbl), Input(type="number", name="deal_size_min", value=p_dsmin, placeholder="e.g. 1000000", step="100000", cls=inp), cls=half),
+                    Div(Label("Max", cls=lbl), Input(type="number", name="deal_size_max", value=p_dsmax, placeholder="e.g. 50000000", step="100000", cls=inp), cls=half),
+                    cls="prf-row",
+                ),
+
+                H3("Preferred Sectors", cls="prf-section-label"),
+                _checkbox_group("preferred_sectors", SECTORS, p_sectors),
+
+                H3("Deal Types", cls="prf-section-label"),
+                _checkbox_group("preferred_deal_types", DEAL_TYPES, p_deal_types),
+
+                H3("Geographies", cls="prf-section-label"),
+                _checkbox_group("preferred_geographies", GEOGRAPHIES, p_geos),
+
+                H3("Financial Criteria", cls="prf-section-label"),
+                Div(
+                    Div(Label("Stage", cls=lbl), _select("preferred_stage", STAGES, p_stage), cls=half),
+                    cls="prf-row",
+                ),
+                Div(
+                    Div(Label("Revenue Min (EUR)", cls=lbl), Input(type="number", name="revenue_min", value=p_rmin, placeholder="e.g. 500000", step="100000", cls=inp), cls=half),
+                    Div(Label("Revenue Max (EUR)", cls=lbl), Input(type="number", name="revenue_max", value=p_rmax, placeholder="e.g. 20000000", step="100000", cls=inp), cls=half),
+                    cls="prf-row",
+                ),
+                Div(
+                    Div(Label("EBITDA Min (EUR)", cls=lbl), Input(type="number", name="ebitda_min", value=p_emin, placeholder="e.g. 100000", step="50000", cls=inp), cls=half),
+                    Div(Label("EBITDA Max (EUR)", cls=lbl), Input(type="number", name="ebitda_max", value=p_emax, placeholder="e.g. 5000000", step="50000", cls=inp), cls=half),
+                    cls="prf-row",
+                ),
+                Div(
+                    Button("Save Preferences", type="submit", cls="prf-save-btn"),
+                    Span(id="prefs-msg", cls="prf-msg"),
+                    cls="prf-btn-row",
+                ),
+                id="prefs-form",
+                onsubmit="return submitPrefs(event)",
+            ),
+
+            # ─── Notifications ────
+            NotStr('<hr class="prf-hr">'),
+            H2("Notifications", cls="prf-h2"),
+            P("Choose what emails you'd like to receive.", cls="prf-sub"),
+            Form(
+                _toggle("notify_new_deals", "New deals matching my investment criteria", p_notify_new),
+                _toggle("notify_deal_updates", "Deal status changes in my pipeline", p_notify_updates),
+                _toggle("notify_weekly_digest", "Weekly market digest", p_notify_digest),
+                Div(
+                    Button("Save Notifications", type="submit", cls="prf-save-btn"),
+                    Span(id="notify-msg", cls="prf-msg"),
+                    cls="prf-btn-row",
+                ),
+                id="notify-form",
+                onsubmit="return submitNotify(event)",
+            ),
+
+            cls="prf-container",
+        ),
+        Style(NotStr("""
+            .prf-container { max-width:640px; margin:32px auto 64px; padding:0 24px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
+            .prf-back { display:block; font-size:13px; color:#6B7280; text-decoration:none; margin-bottom:16px; }
+            .prf-back:hover { color:#111; }
+            .prf-h2 { font-size:1.25rem; font-weight:700; margin:0 0 4px; }
+            .prf-sub { font-size:12px; color:#9CA3AF; margin:0 0 16px; }
+            .prf-h3 { font-size:13px; font-weight:600; margin:12px 0 8px; }
+            .prf-section-label { font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:.05em; margin:16px 0 8px; }
+            .prf-label { display:block; font-size:11px; color:#6B7280; margin-bottom:4px; }
+            .prf-input { width:100%; padding:7px 10px; border:1px solid #E5E7EB; border-radius:6px; font-size:13px; background:#fff; }
+            .prf-input:focus { outline:none; border-color:#1a3c6e; }
+            .prf-disabled { background:#F9FAFB; color:#9CA3AF; }
+            .prf-row { display:flex; gap:12px; margin-bottom:12px; }
+            .prf-row-3 .prf-half { flex:1; }
+            .prf-half { flex:1; }
+            .prf-hr { border:none; border-top:1px solid #F3F4F6; margin:32px 0; }
+            .prf-save-btn { padding:8px 20px; background:#1a3c6e; color:#fff; border:none; border-radius:6px; font-size:13px; cursor:pointer; font-weight:600; }
+            .prf-save-btn:hover { background:#15325a; }
+            .prf-btn-row { display:flex; align-items:center; margin-top:8px; }
+            .prf-msg { font-size:13px; margin-left:12px; }
+            .cb-group { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+            .cb-pill { display:inline-flex; align-items:center; gap:4px; padding:5px 12px; border:1px solid #e5e7eb; border-radius:20px; font-size:13px; cursor:pointer; transition:all .15s; user-select:none; }
+            .cb-pill:has(input:checked) { background:#1a3c6e; color:#fff; border-color:#1a3c6e; }
+            .cb-pill input { display:none; }
+            .prf-toggle-wrap { margin-bottom:8px; }
+            .toggle-row { display:flex; align-items:center; gap:8px; cursor:pointer; font-size:14px; }
+            .toggle-row input { width:16px; height:16px; accent-color:#1a3c6e; }
+            .toggle-label { color:#374151; }
+            select.prf-input { appearance:auto; }
+        """)),
+        Script(NotStr("""
+async function submitProfile(e) {
+    e.preventDefault();
+    var form = document.getElementById('profile-form');
+    var resp = await fetch('/app/profile', { method:'POST', body: new FormData(form) });
+    var data = await resp.json();
+    var msg = document.getElementById('profile-msg');
+    msg.style.color = data.ok ? '#16A34A' : '#DC2626';
+    msg.textContent = data.ok ? 'Saved!' : (data.error || 'Error');
+    setTimeout(function(){ msg.textContent = ''; }, 3000);
+    return false;
+}
+async function submitPrefs(e) {
+    e.preventDefault();
+    var form = document.getElementById('prefs-form');
+    var resp = await fetch('/api/user-preferences', { method:'POST', body: new FormData(form) });
+    var data = await resp.json();
+    var msg = document.getElementById('prefs-msg');
+    msg.style.color = data.ok ? '#16A34A' : '#DC2626';
+    msg.textContent = data.ok ? 'Preferences saved!' : (data.error || 'Error');
+    setTimeout(function(){ msg.textContent = ''; }, 3000);
+    return false;
+}
+async function submitNotify(e) {
+    e.preventDefault();
+    var form = document.getElementById('notify-form');
+    var resp = await fetch('/api/user-preferences', { method:'POST', body: new FormData(form) });
+    var data = await resp.json();
+    var msg = document.getElementById('notify-msg');
+    msg.style.color = data.ok ? '#16A34A' : '#DC2626';
+    msg.textContent = data.ok ? 'Notification settings saved!' : (data.error || 'Error');
+    setTimeout(function(){ msg.textContent = ''; }, 3000);
+    return false;
+}
+""")),
+        cls="prf-page",
+        style="background:#fff; min-height:100vh;",
+    ))
+
+
+# ── Profile POST (account details) ─────────────────────────────────
+
+@rt("/app/profile", methods=["POST"])
+async def profile_update(request, sess):
+    uid = get_user_id(sess)
+    if not uid:
+        return JSONResponse({"error": "Not logged in"}, status_code=401)
+
+    form = await request.form()
+    name = (form.get("name") or "").strip()
+    phone = (form.get("phone") or "").strip()
+    company = (form.get("company") or "").strip()
+    role = (form.get("role") or "").strip()
+    country = (form.get("country") or "").strip()
+    city = (form.get("city") or "").strip()
+    currency = form.get("currency") or "EUR"
+    language = form.get("language") or "en"
+    current_password = form.get("current_password") or ""
+    new_password = form.get("new_password") or ""
+
+    with connect() as conn, conn.cursor() as cur:
+        if new_password:
+            if len(new_password) < 6:
+                return JSONResponse({"error": "New password must be at least 6 characters"}, status_code=400)
+            cur.execute("SELECT password_hash FROM pehero.users WHERE id = %s", (uid,))
+            row = cur.fetchone()
+            if row and row[0]:
+                if not verify_password(current_password, row[0]):
+                    return JSONResponse({"error": "Current password is incorrect"}, status_code=400)
+            cur.execute("UPDATE pehero.users SET name = %s, password_hash = %s WHERE id = %s",
+                        (name, hash_password(new_password), uid))
+        else:
+            cur.execute("UPDATE pehero.users SET name = %s WHERE id = %s", (name, uid))
+
+        cur.execute("""
+            INSERT INTO pehero.user_preferences (user_id, phone, company, role, country, city, currency, language, updated_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
+            ON CONFLICT (user_id) DO UPDATE SET
+                phone = EXCLUDED.phone, company = EXCLUDED.company, role = EXCLUDED.role,
+                country = EXCLUDED.country, city = EXCLUDED.city,
+                currency = EXCLUDED.currency, language = EXCLUDED.language, updated_at = NOW()
+        """, (uid, phone, company, role, country, city, currency, language))
+        conn.commit()
+
+    return JSONResponse({"ok": True})
+
+
+# ── Deal preferences + notifications POST ──────────────────────────
+
+@rt("/api/user-preferences", methods=["POST"])
+async def update_user_prefs(request, sess):
+    uid = get_user_id(sess)
+    if not uid:
+        return JSONResponse({"error": "Not logged in"}, status_code=401)
+
+    form = await request.form()
+
+    deal_size_min = form.get("deal_size_min") or None
+    deal_size_max = form.get("deal_size_max") or None
+    revenue_min = form.get("revenue_min") or None
+    revenue_max = form.get("revenue_max") or None
+    ebitda_min = form.get("ebitda_min") or None
+    ebitda_max = form.get("ebitda_max") or None
+    preferred_sectors = _json.dumps(form.getlist("preferred_sectors"))
+    preferred_deal_types = _json.dumps(form.getlist("preferred_deal_types"))
+    preferred_geographies = _json.dumps(form.getlist("preferred_geographies"))
+    preferred_stage = form.get("preferred_stage") or None
+
+    notify_new = "notify_new_deals" in form
+    notify_updates = "notify_deal_updates" in form
+    notify_digest = "notify_weekly_digest" in form
+
+    with connect() as conn, conn.cursor() as cur:
+        cur.execute("""
+            INSERT INTO pehero.user_preferences (
+                user_id, deal_size_min, deal_size_max, revenue_min, revenue_max,
+                ebitda_min, ebitda_max, preferred_sectors, preferred_deal_types,
+                preferred_geographies, preferred_stage,
+                notify_new_deals, notify_deal_updates, notify_weekly_digest, updated_at
+            ) VALUES (
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW()
+            )
+            ON CONFLICT (user_id) DO UPDATE SET
+                deal_size_min = EXCLUDED.deal_size_min, deal_size_max = EXCLUDED.deal_size_max,
+                revenue_min = EXCLUDED.revenue_min, revenue_max = EXCLUDED.revenue_max,
+                ebitda_min = EXCLUDED.ebitda_min, ebitda_max = EXCLUDED.ebitda_max,
+                preferred_sectors = EXCLUDED.preferred_sectors,
+                preferred_deal_types = EXCLUDED.preferred_deal_types,
+                preferred_geographies = EXCLUDED.preferred_geographies,
+                preferred_stage = EXCLUDED.preferred_stage,
+                notify_new_deals = EXCLUDED.notify_new_deals,
+                notify_deal_updates = EXCLUDED.notify_deal_updates,
+                notify_weekly_digest = EXCLUDED.notify_weekly_digest,
+                updated_at = NOW()
+        """, (uid, deal_size_min, deal_size_max, revenue_min, revenue_max,
+              ebitda_min, ebitda_max, preferred_sectors, preferred_deal_types,
+              preferred_geographies, preferred_stage,
+              notify_new, notify_updates, notify_digest))
+        conn.commit()
+
+    return JSONResponse({"ok": True})

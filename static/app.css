@@ -119,6 +119,8 @@ details.agent-group[open] .agent-list { display: flex; flex-direction: column; g
 .sign-in-btn:hover { border-color: var(--accent); color: var(--accent); }
 .user-mark { color: var(--accent); }
 .user-email { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; color: var(--ink); }
+.profile-link { font-size: .62rem; padding: .15rem .4rem; background: transparent; border: 1px solid var(--line-br); border-radius: .3rem; color: var(--ink-dim); cursor: pointer; text-decoration: none; }
+.profile-link:hover { color: var(--accent); border-color: var(--accent); }
 .sign-out-btn { font-size: .62rem; padding: .15rem .4rem; background: transparent; border: 1px solid var(--line-br); border-radius: .3rem; color: var(--ink-dim); cursor: pointer; }
 .sign-out-btn:hover { color: var(--red); border-color: var(--red); }
 

@@ -63,6 +63,34 @@ def migrate(drop: bool = False) -> None:
             ADD COLUMN IF NOT EXISTS reset_token_expires TIMESTAMPTZ;
     """)
 
+    _apply("""
+        CREATE TABLE IF NOT EXISTS pehero.user_preferences (
+            id              SERIAL PRIMARY KEY,
+            user_id         INTEGER NOT NULL UNIQUE REFERENCES pehero.users(id),
+            phone           VARCHAR(30),
+            company         VARCHAR(200),
+            role            VARCHAR(200),
+            country         VARCHAR(5),
+            city            VARCHAR(100),
+            currency        VARCHAR(3) DEFAULT 'EUR',
+            language        VARCHAR(5) DEFAULT 'en',
+            deal_size_min   NUMERIC(14,2),
+            deal_size_max   NUMERIC(14,2),
+            revenue_min     NUMERIC(14,2),
+            revenue_max     NUMERIC(14,2),
+            ebitda_min      NUMERIC(14,2),
+            ebitda_max      NUMERIC(14,2),
+            preferred_sectors    JSONB DEFAULT '[]',
+            preferred_deal_types JSONB DEFAULT '[]',
+            preferred_geographies JSONB DEFAULT '[]',
+            preferred_stage      VARCHAR(30),
+            notify_new_deals     BOOLEAN DEFAULT TRUE,
+            notify_deal_updates  BOOLEAN DEFAULT TRUE,
+            notify_weekly_digest BOOLEAN DEFAULT TRUE,
+            updated_at      TIMESTAMPTZ DEFAULT NOW()
+        );
+    """)
+
     # Seed existing prompt files as v1 if prompt_versions is empty.
     _seed_prompt_versions()
 
