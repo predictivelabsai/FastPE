@@ -45,6 +45,11 @@ class Settings(BaseSettings):
     pipedrive_api_token: str = Field(default="", alias="PIPEDRIVE_API_TOKEN")
     pipedrive_domain: str = Field(default="", alias="PIPEDRIVE_DOMAIN")
 
+    # Postmark email
+    postmark_api_token: str = Field(default="", alias="POSTMARK_API_TOKEN")
+    postmark_from_email: str = Field(default="info@pehero.chat", alias="POSTMARK_FROM_EMAIL")
+    daily_deals_to_email: str = Field(default="", alias="DAILY_DEALS_TO_EMAIL")
+
     # News feed
     news_interval_seconds: int = Field(default=1800, alias="NEWS_INTERVAL_SECONDS")
 

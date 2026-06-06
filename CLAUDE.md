@@ -36,6 +36,13 @@ pytest -q tests/test_agents_smoke.py::test_lbo_round_trip
 python -m tests.regression_suite                 # all 24 agents, their first example_prompt
 python -m tests.regression_suite --slug deal_triage
 
+# Daily deals email digest (Postmark)
+python -m scripts.daily_deals                    # send to DAILY_DEALS_TO_EMAIL
+python -m scripts.daily_deals --to me@firm.com   # override recipient
+python -m scripts.daily_deals --dry-run          # preview HTML, don't send
+# Cron (8:00 AM EET daily):
+#   0 8 * * * cd /path/to/pehero && .venv/bin/python -m scripts.daily_deals
+
 # Demo artifacts (requires a running server on :5058 and playwright chromium)
 playwright install chromium                      # one-off
 python -m scripts.capture_screenshots            # → ./screenshots/*.png (18 frames)
