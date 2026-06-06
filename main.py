@@ -30,15 +30,15 @@ def _prefetch_news():
 
 
 def _daily_deals_loop():
-    """Send daily deals digest at 08:00 EET. Runs as a daemon thread."""
+    """Send daily deals digest at 08:00 EET to all opted-in users."""
     s = settings()
-    if not s.postmark_api_token or not s.daily_deals_to_email:
-        log.info("Daily deals scheduler disabled (no POSTMARK_API_TOKEN or DAILY_DEALS_TO_EMAIL)")
+    if not s.postmark_api_token:
+        log.info("Daily deals scheduler disabled (no POSTMARK_API_TOKEN)")
         return
 
     target_hour, target_minute = 8, 0
-    log.info("Daily deals scheduler started — target %02d:%02d EET to %s",
-             target_hour, target_minute, s.daily_deals_to_email)
+    log.info("Daily deals scheduler started — target %02d:%02d EET to opted-in users",
+             target_hour, target_minute)
 
     while True:
         now = datetime.now(EET)
@@ -50,9 +50,7 @@ def _daily_deals_loop():
         time.sleep(wait_secs)
 
         try:
-            from scripts.daily_deals import _top_deals, _render_html, _render_text, _fetch_news_sync
-            from utils.email import send_email
-            from datetime import date
+            from scripts.daily_deals import _top_deals, _fetch_news_sync, send_to_all_users
 
             deals = _top_deals(5)
             if not deals:
@@ -60,15 +58,8 @@ def _daily_deals_loop():
                 continue
 
             news = _fetch_news_sync(5)
-            today = date.today().strftime("%b %d")
-            subject = f"PEHero Daily Deals — {today} — {len(deals)} actionable opportunities"
-            result = send_email(
-                to=s.daily_deals_to_email,
-                subject=subject,
-                html_body=_render_html(deals, news),
-                text_body=_render_text(deals, news),
-            )
-            log.info("Daily deals sent — MessageID: %s", result.get("MessageID"))
+            sent = send_to_all_users(deals, news)
+            log.info("Daily deals loop complete — sent to %d users", sent)
         except Exception:
             log.exception("Daily deals email failed")
 

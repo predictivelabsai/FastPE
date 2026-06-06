@@ -1,8 +1,8 @@
 """Daily Deals Digest — queries top 5 actionable deals, sends via Postmark.
 
 Usage:
-    python -m scripts.daily_deals                  # send to DAILY_DEALS_TO_EMAIL
-    python -m scripts.daily_deals --to me@firm.com # override recipient
+    python -m scripts.daily_deals                  # send to all opted-in users
+    python -m scripts.daily_deals --to me@firm.com # override: single recipient
     python -m scripts.daily_deals --dry-run        # print HTML, don't send
 """
 
@@ -11,19 +11,20 @@ from __future__ import annotations
 import argparse
 import asyncio
 import html as _html
+import logging
+import secrets
 from datetime import date
 
-from db import fetch_all
+from db import connect, fetch_all
 from utils.config import settings
 from utils.email import send_email
 
+log = logging.getLogger(__name__)
+
+SERVICE_URL = settings().service_url.rstrip("/")
+
 
 def _top_deals(n: int = 5) -> list[dict]:
-    """Return the top N most actionable deals from the pipeline.
-
-    Scoring: warm/hot seller intent first, then by EBITDA margin × growth,
-    filtered to active stages (sourced → ic).
-    """
     rows = fetch_all("""
         SELECT c.name, c.slug, c.sector, c.sub_sector, c.hq_city, c.country,
                c.revenue_ltm, c.ebitda_ltm, c.ebitda_margin, c.growth_rate,
@@ -141,7 +142,8 @@ def _render_news_html(articles: list[dict]) -> str:
     </td></tr>"""
 
 
-def _render_html(deals: list[dict], news: list[dict] | None = None) -> str:
+def _render_html(deals: list[dict], news: list[dict] | None = None,
+                 unsubscribe_url: str = "") -> str:
     today = date.today().strftime("%B %d, %Y")
     rows_html = ""
     for i, d in enumerate(deals, 1):
@@ -215,6 +217,10 @@ def _render_html(deals: list[dict], news: list[dict] | None = None) -> str:
             </td>
         </tr>"""
 
+    unsub_html = ""
+    if unsubscribe_url:
+        unsub_html = f' · <a href="{_html.escape(unsubscribe_url)}" style="color:#9CA3AF;text-decoration:underline;">Unsubscribe</a>'
+
     return f"""<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
@@ -248,7 +254,7 @@ def _render_html(deals: list[dict], news: list[dict] | None = None) -> str:
     <!-- CTA -->
     <tr>
         <td align="center" style="padding:24px 28px;">
-            <a href="https://pehero.fyi/app/pipeline" style="display:inline-block;background:#1F5D43;color:#FFFFFF;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Open Pipeline →</a>
+            <a href="{SERVICE_URL}/app/pipeline" style="display:inline-block;background:#1F5D43;color:#FFFFFF;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Open Pipeline →</a>
         </td>
     </tr>
     {_render_news_html(news) if news else ""}
@@ -257,8 +263,8 @@ def _render_html(deals: list[dict], news: list[dict] | None = None) -> str:
         <td style="background:#F9FAFB;padding:16px 28px;border-top:1px solid #E5E7EB;">
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                    <td style="font-size:11px;color:#9CA3AF;">PEHero · Your Private Equity AI Agent Squad</td>
-                    <td align="right" style="font-size:11px;color:#9CA3AF;font-family:'JetBrains Mono',monospace;">pehero.fyi</td>
+                    <td style="font-size:11px;color:#9CA3AF;">PEHero · Your Private Equity AI Agent Squad{unsub_html}</td>
+                    <td align="right" style="font-size:11px;color:#9CA3AF;font-family:'JetBrains Mono',monospace;">pehero.chat</td>
                 </tr>
             </table>
         </td>
@@ -270,7 +276,8 @@ def _render_html(deals: list[dict], news: list[dict] | None = None) -> str:
 </html>"""
 
 
-def _render_text(deals: list[dict], news: list[dict] | None = None) -> str:
+def _render_text(deals: list[dict], news: list[dict] | None = None,
+                 unsubscribe_url: str = "") -> str:
     today = date.today().strftime("%B %d, %Y")
     lines = [f"PEHero Daily Deals — {today}", "=" * 40, ""]
     for i, d in enumerate(deals, 1):
@@ -279,7 +286,7 @@ def _render_text(deals: list[dict], news: list[dict] | None = None) -> str:
         lines.append(f"    Rev: {_fmt_eur(d['revenue_ltm'])}  EBITDA: {_fmt_eur(d['ebitda_ltm'])}  EV: {_fmt_eur(d['enterprise_value'])}  Growth: {_pct(d['growth_rate'])}")
         lines.append(f"    Why: {_deal_rationale(d)}")
         lines.append("")
-    lines.append("Open pipeline: https://pehero.fyi/app/pipeline")
+    lines.append(f"Open pipeline: {SERVICE_URL}/app/pipeline")
     if news:
         lines.append("")
         lines.append("Market News")
@@ -288,12 +295,83 @@ def _render_text(deals: list[dict], news: list[dict] | None = None) -> str:
             lines.append(f"  {a['source']}: {a['title']}")
             lines.append(f"  {a['url']}")
             lines.append("")
+    if unsubscribe_url:
+        lines.append(f"\nUnsubscribe: {unsubscribe_url}")
     return "\n".join(lines)
+
+
+# ── Multi-recipient logic ──────────────────────────────────────────
+
+def _get_recipients() -> list[dict]:
+    """Return all verified users with notify_new_deals enabled."""
+    rows = fetch_all("""
+        SELECT u.id, u.email, p.unsubscribe_token
+        FROM pehero.users u
+        JOIN pehero.user_preferences p ON u.id = p.user_id
+        WHERE p.notify_new_deals = TRUE
+          AND u.is_verified = TRUE
+    """)
+    # Backfill missing unsubscribe tokens
+    need_token = [r for r in rows if not r["unsubscribe_token"]]
+    if need_token:
+        with connect() as conn, conn.cursor() as cur:
+            for r in need_token:
+                token = secrets.token_urlsafe(32)
+                cur.execute(
+                    "UPDATE pehero.user_preferences SET unsubscribe_token = %s WHERE user_id = %s",
+                    (token, r["id"]),
+                )
+                r["unsubscribe_token"] = token
+            conn.commit()
+    return rows
+
+
+def _record_send(user_id: int, subject: str, message_id: str) -> None:
+    with connect() as conn, conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO pehero.digest_sends (user_id, subject, message_id) VALUES (%s, %s, %s)",
+            (user_id, subject, message_id),
+        )
+        conn.commit()
+
+
+def send_to_all_users(deals: list[dict], news: list[dict] | None = None) -> int:
+    """Send daily deals digest to all opted-in users. Returns send count."""
+    recipients = _get_recipients()
+    if not recipients:
+        log.info("No opted-in users — skipping daily deals")
+        return 0
+
+    today = date.today().strftime("%b %d")
+    subject = f"PEHero Daily Deals — {today} — {len(deals)} actionable opportunities"
+    sent = 0
+
+    for r in recipients:
+        unsub_url = f"{SERVICE_URL}/auth/unsubscribe/{r['unsubscribe_token']}"
+        html_body = _render_html(deals, news, unsubscribe_url=unsub_url)
+        text_body = _render_text(deals, news, unsubscribe_url=unsub_url)
+        try:
+            result = send_email(
+                to=r["email"], subject=subject,
+                html_body=html_body, text_body=text_body, tag="daily_deals",
+            )
+            msg_id = result.get("MessageID", "")
+            if msg_id:
+                _record_send(r["id"], subject, msg_id)
+                sent += 1
+                log.info("Daily deals sent to %s — %s", r["email"], msg_id)
+            else:
+                log.warning("Daily deals to %s — no MessageID: %s", r["email"], result)
+        except Exception:
+            log.exception("Daily deals failed for %s", r["email"])
+
+    log.info("Daily deals digest sent to %d/%d users", sent, len(recipients))
+    return sent
 
 
 def main():
     parser = argparse.ArgumentParser(description="Send daily deals digest email")
-    parser.add_argument("--to", default=None, help="Override recipient email")
+    parser.add_argument("--to", default=None, help="Single recipient (overrides DB query)")
     parser.add_argument("--dry-run", action="store_true", help="Print HTML, don't send")
     parser.add_argument("--count", type=int, default=5, help="Number of deals")
     args = parser.parse_args()
@@ -304,24 +382,25 @@ def main():
         return
 
     news = _fetch_news_sync(5)
-    html_body = _render_html(deals, news)
-    text_body = _render_text(deals, news)
     today = date.today().strftime("%b %d")
     subject = f"PEHero Daily Deals — {today} — {len(deals)} actionable opportunities"
 
     if args.dry_run:
+        html_body = _render_html(deals, news, unsubscribe_url=f"{SERVICE_URL}/auth/unsubscribe/EXAMPLE_TOKEN")
+        text_body = _render_text(deals, news, unsubscribe_url=f"{SERVICE_URL}/auth/unsubscribe/EXAMPLE_TOKEN")
         print(html_body)
         print("\n--- TEXT ---\n")
         print(text_body)
         return
 
-    to = args.to or settings().daily_deals_to_email
-    if not to:
-        print("No recipient — set DAILY_DEALS_TO_EMAIL or use --to")
-        return
-
-    result = send_email(to=to, subject=subject, html_body=html_body, text_body=text_body)
-    print(f"Sent to {to} — MessageID: {result.get('MessageID', 'n/a')}")
+    if args.to:
+        html_body = _render_html(deals, news)
+        text_body = _render_text(deals, news)
+        result = send_email(to=args.to, subject=subject, html_body=html_body, text_body=text_body)
+        print(f"Sent to {args.to} — MessageID: {result.get('MessageID', 'n/a')}")
+    else:
+        sent = send_to_all_users(deals, news)
+        print(f"Sent daily deals to {sent} users")
 
 
 if __name__ == "__main__":

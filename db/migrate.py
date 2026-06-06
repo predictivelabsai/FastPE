@@ -91,6 +91,21 @@ def migrate(drop: bool = False) -> None:
         );
     """)
 
+    _apply("""
+        ALTER TABLE pehero.user_preferences
+            ADD COLUMN IF NOT EXISTS unsubscribe_token VARCHAR(64) UNIQUE;
+    """)
+
+    _apply("""
+        CREATE TABLE IF NOT EXISTS pehero.digest_sends (
+            id          SERIAL PRIMARY KEY,
+            user_id     INTEGER NOT NULL REFERENCES pehero.users(id),
+            subject     TEXT,
+            message_id  TEXT,
+            sent_at     TIMESTAMPTZ DEFAULT NOW()
+        );
+    """)
+
     # Seed existing prompt files as v1 if prompt_versions is empty.
     _seed_prompt_versions()
 

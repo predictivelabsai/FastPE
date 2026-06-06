@@ -268,6 +268,34 @@ def auth_logout(sess):
     return JSONResponse({"ok": True})
 
 
+# ── Unsubscribe (token-based, no login required) ───────────────────
+
+@rt("/auth/unsubscribe/{token}")
+def auth_unsubscribe(token: str):
+    row = fetch_one(
+        "SELECT user_id FROM pehero.user_preferences WHERE unsubscribe_token = %s",
+        (token,),
+    )
+    if row:
+        with connect() as conn, conn.cursor() as cur:
+            cur.execute(
+                "UPDATE pehero.user_preferences SET notify_new_deals = FALSE WHERE user_id = %s",
+                (row["user_id"],),
+            )
+            conn.commit()
+
+    return Html(_head("Unsubscribed"), Body(
+        Div(
+            H2("Unsubscribed"),
+            P("You've been unsubscribed from daily deal emails."),
+            P("You can re-enable notifications anytime from your ",
+              A("profile settings", href="/app/profile"), "."),
+            A("Back to PEHero", href="/app"),
+            style="max-width:400px;margin:80px auto;text-align:center;font-family:sans-serif",
+        ),
+    ))
+
+
 # ── Google OAuth ─────────────────────────────────────────────────────
 
 @rt("/auth/google")
