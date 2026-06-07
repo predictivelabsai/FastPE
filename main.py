@@ -30,13 +30,16 @@ def _prefetch_news():
 
 
 def _daily_deals_loop():
-    """Send daily deals digest at 08:00 EET to all opted-in users."""
+    """Send daily deals digest to all opted-in users. Runs as a daemon thread."""
     s = settings()
+    if not s.digest_enabled:
+        log.info("Daily deals scheduler disabled (DIGEST_ENABLED=0)")
+        return
     if not s.postmark_api_token:
         log.info("Daily deals scheduler disabled (no POSTMARK_API_TOKEN)")
         return
 
-    target_hour, target_minute = 8, 0
+    target_hour, target_minute = s.digest_hour, 0
     log.info("Daily deals scheduler started — target %02d:%02d EET to opted-in users",
              target_hour, target_minute)
 

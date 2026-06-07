@@ -52,6 +52,10 @@ class Settings(BaseSettings):
     from_name: str = Field(default="PE Hero", alias="FROM_NAME")
     daily_deals_to_email: str = Field(default="", alias="DAILY_DEALS_TO_EMAIL")
 
+    # Digest scheduler
+    digest_enabled: int = Field(default=1, alias="DIGEST_ENABLED")
+    digest_hour: int = Field(default=7, alias="DIGEST_HOUR")
+
     # News feed
     news_interval_seconds: int = Field(default=1800, alias="NEWS_INTERVAL_SECONDS")
 
