@@ -42,170 +42,195 @@ def _head(title: str):
 
 GOOGLE_SVG = '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9s.348 1.452.957 2.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>'
 
+_INPUT_CLS = "w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#1B4D3E] focus:outline-none"
+_BTN_CLS = "w-full bg-[#1B4D3E] text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-[#163f33] transition-colors"
+_GOOGLE_BTN_CLS = "flex items-center justify-center gap-2 w-full border border-gray-200 bg-white text-gray-700 py-2.5 rounded-lg font-medium text-sm hover:bg-gray-50 hover:border-gray-300 transition-colors no-underline"
+
+
+def _auth_layout(title: str, card_parts: list):
+    from fasthtml.common import Title, Main, Script
+    return (
+        Title(f"{title} — PEHero"),
+        Script(src="https://cdn.tailwindcss.com"),
+        Main(
+            Div(
+                Div(
+                    Div("◆", cls="w-14 h-14 rounded-xl bg-gradient-to-br from-[#1B4D3E] to-[#2d7a5f] text-white flex items-center justify-center text-xl font-extrabold mx-auto"),
+                    P("PEHero", cls="text-xl font-bold text-[#1B4D3E] mt-2"),
+                    P("Your Private Equity AI Agent Squad", cls="text-xs text-gray-500"),
+                    cls="text-center mb-6",
+                ),
+                Div(*card_parts, cls="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-8 shadow-lg"),
+                P("PE Hero Ltd", cls="text-xs text-gray-400 mt-6"),
+                cls="flex flex-col items-center justify-center min-h-screen",
+            ),
+            cls="bg-gray-50",
+        ),
+    )
+
+
+def _divider():
+    return Div(
+        Div(cls="flex-1 h-px bg-gray-200"),
+        Span("or", cls="px-3 text-xs text-gray-400"),
+        Div(cls="flex-1 h-px bg-gray-200"),
+        cls="flex items-center my-4",
+    )
+
+
+def _error_msg(msg: str):
+    return Div(msg, cls="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg text-center") if msg else ""
+
+
+def _success_msg(msg: str):
+    return Div(msg, cls="text-sm text-green-600 bg-green-50 px-3 py-2 rounded-lg text-center") if msg else ""
+
 
 @rt("/signin")
-def signin_page(sess):
+async def signin_page(request, sess):
     if get_user_email(sess):
         return RedirectResponse("/app", status_code=303)
 
-    INPUT = "w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm font-sans focus:outline-none focus:border-[#1B4D3E] transition-colors"
-    BTN = "w-full py-2.5 rounded-lg font-semibold text-sm cursor-pointer border-none transition-colors"
+    error = ""
+    if request.method == "POST":
+        form = await request.form()
+        email = (form.get("email") or "").strip().lower()
+        password = form.get("password") or ""
+        if not email or not password:
+            error = "Email and password are required"
+        else:
+            user = fetch_one("SELECT id, email, password_hash FROM pehero.users WHERE email = %s", [email])
+            if not user or not user.get("password_hash"):
+                error = "Invalid email or password"
+            else:
+                if not verify_password(password, user["password_hash"]):
+                    error = "Invalid email or password"
+                else:
+                    set_user_email(sess, user["email"])
+                    set_user_id(sess, user["id"])
+                    return RedirectResponse("/app", status_code=303)
 
-    return Html(
-        _head("Sign In · PEHero"),
-        Body(
-            Style("""
-            body { margin:0; font-family:'Inter',system-ui,sans-serif; background:#f9fafb; }
-            .auth-tab { flex:1; padding:8px 0; background:none; border:none; border-bottom:2px solid transparent;
-                        font-size:14px; font-weight:500; color:#6B7280; cursor:pointer; transition:color .15s,border-color .15s; }
-            .auth-tab:hover { color:#1A1A1A; }
-            .auth-tab.active { color:#1A1A1A; border-bottom-color:#1B4D3E; }
-            .google-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:10px 0;
-                          border:1px solid #E5E5E5; border-radius:8px; background:#fff; text-decoration:none;
-                          font-size:14px; font-weight:500; color:#1A1A1A; cursor:pointer; transition:background .15s; }
-            .google-btn:hover { background:#F9FAFB; border-color:#ccc; }
-            .google-btn-icon { display:flex; align-items:center; }
-            .google-btn-text { font-family:'Inter',sans-serif; }
-            .google-divider { display:flex; align-items:center; gap:12px; margin:16px 0; }
-            .google-divider-line { flex:1; height:1px; background:#E5E5E5; }
-            .google-divider-text { font-size:12px; color:#9CA3AF; }
-            """),
-            Div(
-                Div(
-                    Div(
-                        A(Span("◆", style="color:#1B4D3E; margin-right:8px"), Span("PEHero"),
-                          href="/", style="text-decoration:none; color:#1A1A1A; font-size:18px; font-weight:500; display:flex; align-items:center"),
-                        style="text-align:center; margin-bottom:8px",
-                    ),
-                    P("Your Private Equity AI Agent Squad",
-                      style="font-size:14px; color:#9CA3AF; text-align:center; margin:0 0 32px 0"),
-
-                    Div(
-                        Button("Sign In", id="si-tab-login", cls="auth-tab active",
-                               onclick="siTab('login')"),
-                        Button("Register", id="si-tab-register", cls="auth-tab",
-                               onclick="siTab('register')"),
-                        cls="flex", style="border-bottom:1px solid #E5E5E5; margin-bottom:24px",
-                    ),
-
-                    # ── Login form ──
-                    Div(
-                        A(
-                            Span(NotStr(GOOGLE_SVG), cls="google-btn-icon"),
-                            Span("Continue with Google", cls="google-btn-text"),
-                            href="/auth/google",
-                            cls="google-btn",
-                        ),
-                        Div(Span(cls="google-divider-line"), Span("or", cls="google-divider-text"), Span(cls="google-divider-line"), cls="google-divider"),
-                        Input(type="email", id="si-email", placeholder="Email", cls=INPUT,
-                              onkeydown="if(event.key==='Enter')document.getElementById('si-pass').focus()"),
-                        Input(type="password", id="si-pass", placeholder="Password", cls=INPUT, style="margin-top:12px",
-                              onkeydown="if(event.key==='Enter')siLogin()"),
-                        Div(
-                            A("Forgot password?", href="#", onclick="siTab('forgot');return false",
-                              style="font-size:12px; color:#9CA3AF; text-decoration:none"),
-                            style="text-align:right; margin:4px 0 16px 0",
-                        ),
-                        Div(id="si-login-err", style="color:#EF4444; font-size:12px; margin-bottom:12px"),
-                        Button("Sign In", onclick="siLogin()", cls=BTN,
-                               style="background:#1B4D3E; color:#fff"),
-                        id="si-form-login",
-                    ),
-
-                    # ── Register form ──
-                    Div(
-                        Input(type="text", id="si-reg-name", placeholder="Name (optional)", cls=INPUT),
-                        Input(type="email", id="si-reg-email", placeholder="Email", cls=INPUT, style="margin-top:12px"),
-                        Input(type="password", id="si-reg-pass", placeholder="Password (min 6 characters)", cls=INPUT, style="margin-top:12px",
-                              onkeydown="if(event.key==='Enter')siRegister()"),
-                        Div(id="si-reg-err", style="color:#EF4444; font-size:12px; margin:12px 0"),
-                        Div(id="si-reg-ok", style="color:#16A34A; font-size:12px; margin-bottom:12px"),
-                        Button("Create Account", onclick="siRegister()", cls=BTN,
-                               style="background:#1B4D3E; color:#fff; margin-top:8px"),
-                        Div(Span(cls="google-divider-line"), Span("or", cls="google-divider-text"), Span(cls="google-divider-line"), cls="google-divider", style="margin-top:16px"),
-                        A(
-                            Span(NotStr(GOOGLE_SVG), cls="google-btn-icon"),
-                            Span("Sign up with Google", cls="google-btn-text"),
-                            href="/auth/google",
-                            cls="google-btn",
-                        ),
-                        id="si-form-register",
-                        style="display:none",
-                    ),
-
-                    # ── Forgot password form ──
-                    Div(
-                        P("Enter your email to receive a password reset link.",
-                          style="font-size:14px; color:#6B7280; margin-bottom:16px"),
-                        Input(type="email", id="si-forgot-email", placeholder="Email", cls=INPUT,
-                              onkeydown="if(event.key==='Enter')siForgot()"),
-                        Div(id="si-forgot-msg", style="font-size:14px; margin:12px 0"),
-                        Button("Send Reset Link", onclick="siForgot()", cls=BTN,
-                               style="background:#1B4D3E; color:#fff; margin-top:8px"),
-                        P(A("Back to sign in", href="#", onclick="siTab('login');return false",
-                            style="font-size:14px; color:#9CA3AF; text-decoration:none"),
-                          style="text-align:center; margin-top:16px"),
-                        id="si-form-forgot",
-                        style="display:none",
-                    ),
-
-                    style="background:#fff; padding:32px 40px; border-radius:16px; box-shadow:0 1px 3px rgba(0,0,0,.06); border:1px solid #F3F4F6; width:100%; max-width:420px",
-                ),
-                style="display:flex; justify-content:center; align-items:center; min-height:100vh; padding:24px",
-            ),
-            Script("""
-            function siTab(t) {
-                document.getElementById('si-form-login').style.display = t==='login' ? 'block' : 'none';
-                document.getElementById('si-form-register').style.display = t==='register' ? 'block' : 'none';
-                document.getElementById('si-form-forgot').style.display = t==='forgot' ? 'block' : 'none';
-                var tl = document.getElementById('si-tab-login'), tr = document.getElementById('si-tab-register');
-                tl.classList.toggle('active', t==='login');
-                tr.classList.toggle('active', t==='register');
-                ['si-login-err','si-reg-err','si-reg-ok','si-forgot-msg'].forEach(function(id){
-                    var el=document.getElementById(id); if(el) el.textContent='';
-                });
-            }
-            async function siLogin() {
-                var email = (document.getElementById('si-email')||{}).value||'';
-                var pass = (document.getElementById('si-pass')||{}).value||'';
-                var err = document.getElementById('si-login-err');
-                if (!email.trim()||!pass) { if(err) err.textContent='Email and password are required'; return; }
-                try {
-                    var r = await fetch('/auth/login', {method:'POST', body: new URLSearchParams({email:email.trim(),password:pass})});
-                    var d = await r.json();
-                    if (r.ok && d.ok) { window.location.href='/app'; }
-                    else if (d.error==='no_password') { if(err) err.textContent='Please set a password for your account'; }
-                    else { if(err) err.textContent=d.error||'Invalid email or password'; }
-                } catch(e) { if(err) err.textContent='Network error'; }
-            }
-            async function siRegister() {
-                var name = (document.getElementById('si-reg-name')||{}).value||'';
-                var email = (document.getElementById('si-reg-email')||{}).value||'';
-                var pass = (document.getElementById('si-reg-pass')||{}).value||'';
-                var err = document.getElementById('si-reg-err'), ok = document.getElementById('si-reg-ok');
-                if(err) err.textContent=''; if(ok) ok.textContent='';
-                if (!email.trim()||!pass) { if(err) err.textContent='Email and password are required'; return; }
-                if (pass.length<6) { if(err) err.textContent='Password must be at least 6 characters'; return; }
-                try {
-                    var r = await fetch('/auth/register', {method:'POST', body: new URLSearchParams({name:name,email:email.trim(),password:pass})});
-                    var d = await r.json();
-                    if (r.ok && d.ok) { if(ok) ok.textContent=d.message||'Check your email to verify your account'; }
-                    else { if(err) err.textContent=d.error||'Registration failed'; }
-                } catch(e) { if(err) err.textContent='Network error'; }
-            }
-            async function siForgot() {
-                var email = (document.getElementById('si-forgot-email')||{}).value||'';
-                var msg = document.getElementById('si-forgot-msg');
-                if (!email.trim()) { if(msg){msg.textContent='Please enter your email';msg.style.color='#EF4444';} return; }
-                try {
-                    var r = await fetch('/auth/forgot', {method:'POST', body: new URLSearchParams({email:email.trim()})});
-                    var d = await r.json();
-                    if(msg){msg.textContent=d.message||'If an account exists, a reset link has been sent';msg.style.color='#16A34A';}
-                } catch(e) { if(msg){msg.textContent='Network error';msg.style.color='#EF4444';} }
-            }
-            """),
-        ),
+    parts = [H2("Sign In", cls="text-xl font-bold text-center mb-4")]
+    if error:
+        parts.append(_error_msg(error))
+    if GOOGLE_CLIENT_ID:
+        parts.append(A(NotStr(GOOGLE_SVG), "Continue with Google", href="/auth/google", cls=_GOOGLE_BTN_CLS))
+        parts.append(_divider())
+    parts.append(
+        Form(
+            Input(type="email", name="email", placeholder="Email", required=True, autofocus=True, cls=_INPUT_CLS),
+            Input(type="password", name="password", placeholder="Password", required=True, cls=_INPUT_CLS + " mt-3"),
+            Div(A("Forgot password?", href="/forgot", cls="text-[#1B4D3E] hover:underline"), cls="text-right text-xs mt-1 mb-4"),
+            Button("Sign In", type="submit", cls=_BTN_CLS),
+            method="post", action="/signin", cls="flex flex-col gap-3",
+        )
     )
+    parts.append(Div("Don't have an account? ", A("Sign up", href="/register", cls="text-[#1B4D3E] hover:underline"), cls="text-center text-sm text-gray-500 mt-4"))
+    return _auth_layout("Sign In", parts)
+
+
+@rt("/register")
+async def register_page(request, sess):
+    if get_user_email(sess):
+        return RedirectResponse("/app", status_code=303)
+
+    error = ""
+    success = ""
+    if request.method == "POST":
+        form = await request.form()
+        name = (form.get("name") or "").strip()
+        email = (form.get("email") or "").strip().lower()
+        password = form.get("password") or ""
+        if not email or not password:
+            error = "Email and password are required"
+        elif len(password) < 6:
+            error = "Password must be at least 6 characters"
+        else:
+            existing = fetch_one("SELECT id FROM pehero.users WHERE email = %s", [email])
+            if existing:
+                error = "An account with this email already exists"
+            else:
+                token = generate_token()
+                with connect() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute(
+                            "INSERT INTO pehero.users (email, password_hash, name, verify_token, is_verified) "
+                            "VALUES (%s, %s, %s, %s, FALSE) RETURNING id",
+                            [email, hash_password(password), name or None, token],
+                        )
+                        conn.commit()
+                try:
+                    send_verification_email(email, token)
+                    success = "Account created! Check your email to verify."
+                except Exception:
+                    log.exception("Failed to send verification email")
+                    success = "Account created! (Email verification pending)"
+
+    parts = [H2("Create Account", cls="text-xl font-bold text-center mb-4")]
+    if error:
+        parts.append(_error_msg(error))
+    if success:
+        parts.append(_success_msg(success))
+    if GOOGLE_CLIENT_ID:
+        parts.append(A(NotStr(GOOGLE_SVG), "Sign up with Google", href="/auth/google", cls=_GOOGLE_BTN_CLS))
+        parts.append(_divider())
+    parts.append(
+        Form(
+            Input(type="text", name="name", placeholder="Name (optional)", cls=_INPUT_CLS),
+            Input(type="email", name="email", placeholder="Email", required=True, cls=_INPUT_CLS + " mt-3"),
+            Input(type="password", name="password", placeholder="Password (min 6 characters)", required=True, minlength="6", cls=_INPUT_CLS + " mt-3"),
+            Button("Create Account", type="submit", cls=_BTN_CLS + " mt-2"),
+            method="post", action="/register", cls="flex flex-col gap-3",
+        )
+    )
+    parts.append(Div("Already have an account? ", A("Sign in", href="/signin", cls="text-[#1B4D3E] hover:underline"), cls="text-center text-sm text-gray-500 mt-4"))
+    return _auth_layout("Register", parts)
+
+
+@rt("/forgot")
+async def forgot_page(request, sess):
+    if get_user_email(sess):
+        return RedirectResponse("/app", status_code=303)
+
+    error = ""
+    success = ""
+    if request.method == "POST":
+        form = await request.form()
+        email = (form.get("email") or "").strip().lower()
+        if not email:
+            error = "Please enter your email"
+        else:
+            user = fetch_one("SELECT id, email FROM pehero.users WHERE email = %s", [email])
+            if user:
+                token = generate_token()
+                with connect() as conn:
+                    with conn.cursor() as cur:
+                        cur.execute(
+                            "UPDATE pehero.users SET reset_token = %s, reset_token_expires = NOW() + INTERVAL '1 hour' WHERE id = %s",
+                            [token, user["id"]],
+                        )
+                        conn.commit()
+                try:
+                    send_reset_email(email, token)
+                except Exception:
+                    log.exception("Failed to send reset email")
+            success = "If an account exists, a reset link has been sent"
+
+    parts = [H2("Forgot Password", cls="text-xl font-bold text-center mb-4")]
+    if error:
+        parts.append(_error_msg(error))
+    if success:
+        parts.append(_success_msg(success))
+    parts.append(P("Enter your email and we'll send you a reset link.", cls="text-sm text-gray-500 text-center mb-3"))
+    parts.append(
+        Form(
+            Input(type="email", name="email", placeholder="Email", required=True, autofocus=True, cls=_INPUT_CLS),
+            Button("Send Reset Link", type="submit", cls=_BTN_CLS + " mt-2"),
+            method="post", action="/forgot", cls="flex flex-col gap-3",
+        )
+    )
+    parts.append(Div(A("Back to sign in", href="/signin", cls="text-[#1B4D3E] hover:underline"), cls="text-center text-sm mt-4"))
+    return _auth_layout("Forgot Password", parts)
 
 
 # ── Register ─────────────────────────────────────────────────────────
