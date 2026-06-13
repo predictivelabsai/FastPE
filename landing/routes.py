@@ -211,7 +211,7 @@ def agent_detail(slug: str, sess):
         ),
         CTASection(headline=t("agent_try", lang).format(name=agent_name),
                    body=t("agent_try_body", lang),
-                   cta_label=t("hero_cta_open", lang), cta_href="/app", lang=lang),
+                   cta_label=t("hero_cta_open", lang), cta_href="/signin", lang=lang),
         current_path="/agents",
         lang=lang,
     )
@@ -413,7 +413,7 @@ def contact_post(sess, name: str = "", email: str = "", firm: str = "", message:
             Eyebrow(t("contact_eyebrow", lang)),
             Heading(1, t("contact_thanks", lang), cls="mt-4 max-w-4xl"),
             P(t("contact_usually", lang), " ", t("contact_meanwhile", lang),
-              A(t("contact_open_app", lang), href="/app", cls="text-accent underline"),
+              A(t("contact_open_app", lang), href="/signin", cls="text-accent underline"),
               t("contact_byod_post", lang),
               cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed"),
             cls="border-t border-line",

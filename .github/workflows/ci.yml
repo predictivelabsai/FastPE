@@ -47,7 +47,7 @@ jobs:
         run: python -m synthetic.generate --seed 42 --limit 5 --skip-rag
 
       - name: Import check
-        run: python -c "from app import app; from chat import routes, pipeline, instructions, analytics, memo_pdf, companies, exports, dataroom, help, valuation; print('OK')"
+        run: python -c "from app import app; from chat import routes, pipeline, instructions, analytics, companies, memo_pdf, exports, dataroom, help, valuation, webhooks, integrations, training; from auth import routes as _auth; print('OK')"
 
       - name: Smoke tests
         run: pytest -q tests/test_agents_smoke.py -k "not test_rag_retrieval"

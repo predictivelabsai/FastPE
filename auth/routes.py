@@ -40,6 +40,174 @@ def _head(title: str):
     )
 
 
+GOOGLE_SVG = '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9s.348 1.452.957 2.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>'
+
+
+@rt("/signin")
+def signin_page(sess):
+    if get_user_email(sess):
+        return RedirectResponse("/app", status_code=303)
+
+    INPUT = "w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm font-sans focus:outline-none focus:border-[#1B4D3E] transition-colors"
+    BTN = "w-full py-2.5 rounded-lg font-semibold text-sm cursor-pointer border-none transition-colors"
+
+    return Html(
+        _head("Sign In · PEHero"),
+        Body(
+            Style("""
+            body { margin:0; font-family:'Inter',system-ui,sans-serif; background:#f9fafb; }
+            .auth-tab { flex:1; padding:8px 0; background:none; border:none; border-bottom:2px solid transparent;
+                        font-size:14px; font-weight:500; color:#6B7280; cursor:pointer; transition:color .15s,border-color .15s; }
+            .auth-tab:hover { color:#1A1A1A; }
+            .auth-tab.active { color:#1A1A1A; border-bottom-color:#1B4D3E; }
+            .google-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:10px 0;
+                          border:1px solid #E5E5E5; border-radius:8px; background:#fff; text-decoration:none;
+                          font-size:14px; font-weight:500; color:#1A1A1A; cursor:pointer; transition:background .15s; }
+            .google-btn:hover { background:#F9FAFB; border-color:#ccc; }
+            .google-btn-icon { display:flex; align-items:center; }
+            .google-btn-text { font-family:'Inter',sans-serif; }
+            .google-divider { display:flex; align-items:center; gap:12px; margin:16px 0; }
+            .google-divider-line { flex:1; height:1px; background:#E5E5E5; }
+            .google-divider-text { font-size:12px; color:#9CA3AF; }
+            """),
+            Div(
+                Div(
+                    Div(
+                        A(Span("◆", style="color:#1B4D3E; margin-right:8px"), Span("PEHero"),
+                          href="/", style="text-decoration:none; color:#1A1A1A; font-size:18px; font-weight:500; display:flex; align-items:center"),
+                        style="text-align:center; margin-bottom:8px",
+                    ),
+                    P("Your Private Equity AI Agent Squad",
+                      style="font-size:14px; color:#9CA3AF; text-align:center; margin:0 0 32px 0"),
+
+                    Div(
+                        Button("Sign In", id="si-tab-login", cls="auth-tab active",
+                               onclick="siTab('login')"),
+                        Button("Register", id="si-tab-register", cls="auth-tab",
+                               onclick="siTab('register')"),
+                        cls="flex", style="border-bottom:1px solid #E5E5E5; margin-bottom:24px",
+                    ),
+
+                    # ── Login form ──
+                    Div(
+                        A(
+                            Span(NotStr(GOOGLE_SVG), cls="google-btn-icon"),
+                            Span("Continue with Google", cls="google-btn-text"),
+                            href="/auth/google",
+                            cls="google-btn",
+                        ),
+                        Div(Span(cls="google-divider-line"), Span("or", cls="google-divider-text"), Span(cls="google-divider-line"), cls="google-divider"),
+                        Input(type="email", id="si-email", placeholder="Email", cls=INPUT,
+                              onkeydown="if(event.key==='Enter')document.getElementById('si-pass').focus()"),
+                        Input(type="password", id="si-pass", placeholder="Password", cls=INPUT, style="margin-top:12px",
+                              onkeydown="if(event.key==='Enter')siLogin()"),
+                        Div(
+                            A("Forgot password?", href="#", onclick="siTab('forgot');return false",
+                              style="font-size:12px; color:#9CA3AF; text-decoration:none"),
+                            style="text-align:right; margin:4px 0 16px 0",
+                        ),
+                        Div(id="si-login-err", style="color:#EF4444; font-size:12px; margin-bottom:12px"),
+                        Button("Sign In", onclick="siLogin()", cls=BTN,
+                               style="background:#1B4D3E; color:#fff"),
+                        id="si-form-login",
+                    ),
+
+                    # ── Register form ──
+                    Div(
+                        Input(type="text", id="si-reg-name", placeholder="Name (optional)", cls=INPUT),
+                        Input(type="email", id="si-reg-email", placeholder="Email", cls=INPUT, style="margin-top:12px"),
+                        Input(type="password", id="si-reg-pass", placeholder="Password (min 6 characters)", cls=INPUT, style="margin-top:12px",
+                              onkeydown="if(event.key==='Enter')siRegister()"),
+                        Div(id="si-reg-err", style="color:#EF4444; font-size:12px; margin:12px 0"),
+                        Div(id="si-reg-ok", style="color:#16A34A; font-size:12px; margin-bottom:12px"),
+                        Button("Create Account", onclick="siRegister()", cls=BTN,
+                               style="background:#1B4D3E; color:#fff; margin-top:8px"),
+                        Div(Span(cls="google-divider-line"), Span("or", cls="google-divider-text"), Span(cls="google-divider-line"), cls="google-divider", style="margin-top:16px"),
+                        A(
+                            Span(NotStr(GOOGLE_SVG), cls="google-btn-icon"),
+                            Span("Sign up with Google", cls="google-btn-text"),
+                            href="/auth/google",
+                            cls="google-btn",
+                        ),
+                        id="si-form-register",
+                        style="display:none",
+                    ),
+
+                    # ── Forgot password form ──
+                    Div(
+                        P("Enter your email to receive a password reset link.",
+                          style="font-size:14px; color:#6B7280; margin-bottom:16px"),
+                        Input(type="email", id="si-forgot-email", placeholder="Email", cls=INPUT,
+                              onkeydown="if(event.key==='Enter')siForgot()"),
+                        Div(id="si-forgot-msg", style="font-size:14px; margin:12px 0"),
+                        Button("Send Reset Link", onclick="siForgot()", cls=BTN,
+                               style="background:#1B4D3E; color:#fff; margin-top:8px"),
+                        P(A("Back to sign in", href="#", onclick="siTab('login');return false",
+                            style="font-size:14px; color:#9CA3AF; text-decoration:none"),
+                          style="text-align:center; margin-top:16px"),
+                        id="si-form-forgot",
+                        style="display:none",
+                    ),
+
+                    style="background:#fff; padding:32px 40px; border-radius:16px; box-shadow:0 1px 3px rgba(0,0,0,.06); border:1px solid #F3F4F6; width:100%; max-width:420px",
+                ),
+                style="display:flex; justify-content:center; align-items:center; min-height:100vh; padding:24px",
+            ),
+            Script("""
+            function siTab(t) {
+                document.getElementById('si-form-login').style.display = t==='login' ? 'block' : 'none';
+                document.getElementById('si-form-register').style.display = t==='register' ? 'block' : 'none';
+                document.getElementById('si-form-forgot').style.display = t==='forgot' ? 'block' : 'none';
+                var tl = document.getElementById('si-tab-login'), tr = document.getElementById('si-tab-register');
+                tl.classList.toggle('active', t==='login');
+                tr.classList.toggle('active', t==='register');
+                ['si-login-err','si-reg-err','si-reg-ok','si-forgot-msg'].forEach(function(id){
+                    var el=document.getElementById(id); if(el) el.textContent='';
+                });
+            }
+            async function siLogin() {
+                var email = (document.getElementById('si-email')||{}).value||'';
+                var pass = (document.getElementById('si-pass')||{}).value||'';
+                var err = document.getElementById('si-login-err');
+                if (!email.trim()||!pass) { if(err) err.textContent='Email and password are required'; return; }
+                try {
+                    var r = await fetch('/auth/login', {method:'POST', body: new URLSearchParams({email:email.trim(),password:pass})});
+                    var d = await r.json();
+                    if (r.ok && d.ok) { window.location.href='/app'; }
+                    else if (d.error==='no_password') { if(err) err.textContent='Please set a password for your account'; }
+                    else { if(err) err.textContent=d.error||'Invalid email or password'; }
+                } catch(e) { if(err) err.textContent='Network error'; }
+            }
+            async function siRegister() {
+                var name = (document.getElementById('si-reg-name')||{}).value||'';
+                var email = (document.getElementById('si-reg-email')||{}).value||'';
+                var pass = (document.getElementById('si-reg-pass')||{}).value||'';
+                var err = document.getElementById('si-reg-err'), ok = document.getElementById('si-reg-ok');
+                if(err) err.textContent=''; if(ok) ok.textContent='';
+                if (!email.trim()||!pass) { if(err) err.textContent='Email and password are required'; return; }
+                if (pass.length<6) { if(err) err.textContent='Password must be at least 6 characters'; return; }
+                try {
+                    var r = await fetch('/auth/register', {method:'POST', body: new URLSearchParams({name:name,email:email.trim(),password:pass})});
+                    var d = await r.json();
+                    if (r.ok && d.ok) { if(ok) ok.textContent=d.message||'Check your email to verify your account'; }
+                    else { if(err) err.textContent=d.error||'Registration failed'; }
+                } catch(e) { if(err) err.textContent='Network error'; }
+            }
+            async function siForgot() {
+                var email = (document.getElementById('si-forgot-email')||{}).value||'';
+                var msg = document.getElementById('si-forgot-msg');
+                if (!email.trim()) { if(msg){msg.textContent='Please enter your email';msg.style.color='#EF4444';} return; }
+                try {
+                    var r = await fetch('/auth/forgot', {method:'POST', body: new URLSearchParams({email:email.trim()})});
+                    var d = await r.json();
+                    if(msg){msg.textContent=d.message||'If an account exists, a reset link has been sent';msg.style.color='#16A34A';}
+                } catch(e) { if(msg){msg.textContent='Network error';msg.style.color='#EF4444';} }
+            }
+            """),
+        ),
+    )
+
+
 # ── Register ─────────────────────────────────────────────────────────
 
 @rt("/auth/register", methods=["POST"])

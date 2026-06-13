@@ -10,7 +10,7 @@ services:
       - XAI_API_KEY=${XAI_API_KEY}
     labels:
       - coolify.managed=true
-      - coolify.fqdn=https://pehero.fyi
+      - coolify.fqdn=https://pehero.chat
       - coolify.port=5058
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5058/').read()"]
