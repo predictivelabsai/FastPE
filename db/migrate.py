@@ -106,6 +106,37 @@ def migrate(drop: bool = False) -> None:
         );
     """)
 
+    # Persons tables for investor prospecting.
+    _apply("""
+        CREATE TABLE IF NOT EXISTS pehero.persons (
+            id              BIGSERIAL PRIMARY KEY,
+            name            TEXT NOT NULL,
+            slug            TEXT UNIQUE NOT NULL,
+            country         TEXT DEFAULT 'EE',
+            wealth_eur      NUMERIC(14,2),
+            wealth_rank     INTEGER,
+            wealth_source   TEXT,
+            sector_exposure TEXT[],
+            created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+        );
+        CREATE INDEX IF NOT EXISTS persons_slug_idx ON pehero.persons(slug);
+        CREATE INDEX IF NOT EXISTS persons_wealth_idx ON pehero.persons(wealth_eur DESC NULLS LAST);
+
+        CREATE TABLE IF NOT EXISTS pehero.person_company_links (
+            id              BIGSERIAL PRIMARY KEY,
+            person_id       BIGINT NOT NULL REFERENCES pehero.persons(id) ON DELETE CASCADE,
+            company_id      BIGINT REFERENCES pehero.companies(id) ON DELETE SET NULL,
+            company_name    TEXT NOT NULL,
+            reg_code        TEXT,
+            role            TEXT NOT NULL,
+            stake_pct       NUMERIC(5,2),
+            control_desc    TEXT,
+            UNIQUE(person_id, company_name, role)
+        );
+        CREATE INDEX IF NOT EXISTS pcl_person_idx ON pehero.person_company_links(person_id);
+        CREATE INDEX IF NOT EXISTS pcl_company_idx ON pehero.person_company_links(company_id);
+    """)
+
     # Seed existing prompt files as v1 if prompt_versions is empty.
     _seed_prompt_versions()
 

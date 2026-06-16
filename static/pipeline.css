@@ -663,4 +663,38 @@ details.dr-folder[open] .dr-folder-files { display: flex; flex-direction: column
 }
 .pager-info { font-size: .72rem; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
 
+/* ── Investors page ────────────────────────────────────────── */
+.wealth-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: .68rem; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .04em;
+}
+.wealth-badge.ultra { background: #C89B5B; color: white; }
+.wealth-badge.high  { background: #4A8E66; color: white; }
+.wealth-badge.mid   { background: #7A9E88; color: white; }
+.wealth-badge.low   { background: #9CA89E; color: white; }
+.wealth-badge.unknown { color: var(--ink-dim); }
+
+.role-chip {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: .68rem; background: var(--bg-elev); border: 1px solid var(--line);
+    color: var(--ink-muted);
+}
+.country-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: .72rem; font-weight: 600; background: var(--bg-elev);
+    border: 1px solid var(--line); color: var(--ink);
+}
+.wealth-source { color: var(--ink-dim); font-size: .68rem; margin-left: .4rem; }
+.control-text { font-size: .72rem; color: var(--ink-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.detail-header { padding: 1rem 1.2rem; border-bottom: 1px solid var(--line); }
+.detail-back { margin-bottom: .6rem; }
+.back-link { color: var(--accent); font-size: .78rem; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+.detail-name { font-size: 1.3rem; font-weight: 700; margin: 0 0 .4rem; }
+.detail-meta { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .4rem; }
+.detail-sectors { display: flex; gap: .3rem; flex-wrap: wrap; }
+.section-title { font-size: .88rem; font-weight: 600; padding: .8rem 1.2rem .4rem; color: var(--ink); margin: 0; }
+
 /* Bottom-nav rules moved to static/app.css so they apply on /app too. */

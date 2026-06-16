@@ -47,6 +47,14 @@ python -m scripts.scrape_ee_owners               # scrape + update DB
 python -m scripts.scrape_ee_owners --dry-run     # preview, don't write
 python -m scripts.scrape_ee_owners --limit 20    # first N companies
 
+# Investor prospecting (persons from ee_owners.json + Äripäev wealth data)
+python -m scripts.load_ee_persons                # load persons into DB
+python -m scripts.load_ee_persons --dry-run      # preview counts
+python -m scripts.load_ee_persons --fresh        # truncate + reload
+python -m scripts.load_ee_persons --rich data/ee_rich.json  # merge wealth data
+python -m scripts.scrape_ee_rich                 # scrape Äripäev richest list → data/ee_rich.json
+python -m scripts.scrape_ee_rich --dry-run       # preview, don't write
+
 # Regional data scrapers + loaders (LT, EE, LV, PL, RO)
 python -m scripts.scrape_lt                      # scrape Lithuanian companies
 python -m scripts.scrape_ee                      # scrape Estonian companies
@@ -92,6 +100,7 @@ docker compose up --build                        # local bring-up
 - `/app` → 3-pane chat product. SSE streaming at `POST /app/chat`. `chat/routes.py`.
 - `/app/pipeline` + `/app/pipeline/<slug>` → kanban board + per-deal workspace (chat + brief on right). `chat/pipeline.py`.
 - `/app/companies` + `/app/companies/<slug>` → company/portfolio browser. `chat/companies.py`.
+- `/app/investors` + `/app/investors/<slug>` → family office & investor prospecting (persons, wealth, company links). `chat/investors.py`.
 - `/app/dataroom` + `/app/dataroom/<slug>` → virtual data room file tree + RAG indexing. `chat/dataroom.py`.
 - `/app/instructions` + `/app/instructions/<slug>` → live-edit each agent's prompt. Writes to `prompts/system/<slug>.md`, clears the agent cache. `chat/instructions.py`.
 - `/app/analytics` + `POST /app/analytics/run` → text → SELECT SQL (guarded) → Plotly figure. `chat/analytics.py`.
@@ -125,13 +134,13 @@ docker compose up --build                        # local bring-up
 ### Data model (`db/schema.sql`)
 
 Core tables all live in `pehero.*`:
-`companies, funds, cap_tables, financials (monthly), contracts, transaction_comps, trading_comps, lbo_models, debt_stacks, investor_crm, market_signals, dd_findings, portfolio_kpis, users, user_preferences, chat_sessions, chat_messages, agent_invocations, prompt_versions, data_room, pipedrive_sync, outreach_sequences, user_integrations, digest_sends`.
+`companies, funds, cap_tables, financials (monthly), contracts, transaction_comps, trading_comps, lbo_models, debt_stacks, investor_crm, market_signals, dd_findings, portfolio_kpis, users, user_preferences, chat_sessions, chat_messages, agent_invocations, prompt_versions, data_room, pipedrive_sync, outreach_sequences, user_integrations, digest_sends, persons, person_company_links`.
 
 `pehero_rag.*` holds `documents, chunks, embeddings (vector({{EMBEDDING_DIM}}))`. `EMBEDDING_DIM` is substituted at migrate time — changing it requires `db.migrate --drop` and re-indexing.
 
 ### Front-end (`chat/components.py` + `static/`)
 
-- Left pane: New-chat + session list, agent browser (5 categories × 25 agents), Workspace (Pipeline / Companies / Data Room / Instructions / Analytics / Valuation / Integrations), Training (User Guide + PE Hero Game), Configuration (currency + language switcher). All routes pass `current_currency=get_currency(sess)` and `lang=get_lang(sess)` to `left_pane()`.
+- Left pane: New-chat + session list, agent browser (5 categories × 25 agents), Workspace (Pipeline / Companies / Investors / Data Room / Instructions / Analytics / Valuation / Integrations), Training (User Guide + PE Hero Game), Configuration (currency + language switcher). All routes pass `current_currency=get_currency(sess)` and `lang=get_lang(sess)` to `left_pane()`.
 - `static/app.css` holds base chat + left-pane + thinking indicator + follow-up + sample-cards + currency-chip rules. `static/pipeline.css` holds kanban + deal-detail + instructions + analytics rules (pipeline.css is only loaded on those routes; anything that also appears on `/app` must live in `app.css`).
 - `static/chat.js` handles SSE streaming, thinking-indicator (timer + rotating tool name), contextual sample cards (per agent — prompt tables embedded as `<script id="agent-prompts-data">`), the "Next step — Yes / No" follow-up pattern, Copy chat / Share link (clipboard + `POST /app/share`), memo → PDF/Word export, table → CSV/XLS export + Plotly visualize, and the currency/language selectors.
 
@@ -237,7 +246,7 @@ pytest -q tests/test_agents_smoke.py
 
 # 3. Offline boot check — every route module that app.py imports at
 #    startup must import cleanly with only what's installed.
-.venv/bin/python -c "from app import app; from chat import routes, pipeline, instructions, analytics, companies, memo_pdf, exports, dataroom, help, valuation, webhooks, integrations, training; from auth import routes as _auth; print('app imports OK')"
+.venv/bin/python -c "from app import app; from chat import routes, pipeline, instructions, analytics, companies, memo_pdf, exports, dataroom, help, valuation, webhooks, integrations, training, investors; from auth import routes as _auth; print('app imports OK')"
 ```
 
 Only push once all three pass. If you added a new dependency, pin it with a lower bound (`pkg>=X.Y.0`) in `requirements.txt` in the same commit that introduces the import.
