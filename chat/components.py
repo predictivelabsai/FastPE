@@ -553,16 +553,28 @@ def right_pane(lang: str = "en"):
 
 COPILOT_PROMPTS: dict[str, list[str]] = {
     "Pipeline": [
-        "Which companies should I move to screening?",
-        "Show me healthcare deals above €10M revenue",
-        "What's the average EBITDA margin across the pipeline?",
+        "Which deals should I move to screening next?",
+        "Summarize the top 3 deals by EBITDA margin",
+        "What's the total pipeline value by stage?",
         "Draft an outreach email for the top logistics company",
     ],
     "Companies": [
         "Top 10 companies by revenue in healthcare",
         "Find software companies in Vilnius above €5M revenue",
         "Compare EBITDA margins across sectors",
-        "Which companies have the highest growth rate?",
+        "Which companies have the highest employee count?",
+    ],
+    "Investors": [
+        "Who are the most connected investors across sectors?",
+        "Find investors with holdings in healthcare and software",
+        "Which persons have stakes in multiple companies?",
+        "Summarize the top Estonian shareholders by portfolio size",
+    ],
+    "Investor Detail": [
+        "What sectors is this person most exposed to?",
+        "Summarize this investor's portfolio and key holdings",
+        "Are any of these companies in our pipeline?",
+        "Draft an intro email to this investor",
     ],
     "Analytics": [
         "Revenue distribution by sector",
@@ -571,10 +583,10 @@ COPILOT_PROMPTS: dict[str, list[str]] = {
         "Top 20 companies by enterprise value",
     ],
     "Valuation": [
-        "If I bought this company, how do I increase value?",
         "What's a fair EV/EBITDA multiple for this sector?",
-        "Build a 5-year LBO model at 12% revenue growth",
-        "What are the key risks for this acquisition?",
+        "Build a 5-year DCF with 8% discount rate",
+        "Compare this company's multiples to peer transactions",
+        "What are the key value creation levers post-acquisition?",
     ],
     "Data Room": [
         "What documents are missing for due diligence?",
@@ -596,9 +608,15 @@ COPILOT_PROMPTS: dict[str, list[str]] = {
     ],
     "Integrations": [
         "Sync all Lithuanian companies to Pipedrive",
-        "Which companies are not yet synced to Pipedrive?",
-        "Draft an outreach sequence for the top healthcare company",
-        "Show LP prospects that haven't been touched in 30 days",
+        "Which data sources are connected and up to date?",
+        "Show companies not yet synced to the CRM",
+        "What registry data is available for each country?",
+    ],
+    "Training": [
+        "How does the PE Hero scoring system work?",
+        "What deal scenarios can I practice?",
+        "Give me tips for negotiating better terms",
+        "What skills should I focus on improving?",
     ],
 }
 
