@@ -104,6 +104,30 @@
 .sev-low, .sev-info { background: var(--bg-raise); color: var(--ink-dim); }
 .deal-desc { margin-top: .9rem; padding-top: .8rem; border-top: 1px solid var(--line); font-size: .72rem; color: var(--ink-muted); line-height: 1.5; }
 
+/* Risk register rows */
+.risk-row { padding: .35rem 0; border-bottom: 1px dashed var(--line); }
+.risk-head { display: flex; align-items: center; justify-content: space-between; gap: .4rem; }
+.risk-title { font-size: .72rem; font-weight: 500; color: var(--ink); }
+.risk-score { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: .6rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: white; }
+.risk-crit { background: #c0392b; }
+.risk-high { background: #C89B5B; }
+.risk-low  { background: #7A9E88; }
+.risk-detail { font-size: .62rem; color: var(--ink-dim); margin-top: .15rem; }
+.risk-cat { text-transform: uppercase; letter-spacing: .08em; font-weight: 600; margin-right: .3rem; }
+
+/* Milestone rows */
+.ms-row { padding: .35rem 0; border-bottom: 1px dashed var(--line); }
+.ms-head { display: flex; align-items: center; justify-content: space-between; gap: .4rem; }
+.ms-title { font-size: .72rem; font-weight: 500; color: var(--ink); }
+.ms-status { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: .58rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.ms-done    { background: #1F5D43; color: white; }
+.ms-overdue { background: #c0392b; color: white; }
+.ms-open    { background: var(--bg-raise); color: var(--ink-dim); }
+.ms-blocked { background: #C89B5B; color: white; }
+.ms-bar-wrap { height: 4px; background: var(--line); border-radius: 2px; margin: .25rem 0 .15rem; }
+.ms-bar { height: 100%; background: #1F5D43; border-radius: 2px; transition: width .3s; }
+.ms-detail { font-size: .62rem; color: var(--ink-dim); }
+
 .deal-chat-hint { padding: 1.5rem 2rem; text-align: center; color: var(--ink-dim); font-size: .82rem; }
 
 /* ── Instructions page ─────────────────────────────────────────── */

@@ -106,6 +106,33 @@ def migrate(drop: bool = False) -> None:
         );
     """)
 
+    # Deal risks and milestones tables.
+    _apply("""
+        CREATE TABLE IF NOT EXISTS pehero.deal_risks (
+            id              BIGSERIAL PRIMARY KEY,
+            company_id      BIGINT NOT NULL REFERENCES pehero.companies(id) ON DELETE CASCADE,
+            title           TEXT NOT NULL,
+            probability     INTEGER CHECK (probability BETWEEN 1 AND 5),
+            impact          INTEGER CHECK (impact BETWEEN 1 AND 5),
+            category        TEXT,
+            mitigation      TEXT,
+            created_at      TIMESTAMPTZ DEFAULT NOW()
+        );
+        CREATE INDEX IF NOT EXISTS deal_risks_company_idx ON pehero.deal_risks(company_id);
+
+        CREATE TABLE IF NOT EXISTS pehero.deal_milestones (
+            id              BIGSERIAL PRIMARY KEY,
+            company_id      BIGINT NOT NULL REFERENCES pehero.companies(id) ON DELETE CASCADE,
+            title           TEXT NOT NULL,
+            due_date        DATE,
+            owner           TEXT,
+            pct_complete    INTEGER DEFAULT 0 CHECK (pct_complete BETWEEN 0 AND 100),
+            status          TEXT DEFAULT 'open',
+            created_at      TIMESTAMPTZ DEFAULT NOW()
+        );
+        CREATE INDEX IF NOT EXISTS deal_milestones_company_idx ON pehero.deal_milestones(company_id);
+    """)
+
     # Triage scoring columns on companies.
     _apply("""
         ALTER TABLE pehero.companies

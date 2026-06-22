@@ -246,6 +246,32 @@ CREATE TABLE IF NOT EXISTS pehero.dd_findings (
 );
 CREATE INDEX IF NOT EXISTS dd_company_idx ON pehero.dd_findings(company_id, severity);
 
+-- ── deal risks (P×I scoring) ────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS pehero.deal_risks (
+    id              BIGSERIAL PRIMARY KEY,
+    company_id      BIGINT NOT NULL REFERENCES pehero.companies(id) ON DELETE CASCADE,
+    title           TEXT NOT NULL,
+    probability     INTEGER CHECK (probability BETWEEN 1 AND 5),
+    impact          INTEGER CHECK (impact BETWEEN 1 AND 5),
+    category        TEXT,
+    mitigation      TEXT,
+    created_at      TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS deal_risks_company_idx ON pehero.deal_risks(company_id);
+
+-- ── deal milestones (progress tracking) ─────────────────────────────
+CREATE TABLE IF NOT EXISTS pehero.deal_milestones (
+    id              BIGSERIAL PRIMARY KEY,
+    company_id      BIGINT NOT NULL REFERENCES pehero.companies(id) ON DELETE CASCADE,
+    title           TEXT NOT NULL,
+    due_date        DATE,
+    owner           TEXT,
+    pct_complete    INTEGER DEFAULT 0 CHECK (pct_complete BETWEEN 0 AND 100),
+    status          TEXT DEFAULT 'open',
+    created_at      TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS deal_milestones_company_idx ON pehero.deal_milestones(company_id);
+
 -- ── board / portfolio KPIs (post-close operational data) ──────────────
 CREATE TABLE IF NOT EXISTS pehero.portfolio_kpis (
     id           BIGSERIAL PRIMARY KEY,

@@ -136,7 +136,7 @@ docker compose up --build                        # local bring-up
 ### Data model (`db/schema.sql`)
 
 Core tables all live in `pehero.*`:
-`companies, funds, cap_tables, financials (monthly), contracts, transaction_comps, trading_comps, lbo_models, debt_stacks, investor_crm, market_signals, dd_findings, portfolio_kpis, users, user_preferences, chat_sessions, chat_messages, agent_invocations, prompt_versions, data_room, pipedrive_sync, outreach_sequences, user_integrations, digest_sends, persons, person_company_links`.
+`companies, funds, cap_tables, financials (monthly), contracts, transaction_comps, trading_comps, lbo_models, debt_stacks, investor_crm, market_signals, dd_findings, deal_risks, deal_milestones, portfolio_kpis, users, user_preferences, chat_sessions, chat_messages, agent_invocations, prompt_versions, data_room, pipedrive_sync, outreach_sequences, user_integrations, digest_sends, persons, person_company_links`.
 
 `pehero_rag.*` holds `documents, chunks, embeddings (vector({{EMBEDDING_DIM}}))`. `EMBEDDING_DIM` is substituted at migrate time — changing it requires `db.migrate --drop` and re-indexing.
 

@@ -361,6 +361,19 @@ def deal_detail(sess, slug: str):
         (cid,),
     )
 
+    risks = fetch_all(
+        "SELECT title, probability, impact, category, mitigation "
+        "FROM pehero.deal_risks WHERE company_id = %s "
+        "ORDER BY (probability * impact) DESC LIMIT 8",
+        (cid,),
+    )
+    milestones = fetch_all(
+        "SELECT title, due_date, owner, pct_complete, status "
+        "FROM pehero.deal_milestones WHERE company_id = %s "
+        "ORDER BY due_date NULLS LAST LIMIT 8",
+        (cid,),
+    )
+
     # Start or resume a per-deal chat session
     deal_sid_row = fetch_one(
         "SELECT id FROM pehero.chat_sessions WHERE user_id = %s AND title = %s "
@@ -402,6 +415,10 @@ def deal_detail(sess, slug: str):
       <ul class="deal-list">
         {"".join(f"<li><span class='sev sev-{f['severity']}'>{f['severity']}</span><span>{f['summary']}</span></li>" for f in findings) or "<li class='muted'>No findings yet. Try running VDR Auditor.</li>"}
       </ul>
+      <h4>Risk register</h4>
+      {"".join(f'''<div class="risk-row"><div class="risk-head"><span class="risk-title">{r['title']}</span><span class="risk-score risk-{'crit' if (r['probability'] or 0)*(r['impact'] or 0) >= 15 else 'high' if (r['probability'] or 0)*(r['impact'] or 0) >= 9 else 'low'}">{(r['probability'] or 0)*(r['impact'] or 0)}</span></div><div class="risk-detail"><span class="risk-cat">{r['category'] or ''}</span> P{r['probability'] or 0} × I{r['impact'] or 0} · {r['mitigation'] or ''}</div></div>''' for r in risks) or "<p class='muted'>No risks identified.</p>"}
+      <h4>Milestones</h4>
+      {"".join(f'''<div class="ms-row"><div class="ms-head"><span class="ms-title">{m['title']}</span><span class="ms-status ms-{m['status'] or 'open'}">{(m['status'] or 'open').title()}</span></div><div class="ms-bar-wrap"><div class="ms-bar" style="width:{m['pct_complete'] or 0}%"></div></div><div class="ms-detail">{m['owner'] or ''} · {str(m['due_date'] or '—')[:10]} · {m['pct_complete'] or 0}%</div></div>''' for m in milestones) or "<p class='muted'>No milestones yet.</p>"}
       <div class="deal-desc">{co.get('description') or ''}</div>
     </div>
     """

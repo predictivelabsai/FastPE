@@ -33,6 +33,8 @@ log = logging.getLogger(__name__)
 
 TRUNCATE_TABLES = [
     "pehero.agent_invocations",
+    "pehero.deal_risks",
+    "pehero.deal_milestones",
     "pehero.dd_findings",
     "pehero.portfolio_kpis",
     "pehero.market_signals",
@@ -204,6 +206,94 @@ def _insert_contracts(cos_with_ids: list[tuple[int, dict]], rng: random.Random) 
     return n
 
 
+RISK_POOL = [
+    ("financial", "Customer concentration risk", "Diversify revenue across top 5 accounts"),
+    ("financial", "Working capital volatility", "Implement 13-week cash flow forecast"),
+    ("financial", "Revenue recognition uncertainty", "Engage Big 4 for QoE review"),
+    ("financial", "FX exposure on Baltic trade", "Hedge EUR/USD with forward contracts"),
+    ("operational", "Key person dependency", "Ensure management incentives and retention packages"),
+    ("operational", "IT systems integration risk", "Conduct IT due diligence and migration plan"),
+    ("operational", "Supply chain single-source risk", "Dual-source critical components"),
+    ("operational", "Workforce scalability constraints", "Map hiring pipeline and labor market"),
+    ("legal", "Pending litigation exposure", "Obtain legal opinion and reserve estimate"),
+    ("legal", "IP ownership ambiguity", "Commission IP audit and chain-of-title review"),
+    ("legal", "GDPR compliance gaps", "Engage privacy counsel for gap assessment"),
+    ("legal", "Change-of-control clause triggers", "Map all CoC clauses and negotiate waivers"),
+    ("market", "Sector cyclicality exposure", "Model downside scenario at -20% revenue"),
+    ("market", "Regulatory change risk", "Monitor pending legislation and model impact"),
+    ("market", "Competitive entry threat", "Benchmark moat against top 3 competitors"),
+    ("integration", "Culture clash post-close", "Develop 100-day integration playbook"),
+    ("integration", "ERP migration complexity", "Budget 6-month parallel run period"),
+    ("integration", "Retention of key clients during transition", "Draft client communication plan"),
+]
+
+MILESTONE_POOL = [
+    ("Management presentation", "Deal lead"),
+    ("Preliminary valuation model", "Finance"),
+    ("VDR access and document review", "Operations"),
+    ("Quality of earnings report", "Finance"),
+    ("Commercial due diligence", "Deal lead"),
+    ("Legal due diligence memo", "Legal"),
+    ("IT systems assessment", "Operations"),
+    ("SPA first draft review", "Legal"),
+    ("IC memo submitted", "Deal lead"),
+    ("Financing term sheet", "Finance"),
+    ("Final close conditions", "Legal"),
+    ("100-day plan drafted", "Operations"),
+]
+
+
+def _insert_risks(cos_with_ids: list[tuple[int, dict]], rng: random.Random) -> int:
+    n = 0
+    with connect() as conn, conn.cursor() as cur:
+        for cid, co in cos_with_ids:
+            k = rng.randint(3, 6)
+            picks = rng.sample(RISK_POOL, min(k, len(RISK_POOL)))
+            for cat, title, mitigation in picks:
+                cur.execute(
+                    "INSERT INTO pehero.deal_risks "
+                    "(company_id, title, probability, impact, category, mitigation) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)",
+                    (cid, title, rng.randint(1, 5), rng.randint(1, 5), cat, mitigation),
+                )
+                n += 1
+        conn.commit()
+    return n
+
+
+def _insert_milestones(cos_with_ids: list[tuple[int, dict]], rng: random.Random) -> int:
+    n = 0
+    today = date.today()
+    with connect() as conn, conn.cursor() as cur:
+        for cid, co in cos_with_ids:
+            stage = co.get("deal_stage") or "sourced"
+            if stage in ("exited", "passed"):
+                continue
+            k = rng.randint(4, 7)
+            picks = rng.sample(MILESTONE_POOL, min(k, len(MILESTONE_POOL)))
+            base_offset = rng.randint(-30, 30)
+            for i, (title, owner) in enumerate(picks):
+                due = today + relativedelta(days=base_offset + i * rng.randint(15, 35))
+                pct = rng.choice([0, 0, 20, 40, 60, 80, 100, 100])
+                if pct == 100:
+                    status = "done"
+                elif due < today and pct < 100:
+                    status = "overdue"
+                elif pct > 0 and rng.random() < 0.08:
+                    status = "blocked"
+                else:
+                    status = "open"
+                cur.execute(
+                    "INSERT INTO pehero.deal_milestones "
+                    "(company_id, title, due_date, owner, pct_complete, status) "
+                    "VALUES (%s, %s, %s, %s, %s, %s)",
+                    (cid, title, due.isoformat(), owner, pct, status),
+                )
+                n += 1
+        conn.commit()
+    return n
+
+
 def _insert_txn_comps(cos_with_ids: list[tuple[int, dict]], rng: random.Random) -> tuple[int, int]:
     s = r = 0
     with connect() as conn, conn.cursor() as cur:
@@ -351,6 +441,12 @@ def run(seed: int = 42, skip_rag: bool = False, limit: int | None = None, fresh:
 
     n = _insert_contracts(cos_with_ids, rng)
     print(f"inserted {n} contracts (customer MSAs + suppliers)")
+
+    n = _insert_risks(cos_with_ids, rng)
+    print(f"inserted {n} deal risks")
+
+    n = _insert_milestones(cos_with_ids, rng)
+    print(f"inserted {n} deal milestones")
 
     s, r = _insert_txn_comps(cos_with_ids, rng)
     print(f"inserted {s} transaction comps, {r} trading comps")
