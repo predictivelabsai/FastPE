@@ -70,13 +70,13 @@ def _insert_companies(specs: list[dict]) -> dict[str, int]:
                   (slug, name, hq_city, hq_state, country, sector, sub_sector, website,
                    founded_year, employees, revenue_ltm, ebitda_ltm, ebitda_margin,
                    growth_rate, ownership, deal_stage, deal_type, enterprise_value,
-                   ask_multiple, description, seller_intent)
+                   ask_multiple, description, seller_intent, triage_score, triage_priority)
                 VALUES (%(slug)s, %(name)s, %(hq_city)s, %(hq_state)s, %(country)s,
                         %(sector)s, %(sub_sector)s, %(website)s,
                         %(founded_year)s, %(employees)s, %(revenue_ltm)s, %(ebitda_ltm)s,
                         %(ebitda_margin)s, %(growth_rate)s, %(ownership)s, %(deal_stage)s,
                         %(deal_type)s, %(enterprise_value)s, %(ask_multiple)s,
-                        %(description)s, %(seller_intent)s)
+                        %(description)s, %(seller_intent)s, %(triage_score)s, %(triage_priority)s)
                 ON CONFLICT (slug) DO UPDATE SET
                   name = EXCLUDED.name, description = EXCLUDED.description
                 RETURNING id, slug

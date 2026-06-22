@@ -130,6 +130,7 @@ docker compose up --build                        # local bring-up
 - `tools/search.py` — Tavily (default) → EXA (fallback) web search. Wired into the 4 sourcing agents.
 - `tools/baltic.py` + `tools/registry/{ee,lt,lv}.py` — uniform `baltic_lookup / baltic_filings / baltic_tax_status` surface. Returns `stub=True` until the country API keys are set. Full setup in `docs/registry_integration.md`.
 - `tools/rag.py` → semantic search over `pehero_rag.documents` via `rag/retriever.py`.
+- `utils/scoring.py` — PE triage scoring (40% impact, 30% strategic fit, 20% feasibility, 10% urgency → 1.0–5.0 weighted total, High/Medium/Low band). Used by synthetic data + pipeline cards.
 - Tools that produce UI artifacts return a string prefixed `__ARTIFACT__{json}` — the SSE layer picks it up, forwards it as an `artifact_show` event, and `static/chat.js` renders it in the right pane.
 
 ### Data model (`db/schema.sql`)

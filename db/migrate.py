@@ -106,6 +106,14 @@ def migrate(drop: bool = False) -> None:
         );
     """)
 
+    # Triage scoring columns on companies.
+    _apply("""
+        ALTER TABLE pehero.companies
+            ADD COLUMN IF NOT EXISTS triage_score NUMERIC(4,2);
+        ALTER TABLE pehero.companies
+            ADD COLUMN IF NOT EXISTS triage_priority TEXT;
+    """)
+
     # Persons tables for investor prospecting.
     _apply("""
         CREATE TABLE IF NOT EXISTS pehero.persons (

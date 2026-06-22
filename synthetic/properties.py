@@ -108,6 +108,8 @@ class CompanySpec:
     ask_multiple: float | None
     description: str
     seller_intent: str
+    triage_score: float | None
+    triage_priority: str | None
 
 
 def _name_for(sector: str, rng: random.Random) -> str:
@@ -115,6 +117,13 @@ def _name_for(sector: str, rng: random.Random) -> str:
     p = rng.choice(prefixes)
     s = rng.choice(suffixes)
     return f"{p} {s}"
+
+
+def _triage(revenue: float, margin: float, growth: float,
+            sector: str, intent: str, stage: str) -> tuple[float, str]:
+    from utils.scoring import triage_score
+    return triage_score(revenue=revenue, ebitda_margin=margin, growth_rate=growth,
+                        sector=sector, seller_intent=intent, deal_stage=stage)
 
 
 def _ask_multiple(sector: str, growth: float, margin: float, rng: random.Random) -> float:
@@ -171,6 +180,7 @@ def generate(seed: int = 42) -> list[dict]:
             f"{margin:.0f}% EBITDA margin, growing {growth:.0f}% YoY. "
             f"{ownership.replace('_', ' ')}-owned; currently {deal_stage}."
         )
+        ts, tp = _triage(revenue, margin, growth, sector, "warm", deal_stage)
         specs.append(CompanySpec(
             slug=slug, name=name, hq_city=city, hq_state=state, country=country,
             sector=sector, sub_sector=sub_sector,
@@ -180,6 +190,7 @@ def generate(seed: int = 42) -> list[dict]:
             growth_rate=growth, ownership=ownership, deal_stage=deal_stage,
             deal_type=deal_type, enterprise_value=ev, ask_multiple=ask_mult,
             description=descr, seller_intent="warm",
+            triage_score=ts, triage_priority=tp,
         ))
         slug_counter[slug] = 1
         reserved_names.add(name)
@@ -216,6 +227,7 @@ def generate(seed: int = 42) -> list[dict]:
             slug_base = "".join(c for c in slug_base if c.isalnum() or c == "-")
             slug = next_slug(slug_base[:50])
 
+            ts, tp = _triage(revenue, margin, growth, sector, intent, deal_stage)
             specs.append(CompanySpec(
                 slug=slug,
                 name=name,
@@ -238,6 +250,8 @@ def generate(seed: int = 42) -> list[dict]:
                 ask_multiple=ask_mult if deal_stage not in {"exited", "passed"} else None,
                 description=descr,
                 seller_intent=intent,
+                triage_score=ts,
+                triage_priority=tp,
             ))
 
     return [s.__dict__ for s in specs]

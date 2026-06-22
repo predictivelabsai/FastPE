@@ -57,6 +57,18 @@
 .card-mult { color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
 .card-ev-line { margin-top: .2rem; }
 
+/* Triage badge on deal cards */
+.triage-badge {
+    display: inline-block; margin-left: auto; flex-shrink: 0;
+    padding: 1px 5px; border-radius: 3px; font-size: .6rem; font-weight: 700;
+    color: white; font-family: 'JetBrains Mono', monospace; letter-spacing: .04em;
+}
+/* Triage tag on deal detail */
+.tag-triage { font-weight: 600; }
+.tag-triage-high  { background: #1F5D43; color: white; }
+.tag-triage-medium { background: #C89B5B; color: white; }
+.tag-triage-low   { background: #9CA89E; color: white; }
+
 /* Back button in header */
 .back-to-chat-btn {
     padding: .3rem .7rem; font-size: .7rem;

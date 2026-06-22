@@ -58,11 +58,14 @@ CREATE TABLE IF NOT EXISTS pehero.companies (
     fund_id        BIGINT,              -- soft ref: pehero.funds(id)
     description    TEXT,
     seller_intent  TEXT,                -- cold | warm | hot
+    triage_score   NUMERIC(4,2),        -- weighted 1.0–5.0 priority score
+    triage_priority TEXT,               -- High (≥4) | Medium (≥3) | Low (<3)
     created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS companies_sector_idx  ON pehero.companies(sector);
 CREATE INDEX IF NOT EXISTS companies_stage_idx   ON pehero.companies(deal_stage);
 CREATE INDEX IF NOT EXISTS companies_geo_idx     ON pehero.companies(country, hq_state);
+CREATE INDEX IF NOT EXISTS companies_triage_idx  ON pehero.companies(triage_score DESC NULLS LAST);
 
 -- ── funds (GP side: what's deploying) ─────────────────────────────────
 CREATE TABLE IF NOT EXISTS pehero.funds (

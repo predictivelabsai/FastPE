@@ -76,6 +76,14 @@ def _pipeline_head(title: str):
     )
 
 
+def _triage_badge(score, priority) -> Span:
+    if score is None:
+        return Span("")
+    colors = {"High": "#1F5D43", "Medium": "#C89B5B", "Low": "#9CA89E"}
+    bg = colors.get(priority, "#9CA89E")
+    return Span(f"{float(score):.1f}", cls="triage-badge", style=f"background:{bg}")
+
+
 def _card_for(company: dict, sym: str = "€") -> Div:
     name = company["name"]
     sector = company.get("sector") or ""
@@ -85,8 +93,9 @@ def _card_for(company: dict, sym: str = "€") -> Div:
     ev = company.get("enterprise_value") or 0
     mult = company.get("ask_multiple")
     intent = company.get("seller_intent") or ""
+    score = company.get("triage_score")
+    priority = company.get("triage_priority")
 
-    # Heat dot for seller intent
     heat_colors = {"hot": "#B83A3A", "warm": "#C89B5B", "cold": "#7A9E88"}
     heat = heat_colors.get(intent, "#CFC8B4")
 
@@ -95,6 +104,7 @@ def _card_for(company: dict, sym: str = "€") -> Div:
             Div(
                 Span(cls="heat-dot", style=f"background:{heat}"),
                 Span(name, cls="card-title"),
+                _triage_badge(score, priority),
                 cls="card-head",
             ),
             Div(
@@ -185,7 +195,8 @@ def _board(companies_by_stage: dict[str, list[dict]], stage_counts: dict[str, in
 
 _CARD_COLS = (
     "slug, name, sector, sub_sector, revenue_ltm, ebitda_ltm, "
-    "enterprise_value, ask_multiple, seller_intent, deal_stage"
+    "enterprise_value, ask_multiple, seller_intent, deal_stage, "
+    "triage_score, triage_priority"
 )
 _CARDS_PER_STAGE = 20
 
@@ -222,7 +233,7 @@ def pipeline_home(sess, sector: str = "", ownership: str = "", stage: str = "", 
         rows = fetch_all(
             f"SELECT {_CARD_COLS} FROM pehero.companies "
             f"WHERE {where} AND COALESCE(deal_stage, 'sourced') = %s "
-            f"ORDER BY enterprise_value DESC NULLS LAST, name "
+            f"ORDER BY triage_score DESC NULLS LAST, enterprise_value DESC NULLS LAST, name "
             f"LIMIT {_PAGE_SIZE} OFFSET %s",
             tuple(params) + (stage, offset),
         )
@@ -238,7 +249,7 @@ def pipeline_home(sess, sector: str = "", ownership: str = "", stage: str = "", 
             rows = fetch_all(
                 f"SELECT {_CARD_COLS} FROM pehero.companies "
                 f"WHERE {where} AND COALESCE(deal_stage, 'sourced') = %s "
-                f"ORDER BY enterprise_value DESC NULLS LAST, name "
+                f"ORDER BY triage_score DESC NULLS LAST, enterprise_value DESC NULLS LAST, name "
                 f"LIMIT {_CARDS_PER_STAGE}",
                 tuple(params) + (stage_key,),
             )
@@ -368,6 +379,7 @@ def deal_detail(sess, slug: str):
         <span class="tag">{(co.get('sector') or '').replace('_', ' ').title()}</span>
         <span class="tag">{co.get('sub_sector') or ''}</span>
         <span class="tag tag-stage">{(co.get('deal_stage') or '').upper()}</span>
+        {f'<span class="tag tag-triage tag-triage-{(co.get("triage_priority") or "").lower()}">{co.get("triage_priority")} ({float(co.get("triage_score") or 0):.1f})</span>' if co.get('triage_score') else ''}
       </div>
       <div class="deal-kv">
         <div><strong>HQ</strong> {co.get('hq_city') or ''}, {co.get('hq_state') or ''} {co.get('country') or ''}</div>
