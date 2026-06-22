@@ -663,6 +663,37 @@ details.dr-folder[open] .dr-folder-files { display: flex; flex-direction: column
 }
 .pager-info { font-size: .72rem; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
 
+/* ── Portfolio page ────────────────────────────────────────── */
+.portfolio-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: .6rem; padding: 1rem 1.2rem;
+}
+.kpi-card {
+    background: var(--bg); border: 1px solid var(--line); border-radius: .5rem;
+    padding: .7rem .9rem;
+}
+.kpi-label { font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-muted); }
+.kpi-value { font-size: 1.3rem; font-weight: 700; color: var(--ink); font-family: 'JetBrains Mono', monospace; margin: .1rem 0; }
+.kpi-sub { font-size: .68rem; color: var(--ink-dim); }
+
+.portfolio-card {
+    background: var(--bg); border: 1px solid var(--line); border-radius: .5rem;
+    padding: .8rem 1rem; margin: 0 1.2rem .8rem;
+}
+.portfolio-card h3 { font-size: .82rem; font-weight: 600; margin: 0 0 .5rem; color: var(--ink); }
+
+.portfolio-grid2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: .8rem;
+    padding: 0 1.2rem .8rem;
+}
+.portfolio-grid2 .portfolio-card { margin: 0; }
+
+@media (max-width: 768px) {
+    .portfolio-grid2 { grid-template-columns: 1fr; }
+    .portfolio-metrics { grid-template-columns: repeat(2, 1fr); }
+}
+
 /* ── Investors page ────────────────────────────────────────── */
 .wealth-badge {
     display: inline-block; padding: 2px 8px; border-radius: 4px;

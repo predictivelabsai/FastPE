@@ -1644,6 +1644,11 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "lv": "Uzņēmumu portfelis", "fi": "Yritysportfolio", "sv": "Företagsportfölj",
                           "no": "Selskapsportefølje", "da": "Virksomhedsportefølje", "fr": "Portefeuille d'entreprises", "de": "Unternehmensportfolio", "pl": "Portfel firm"},
 
+    # ── Portfolio Management ───────────────────────────────────
+    "port_title":        {"en": "Portfolio",             "et": "Portfell",           "lt": "Portfelis",
+                          "lv": "Portfelis", "fi": "Salkku", "sv": "Portfölj",
+                          "no": "Portefølje", "da": "Portefølje", "fr": "Portefeuille", "de": "Portfolio", "pl": "Portfel"},
+
     # ── Valuation Simulator ─────────────────────────────────────
     "val_title":         {"en": "PE Valuation Simulator", "et": "PE hindamise simulaator", "lt": "PE vertinimo simuliatorius",
                           "lv": "PE vērtēšanas simulators", "fi": "PE arvostussimulaattori", "sv": "PE värderingssimulator",

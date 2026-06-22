@@ -279,6 +279,7 @@ def _bottom_nav(current_path: str = "", lang: str = "en"):
         (t("chat_instructions", lang), "/app/instructions", "✎"),
         (t("chat_analytics", lang),    "/app/analytics",    "∑"),
         (t("val_title", lang),          "/app/valuation",    "◎"),
+        (t("port_title", lang),         "/app/portfolio",    "◈"),
     ]
     links = []
     for label, href, icon in items:
@@ -611,6 +612,12 @@ COPILOT_PROMPTS: dict[str, list[str]] = {
         "Which data sources are connected and up to date?",
         "Show companies not yet synced to the CRM",
         "What registry data is available for each country?",
+    ],
+    "Portfolio": [
+        "What's the total enterprise value of the portfolio?",
+        "Which sectors are overweight in the portfolio?",
+        "Compare EBITDA margins across portfolio companies",
+        "Which portfolio company has the highest growth rate?",
     ],
     "Training": [
         "How does the PE Hero scoring system work?",
