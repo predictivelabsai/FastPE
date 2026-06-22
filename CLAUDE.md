@@ -101,7 +101,7 @@ docker compose up --build                        # local bring-up
 - `/app/pipeline` + `/app/pipeline/<slug>` → kanban board + per-deal workspace (chat + brief on right). `chat/pipeline.py`.
 - `/app/companies` + `/app/companies/<slug>` → company/portfolio browser. `chat/companies.py`.
 - `/app/investors` + `/app/investors/<slug>` → family office & investor prospecting (persons, wealth, company links). `chat/investors.py`.
-- `/app/portfolio` → simulated PE portfolio dashboard (KPI cards, bubble chart, heatmap, holdings table). `chat/portfolio.py`.
+- `/app/portfolio` → portfolio dashboard (KPIs, value bridge, health donut, top holdings). `/app/portfolio/analytics` → bubble chart, heatmap, sector allocation, holdings table. `/app/portfolio/kpis` → financial trend lines, margin targets, company scorecard. `chat/portfolio.py`.
 - `/app/dataroom` + `/app/dataroom/<slug>` → virtual data room file tree + RAG indexing. `chat/dataroom.py`.
 - `/app/instructions` + `/app/instructions/<slug>` → live-edit each agent's prompt. Writes to `prompts/system/<slug>.md`, clears the agent cache. `chat/instructions.py`.
 - `/app/analytics` + `POST /app/analytics/run` → text → SELECT SQL (guarded) → Plotly figure. `chat/analytics.py`.

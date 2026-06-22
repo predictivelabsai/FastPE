@@ -664,6 +664,20 @@ details.dr-folder[open] .dr-folder-files { display: flex; flex-direction: column
 .pager-info { font-size: .72rem; color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; }
 
 /* ── Portfolio page ────────────────────────────────────────── */
+.port-tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--line);
+    padding: 0 1.2rem; background: var(--bg);
+}
+.port-tab {
+    padding: .55rem 1.1rem; font-size: .78rem; font-weight: 500;
+    color: var(--ink-muted); text-decoration: none;
+    border-bottom: 2px solid transparent; transition: all .15s;
+}
+.port-tab:hover { color: var(--ink); }
+.port-tab.active {
+    color: #1F5D43; border-bottom-color: #1F5D43; font-weight: 600;
+}
+
 .portfolio-metrics {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));

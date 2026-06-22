@@ -616,8 +616,20 @@ COPILOT_PROMPTS: dict[str, list[str]] = {
     "Portfolio": [
         "What's the total enterprise value of the portfolio?",
         "Which sectors are overweight in the portfolio?",
+        "Summarize portfolio health — any companies at risk?",
+        "Which sector contributes most to EBITDA?",
+    ],
+    "Portfolio Analytics": [
         "Compare EBITDA margins across portfolio companies",
+        "Which country has the highest concentration?",
         "Which portfolio company has the highest growth rate?",
+        "Show revenue vs profitability for all holdings",
+    ],
+    "Portfolio KPIs": [
+        "How has portfolio revenue grown year over year?",
+        "Which companies are below the 20% margin target?",
+        "What was the best year for portfolio EBITDA?",
+        "Compare growth rates across the portfolio companies",
     ],
     "Training": [
         "How does the PE Hero scoring system work?",
