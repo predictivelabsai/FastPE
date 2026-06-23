@@ -1,247 +1,341 @@
 # PEHero User Guide
 
-Your Private Equity AI Agent Squad — one chat interface, every PE workflow.
+## Your Private Equity AI Agent Squad
+
+*One chat interface, every PE workflow — sourcing through exit.*
+
+**pehero.chat**
 
 ---
 
-## Table of Contents
+## Contents
 
-- [Getting Started](#getting-started)
-- [Chat](#chat)
-- [Pipeline](#pipeline)
-- [Company Search](#company-search)
-- [PE Valuation Simulator](#pe-valuation-simulator)
-- [Data Room](#data-room)
-- [Analytics](#analytics)
-- [Instructions](#instructions)
-- [Copilot](#copilot)
-- [News Feed](#news-feed)
-- [Configuration](#configuration)
-- [Data Coverage](#data-coverage)
+**Getting Started** · Sign in, first chat, agent routing
+
+**Chat** · 3-pane layout, agent categories, tables, charts, memo export
+
+**Pipeline** · Kanban board, triage scoring, deal workspace, risk register, milestones
+
+**Companies** · Fuzzy search, sector filters, company detail
+
+**Investors** · Family office & investor prospecting, wealth data, company links
+
+**Portfolio** · Dashboard, analytics, KPIs — 3-tab submenu
+
+**Valuation** · DCF, comps, precedent, LBO simulator with WACC calculator
+
+**Data Room** · Upload, index, RAG-powered document search
+
+**Analytics** · Text-to-SQL, auto-charting, schema-aware queries
+
+**Instructions** · Live-edit agent prompts — no redeploy needed
+
+**Training** · PE Hero RPG game for deal-making practice
+
+**Configuration** · Currency, language, integrations, profile
 
 ---
 
 ## Getting Started
 
+![Chat interface](screenshots/07-chat-empty.png)
+
 1. **Open the app** at [pehero.chat/app](https://pehero.chat/app)
-2. **Sign in** with your email (click the Sign in button at the bottom of the left pane)
-3. **Type a prompt** in the chat input — PEHero automatically routes to the right specialist agent
+2. **Sign in** with Google or email/password (bottom of the left pane)
+3. **Type a prompt** in the chat input — PEHero routes to the right specialist agent automatically
+4. **Browse agents** in the left pane under the 5 PE workflow categories
+
+> First time? Try: *"Triage Northwind Systems for our fund"* — the Deal Triage agent runs a full strategic fit analysis.
 
 ---
 
-## Chat
+## Chat — 3-Pane Layout
 
-The main interface is a 3-pane layout:
+![Chat with triage response](screenshots/08-chat-triage.png)
 
-- **Left pane** — sessions, agent browser, workspace navigation, configuration
-- **Centre pane** — the conversation with streaming responses, inline tables, and charts
-- **Right pane** — live PE industry news feed (PE Hub, Buyouts Insider, PE International)
+The main interface has three panes:
 
-### Using Agents
+- **Left pane** — sessions, agent browser (5 categories), workspace navigation, configuration
+- **Centre pane** — conversation with streaming responses, inline tables, charts
+- **Right pane** — live PE news feed (PE Hub, Buyouts Insider, PE International, FT, Bloomberg)
 
-PEHero has specialist agents across 5 PE workflow categories. You can invoke them in two ways:
+### Agent routing
 
-1. **Prefix routing** — type a prefix like `triage:`, `lbo:`, `memo:` followed by your question
-2. **Auto routing** — just describe what you need in plain English and the router picks the right agent
+Two ways to invoke a specialist:
 
-### Agent Categories
+- **Prefix** — type `triage:`, `lbo:`, `memo:` etc. before your question
+- **Auto** — describe what you need in plain English; the router picks the best agent
 
-| Category | Agents | Example Prefix |
-|----------|--------|----------------|
-| **Sourcing** | Market Scanner, Deal Triage, Comp Finder, Owner Intent | `scan:`, `triage:`, `comps:` |
-| **Underwriting** | LTM Normalizer, LBO Model Builder, Pro Forma, Debt Stack, Return Metrics | `ltm:`, `lbo:`, `pf:`, `debt:` |
-| **Diligence** | VDR Auditor, Contract Abstractor, Legal & Regulatory, Ops DD, ESG Risk | `vdr:`, `contracts:`, `legal:` |
-| **Capital** | IC Memo Writer, Deal Teaser, LP Update, Fundraising CRM, Outreach Email, LOI Writer | `memo:`, `teaser:`, `lp:`, `crm:`, `email:`, `loi:` |
+---
+
+## Chat — Agent Categories
+
+PEHero's specialist agents cover every stage of the PE deal lifecycle:
+
+| Category | Agents | Example Prefixes |
+|----------|--------|-----------------|
+| **Sourcing** | Market Scanner, Deal Triage, Comp Finder, Owner Intent, Outreach, LOI Writer, Deal Teaser | `scan:`, `triage:`, `comps:`, `loi:` |
+| **Underwriting** | LTM Normalizer, LBO Model, Pro Forma, Debt Stack, Return Metrics | `ltm:`, `lbo:`, `pf:`, `debt:` |
+| **Diligence** | VDR Auditor, Contract Abstractor, Legal, Ops DD, ESG Risk | `vdr:`, `contracts:`, `legal:` |
+| **Capital** | IC Memo Writer, LP Update, Fundraising CRM | `memo:`, `lp:`, `crm:` |
 | **Portfolio Ops** | Pricing Optimizer, EBITDA Variance, Value Creation, Customer Churn | `pricing:`, `opex:`, `vcb:`, `churn:` |
 
-### Tables & Data
+---
 
-When agents return tabular data (financials, comps, models), the table appears inline in the chat with:
+## Chat — Tables & Data
 
-- **First 5 rows** shown by default — click **See more** to expand
-- **Copy CSV** — copy the table to clipboard
+![Table with export options](screenshots/21-chat-table-truncated.png)
+
+When agents return tabular data (financials, comps, models), the table appears inline with:
+
+- **First 5 rows** shown — click **See more** to expand
+- **Copy CSV** — copy to clipboard
 - **Download CSV** — save as .csv file
 - **Download XLS** — save as formatted .xlsx with styled headers
-- **Visualize** — auto-generate a chart (bar, area, pie, treemap) from the table data
+- **Visualize** — auto-generate a Plotly chart from the table
 
-### Charts
+### Chart types (auto-selected)
 
-Click **Visualize** on any table to render an interactive Plotly chart:
-
-- Time series with <20 data points — **bar chart**
-- Time series with 20+ points — **area/line chart**
-- Categorical data with 8 or fewer items — **pie chart**
-- Categorical data with more than 8 items — **treemap**
-- Multiple numeric columns — **grouped bar chart**
-
-### Memo & Document Export
-
-For memo-type agents (IC Memo, Deal Teaser, LP Update, LOI, Outreach Email), three export buttons appear:
-
-- **Preview PDF** — opens a formatted PDF in a new tab
-- **Download PDF** — saves the PDF file
-- **Download Word** — saves a formatted .docx with headings, tables, and bullets
+- Time series <20 points → **bar chart**
+- Time series 20+ points → **area/line chart**
+- ≤8 categories → **pie chart**
+- >8 categories → **treemap**
+- Multiple numeric columns → **grouped bar chart**
 
 ---
 
-## Pipeline
+## Chat — Memo Export
 
-The pipeline kanban board shows all companies across deal stages:
+![Memo export buttons](screenshots/24-chat-memo-exports.png)
 
-**Sourced — Screened — LOI — Diligence — IC — Signed — Closed — Held — Exited**
+For memo-type agents (IC Memo, Deal Teaser, LP Update, LOI, Outreach Email):
+
+- **Preview PDF** — opens formatted PDF in a new tab
+- **Download PDF** — saves the PDF
+- **Download Word** — saves .docx with headings, tables, bullets
+
+### Share & Copy
+
+- **Copy** — copy the full chat to clipboard (markdown)
+- **Share** — generate a read-only link anyone can view without signing in
+
+---
+
+## Pipeline — Kanban Board
+
+![Pipeline kanban](screenshots/11-pipeline-kanban.png)
+
+The pipeline board shows all companies across deal stages:
+
+**Sourced → Screened → LOI → Diligence → IC → Signed → Closed → Held → Exited**
 
 - Filter by **sector** or **ownership** type
-- Click any card to open the **deal workspace** with a brief on the right and per-deal chat in the centre
-- Each card shows revenue, EBITDA, EV, multiple, and a seller-intent heat dot
+- Cards sorted by **triage score** (highest priority first)
+- Each card shows revenue, EBITDA, EV, multiple, seller-intent dot, and **triage badge**
+
+### Triage scoring
+
+Every company gets a weighted priority score (1.0–5.0):
+
+- **40%** Impact · **30%** Strategic fit · **20%** Feasibility · **10%** Urgency
+- Badges: **High** (≥4.0, green) · **Medium** (≥3.0, amber) · **Low** (<3.0, grey)
 
 ---
 
-## Company Search
+## Pipeline — Deal Workspace
+
+![Deal workspace](screenshots/13-pipeline-deal.png)
+
+Click any card to open the deal workspace:
+
+- **Centre** — per-deal chat (ask agents about this specific company)
+- **Right pane** — deal brief with live data:
+
+### Deal brief sections
+
+- **Company info** — sector, sub-sector, stage, triage score, HQ, employees, founded, ownership
+- **LTM financials** — revenue, EBITDA, margin, ask EV and multiple
+- **Top customers** — largest contracts by annual value
+- **DD findings** — severity-coded results from VDR Auditor
+- **Risk register** — P×I scored risks with category and mitigation
+- **Milestones** — progress bars, due dates, owner, status (done/overdue/open/blocked)
+
+---
+
+## Companies
+
+![Company search](screenshots/14-companies.png)
 
 Search your entire company database at `/app/companies`:
 
-- **Fuzzy name search** — partial matching via ILIKE
-- **Sector filter** — dropdown with all available sectors
-- Results show revenue, EBITDA, employees, and deal stage
+- **Fuzzy name search** — partial matching
+- **Sector filter** — dropdown with all sectors
+- Results show revenue, EBITDA, employees, deal stage
 - Click any company to jump to its deal workspace
+
+---
+
+## Investors
+
+Investor prospecting at `/app/investors`:
+
+- **2,500+ persons** across Estonia, Lithuania, and Latvia
+- Search by name, filter by country
+- Each person card shows **wealth rank**, company links, ownership stakes
+- Click any person for detail view with full company portfolio
+- Data from Baltic business registries and wealth rankings
+
+---
+
+## Portfolio — Dashboard
+
+The Portfolio section (`/app/portfolio`) has a **3-tab submenu**: Dashboard, Analytics, KPIs.
+
+### Dashboard tab
+
+- **Value Bridge** — waterfall chart showing NAV progression (entry → growth → margin → multiple → exit)
+- **Portfolio Health** — donut chart of margin bands (healthy >20%, watch 10-20%, risk <10%)
+- **KPI cards** — total companies, total NAV, average MOIC, average hold period
+- **Top holdings** — ranked by NAV with inline sparkline bars
+
+---
+
+## Portfolio — Analytics
+
+### Analytics tab
+
+- **Bubble chart** — companies plotted by revenue (x) vs EBITDA margin (y), sized by EV
+- **Heatmap** — sector × deal-stage matrix showing company counts
+- **Sector allocation** — table with company count, total revenue, avg margin per sector
+- **Full holdings table** — sortable list with all portfolio companies and key metrics
+
+---
+
+## Portfolio — KPIs
+
+### KPIs tab
+
+- **Revenue & EBITDA trends** — annual aggregated lines from monthly financial data
+- **Margin trends** — EBITDA margin over time vs 20% target line (dashed)
+- **Growth trends** — year-over-year revenue growth as bar chart
+
+All charts are interactive (Plotly) — hover for values, zoom, download as PNG.
 
 ---
 
 ## PE Valuation Simulator
 
-Interactive company valuation with four methods, WACC calculator, equity bridge, and XLS export.
+![Valuation simulator](screenshots/21-valuation-full.png)
 
-### Getting Started
+Interactive company valuation with four methods at `/app/valuation`:
 
-1. Open **PE Valuation Simulator** from the left-pane Workspace menu
-2. **Select a company** from the dropdown (or search by name)
-3. The simulator loads the company's financials and auto-selects an industry benchmark
+1. **Select a company** from the dropdown (type to search)
+2. The simulator loads financials and auto-selects an industry benchmark
 
-### Valuation Methods
+### Four valuation methods
 
-The simulator computes enterprise value using four approaches:
+- **EV/Revenue** — revenue × industry sales multiple (96 Damodaran industries)
+- **EV/EBITDA** — EBITDA × industry EV/EBITDA multiple
+- **EV/EBIT** — EBIT × industry EV/EBIT multiple
+- **DCF** — configurable revenue growth, WACC, terminal growth, projection years, CapEx, tax rate
 
-- **EV/Revenue** — revenue times an industry-specific sales multiple (Damodaran data, 96 industries)
-- **EV/EBITDA** — EBITDA times the industry EV/EBITDA multiple
-- **EV/EBIT** — EBIT times the industry EV/EBIT multiple
-- **DCF** — discounted cash flow with configurable revenue growth, WACC, terminal growth, projection years, CapEx rate, and tax rate
+Each method has **interactive sliders** — adjust any parameter, all valuations update instantly.
 
-Each method has interactive sliders — adjust any parameter and all valuations update instantly.
+---
 
-### Industry Benchmarks
+## Valuation — WACC & Equity Bridge
 
-Select from 96 Damodaran industry categories. Changing the industry auto-fills the revenue, EBITDA, and EBIT multiples with real-world benchmarks.
+![WACC calculator](screenshots/22-valuation-wacc-chart.png)
 
 ### WACC Calculator
 
-Build up the discount rate from first principles:
-
-- **Risk-Free Rate** — government bond yield
-- **Levered Beta** — industry beta from Damodaran
-- **Market Risk Premium** — historical equity premium
-- **Country Risk Premium** — Damodaran country CRP
-- **Size Premium** — Duff & Phelps size study
-- **D/E Ratio** — debt-to-equity
-- **Cost of Debt** — pre-tax borrowing rate
-- **Tax Rate** — marginal corporate tax rate
-
-Click **Apply to DCF** to push the calculated WACC into the DCF model.
+Build the discount rate from first principles: risk-free rate, levered beta, market risk premium, country risk premium, size premium, D/E ratio, cost of debt, tax rate. Click **Apply to DCF**.
 
 ### Equity Bridge
 
-Derive equity value from the average enterprise value:
+Derive equity value: Average EV + Cash − Debt − Minority Interest.
 
-- **(+) Cash** — add cash on hand
-- **(-) Debt** — subtract total debt
-- **(-) Minority Interest** — adjust for minority stakes
+### Comparison chart
 
-### Comparison Chart
-
-An interactive Plotly bar chart shows all four valuations side by side, with a dashed average line.
+Interactive Plotly bar chart showing all four valuations side by side with dashed average line.
 
 ### XLS Export
 
-Click **Download XLS** to generate a multi-sheet Excel workbook:
-
-- **Valuation Summary** — all methods + equity bridge
-- **Multiples** — metric, multiple, and enterprise value detail
-- **DCF** — assumptions + year-by-year FCF projections + terminal value
-- **WACC** — full component breakdown with sources
+Multi-sheet Excel workbook: Valuation Summary, Multiples, DCF projections, WACC components.
 
 ---
 
 ## Data Room
 
+![Data room](screenshots/24-data-room.png)
+
 Upload and manage deal documents at `/app/dataroom`:
 
-- Upload PDFs, Word docs, spreadsheets, presentations, and images
-- Documents are organized in a **virtual folder tree** grouped by company
-- Download or delete any uploaded file
-- Uploaded documents are **automatically indexed into RAG** — agents can search and answer questions about your uploaded documents
+- Upload PDFs, Word docs, spreadsheets, presentations, images
+- **Virtual folder tree** grouped by company
+- Download or delete any file
+- Documents **automatically indexed into RAG** — agents can search and answer questions about your uploads
 
 ---
 
 ## Analytics
 
-Ask questions in plain English and get charts:
+![Analytics chart](screenshots/15-analytics-stages.png)
 
-- "Top 10 companies by revenue"
-- "Average EBITDA margin by sector"
-- "Monthly revenue trend for DR VET"
-- "Company count by deal stage"
+Ask questions in plain English, get charts:
 
-The system translates your question to SQL, runs it read-only against the database, and picks the right chart type automatically. The underlying SQL query is shown for auditability.
+- *"Top 10 companies by revenue"*
+- *"Average EBITDA margin by sector"*
+- *"Company count by deal stage"*
+- *"Revenue distribution across Baltic countries"*
+
+The system translates your question to **read-only SQL**, runs it against the database, and auto-picks the chart type. The underlying SQL is shown for auditability.
 
 ---
 
 ## Instructions
 
+![Instructions editor](screenshots/18-instructions-edit.png)
+
 Edit any agent's system prompt live at `/app/instructions`:
 
-- Changes take effect on the very next conversation
+- Changes take effect on the **very next conversation**
 - No restarts or deploys needed
-- Perfect for encoding your firm's house style, memo format, or diligence approach
+- Encode your firm's house style, memo format, or diligence approach
+- Shared across your team — all users see the same prompts
 
 ---
 
 ## Copilot
 
-Every workspace page (Pipeline, Companies, Analytics, Valuation, Data Room, Instructions) includes a **Copilot** AI assistant in the right pane. Click the **Copilot** button in the top-right header to open it.
+![Copilot on pipeline](screenshots/25-copilot-pipeline.png)
 
-### What the Copilot knows
+Every workspace page includes a **Copilot** AI assistant in the right pane.
 
-The Copilot automatically receives context from the page you're on:
+### Context-aware
 
-- **Pipeline**: stage counts, active filters, total companies
-- **Valuation**: loaded company financials (revenue, EBITDA, margin, growth), sector, employees
-- **Analytics**: schema capabilities, sample queries
-- **Companies**: current search and sector filter
-- **Data Room**: uploaded files and folder structure
+The Copilot automatically receives page context:
 
-### Example questions
+- **Pipeline** — stage counts, filters, total companies
+- **Valuation** — loaded company financials, sector, employees
+- **Analytics** — schema capabilities, sample queries
+- **Companies** — current search, sector filter
+- **Portfolio** — KPI summaries, holdings data
 
-- On **Valuation** with a company loaded: "If I bought this company, how do I increase value?"
-- On **Pipeline**: "Which healthcare companies should I move to screening?"
-- On **Analytics**: "Show me revenue trends by sector"
-- On **Companies**: "Find logistics companies in Vilnius above 5M revenue"
-
-### Session management
-
-Each page has its own copilot chat history. Navigate away and come back — your previous conversation is still there. Pipeline copilot and Valuation copilot are separate sessions.
-
-The Copilot routes your questions to the best specialist agent (deal triage, LBO modeler, value creation planner, etc.) using the same 24-agent routing system as the main chat.
+Each page has its own copilot session — navigate away and come back, your conversation is preserved.
 
 ---
 
-## News Feed
+## Training — PE Hero Game
 
-The right pane shows live PE industry news from:
+The PE Hero RPG game at `/app/training` lets you practice PE deal-making:
 
-- **PE Hub** — deals, exits, personnel moves
-- **Buyouts Insider** — US mid-market PE, fundraising, LP allocations
-- **PE International** — global PE, LP/GP dynamics
+- **Pick a character** — each has different strengths (analytical, relationship, operations)
+- **Navigate real deal scenarios** using companies from the database
+- **Make decisions** — bid/pass, negotiate terms, manage portfolio
+- **Earn scores** — scored on deal quality, timing, and strategic fit
 
-Plus financial headlines from FT, Bloomberg, WSJ, Reuters, BBC, ERR, and Baltic Times. Refreshed every 30 minutes (configurable).
+An engaging way to learn PE workflows and practice decision-making.
 
 ---
 
@@ -249,24 +343,41 @@ Plus financial headlines from FT, Bloomberg, WSJ, Reuters, BBC, ERR, and Baltic 
 
 ### Currency
 
-Switch between **EUR** (default), **GBP**, and **USD**. All monetary figures across the app follow your preference.
+Switch between **EUR** (default), **GBP**, and **USD**. All monetary figures follow your preference.
 
 ### Language
 
-11 languages supported: English, Estonian, Lithuanian, Latvian, Finnish, Swedish, Norwegian, Danish, French, German, Polish. The language selector is in the chat header — agents respond in your chosen language.
+11 languages: English, Estonian, Lithuanian, Latvian, Finnish, Swedish, Norwegian, Danish, French, German, Polish. Agents respond in your chosen language.
+
+### Profile & Deal Preferences
+
+At `/app/profile`, set your deal criteria: size range, revenue/EBITDA ranges, preferred sectors, deal types, and geographies. Enable/disable email notifications for new deals and weekly digests.
 
 ### Integrations
 
-Baltic company registries (Estonia, Lithuania, Latvia) and web search (Tavily, EXA) status shown in the configuration panel.
+At `/app/integrations`: Pipedrive CRM sync, Baltic registry connections (Estonia, Lithuania, Latvia), web search providers (Tavily, EXA).
 
 ---
 
 ## Data Coverage
 
-| Country | Companies | Financial Rows | Source |
-|---------|-----------|----------------|--------|
-| Lithuania | 1,000 | 54,012 | rekvizitai.vz.lt |
-| Estonia | 363 | 5,208 | ssb.ee |
-| **Total** | **1,363** | **59,220** | |
+| Country | Companies | Source |
+|---------|-----------|--------|
+| Estonia | 363+ | ariregister.rik.ee |
+| Lithuania | 1,000+ | rekvizitai.vz.lt |
+| Latvia | 500+ | lursoft.lv |
+| **Total** | **1,800+** | |
 
 Sectors: Healthcare, Software, Industrials, Financial Services, Business Services, Consumer.
+
+BYOD — bring your own data. Upload documents to the Data Room, and PEHero's agents can search and reason over your proprietary deal files.
+
+---
+
+## Getting Help
+
+- **In-app**: `/app/help` — this user guide rendered in the browser
+- **Copilot**: ask any question on any workspace page
+- **Support**: contact@pehero.chat
+
+*PEHero — your Private Equity AI Agent Squad.*

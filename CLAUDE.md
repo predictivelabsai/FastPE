@@ -72,6 +72,9 @@ python -m scripts.sync_pipedrive                 # sync companies → Pipedrive 
 python -m scripts.make_handbook                  # → docs/pe-handbook.md
 python -m scripts.translate_handbook             # translate to ET/LT/RO
 
+# User guide (A4 landscape PDF + 16:9 PPTX, requires pandoc + weasyprint)
+bash scripts/build_user_guide.sh                 # → docs/pehero-user-guide.{pdf,pptx}
+
 # Demo artifacts (requires a running server on :5058 and playwright chromium)
 playwright install chromium                      # one-off
 python -m scripts.capture_screenshots            # → ./screenshots/*.png (18 frames)
