@@ -19,7 +19,7 @@ from utils.i18n import t, agent_t, category_t, LANGUAGES
 SITE_NAME = "PEHero"
 SITE_TAGLINE = "Agentic AI for private equity deal teams."
 CONTACT_EMAIL = "hello@pehero.fyi"
-GITHUB_URL = "https://github.com/predictivelabsai/pehero"
+GITHUB_URL = "https://github.com/predictivelabsai/FastPE"
 LINKEDIN_URL = "https://www.linkedin.com/company/predictive-labs-ltd/"
 
 NAV_ITEMS = [
@@ -284,7 +284,7 @@ def ProductTour(lang: str = "en"):
                     alt="PEHero product tour — chat, pipeline, analytics",
                     cls="block w-full h-auto rounded-2xl border border-line shadow-[0_8px_40px_rgba(0,0,0,0.06)]",
                     loading="lazy"),
-                href="https://github.com/predictivelabsai/pehero#readme",
+                href=f"{GITHUB_URL}#readme",
                 target="_blank", rel="noopener",
                 cls="block rounded-2xl overflow-hidden hover:opacity-95 transition-opacity",
                 title="Open the README",
@@ -299,7 +299,7 @@ def ProductTour(lang: str = "en"):
                   cls="inline-flex items-center gap-2 text-sm text-accent hover:text-ink"),
                 Span("·", cls="text-ink-dim mx-3"),
                 A(Span(t("tour_readme", lang)), Span("→", cls="ml-1"),
-                  href="https://github.com/predictivelabsai/pehero#readme",
+                  href=f"{GITHUB_URL}#readme",
                   target="_blank", rel="noopener",
                   cls="inline-flex items-center gap-2 text-sm text-accent hover:text-ink"),
                 Span("·", cls="text-ink-dim mx-3"),
