@@ -1,4 +1,10 @@
-"""Daily Deals Digest — queries top 5 actionable deals, sends via Postmark.
+"""Daily Deals Digest — top actionable deals + a Featured Sector screen,
+sent via Postmark.
+
+The Featured Sector block runs the taxonomy-driven Baltic health / dental /
+dermatology screen (evals.run_screen_eval.screen_db) — founder/family-owned
+clinics, €3-10M revenue — and backlinks into the PEHero app. It is included in
+both the scheduled daemon send and manual sends.
 
 Usage:
     python -m scripts.daily_deals                  # send to all opted-in users
@@ -142,8 +148,79 @@ def _render_news_html(articles: list[dict]) -> str:
     </td></tr>"""
 
 
+# ── Featured Sector (Baltic health/dental/dermatology screen) ──────────
+
+FEATURED_SUBTITLE = ("Baltic health, dental &amp; dermatology clinics · "
+                     "founder / family-owned · €3&ndash;10M revenue")
+
+
+def _featured_sector(limit: int = 6, scan_cap: int = 200) -> dict:
+    """Run the Baltic health/dental/dermatology screen for the email's Featured
+    Sector block. Reuses the taxonomy-driven screen in evals.run_screen_eval so
+    the email and the eval stay in lockstep. Degrades to an empty block."""
+    try:
+        from evals.run_screen_eval import screen_db
+        res = screen_db(limit=scan_cap)
+        companies = res.get("companies", []) or []
+        return {"companies": companies[:limit],
+                "total": res.get("count", len(companies)),
+                "note": res.get("note", "")}
+    except Exception as e:  # noqa: BLE001 — Featured Sector is optional in the email
+        log.warning("featured sector screen failed: %s", e)
+        return {"companies": [], "total": 0, "note": str(e)[:160]}
+
+
+def _render_featured_sector_html(featured: dict | None) -> str:
+    companies = (featured or {}).get("companies") or []
+    if not companies:
+        return ""
+    esc = _html.escape
+    total = (featured or {}).get("total", len(companies))
+    rows = ""
+    for c in companies:
+        name = esc(c.get("name", ""))
+        country = esc((c.get("country") or "").upper())
+        sub = esc(c.get("sub_sector") or c.get("sector") or "")
+        ownership = esc((c.get("ownership") or "").replace("_", " "))
+        rev = _fmt_eur(c.get("revenue_ltm"))
+        rows += f"""
+        <tr>
+            <td style="padding:10px 20px;border-bottom:1px solid #E5E7EB;">
+                <span style="font-size:14px;font-weight:700;color:#14231B;">{name}</span>
+                <span style="display:inline-block;background:#1F5D43;color:#fff;font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:6px;">{country}</span>
+                <span style="display:inline-block;background:#E5EFE9;color:#1F5D43;font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;margin-left:4px;text-transform:capitalize;">{ownership}</span>
+                <div style="font-size:12px;color:#6B7280;margin-top:3px;">{sub} · <strong style="color:#14231B;">{rev}</strong> revenue</div>
+            </td>
+        </tr>"""
+
+    backlink = f"{SERVICE_URL}/app/companies?sector=healthcare"
+    return f"""
+    <!-- Featured Sector -->
+    <tr>
+        <td style="padding:20px 28px 8px;">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr><td style="border-top:2px solid #E5E7EB;padding-top:16px;">
+                    <span style="font-size:14px;font-weight:700;color:#14231B;">Featured Sector</span>
+                    <span style="font-size:11px;color:#9CA3AF;margin-left:8px;">{FEATURED_SUBTITLE}</span>
+                </td></tr>
+                <tr><td style="font-size:12px;color:#6B7280;padding-top:4px;">{total} matching targets — top {len(companies)} by revenue:</td></tr>
+            </table>
+        </td>
+    </tr>
+    <tr><td style="padding:0 8px;">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        {rows}
+        </table>
+    </td></tr>
+    <tr>
+        <td align="center" style="padding:14px 28px 4px;">
+            <a href="{backlink}" style="display:inline-block;background:#14231B;color:#FFFFFF;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;">Explore this sector in PEHero →</a>
+        </td>
+    </tr>"""
+
+
 def _render_html(deals: list[dict], news: list[dict] | None = None,
-                 unsubscribe_url: str = "") -> str:
+                 unsubscribe_url: str = "", featured: dict | None = None) -> str:
     today = date.today().strftime("%B %d, %Y")
     rows_html = ""
     for i, d in enumerate(deals, 1):
@@ -246,7 +323,7 @@ def _render_html(deals: list[dict], news: list[dict] | None = None,
     <!-- Intro -->
     <tr>
         <td style="padding:20px 28px 12px;font-size:14px;color:#374151;line-height:1.5;">
-            Good morning — here are today's <strong>top {len(deals)} actionable deals</strong> from your pipeline, ranked by seller intent and financial attractiveness.
+            {("Good morning — here are today's <strong>top " + str(len(deals)) + " actionable deals</strong> from your pipeline, ranked by seller intent and financial attractiveness." if deals else "Good morning — no new pipeline deals today. Here's the <strong>Featured Sector</strong> screen we're tracking for you.")}
         </td>
     </tr>
     <!-- Deals -->
@@ -257,6 +334,7 @@ def _render_html(deals: list[dict], news: list[dict] | None = None,
             <a href="{SERVICE_URL}/app/pipeline" style="display:inline-block;background:#1F5D43;color:#FFFFFF;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Open Pipeline →</a>
         </td>
     </tr>
+    {_render_featured_sector_html(featured) if featured else ""}
     {_render_news_html(news) if news else ""}
     <!-- Footer -->
     <tr>
@@ -277,7 +355,7 @@ def _render_html(deals: list[dict], news: list[dict] | None = None,
 
 
 def _render_text(deals: list[dict], news: list[dict] | None = None,
-                 unsubscribe_url: str = "") -> str:
+                 unsubscribe_url: str = "", featured: dict | None = None) -> str:
     today = date.today().strftime("%B %d, %Y")
     lines = [f"PEHero Daily Deals — {today}", "=" * 40, ""]
     for i, d in enumerate(deals, 1):
@@ -287,6 +365,17 @@ def _render_text(deals: list[dict], news: list[dict] | None = None,
         lines.append(f"    Why: {_deal_rationale(d)}")
         lines.append("")
     lines.append(f"Open pipeline: {SERVICE_URL}/app/pipeline")
+    if featured and featured.get("companies"):
+        lines.append("")
+        lines.append("Featured Sector — Baltic health, dental & dermatology clinics, "
+                     "founder/family-owned, €3-10M revenue")
+        lines.append("-" * 40)
+        for c in featured["companies"]:
+            rev = _fmt_eur(c.get("revenue_ltm"))
+            lines.append(f"  {c.get('name','')} [{(c.get('country') or '').upper()}] "
+                         f"{c.get('sub_sector') or c.get('sector') or ''} · "
+                         f"{(c.get('ownership') or '')} · {rev}")
+        lines.append(f"  Explore: {SERVICE_URL}/app/companies?sector=healthcare")
     if news:
         lines.append("")
         lines.append("Market News")
@@ -335,12 +424,21 @@ def _record_send(user_id: int, subject: str, message_id: str) -> None:
         conn.commit()
 
 
-def send_to_all_users(deals: list[dict], news: list[dict] | None = None) -> int:
-    """Send daily deals digest to all opted-in users. Returns send count."""
+def send_to_all_users(deals: list[dict], news: list[dict] | None = None,
+                      featured: dict | None = None) -> int:
+    """Send daily deals digest to all opted-in users. Returns send count.
+
+    When `featured` is None it is computed once here, so the scheduled daemon
+    send (main.py) includes the Featured Sector block without extra wiring.
+    """
     recipients = _get_recipients()
     if not recipients:
         log.info("No opted-in users — skipping daily deals")
         return 0
+
+    if featured is None:
+        featured = _featured_sector()
+        log.info("Featured Sector: %d targets in universe", featured.get("total", 0))
 
     today = date.today().strftime("%b %d")
     subject = f"PEHero Daily Deals — {today} — {len(deals)} actionable opportunities"
@@ -348,8 +446,8 @@ def send_to_all_users(deals: list[dict], news: list[dict] | None = None) -> int:
 
     for r in recipients:
         unsub_url = f"{SERVICE_URL}/auth/unsubscribe/{r['unsubscribe_token']}"
-        html_body = _render_html(deals, news, unsubscribe_url=unsub_url)
-        text_body = _render_text(deals, news, unsubscribe_url=unsub_url)
+        html_body = _render_html(deals, news, unsubscribe_url=unsub_url, featured=featured)
+        text_body = _render_text(deals, news, unsubscribe_url=unsub_url, featured=featured)
         try:
             result = send_email(
                 to=r["email"], subject=subject,
@@ -377,29 +475,35 @@ def main():
     args = parser.parse_args()
 
     deals = _top_deals(args.count)
-    if not deals:
-        print("No active deals in pipeline — skipping email.")
-        return
-
     news = _fetch_news_sync(5)
+    featured = _featured_sector()
+    if featured.get("companies"):
+        print(f"Featured Sector: {featured['total']} targets — showing top {len(featured['companies'])}")
+    elif featured.get("note"):
+        print(f"Featured Sector unavailable: {featured['note']}")
+
+    # Send if there's anything to show — deals OR the Featured Sector screen.
+    if not deals and not featured.get("companies"):
+        print("No active deals and no Featured Sector matches — skipping email.")
+        return
     today = date.today().strftime("%b %d")
     subject = f"PEHero Daily Deals — {today} — {len(deals)} actionable opportunities"
 
     if args.dry_run:
-        html_body = _render_html(deals, news, unsubscribe_url=f"{SERVICE_URL}/auth/unsubscribe/EXAMPLE_TOKEN")
-        text_body = _render_text(deals, news, unsubscribe_url=f"{SERVICE_URL}/auth/unsubscribe/EXAMPLE_TOKEN")
+        html_body = _render_html(deals, news, unsubscribe_url=f"{SERVICE_URL}/auth/unsubscribe/EXAMPLE_TOKEN", featured=featured)
+        text_body = _render_text(deals, news, unsubscribe_url=f"{SERVICE_URL}/auth/unsubscribe/EXAMPLE_TOKEN", featured=featured)
         print(html_body)
         print("\n--- TEXT ---\n")
         print(text_body)
         return
 
     if args.to:
-        html_body = _render_html(deals, news)
-        text_body = _render_text(deals, news)
+        html_body = _render_html(deals, news, featured=featured)
+        text_body = _render_text(deals, news, featured=featured)
         result = send_email(to=args.to, subject=subject, html_body=html_body, text_body=text_body)
         print(f"Sent to {args.to} — MessageID: {result.get('MessageID', 'n/a')}")
     else:
-        sent = send_to_all_users(deals, news)
+        sent = send_to_all_users(deals, news, featured=featured)
         print(f"Sent daily deals to {sent} users")
 
 
