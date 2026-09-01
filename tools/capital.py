@@ -176,5 +176,4 @@ portfolio_snapshot = StructuredTool.from_function(
     func=_portfolio_snapshot,
     name="portfolio_snapshot",
     description="Portfolio-wide snapshot by sector — company count, aggregate LTM revenue / EBITDA, average growth.",
-    args_schema=BaseModel,
 )

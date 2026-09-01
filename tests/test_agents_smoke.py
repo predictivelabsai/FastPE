@@ -75,3 +75,10 @@ def test_lbo_round_trip():
     assert out.startswith("__ARTIFACT__")
     ret = json.loads(compute_returns.invoke({"slug_or_id": "2"}))
     assert "returns" in ret
+
+
+def test_zero_argument_tool_has_concrete_schema():
+    """LangChain must be able to expose no-argument tools to the model."""
+    from tools.capital import portfolio_snapshot
+
+    assert portfolio_snapshot.tool_call_schema.model_json_schema()["properties"] == {}

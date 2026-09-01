@@ -7,8 +7,9 @@
 - Converted web-search Markdown/HTML snippets into compact plain-text citation cards with safe source links
 - Normalized assistant paragraph/list spacing in both the main chat and copilot
 - Added a Market Scanner response contract for concise single-company fact lookups
-- Added stream-privacy regression coverage; full suite: 155 passed, 2 skipped
+- Added stream-privacy and tool-schema regression coverage; full suite: 156 passed, 2 skipped
 - Pinned the existing Anthropic handbook-translation dependency so clean production installs pass dependency reachability checks
+- Fixed the portfolio snapshot's zero-argument tool schema for current clean-install LangChain/Pydantic releases
 
 ## v0.7.0 — 2026-05-30
 
