@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import html
 import json
 import logging
+import re
 import uuid
 from typing import Optional
 
@@ -28,6 +30,56 @@ from utils.session import (get_user_email, set_user_email, clear_user,
 from utils.i18n import get_lang, set_lang, LANGUAGES
 
 log = logging.getLogger(__name__)
+
+
+_MARKDOWN_TABLE_SEPARATOR = re.compile(r"^\s*\|?[\s:|-]+\|?\s*$")
+
+
+def _plain_artifact_text(value: object, limit: int = 360) -> str:
+    """Turn untrusted search-result Markdown/HTML into compact display text."""
+    text = html.unescape(str(value or ""))
+    text = re.sub(r"<(script|style)\b[^>]*>.*?</\1>", " ", text,
+                  flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"!\[([^]]*)\]\([^)]+\)", r"\1", text)
+    text = re.sub(r"\[([^]]+)\]\([^)]+\)", r"\1", text)
+
+    clean_lines = []
+    for line in text.replace("```", "").splitlines():
+        if _MARKDOWN_TABLE_SEPARATOR.fullmatch(line):
+            continue
+        line = re.sub(r"^\s{0,3}(?:#{1,6}|>|[-*+]\s|\d+[.)]\s)+", "", line)
+        line = line.replace("|", " · ")
+        clean_lines.append(line)
+
+    text = " ".join(clean_lines)
+    text = re.sub(r"[*_~`]", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) > limit:
+        text = text[:limit].rsplit(" ", 1)[0].rstrip(" ,.;:") + "…"
+    return text
+
+
+def _public_artifact(payload: dict) -> dict:
+    """Return the browser-safe representation of a structured artifact."""
+    if payload.get("kind") != "citations" or not isinstance(payload.get("items"), list):
+        return payload
+
+    public = dict(payload)
+    public_items = []
+    for item in payload["items"]:
+        if not isinstance(item, dict):
+            continue
+        url = str(item.get("url") or "")
+        if not re.match(r"^https?://", url, re.IGNORECASE):
+            url = ""
+        public_items.append({
+            **item,
+            "url": url,
+            "snippet": _plain_artifact_text(item.get("snippet")),
+        })
+    public["items"] = public_items
+    return public
 
 
 # ── helpers ──────────────────────────────────────────────────────────
@@ -249,18 +301,20 @@ async def chat_stream(request: Request):
                     name = event.get("name", "unknown")
                     args = event["data"].get("input", {})
                     tool_calls_log.append({"name": name, "args": args})
-                    yield sse.event(sse.TOOL_START, {"name": name, "args": args})
+                    # Tool arguments stay in the server-side audit log.  The UI only
+                    # needs a status label and must never receive raw payloads.
+                    yield sse.event(sse.TOOL_START, {"name": name})
                 elif kind == "on_tool_end":
                     name = event.get("name", "unknown")
                     raw = event["data"].get("output", "")
                     output = getattr(raw, "content", None) or (raw if isinstance(raw, str) else str(raw))
-                    yield sse.event(sse.TOOL_END, {"name": name, "output": output[:2000]})
+                    yield sse.event(sse.TOOL_END, {"name": name})
 
                     # If the tool returned a structured artifact descriptor, forward it.
                     if isinstance(output, str) and output.startswith("__ARTIFACT__"):
                         try:
                             payload = json.loads(output[len("__ARTIFACT__"):])
-                            yield sse.event(sse.ARTIFACT, payload)
+                            yield sse.event(sse.ARTIFACT, _public_artifact(payload))
                         except Exception:
                             pass
         except Exception as e:  # noqa: BLE001

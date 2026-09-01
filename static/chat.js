@@ -52,28 +52,15 @@
         return bubble;
     }
 
-    function appendToolLog(bubble, name, args) {
-        let log = bubble.parentElement.querySelector(".tool-log");
-        if (!log) {
-            log = document.createElement("div");
-            log.className = "tool-log";
-            bubble.parentElement.appendChild(log);
-        }
-        const step = document.createElement("div");
-        step.className = "tool-step";
-        const argStr = args ? JSON.stringify(args).slice(0, 140) : "";
-        step.innerHTML = `→ <span class="tool-name">${name}</span> <span class="tool-args">${argStr}</span>`;
-        log.appendChild(step);
-    }
-
     function scrollMessagesBottom() {
         const m = $("#messages");
         m.scrollTop = m.scrollHeight;
     }
 
     function renderMarkdownLite(text) {
-        if (window.marked) return marked.parse(text);
-        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        const safe = escapeHtml(text);
+        if (window.marked) return marked.parse(safe);
+        return safe
             .replace(/\n/g, "<br>");
     }
 
@@ -399,10 +386,10 @@
         }
         if (p.kind === "citations" && Array.isArray(p.items)) {
             return p.items.map(it => `
-                <div style="margin-bottom:.6rem;">
-                    <div style="color:var(--ink); font-size:.8rem; font-weight:500;">${escapeHtml(it.title || "")}</div>
-                    <div style="color:var(--ink-dim); font-size:.68rem; font-family:'JetBrains Mono',monospace;">${escapeHtml(it.doc_type || "")}${it.url ? ` · <a href="${escapeHtml(it.url)}" target="_blank">link</a>` : ""} · score ${(it.score||0).toFixed(2)}</div>
-                    <div style="color:var(--ink-muted); font-size:.75rem; margin-top:.25rem;">${escapeHtml(it.snippet || "").replace(/\n/g,"<br>")}</div>
+                <div class="citation-item">
+                    <div class="citation-title">${it.url ? `<a href="${escapeHtml(it.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(it.title || it.url)}</a>` : escapeHtml(it.title || "")}</div>
+                    <div class="citation-meta">${escapeHtml(it.doc_type || "Web source")}${typeof it.score === "number" ? ` · score ${it.score.toFixed(2)}` : ""}</div>
+                    ${it.snippet ? `<div class="citation-snippet">${escapeHtml(it.snippet)}</div>` : ""}
                 </div>
             `).join("");
         }
@@ -504,7 +491,6 @@
                         scrollMessagesBottom();
                     } else if (type === "tool_start") {
                         setThinkingTool(payload.name);
-                        appendToolLog(bubble || addBubble("assistant", "", ""), payload.name, payload.args);
                     } else if (type === "tool_end") {
                         // update thinker with "(done)" flavor; leaving tool name as-is
                     } else if (type === "artifact_show") {

@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.8.1 — 2026-09-01
+
+### Safe, consistently formatted agent responses
+- Removed raw tool names, arguments, and result payloads from browser SSE events and live chat bubbles
+- Converted web-search Markdown/HTML snippets into compact plain-text citation cards with safe source links
+- Normalized assistant paragraph/list spacing in both the main chat and copilot
+- Added a Market Scanner response contract for concise single-company fact lookups
+- Added stream-privacy regression coverage; full suite: 155 passed, 2 skipped
+- Pinned the existing Anthropic handbook-translation dependency so clean production installs pass dependency reachability checks
+
 ## v0.7.0 — 2026-05-30
 
 ### Export suite + inline charts + table truncation

@@ -192,12 +192,14 @@ details.agent-group[open] .agent-list { display: flex; flex-direction: column; g
     overflow-x: auto;
 }
 .msg-user .msg-bubble { background: var(--accent); color: var(--bg); border-bottom-right-radius: .25rem; }
-.msg-assistant .msg-bubble { background: var(--bg-elev); border: 1px solid var(--line); border-bottom-left-radius: .25rem; }
+.msg-assistant .msg-bubble { background: var(--bg-elev); border: 1px solid var(--line); border-bottom-left-radius: .25rem; white-space: normal; }
 .msg-tool .msg-bubble { background: var(--bg-raise); border: 1px dashed var(--line-br); font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--ink-muted); }
 
 .msg-bubble pre { background: var(--bg); border: 1px solid var(--line); border-radius: .4rem; padding: .6rem; overflow-x: auto; font-size: .72rem; margin: .4rem 0; }
+.msg-bubble p { margin: .35rem 0; }
 .msg-bubble ul { padding-left: 1.1rem; margin: .35rem 0; }
 .msg-bubble li { margin-bottom: .25rem; }
+.msg-bubble li > p { margin: 0; }
 .msg-bubble strong { color: var(--accent); }
 .msg-bubble h2, .msg-bubble h3, .msg-bubble h4 { margin: .6rem 0 .25rem; font-weight: 600; }
 .msg-bubble h2 { font-size: 1rem; }
@@ -352,6 +354,13 @@ details.agent-group[open] .agent-list { display: flex; flex-direction: column; g
 }
 .artifact-inline-title { color: var(--ink); font-size: .8rem; font-weight: 600; margin-bottom: .15rem; }
 .artifact-inline-sub { color: var(--ink-dim); font-size: .68rem; font-family: 'JetBrains Mono', monospace; margin-bottom: .5rem; }
+.citation-item { padding: .45rem 0; border-bottom: 1px solid var(--line); }
+.citation-item:last-child { border-bottom: 0; }
+.citation-title { color: var(--ink); font-size: .8rem; font-weight: 600; }
+.citation-title a { color: var(--accent); text-decoration: none; }
+.citation-title a:hover { text-decoration: underline; }
+.citation-meta { color: var(--ink-dim); font-size: .65rem; font-family: 'JetBrains Mono', monospace; margin-top: .1rem; }
+.citation-snippet { color: var(--ink-muted); font-size: .75rem; line-height: 1.45; margin-top: .2rem; }
 
 /* Table "See more / See less" toggle */
 .table-see-more {
@@ -395,11 +404,6 @@ details.agent-group[open] .agent-list { display: flex; flex-direction: column; g
 .msg-bubble tbody tr:nth-child(even) td { background: var(--bg); }
 .pe-table tbody tr:hover td, .artifact-table tbody tr:hover td,
 .msg-bubble tbody tr:hover td { background: var(--accent-dim); }
-
-/* Tool call log (inline with assistant message) */
-.tool-log { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--ink-dim); margin-top: .35rem; padding-left: .8rem; border-left: 2px solid var(--line-br); }
-.tool-log .tool-step { margin-bottom: .2rem; }
-.tool-log .tool-name { color: var(--accent); }
 
 /* Left overlay for mobile */
 .left-overlay { display: none; position: fixed; inset: 0; z-index: 199; background: rgba(0,0,0,.4); backdrop-filter: blur(2px); }

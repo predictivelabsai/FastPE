@@ -10,8 +10,9 @@
     }
 
     function renderMd(text) {
-        if (window.marked) return marked.parse(text);
-        return escapeHtml(text).replace(/\n/g, "<br>");
+        const safe = escapeHtml(text);
+        if (window.marked) return marked.parse(safe);
+        return safe.replace(/\n/g, "<br>");
     }
 
     function scrollBottom() {
@@ -38,22 +39,6 @@
         box.appendChild(div);
         scrollBottom();
         return bubble;
-    }
-
-    function appendToolLog(bubble, name, args) {
-        if (!bubble) return;
-        let log = bubble.parentElement.querySelector(".tool-log");
-        if (!log) {
-            log = document.createElement("div");
-            log.className = "tool-log";
-            bubble.parentElement.appendChild(log);
-        }
-        const step = document.createElement("div");
-        step.className = "tool-step";
-        const argStr = args ? JSON.stringify(args).slice(0, 100) : "";
-        step.innerHTML = '→ <span class="tool-name">' + escapeHtml(name) +
-            '</span> <span class="tool-args">' + escapeHtml(argStr) + '</span>';
-        log.appendChild(step);
     }
 
     function showThinking(bubble) {
@@ -204,7 +189,6 @@
                             scrollBottom();
                         } else if (type === "tool_start") {
                             setThinkingTool(payload.name);
-                            if (bubble) appendToolLog(bubble, payload.name, payload.args);
                         } else if (type === "tool_end") {
                             // tool finished
                         } else if (type === "session") {
