@@ -83,9 +83,19 @@ async def test_chat_stream_never_exposes_raw_tool_payloads(monkeypatch):
     monkeypatch.setattr(routes.agent_router, "route", lambda _msg: "market_scanner")
     monkeypatch.setattr(routes.agent_router, "strip_prefix", lambda msg: msg)
     monkeypatch.setattr(routes, "by_slug", lambda _slug: SimpleNamespace(name="Market Scanner", icon="◆"))
+    monkeypatch.setattr(
+        routes.byok,
+        "begin_query",
+        lambda _session: SimpleNamespace(
+            blocked=False,
+            used_byok=False,
+            llm=None,
+            commit=lambda: None,
+        ),
+    )
 
     from agents import base
-    monkeypatch.setattr(base, "cached_agent", lambda _slug: _Graph())
+    monkeypatch.setattr(base, "cached_agent", lambda _slug, model=None: _Graph())
 
     response = await routes.chat_stream(_Request())
     chunks = []

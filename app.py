@@ -38,6 +38,17 @@ from chat import investors as _investors_routes  # noqa: E402,F401
 from chat import portfolio as _portfolio_routes  # noqa: E402,F401
 from auth import routes as _auth_routes  # noqa: E402,F401
 
+# BYOK — per-user free-query gate + encrypted bring-your-own-key settings page.
+# No org concept in FastPE, so key the gate on the user's email (stable across
+# sessions), falling back to the numeric user id.
+import byok  # noqa: E402
+byok.register(
+    rt,
+    app,
+    app_name="FastPE",
+    get_org=lambda s: (s or {}).get("user_email") or (s or {}).get("user_id"),
+)
+
 
 def _serve_default():
     serve(port=settings().port)

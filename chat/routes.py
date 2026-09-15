@@ -16,6 +16,8 @@ from starlette.responses import StreamingResponse, JSONResponse, RedirectRespons
 
 from fasthtml.common import Div, Span, A, H1, P
 
+import byok
+
 from app import rt
 from agents import router as agent_router
 from agents.registry import AGENTS_BY_SLUG, by_slug
@@ -266,6 +268,16 @@ async def chat_stream(request: Request):
             "icon": spec.icon if spec else "◆",
         })
 
+        # BYOK gate — enforce the per-user free-query limit and route BYOK users
+        # through their own key. Blocked users get the setup message and no LLM call.
+        gate = byok.begin_query(sess)
+        if gate.blocked:
+            yield sse.event(sse.TOKEN, {"text": gate.gate_markdown})
+            _persist_message(session_id, "assistant", gate.gate_markdown,
+                             agent_slug=agent_slug)
+            yield sse.event(sse.DONE, {"slug": agent_slug, "tools": 0})
+            return
+
         # Build LangChain messages
         lc_messages = [SystemMessage(content=currency_directive)]
         if context_raw:
@@ -282,12 +294,20 @@ async def chat_stream(request: Request):
 
         try:
             from agents.base import cached_agent
+            # BYOK users get a fresh agent bound to their own model; house users
+            # keep the fast cached singleton.
+            byok_model = gate.llm if gate.used_byok else None
             try:
-                graph = cached_agent(agent_slug)
+                graph = cached_agent(agent_slug, model=byok_model)
             except Exception as e:  # noqa: BLE001
                 log.warning("agent %s not yet implemented — falling back to generalist: %s", agent_slug, e)
-                from agents.generalist import build as build_generalist
-                graph = build_generalist()
+                if byok_model is not None:
+                    import agents.generalist as _gen
+                    from agents.base import build_agent
+                    graph = build_agent(_gen.SPEC, _gen.TOOLS, model=byok_model)
+                else:
+                    from agents.generalist import build as build_generalist
+                    graph = build_generalist()
 
             async for event in graph.astream_events({"messages": lc_messages}, version="v2"):
                 kind = event["event"]
@@ -317,6 +337,9 @@ async def chat_stream(request: Request):
                             yield sse.event(sse.ARTIFACT, _public_artifact(payload))
                         except Exception:
                             pass
+
+            # Successful stream — count this free-tier query (no-op for BYOK).
+            gate.commit()
         except Exception as e:  # noqa: BLE001
             log.exception("chat stream failed")
             yield sse.event(sse.ERROR, {"message": str(e)})

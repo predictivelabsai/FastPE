@@ -31,19 +31,23 @@ def _load_system_prompt(slug: str) -> str:
     return (shared + "\n\n" + specific).strip()
 
 
-def build_agent(spec: AgentSpec, tools: list[BaseTool]):
+def build_agent(spec: AgentSpec, tools: list[BaseTool], model=None):
     """Build a LangGraph ReAct agent with Grok + the provided tools.
 
     Intentionally NOT cached here — caller may want different tool sets per
     session. Agent module-level `build()` functions own their own caching.
+
+    When ``model`` is provided (e.g. a per-request BYOK chat model), it is used
+    instead of the default house LLM. Otherwise the standard cached house model
+    (``build_agent_llm``) is used, preserving existing behaviour exactly.
     """
     system = _load_system_prompt(spec.slug)
-    llm = build_agent_llm()
+    llm = model or build_agent_llm()
     return create_react_agent(llm, tools, prompt=system or None)
 
 
 @lru_cache(maxsize=64)
-def cached_agent(slug: str):
+def _cached_agent(slug: str):
     """Fetch a cached agent by slug. Looks up the module and calls its build()."""
     from agents import registry
     spec = registry.by_slug(slug)
@@ -54,3 +58,22 @@ def cached_agent(slug: str):
     import importlib
     module = importlib.import_module(f"agents.{spec.category}.{spec.slug}")
     return module.build()
+
+
+def cached_agent(slug: str, model=None):
+    """Return an agent graph for ``slug``.
+
+    Default (``model=None``): the cached house agent — identical to before.
+    With ``model`` set (per-request BYOK model): build a FRESH agent bound to
+    that model, bypassing the lru_cache so the house singleton stays untouched.
+    """
+    if model is None:
+        return _cached_agent(slug)
+
+    from agents import registry
+    spec = registry.by_slug(slug)
+    if spec is None:
+        raise ValueError(f"unknown agent slug: {slug}")
+    import importlib
+    module = importlib.import_module(f"agents.{spec.category}.{spec.slug}")
+    return build_agent(spec, module.TOOLS, model=model)
