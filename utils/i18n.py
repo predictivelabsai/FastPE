@@ -1554,7 +1554,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "fr": "Pipeline",
                           "de": "Pipeline",
                           "pl": "Pipeline"},
-    "chat_instructions": {"en": "Instructions",      "et": "Juhised",            "lt": "Instrukcijos",
+    "chat_instructions": {"en": "Skills",            "et": "Juhised",            "lt": "Instrukcijos",
                           "fi": "Ohjeet", "sv": "Instruktioner",
                           "lv": "Instrukcijas",
                           "no": "Instruksjoner",
@@ -2101,7 +2101,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "fr": "Actualités du secteur du capital-investissement",
                           "de": "Private-Equity-Branchennachrichten",
                           "pl": "Wiadomości z branży private equity"},
-    "news_pe_sources":   {"en": "PE Hub · Buyouts Insider · PE International",
+    "news_pe_sources":   {"en": "PE Hub · FT Private Equity · Bloomberg · Private Credit",
                           "et": "PE Hub · Buyouts Insider · PE International",
                           "lt": "PE Hub · Buyouts Insider · PE International",
                           "fi": "PE Hub · Buyouts Insider · PE International",
@@ -2774,7 +2774,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "pl": "Myślę…"},
 
     # ── Instructions page ─────────────────────────────────────────
-    "instr_title":       {"en": "Instructions",      "et": "Juhised",            "lt": "Instrukcijos",
+    "instr_title":       {"en": "Skills",            "et": "Juhised",            "lt": "Instrukcijos",
                           "fi": "Ohjeet", "sv": "Instruktioner",
                           "lv": "Instrukcijas",
                           "no": "Instruksjoner",
@@ -2785,7 +2785,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
     "instr_count":       {"en": "{n} agent prompts",  "et": "{n} agendi prompti", "lt": "{n} agentų promptų",
                           "fi": "{n} agentin promptia", "sv": "{n} agentprompts",
                           "lv": "{n} aģenta prompti", "no": "{n} agentprompter", "da": "{n} agent-prompter", "fr": "{n} prompts d’agent", "de": "{n} Agent-Prompts", "pl": "{n} prompty agentów"},
-    "instr_intro":       {"en": "Edit the system prompts that drive each agent. Saves write to "
+    "instr_intro":       {"en": "Review and edit the skills that drive each agent. Saves write to "
                                 "prompts/system/<slug>.md and are versioned in the database.",
                           "et": "Redigeerige süsteemi prompte, mis juhivad iga agenti. Salvestused kirjutatakse "
                                 "prompts/system/<slug>.md ja versioonitakse andmebaasis.",

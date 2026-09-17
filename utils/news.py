@@ -1,9 +1,4 @@
-"""RSS news feed fetcher for the right-pane news panel.
-
-Fetches from PE-relevant financial sources (FT, Bloomberg, WSJ, Reuters,
-BBC Business) plus Baltic regional sources, returning a unified list of
-articles sorted by publish date.
-"""
+"""Focused private-equity and private-credit RSS news feed fetcher."""
 
 from __future__ import annotations
 
@@ -17,19 +12,18 @@ import feedparser
 log = logging.getLogger(__name__)
 
 FEEDS: list[dict] = [
-    # PE industry
+    # Private equity industry
     {"name": "PE Hub",           "url": "https://www.pehub.com/feed/",                        "lang": "en", "icon": "PEH"},
     {"name": "Buyouts Insider",  "url": "https://www.buyoutsinsider.com/feed/",               "lang": "en", "icon": "BUY"},
     {"name": "PE International", "url": "https://www.privateequityinternational.com/feed/",   "lang": "en", "icon": "PEI"},
-    # Global financial
-    {"name": "Financial Times",  "url": "https://www.ft.com/rss/home",                       "lang": "en", "icon": "FT"},
-    {"name": "Wall Street Journal", "url": "https://feeds.a.dj.com/rss/RSSWorldNews.xml",    "lang": "en", "icon": "WSJ"},
-    {"name": "Bloomberg",        "url": "https://feeds.bloomberg.com/markets/news.rss",       "lang": "en", "icon": "BBG"},
-    {"name": "Reuters Business", "url": "https://www.reutersagency.com/feed/?taxonomy=best-sectors&post_type=best", "lang": "en", "icon": "RTR"},
-    {"name": "BBC Business",     "url": "http://feeds.bbci.co.uk/news/business/rss.xml",      "lang": "en", "icon": "BBC"},
-    # Baltic
-    {"name": "ERR News",         "url": "https://news.err.ee/rss",                            "lang": "en", "icon": "ERR"},
-    {"name": "Baltic Times",     "url": "https://www.baltictimes.com/rss.xml",                "lang": "en", "icon": "BT"},
+    # Private credit
+    {"name": "Alternative Credit Investor", "url": "https://alternativecreditinvestor.com/feed/", "lang": "en", "icon": "ACI"},
+    {"name": "Connect Money Private Debt", "url": "https://www.connectmoney.com/feed?story-market=private-debt", "lang": "en", "icon": "PC"},
+    # Focused financial press coverage
+    {"name": "FT Private Equity", "url": "https://www.ft.com/private-equity?format=rss",       "lang": "en", "icon": "FT"},
+    {"name": "FT M&A",            "url": "https://www.ft.com/mergers-acquisitions?format=rss", "lang": "en", "icon": "FT"},
+    {"name": "Bloomberg PE US",   "url": "https://www.bloomberg.com/authors/ASS6hzNzQ9I/allison-mcneely.rss", "lang": "en", "icon": "BBG"},
+    {"name": "Bloomberg PE Europe", "url": "https://www.bloomberg.com/authors/AUD3zCLcLLw/swetha-gopinath.rss", "lang": "en", "icon": "BBG"},
 ]
 
 _cache: dict = {"articles": [], "fetched_at": None}

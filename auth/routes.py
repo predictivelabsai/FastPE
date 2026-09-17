@@ -47,6 +47,14 @@ _BTN_CLS = "w-full bg-[#1B4D3E] text-white py-2.5 rounded-lg font-semibold text-
 _GOOGLE_BTN_CLS = "flex items-center justify-center gap-2 w-full border border-gray-200 bg-white text-gray-700 py-2.5 rounded-lg font-medium text-sm hover:bg-gray-50 hover:border-gray-300 transition-colors no-underline"
 
 
+def _safe_next_url(value: str | None, default: str = "/app") -> str:
+    """Allow only local absolute paths as post-auth destinations."""
+    if (value and value.startswith("/") and not value.startswith("//")
+            and "\\" not in value and not urllib.parse.urlsplit(value).netloc):
+        return value
+    return default
+
+
 def _auth_layout(title: str, card_parts: list):
     from fasthtml.common import Title, Main, Script
     return (
@@ -88,12 +96,14 @@ def _success_msg(msg: str):
 
 @rt("/signin")
 async def signin_page(request, sess):
+    next_url = _safe_next_url(request.query_params.get("next"), default="/app")
     if get_user_email(sess):
-        return RedirectResponse("/app", status_code=303)
+        return RedirectResponse(next_url, status_code=303)
 
     error = ""
     if request.method == "POST":
         form = await request.form()
+        next_url = _safe_next_url(form.get("next"), default=next_url)
         email = (form.get("email") or "").strip().lower()
         password = form.get("password") or ""
         if not email or not password:
@@ -108,18 +118,20 @@ async def signin_page(request, sess):
                 else:
                     set_user_email(sess, user["email"])
                     set_user_id(sess, user["id"])
-                    return RedirectResponse("/app", status_code=303)
+                    return RedirectResponse(next_url, status_code=303)
 
     parts = [H2("Sign In", cls="text-xl font-bold text-center mb-4")]
     if error:
         parts.append(_error_msg(error))
     if GOOGLE_CLIENT_ID:
-        parts.append(A(NotStr(GOOGLE_SVG), "Continue with Google", href="/auth/google", cls=_GOOGLE_BTN_CLS))
+        google_next = urllib.parse.quote(next_url, safe="")
+        parts.append(A(NotStr(GOOGLE_SVG), "Continue with Google", href=f"/auth/google?next={google_next}", cls=_GOOGLE_BTN_CLS))
         parts.append(_divider())
     parts.append(
         Form(
             Input(type="email", name="email", placeholder="Email", required=True, autofocus=True, cls=_INPUT_CLS),
             Input(type="password", name="password", placeholder="Password", required=True, cls=_INPUT_CLS + " mt-3"),
+            Input(type="hidden", name="next", value=next_url),
             Div(A("Forgot password?", href="/forgot", cls="text-[#1B4D3E] hover:underline"), cls="text-right text-xs mt-1 mb-4"),
             Button("Sign In", type="submit", cls=_BTN_CLS),
             method="post", action="/signin", cls="flex flex-col gap-3",
@@ -458,7 +470,7 @@ async def auth_set_password(request, sess):
 @rt("/auth/logout", methods=["POST"])
 def auth_logout(sess):
     clear_user(sess)
-    return JSONResponse({"ok": True})
+    return JSONResponse({"ok": True, "redirect": "/"})
 
 
 # ── Unsubscribe (token-based, no login required) ───────────────────
@@ -492,12 +504,13 @@ def auth_unsubscribe(token: str):
 # ── Google OAuth ─────────────────────────────────────────────────────
 
 @rt("/auth/google")
-def auth_google_redirect(sess):
+def auth_google_redirect(request, sess):
     if not GOOGLE_CLIENT_ID:
         return JSONResponse({"error": "Google OAuth not configured"}, status_code=500)
 
     state = generate_token()
     sess["oauth_state"] = state
+    sess["post_auth_redirect"] = _safe_next_url(request.query_params.get("next"), default="/app")
 
     params = urllib.parse.urlencode({
         "client_id": GOOGLE_CLIENT_ID,
@@ -526,6 +539,7 @@ def auth_google_callback(request, sess):
         return RedirectResponse("/app", status_code=303)
 
     sess.pop("oauth_state", None)
+    next_url = _safe_next_url(sess.pop("post_auth_redirect", None), default="/app")
 
     token_resp = httpx.post(
         "https://oauth2.googleapis.com/token",
@@ -581,7 +595,7 @@ def auth_google_callback(request, sess):
 
     set_user_email(sess, email)
     set_user_id(sess, uid)
-    return RedirectResponse("/app", status_code=303)
+    return RedirectResponse(next_url, status_code=303)
 
 
 # ── Profile & Preferences ──────────────────────────────────────────

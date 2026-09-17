@@ -723,6 +723,12 @@ async function doSetPassword(email) {
     else errEl.textContent = data.error || 'Failed';
 }
 
-function signOut() {
-    fetch('/auth/logout', { method: 'POST' }).then(() => location.reload());
+async function signOut() {
+    try {
+        const response = await fetch('/auth/logout', { method: 'POST' });
+        const data = await response.json();
+        window.location.assign(data.redirect || '/');
+    } catch (_) {
+        window.location.assign('/');
+    }
 }

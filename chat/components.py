@@ -276,7 +276,7 @@ def _bottom_nav(current_path: str = "", lang: str = "en"):
         (t("chat_companies", lang),    "/app/companies",    "⊞"),
         (t("chat_investors", lang),    "/app/investors",    "👤"),
         (t("dr_title", lang),          "/app/dataroom",     "📁"),
-        (t("chat_instructions", lang), "/app/instructions", "✎"),
+        (t("chat_instructions", lang), "/skills",          "✎"),
         (t("chat_analytics", lang),    "/app/analytics",    "∑"),
         (t("val_title", lang),          "/app/valuation",    "◎"),
         (t("port_title", lang),         "/app/portfolio",    "◈"),
@@ -334,7 +334,7 @@ def left_pane(*, user_email: str | None, sessions: list[dict], current_sid: str 
                    onclick="signOut()"),
             cls="signed-in-bar",
         )
-        if user_email else None
+        if user_email else A(t("chat_sign_in", lang), href="/signin", cls="sign-in-btn")
     )
 
     return Div(

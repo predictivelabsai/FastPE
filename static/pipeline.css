@@ -130,8 +130,13 @@
 
 .deal-chat-hint { padding: 1.5rem 2rem; text-align: center; color: var(--ink-dim); font-size: .82rem; }
 
-/* ── Instructions page ─────────────────────────────────────────── */
-.instr-list { padding: 1rem 1.2rem; max-width: 820px; margin: 0 auto; width: 100%; }
+/* ── Skills page ───────────────────────────────────────────────── */
+.skills-center { min-height: 0; }
+.skills-center > .instr-list,
+.skills-center > .instr-edit {
+    flex: 1; min-height: 0; overflow-y: auto;
+}
+.instr-list { padding: 1rem 1.2rem 2rem; max-width: 820px; margin: 0 auto; width: 100%; }
 .instr-intro { color: var(--ink-muted); font-size: .82rem; margin-bottom: 1rem; }
 .instr-shared-link {
     display: inline-block; padding: .45rem .75rem; margin-bottom: 1rem;
@@ -149,7 +154,9 @@
 .instr-icon { color: var(--accent); font-size: 1.3rem; width: 1.5rem; text-align: center; }
 .instr-name { color: var(--ink); font-size: .88rem; font-weight: 600; }
 .instr-sub { color: var(--ink-muted); font-size: .72rem; margin-top: .15rem; }
-.instr-size { margin-left: auto; color: var(--ink-dim); font-size: .7rem; font-family: 'JetBrains Mono', monospace; }
+.instr-row-actions { margin-left: auto; display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
+.instr-size { color: var(--ink-dim); font-size: .7rem; font-family: 'JetBrains Mono', monospace; }
+.instr-edit-cta { color: var(--accent); font-size: .7rem; font-weight: 600; }
 
 .instr-version-badge {
     padding: .15rem .45rem; font-size: .62rem; font-family: 'JetBrains Mono', monospace;

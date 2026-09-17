@@ -13,7 +13,7 @@ from fasthtml.common import (
     H1, H2, H3, H4, P, Ul, Li, Button, Form, Input, Textarea, Label,
 )
 
-from agents.registry import CATEGORIES, AGENTS, AGENTS_BY_CATEGORY
+from agents.registry import CATEGORIES, AGENTS, AGENTS_BY_CATEGORY, AGENTS_BY_SLUG
 from utils.i18n import t, agent_t, category_t, LANGUAGES
 
 SITE_NAME = "PEHero"
@@ -381,6 +381,50 @@ def CategorySection(cat: dict, lang: str = "en"):
             cls="max-w-7xl mx-auto px-5 md:px-6",
         ),
         cls="py-14 md:py-20 border-t border-line",
+    )
+
+
+def SkillsPreview(lang: str = "en"):
+    """Public preview of the agent skills available after sign-in."""
+    featured = [
+        AGENTS_BY_SLUG["deal_triage"],
+        AGENTS_BY_SLUG["pro_forma_builder"],
+        AGENTS_BY_SLUG["doc_room_auditor"],
+    ]
+    return Section_(
+        Div(
+            Eyebrow("Skills"),
+            Heading(2, "See the skills behind the agent squad.", cls="mt-3 max-w-3xl"),
+            P(
+                "Preview how PEHero's specialist agents approach screening, underwriting, and diligence. "
+                "Sign in to review the full skill library.",
+                cls="mt-5 text-ink-muted text-base md:text-lg max-w-3xl leading-relaxed",
+            ),
+            cls="mb-10",
+        ),
+        Div(
+            *[
+                Article(
+                    Div(
+                        Span(agent.icon, cls="text-accent text-2xl"),
+                        Pill(agent.prefix, cls="ml-auto"),
+                        cls="flex items-center mb-5",
+                    ),
+                    H3(agent_t(agent.slug, "name", lang), cls="text-ink text-xl font-medium mb-2"),
+                    P(agent_t(agent.slug, "one_liner", lang), cls="text-ink-muted text-sm leading-relaxed mb-5"),
+                    P("Skill preview", cls="font-mono text-[11px] tracking-widest uppercase text-ink-dim mb-2"),
+                    P(f'“{agent.example_prompts[0]}”', cls="text-ink text-sm leading-relaxed"),
+                    cls="p-7 rounded-2xl bg-bg-elevated border border-line h-full",
+                )
+                for agent in featured
+            ],
+            cls="grid md:grid-cols-3 gap-4",
+        ),
+        Div(
+            Button_("Sign in to see full Skills", href="/signin?next=/skills", primary=True),
+            cls="mt-8",
+        ),
+        cls="border-t border-line",
     )
 
 

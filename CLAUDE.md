@@ -106,7 +106,7 @@ docker compose up --build                        # local bring-up
 - `/app/investors` + `/app/investors/<slug>` → family office & investor prospecting (persons, wealth, company links). `chat/investors.py`.
 - `/app/portfolio` → portfolio dashboard (KPIs, value bridge, health donut, top holdings). `/app/portfolio/analytics` → bubble chart, heatmap, sector allocation, holdings table. `/app/portfolio/kpis` → financial trend lines, margin targets, company scorecard. `chat/portfolio.py`.
 - `/app/dataroom` + `/app/dataroom/<slug>` → virtual data room file tree + RAG indexing. `chat/dataroom.py`.
-- `/app/instructions` + `/app/instructions/<slug>` → live-edit each agent's prompt. Writes to `prompts/system/<slug>.md`, clears the agent cache. `chat/instructions.py`.
+- `/skills` + `/skills/<slug>` → live-edit each agent's skill prompt. Writes to `prompts/system/<slug>.md`, clears the agent cache. Legacy `/app/instructions` URLs redirect here. `chat/instructions.py`.
 - `/app/analytics` + `POST /app/analytics/run` → text → SELECT SQL (guarded) → Plotly figure. `chat/analytics.py`.
 - `/app/valuation` → PE valuation simulator (DCF, comps, precedent, LBO). `chat/valuation.py`.
 - `/app/integrations` → Pipedrive CRM sync + data source status. `chat/integrations.py`.

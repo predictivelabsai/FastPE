@@ -42,7 +42,7 @@ TOUR = [
     ("10-analytics-empty_lt.png",    "/app/analytics",          "#analytics-q",                 False, None),
     ("11-analytics-revenue_lt.png",  "/app/analytics",          "#analytics-q",                 False, "revenue"),
     # Instructions
-    ("12-instructions-list_lt.png",  "/app/instructions",       ".instr-list",                  False, None),
+    ("12-instructions-list_lt.png",  "/skills",       ".instr-list",                  False, None),
 ]
 
 CHAT_MSGS = {

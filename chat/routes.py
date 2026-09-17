@@ -386,8 +386,8 @@ async def signin(request: Request):
 async def signout(request: Request):
     clear_user(request.session)
     if request.headers.get("HX-Request"):
-        return Response("", headers={"HX-Redirect": "/app"})
-    return JSONResponse({"ok": True})
+        return Response("", headers={"HX-Redirect": "/"})
+    return JSONResponse({"ok": True, "redirect": "/"})
 
 
 # ── Config (currency, etc.) ──────────────────────────────────────────

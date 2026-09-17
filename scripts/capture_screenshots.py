@@ -56,8 +56,8 @@ TOUR = [
     ("17-analytics-stages.png",   "/app/analytics",          "#analytics-q",                 False, "stages"),
     ("18-analytics-sector.png",   "/app/analytics",          "#analytics-q",                 False, "ev_by_sector"),
     # Instructions
-    ("19-instructions-list.png",  "/app/instructions",       ".instr-list",                  False, None),
-    ("20-instructions-edit.png",  "/app/instructions/deal_triage", ".instr-textarea",        False, None),
+    ("19-instructions-list.png",  "/skills",       ".instr-list",                  False, None),
+    ("20-instructions-edit.png",  "/skills/deal_triage", ".instr-textarea",        False, None),
 ]
 
 

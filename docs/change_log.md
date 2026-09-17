@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.9.1 — 2026-09-17
+
+### Skills discovery, focused PE news, and logout navigation
+- Added a public Skills preview below the landing-page agent pillars with an authenticated CTA into the full library
+- Renamed the authenticated Instructions UI to a scrollable `/skills` library with clear editor links and compatibility redirects for existing `/app/instructions` links
+- Preserved the requested Skills destination through password and Google sign-in
+- Redirected logout to the landing page and added a sign-in link when an anonymous user reaches the app shell
+- Replaced broad and Baltic RSS sources with working PE, M&A, and private-credit feeds from specialist publishers, FT, and Bloomberg
+- Verified all configured RSS endpoints and the full regression suite: 156 passed, 2 skipped
+
 ## v0.9.0 — 2026-09-17
 
 ### Bring your own LLM key

@@ -1,8 +1,8 @@
-"""Instructions page — edit + save per-agent system prompts.
+"""Skills page — review and edit per-agent system prompts.
 
-/app/instructions              → list all agents
-/app/instructions/<slug>       → WYSIWYG editor (default) + markdown toggle + version history
-POST /app/instructions/<slug>  → persist to file + pehero.prompt_versions
+/skills              → list all agents
+/skills/<slug>       → WYSIWYG editor (default) + markdown toggle + version history
+POST /skills/<slug>  → persist to file + pehero.prompt_versions
 
 API:
 GET  /app/api/prompt-versions/<slug>       → version list
@@ -30,7 +30,7 @@ from db.prompts import (
     save_prompt_version, count_prompt_versions,
     get_prompt_versions, get_prompt_version,
 )
-from utils.session import get_currency, currency_symbol
+from utils.session import get_currency, currency_symbol, get_user_email
 from utils.i18n import t, get_lang, agent_t
 from chat.routes import _ensure_user, _list_sessions
 from landing.components import TAILWIND_CONFIG, _favicon_links
@@ -72,8 +72,11 @@ def _editor_head(title: str) -> Head:
 # ── List page ──────────────────────────────────────────────────────────
 
 
-@rt("/app/instructions", methods=["GET"])
+@rt("/skills", methods=["GET"])
 def instructions_home(sess):
+    if not get_user_email(sess):
+        return RedirectResponse("/signin?next=/skills", status_code=303)
+
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
     lang = get_lang(sess)
@@ -90,17 +93,21 @@ def instructions_home(sess):
                     Div(agent_t(a.slug, "name", lang), cls="instr-name"),
                     Div(agent_t(a.slug, "one_liner", lang), cls="instr-sub"),
                 ),
-                Span(f"{size}b" if exists else "missing", cls="instr-size"),
+                Div(
+                    Span(f"{size}b" if exists else "missing", cls="instr-size"),
+                    Span(f"{t('instr_editor', lang)} →", cls="instr-edit-cta"),
+                    cls="instr-row-actions",
+                ),
                 cls="instr-row",
             ),
-            href=f"/app/instructions/{a.slug}",
+            href=f"/skills/{a.slug}",
             cls="instr-link",
         ))
 
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), current_path="/app/instructions", lang=lang),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), current_path="/skills", lang=lang),
         Div(
             Div(
                 Div(
@@ -119,17 +126,17 @@ def instructions_home(sess):
             Div(
                 P(t("instr_intro", lang), cls="instr-intro"),
                 A(t("instr_shared", lang),
-                  href="/app/instructions/__shared__",
+                  href="/skills/__shared__",
                   cls="instr-shared-link"),
                 *items,
                 cls="instr-list",
             ),
-            cls="center-pane",
+            cls="center-pane skills-center",
         ),
         copilot_pane(
-            page_name="Instructions",
+            page_name="Skills",
             page_context={
-                "page": "Instructions",
+                "page": "Skills",
                 "total_agents": len(AGENTS),
             },
             lang=lang,
@@ -138,14 +145,22 @@ def instructions_home(sess):
         Script(src=_versioned("copilot.js")),
         cls="bg-bg text-ink font-sans antialiased app pipeline-app",
     )
-    return Html(_head("Instructions"), body, lang="en")
+    return Html(_head("Skills"), body, lang="en")
+
+
+@rt("/app/instructions", methods=["GET"])
+def legacy_instructions_home():
+    return RedirectResponse("/skills", status_code=308)
 
 
 # ── Editor page ────────────────────────────────────────────────────────
 
 
-@rt("/app/instructions/{slug}", methods=["GET"])
+@rt("/skills/{slug}", methods=["GET"])
 def instruction_edit(sess, slug: str):
+    if not get_user_email(sess):
+        return RedirectResponse(f"/signin?next=/skills/{slug}", status_code=303)
+
     uid, email = _ensure_user(sess)
     sessions = _list_sessions(uid) if uid else []
     lang = get_lang(sess)
@@ -159,7 +174,7 @@ def instruction_edit(sess, slug: str):
         if not spec:
             return Html(_head("Not found"),
                         Body(Div(H1("Agent not found"),
-                                 A("Back", href="/app/instructions"),
+                                 A("Back", href="/skills"),
                                  cls="p-10 text-ink")))
         path = PROMPTS_DIR / f"{slug}.md"
         title = spec.name
@@ -171,12 +186,12 @@ def instruction_edit(sess, slug: str):
     body = Body(
         signin_overlay(),
         Div(id="left-overlay", cls="left-overlay", onclick="toggleLeftPane()"),
-        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), current_path="/app/instructions", lang=lang),
+        left_pane(user_email=email, sessions=sessions, current_sid="", current_currency=get_currency(sess), current_path="/skills", lang=lang),
         Div(
             Div(
                 Div(
                     Button("☰", cls="mobile-menu-btn", onclick="toggleLeftPane()"),
-                    A(f"← {t('instr_title', lang)}", href="/app/instructions", cls="back-to-chat-btn"),
+                    A(f"← {t('instr_title', lang)}", href="/skills", cls="back-to-chat-btn"),
                     Span("·", cls="chat-header-dot"),
                     Span(title, cls="chat-header-title"),
                     Span(f"v{vc}", cls="instr-version-badge", id="version-badge") if vc else
@@ -215,13 +230,13 @@ def instruction_edit(sess, slug: str):
                     Div(id="save-status", cls="save-status"),
                     Button(t("instr_save", lang), type="button", cls="chat-send instr-save",
                            onclick="savePrompt()"),
-                    A(t("instr_cancel", lang), href="/app/instructions", cls="back-to-chat-btn"),
+                    A(t("instr_cancel", lang), href="/skills", cls="back-to-chat-btn"),
                     cls="instr-actions",
                 ),
                 Input(type="hidden", id="instr-slug", value=slug),
                 cls="instr-edit",
             ),
-            cls="center-pane",
+            cls="center-pane skills-center",
         ),
         Script(src=_versioned("chat.js")),
         Script(src="/static/instructions.js"),
@@ -230,11 +245,19 @@ def instruction_edit(sess, slug: str):
     return Html(_editor_head(f"Edit — {title}"), body, lang="en")
 
 
+@rt("/app/instructions/{slug}", methods=["GET"])
+def legacy_instruction_edit(slug: str):
+    return RedirectResponse(f"/skills/{slug}", status_code=308)
+
+
 # ── Save endpoint ──────────────────────────────────────────────────────
 
 
-@rt("/app/instructions/{slug}", methods=["POST"])
+@rt("/skills/{slug}", methods=["POST"])
 async def instruction_save(request: Request, slug: str):
+    if not get_user_email(request.session):
+        return JSONResponse({"ok": False, "error": "Authentication required"}, status_code=401)
+
     data = await request.json()
     content = data.get("content") or ""
 
@@ -258,17 +281,26 @@ async def instruction_save(request: Request, slug: str):
     return JSONResponse({"ok": True, "version_count": vc, "version_id": version_id})
 
 
+@rt("/app/instructions/{slug}", methods=["POST"])
+async def legacy_instruction_save(request: Request, slug: str):
+    return await instruction_save(request, slug)
+
+
 # ── Version API ────────────────────────────────────────────────────────
 
 
 @rt("/app/api/prompt-versions/{slug}", methods=["GET"])
-def api_prompt_versions(slug: str):
+def api_prompt_versions(slug: str, sess):
+    if not get_user_email(sess):
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
     versions = get_prompt_versions(slug)
     return JSONResponse({"slug": slug, "versions": versions})
 
 
 @rt("/app/api/prompt-version/{version_id:int}", methods=["GET"])
-def api_prompt_version(version_id: int):
+def api_prompt_version(version_id: int, sess):
+    if not get_user_email(sess):
+        return JSONResponse({"error": "Authentication required"}, status_code=401)
     ver = get_prompt_version(version_id)
     if not ver:
         return JSONResponse({"error": "Version not found"}, status_code=404)
@@ -277,6 +309,9 @@ def api_prompt_version(version_id: int):
 
 @rt("/app/api/prompt-versions/{slug}/revert", methods=["POST"])
 async def api_revert_prompt(request: Request, slug: str):
+    if not get_user_email(request.session):
+        return JSONResponse({"ok": False, "error": "Authentication required"}, status_code=401)
+
     data = await request.json()
     version_id = data.get("version_id")
     if not version_id:
