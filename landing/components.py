@@ -17,7 +17,7 @@ from agents.registry import CATEGORIES, AGENTS, AGENTS_BY_CATEGORY, AGENTS_BY_SL
 from utils.i18n import t, agent_t, category_t, LANGUAGES
 
 SITE_NAME = "PEHero"
-SITE_TAGLINE = "Agentic AI for private equity deal teams."
+SITE_TAGLINE = "Agentic AI for private equity and private credit teams."
 CONTACT_EMAIL = "hello@pehero.fyi"
 GITHUB_URL = "https://github.com/predictivelabsai/FastPE"
 LINKEDIN_URL = "https://www.linkedin.com/company/predictive-labs-ltd/"
@@ -87,6 +87,39 @@ def Pill(text: str, *, cls: str = ""):
         text,
         cls=f"inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono tracking-wider uppercase text-ink-muted bg-bg-elevated border border-line {cls}".strip(),
     )
+
+
+def StrategyBadge(agent, *, cls: str = ""):
+    tone = {"equity": "bg-slate-100", "credit": "bg-emerald-100", "both": "bg-amber-100"}[agent.asset_class]
+    return Span(agent.asset_class_label,
+                cls=f"inline-flex px-2 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase text-ink-muted {tone} {cls}".strip())
+
+
+def StrategyFilter():
+    buttons = [
+        Button(label, type="button", data_strategy=value,
+               onclick=f"filterAgentStrategy('{value}', this)",
+               cls=f"strategy-filter-btn px-4 py-2 rounded-full border border-line text-xs font-mono uppercase tracking-wider {'active bg-accent text-bg' if value == 'all' else 'bg-bg-elevated text-ink-muted'}")
+        for label, value in (("All", "all"), ("Equity", "equity"), ("Credit", "credit"), ("Equity + Credit", "both"))
+    ]
+    script = Script(NotStr("""
+function filterAgentStrategy(value, button) {
+  document.querySelectorAll('.strategy-card').forEach(function(card) {
+    var own = card.dataset.assetClass;
+    card.style.display = (value === 'all' || own === value || (own === 'both' && value !== 'both')) ? '' : 'none';
+  });
+  document.querySelectorAll('[data-strategy-section]').forEach(function(section) {
+    section.style.display = Array.from(section.querySelectorAll('.strategy-card')).some(function(card) { return card.style.display !== 'none'; }) ? '' : 'none';
+  });
+  document.querySelectorAll('.strategy-filter-btn').forEach(function(btn) {
+    btn.classList.remove('active', 'bg-accent', 'text-bg');
+    btn.classList.add('bg-bg-elevated', 'text-ink-muted');
+  });
+  button.classList.add('active', 'bg-accent', 'text-bg');
+  button.classList.remove('bg-bg-elevated', 'text-ink-muted');
+}
+"""))
+    return Div(Div(*buttons, cls="flex flex-wrap gap-2"), script, cls="mt-8")
 
 
 def _navbar(current_path: str = "/", lang: str = "en"):
@@ -356,8 +389,10 @@ def AgentCard(agent, *, as_link: bool = True, lang: str = "en"):
             cls="flex items-center mb-4",
         ),
         H4(agent_t(agent.slug, "name", lang), cls="text-ink font-medium mb-1.5"),
+        StrategyBadge(agent, cls="mb-3"),
         P(agent_t(agent.slug, "one_liner", lang), cls="text-ink-muted text-sm leading-relaxed"),
-        cls="p-6 rounded-2xl bg-bg-elevated border border-line hover:border-accent/50 transition-colors h-full",
+        cls="strategy-card p-6 rounded-2xl bg-bg-elevated border border-line hover:border-accent/50 transition-colors h-full",
+        data_asset_class=agent.asset_class,
     )
     if as_link:
         return A(inner, href=f"/agents/{agent.slug}", cls="block h-full")
@@ -381,6 +416,7 @@ def CategorySection(cat: dict, lang: str = "en"):
             cls="max-w-7xl mx-auto px-5 md:px-6",
         ),
         cls="py-14 md:py-20 border-t border-line",
+        data_strategy_section=cat["key"],
     )
 
 
@@ -389,7 +425,8 @@ def SkillsPreview(lang: str = "en"):
     featured = [
         AGENTS_BY_SLUG["deal_triage"],
         AGENTS_BY_SLUG["pro_forma_builder"],
-        AGENTS_BY_SLUG["doc_room_auditor"],
+        AGENTS_BY_SLUG["default_risk_modeler"],
+        AGENTS_BY_SLUG["private_debt_valuation"],
     ]
     return Section_(
         Div(
@@ -411,6 +448,7 @@ def SkillsPreview(lang: str = "en"):
                         cls="flex items-center mb-5",
                     ),
                     H3(agent_t(agent.slug, "name", lang), cls="text-ink text-xl font-medium mb-2"),
+                    StrategyBadge(agent, cls="mb-3"),
                     P(agent_t(agent.slug, "one_liner", lang), cls="text-ink-muted text-sm leading-relaxed mb-5"),
                     P("Skill preview", cls="font-mono text-[11px] tracking-widest uppercase text-ink-dim mb-2"),
                     P(f'“{agent.example_prompts[0]}”', cls="text-ink text-sm leading-relaxed"),
@@ -418,7 +456,7 @@ def SkillsPreview(lang: str = "en"):
                 )
                 for agent in featured
             ],
-            cls="grid md:grid-cols-3 gap-4",
+            cls="grid md:grid-cols-2 lg:grid-cols-4 gap-4",
         ),
         Div(
             Button_("Sign in to see full Skills", href="/signin?next=/skills", primary=True),

@@ -200,6 +200,103 @@ CREATE TABLE IF NOT EXISTS pehero.debt_stacks (
     created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- ── private-credit facilities and risk history ─────────────────────────
+-- Synthetic calibration is explicit: generated examples must never be mistaken
+-- for observed loan-performance data.
+CREATE TABLE IF NOT EXISTS pehero.credit_facilities (
+    id                    BIGSERIAL PRIMARY KEY,
+    company_id            BIGINT NOT NULL REFERENCES pehero.companies(id) ON DELETE CASCADE,
+    name                  TEXT NOT NULL,
+    strategy              TEXT NOT NULL, -- direct_lending | abl | real_estate | infrastructure | fund_finance | specialty_finance | distressed
+    facility_type         TEXT NOT NULL,
+    currency              TEXT NOT NULL DEFAULT 'EUR',
+    commitment            NUMERIC(14,2) NOT NULL,
+    drawn_amount          NUMERIC(14,2) NOT NULL,
+    base_rate_pct         NUMERIC(7,4) DEFAULT 0,
+    spread_bps            INTEGER DEFAULT 0,
+    floor_pct             NUMERIC(7,4) DEFAULT 0,
+    cash_interest_pct     NUMERIC(7,4),
+    pik_interest_pct      NUMERIC(7,4) DEFAULT 0,
+    oid_pct               NUMERIC(7,4) DEFAULT 100,
+    upfront_fee_pct       NUMERIC(7,4) DEFAULT 0,
+    amortization_pct      NUMERIC(7,4) DEFAULT 0,
+    maturity_date         DATE,
+    lien                  TEXT,
+    obligor_grade         TEXT,
+    pd_pct                NUMERIC(7,4),
+    lgd_pct               NUMERIC(7,4),
+    synthetic_calibration BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at            TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS credit_facilities_company_idx ON pehero.credit_facilities(company_id);
+CREATE INDEX IF NOT EXISTS credit_facilities_strategy_idx ON pehero.credit_facilities(strategy);
+
+CREATE TABLE IF NOT EXISTS pehero.credit_cashflows (
+    id             BIGSERIAL PRIMARY KEY,
+    facility_id    BIGINT NOT NULL REFERENCES pehero.credit_facilities(id) ON DELETE CASCADE,
+    period_end     DATE NOT NULL,
+    opening_balance NUMERIC(14,2),
+    cash_interest  NUMERIC(14,2),
+    pik_interest   NUMERIC(14,2),
+    principal      NUMERIC(14,2),
+    fees           NUMERIC(14,2),
+    closing_balance NUMERIC(14,2),
+    scenario       TEXT NOT NULL DEFAULT 'base',
+    UNIQUE(facility_id, period_end, scenario)
+);
+
+CREATE TABLE IF NOT EXISTS pehero.credit_covenants (
+    id             BIGSERIAL PRIMARY KEY,
+    facility_id    BIGINT NOT NULL REFERENCES pehero.credit_facilities(id) ON DELETE CASCADE,
+    covenant_type  TEXT NOT NULL,
+    test_frequency TEXT DEFAULT 'quarterly',
+    threshold      NUMERIC(12,4) NOT NULL,
+    direction      TEXT NOT NULL, -- maximum | minimum
+    cure_rights    TEXT,
+    created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS pehero.credit_collateral (
+    id              BIGSERIAL PRIMARY KEY,
+    facility_id     BIGINT NOT NULL REFERENCES pehero.credit_facilities(id) ON DELETE CASCADE,
+    collateral_type TEXT NOT NULL,
+    gross_value     NUMERIC(14,2) NOT NULL,
+    eligible_value  NUMERIC(14,2),
+    advance_rate_pct NUMERIC(7,4),
+    haircut_pct     NUMERIC(7,4),
+    as_of_date      DATE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS pehero.credit_ratings (
+    id              BIGSERIAL PRIMARY KEY,
+    facility_id     BIGINT NOT NULL REFERENCES pehero.credit_facilities(id) ON DELETE CASCADE,
+    as_of_date      DATE NOT NULL,
+    obligor_grade   TEXT NOT NULL,
+    facility_grade  TEXT NOT NULL,
+    pd_pct          NUMERIC(7,4),
+    lgd_pct         NUMERIC(7,4),
+    expected_loss   NUMERIC(14,2),
+    rationale       JSONB,
+    synthetic_calibration BOOLEAN NOT NULL DEFAULT TRUE,
+    UNIQUE(facility_id, as_of_date)
+);
+
+CREATE TABLE IF NOT EXISTS pehero.credit_monitoring (
+    id                 BIGSERIAL PRIMARY KEY,
+    facility_id        BIGINT NOT NULL REFERENCES pehero.credit_facilities(id) ON DELETE CASCADE,
+    as_of_date         DATE NOT NULL,
+    revenue_variance_pct NUMERIC(7,4),
+    ebitda_variance_pct NUMERIC(7,4),
+    liquidity          NUMERIC(14,2),
+    leverage_x         NUMERIC(7,4),
+    interest_cover_x   NUMERIC(7,4),
+    dscr_x             NUMERIC(7,4),
+    covenant_headroom_pct NUMERIC(7,4),
+    watch_status       TEXT DEFAULT 'performing',
+    notes              JSONB,
+    UNIQUE(facility_id, as_of_date)
+);
+
 -- ── LP CRM ────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS pehero.investor_crm (
     id            BIGSERIAL PRIMARY KEY,

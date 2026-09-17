@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.10.0 — 2026-09-17
+
+### Private-credit agent squad and deterministic underwriting engine
+- Added 12 editable private-credit agents across the existing sourcing, underwriting, diligence, capital, and portfolio workflows
+- Added visible Equity, Credit, and Equity + Credit labels and filters to the public agent directory, landing-page Skills preview, app agent browser, and authenticated Skills library
+- Added deterministic PD/LGD/EAD, expected-loss, facility cash-flow, covenant, debt valuation, recovery, borrowing-base, early-warning, workout, and portfolio-construction tools
+- Added facility-level schemas for credit cash flows, covenants, collateral, ratings, and monitoring, with explicit synthetic-calibration provenance
+- Added a reproducible synthetic portfolio spanning direct lending, ABL, real estate, infrastructure, fund finance, specialty finance, and distressed debt while excluding venture debt
+- Expanded private-credit intent routing, shared domain guidance, landing-page positioning, and product documentation
+- Verified the PostgreSQL DDL in a rolled-back transaction, the full suite (175 passed, 2 skipped), and Playwright desktop/mobile coverage for filters, labels, authenticated Skills editing, and scrolling
+
 ## v0.9.1 — 2026-09-17
 
 ### Skills discovery, focused PE news, and logout navigation

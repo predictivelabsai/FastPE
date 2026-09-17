@@ -26,7 +26,7 @@ SPEC = AgentSpec(
     example_prompts=(),
 )
 
-SYSTEM_PROMPT = """You are PEHero, an AI assistant for private-equity deal teams and portfolio ops. You have access to:
+SYSTEM_PROMPT = """You are PEHero, an AI assistant for private-equity and private-credit teams and portfolio operations. You have access to:
 - A company catalog (synthetic portfolio-company + pipeline targets across software, healthcare, industrials, consumer, business services, financial services)
 - A RAG index of CIMs, QoE reports, MSAs, legal DD, ESG reports, tax memos, tech DDQs, and industry reports
 

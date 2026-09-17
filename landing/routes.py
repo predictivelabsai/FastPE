@@ -12,7 +12,7 @@ from app import rt
 from agents.registry import AGENTS, AGENTS_BY_CATEGORY, AGENTS_BY_SLUG, CATEGORIES
 from landing.components import (
     page, Hero, ProductTour, CategoryPillar, AgentCard, CategorySection, SkillsPreview, CaseStudyStrip, PENewsSection, CTASection,
-    Eyebrow, Heading, Body_, Button_, Pill, Section_, SITE_NAME, SITE_TAGLINE,
+    Eyebrow, Heading, Body_, Button_, Pill, Section_, StrategyBadge, StrategyFilter, SITE_NAME, SITE_TAGLINE,
 )
 from utils.i18n import t, agent_t, category_t, get_lang, set_lang, LANGUAGES
 
@@ -142,6 +142,7 @@ def agents_page(sess):
             Heading(1, t("agents_h1", lang), cls="mt-4 max-w-4xl"),
             P(t("agents_body", lang),
               cls="mt-6 text-ink-muted text-lg max-w-3xl leading-relaxed"),
+            StrategyFilter(),
             cls="border-t border-line",
         ),
         *[CategorySection(c, lang=lang) for c in CATEGORIES],
@@ -185,6 +186,7 @@ def agent_detail(slug: str, sess):
             P(agent_t(slug, "one_liner", lang), cls="mt-5 text-ink-muted text-lg max-w-3xl"),
             Div(Pill(f"prefix: {agent.prefix}"),
                 Pill(f"category: {cat['key']}"),
+                StrategyBadge(agent),
                 cls="mt-6 flex flex-wrap gap-2"),
             cls="border-t border-line",
         ),

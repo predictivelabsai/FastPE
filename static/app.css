@@ -108,6 +108,10 @@ details.agent-group[open] .agent-list { display: flex; flex-direction: column; g
 .aitem-icon { color: var(--accent); width: .9rem; flex-shrink: 0; }
 .aitem-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .aitem-prefix { color: var(--ink-dim); font-family: 'JetBrains Mono', monospace; font-size: .62rem; }
+.aitem-strategy { padding: .08rem .25rem; border-radius: .25rem; font: 500 .52rem 'JetBrains Mono', monospace; letter-spacing: .03em; }
+.aitem-strategy.strategy-equity { color: #475569; background: #e2e8f0; }
+.aitem-strategy.strategy-credit { color: #166534; background: #dcfce7; }
+.aitem-strategy.strategy-both { color: #92400e; background: #fef3c7; }
 
 /* Left footer (auth) */
 .left-footer { padding: .6rem .9rem; border-top: 1px solid var(--line); background: var(--bg-elev); }

@@ -56,6 +56,9 @@ CATEGORY_HINTS: dict[str, list[str]] = {
         "5-year", "sensitivity", "irr", "moic", "dscr",
         "leverage", "unitranche", "mezz", "mezzanine", "debt stack",
         "ev/ebitda", "ev-ebitda", "entry multiple", "exit multiple",
+        "probability of default", "expected loss", "loss given default",
+        "cash interest", "pik", "oid", "credit spread", "loan valuation",
+        "covenant headroom", "borrowing base", "recovery waterfall",
     ],
     "diligence": [
         "data room", "vdr", "due diligence", "diligence",
@@ -63,11 +66,13 @@ CATEGORY_HINTS: dict[str, list[str]] = {
         "legal", "regulatory", "licensure", "litigation",
         "operational diligence", "100-day plan", "ops review",
         "esg", "environmental", "governance",
+        "credit agreement", "loan agreement", "events of default", "baskets",
     ],
     "capital": [
         "ic memo", "investment memo", "memo", "teaser", "lp letter",
         "lp update", "investor update", "limited partner", "crm",
         "prospect", "fundraising", "gp", "general partner",
+        "credit memo", "lender memo",
     ],
     "asset_mgmt": [
         "pricing", "price increase", "renewal pricing",
@@ -75,7 +80,24 @@ CATEGORY_HINTS: dict[str, list[str]] = {
         "value creation", "value-creation", "100-day", "portco",
         "portfolio company", "customer churn", "renewal likelihood",
         "retention",
+        "watchlist", "rating migration", "workout", "restructuring",
+        "amend and extend", "maturity wall", "credit portfolio",
     ],
+}
+
+AGENT_HINTS: dict[str, tuple[str, ...]] = {
+    "credit_opportunity_screener": ("credit opportunity", "private credit", "direct lending", "fund finance", "specialty finance"),
+    "default_risk_modeler": ("probability of default", "default risk", "expected loss", "pd", "lgd", "ead", "risk grade"),
+    "debt_cashflow_pricing": ("cash interest", "pik", "oid", "lender irr", "credit spread", "debt cash flow", "debt cashflow"),
+    "covenant_headroom": ("covenant", "headroom", "fccr", "llcr", "plcr", "debt yield"),
+    "private_debt_valuation": ("loan valuation", "debt valuation", "mark to market", "fair value", "price as percent of par"),
+    "recovery_waterfall": ("recovery", "waterfall", "fulcrum", "liquidation value", "going concern recovery"),
+    "abl_collateral": ("borrowing base", "abl", "advance rate", "eligible receivables", "collateral coverage"),
+    "loan_terms_extractor": ("credit agreement", "loan terms", "events of default", "baskets", "cure rights"),
+    "credit_memo_writer": ("credit memo", "lender memo"),
+    "credit_portfolio_monitor": ("credit watchlist", "rating migration", "early warning", "portfolio credit monitor"),
+    "restructuring_workout": ("workout", "restructuring", "amend and extend", "debt for equity", "enforcement"),
+    "credit_portfolio_constructor": ("credit portfolio", "risk adjusted yield", "maturity wall", "portfolio concentration"),
 }
 
 
@@ -97,6 +119,9 @@ def _keyword_scores(message: str) -> dict[str, int]:
         # Prioritize agent-name presence
         if agent.name.lower() in lower:
             scores[agent.slug] = scores.get(agent.slug, 0) + 5
+        for hint in AGENT_HINTS.get(agent.slug, ()):
+            if re.search(rf"(?<!\w){re.escape(hint)}(?!\w)", lower):
+                scores[agent.slug] = scores.get(agent.slug, 0) + (6 if " " in hint else 3)
         # Category-level hints
         hints = CATEGORY_HINTS.get(agent.category, [])
         for h in hints:
@@ -108,6 +133,30 @@ def _keyword_scores(message: str) -> dict[str, int]:
 def _best_in_category_for(message: str) -> str | None:
     """When the message looks like a category, pick a good default agent for it."""
     lower = message.lower()
+    if "credit memo" in lower or "lender memo" in lower:
+        return "credit_memo_writer"
+    if "probability of default" in lower or "default risk" in lower or re.search(r"\b(pd|lgd|ead)\b", lower):
+        return "default_risk_modeler"
+    if "borrowing base" in lower or re.search(r"\babl\b", lower):
+        return "abl_collateral"
+    if "covenant" in lower or "headroom" in lower or "llcr" in lower or "plcr" in lower:
+        return "covenant_headroom"
+    if "loan valuation" in lower or "debt valuation" in lower or "mark to market" in lower:
+        return "private_debt_valuation"
+    if "recovery" in lower or "fulcrum" in lower or "liquidation waterfall" in lower:
+        return "recovery_waterfall"
+    if "credit agreement" in lower or "loan terms" in lower or "events of default" in lower:
+        return "loan_terms_extractor"
+    if "credit watchlist" in lower or "rating migration" in lower or "early warning" in lower:
+        return "credit_portfolio_monitor"
+    if "workout" in lower or "restructuring" in lower or "amend and extend" in lower:
+        return "restructuring_workout"
+    if "credit portfolio" in lower or "risk adjusted yield" in lower or "maturity wall" in lower:
+        return "credit_portfolio_constructor"
+    if "cash interest" in lower or "lender irr" in lower or "debt cash flow" in lower or "oid" in lower:
+        return "debt_cashflow_pricing"
+    if "private credit" in lower or "direct lending" in lower or "fund finance" in lower or "specialty finance" in lower:
+        return "credit_opportunity_screener"
     if "triage" in lower or "go/no-go" in lower or "screen" in lower:
         return "deal_triage"
     if "lbo" in lower or "pro forma" in lower or "proforma" in lower:
@@ -135,7 +184,7 @@ def _best_in_category_for(message: str) -> str | None:
     return None
 
 
-_LLM_CLASSIFIER_PROMPT = """You are a router for a private-equity deal platform. Return the SLUG of the best specialist agent for the user's message. Pick from this list only, output just the slug with no extra text:
+_LLM_CLASSIFIER_PROMPT = """You are a router for a private-equity and private-credit deal platform. Return the SLUG of the best specialist agent for the user's message. Pick from this list only, output just the slug with no extra text:
 
 {agent_list}
 

@@ -1,4 +1,4 @@
-"""Central registry of all 24 specialist PE agents.
+"""Central registry of the PEHero equity and private-credit agent squad.
 
 Each `AgentSpec` is the source of truth for routing, UI rendering, and prompt
 loading. The agent module (in agents/<category>/<slug>.py) owns its TOOLS +
@@ -19,20 +19,25 @@ class AgentSpec:
     one_liner: str       # marketing sub-heading
     description: str     # full sentence for /agents page
     prefix: str          # router prefix (e.g., "triage:")
+    asset_class: str = "equity"  # equity | credit | both
     example_prompts: tuple[str, ...] = field(default_factory=tuple)
+
+    @property
+    def asset_class_label(self) -> str:
+        return {"equity": "Equity", "credit": "Credit", "both": "Equity + Credit"}[self.asset_class]
 
 
 CATEGORIES: list[dict] = [
     {
         "key": "sourcing",
-        "name": "Deal Sourcing & Screening",
-        "blurb": "Find proprietary deals before they hit the auction.",
+        "name": "Opportunity Sourcing & Screening",
+        "blurb": "Find and screen equity and credit opportunities early.",
         "icon": "◉",
     },
     {
         "key": "underwriting",
-        "name": "LBO Underwriting Engine",
-        "blurb": "Teaser to IC-ready LBO model in hours.",
+        "name": "Underwriting & Modelling",
+        "blurb": "Equity returns, credit risk, cash flows, and downside cases.",
         "icon": "◈",
     },
     {
@@ -43,14 +48,14 @@ CATEGORIES: list[dict] = [
     },
     {
         "key": "capital",
-        "name": "Capital & LP Relations",
-        "blurb": "IC memos, teasers and LP updates your GP will sign.",
+        "name": "Investment Committee & Capital",
+        "blurb": "Equity and credit memos, teasers, and investor reporting.",
         "icon": "◐",
     },
     {
         "key": "asset_mgmt",
-        "name": "Portfolio Operations",
-        "blurb": "Drive EBITDA growth and value creation post-close.",
+        "name": "Portfolio Monitoring & Operations",
+        "blurb": "Monitor credit risk and drive equity value creation post-close.",
         "icon": "◼",
     },
 ]
@@ -61,6 +66,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="market_scanner", name="Market Scanner",
         category="sourcing", icon="⚯", prefix="scan:",
+        asset_class="both",
         one_liner="PitchBook + banker feeds + proprietary outreach, ranked by fit.",
         description="Continuously scans sell-side teasers, PitchBook/Grata/SourceScrub feeds, and proprietary founder outreach channels, deduplicating deals and surfacing those that fit your fund's mandate.",
         example_prompts=(
@@ -110,6 +116,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="outreach_email", name="Outreach Email Drafter",
         category="sourcing", icon="✉", prefix="outreach:",
+        asset_class="both",
         one_liner="Personalized founder/broker outreach emails in your fund's voice.",
         description="Drafts cold outreach emails to founders, brokers, or intermediaries — personalized to the target's sector, size, and ownership situation, with a clear ask and your fund's positioning.",
         example_prompts=(
@@ -122,6 +129,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="outreach_sequencer", name="Outreach Sequencer",
         category="sourcing", icon="📨", prefix="sequence:",
+        asset_class="both",
         one_liner="Multi-touch outreach sequences for deal sourcing and LP fundraising.",
         description="Plans and drafts 5-email sequences with angle rotation (SCQ, PAS, BAB frameworks). Personalizes each touch using company financials, market signals, and portfolio track record. Logs activities to Pipedrive with scheduled due dates.",
         example_prompts=(
@@ -160,6 +168,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="t12_normalizer", name="LTM Financials Normalizer",
         category="underwriting", icon="∑", prefix="ltm:",
+        asset_class="both",
         one_liner="Messy owner financials → clean, add-back-adjusted LTM EBITDA.",
         description="Normalizes seller-provided financials onto a standard chart of accounts, applies QoE add-backs, separates one-time items, and flags revenue/EBITDA anomalies vs. industry benchmarks.",
         example_prompts=(
@@ -184,6 +193,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="debt_stack_modeler", name="Debt Stack Modeler",
         category="underwriting", icon="▥", prefix="debt:",
+        asset_class="both",
         one_liner="Unitranche + mezz + revolver — with live leverage + DSCR.",
         description="Models LBO capital structures across senior / unitranche / mezzanine / seller notes / revolver — with total-leverage turns, DSCR, fixed-charge coverage, and refinance sensitivity.",
         example_prompts=(
@@ -210,6 +220,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="doc_room_auditor", name="VDR Auditor",
         category="diligence", icon="☷", prefix="vdr:",
+        asset_class="both",
         one_liner="Cross-checks the data room against a full PE DD checklist.",
         description="Audits the seller's VDR against a 140-item PE diligence checklist, flagging missing documents, stale versions, and internal inconsistencies across legal, financial, commercial, and tech DD workstreams.",
         example_prompts=(
@@ -222,6 +233,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="lease_abstractor", name="Contract Abstractor",
         category="diligence", icon="▢", prefix="abstract:",
+        asset_class="both",
         one_liner="PDFs → contract abstracts with key terms, options, and risks.",
         description="Abstracts PDF contracts (customer MSAs, supplier agreements, employment contracts, IP licenses) into structured records — term, renewal, change-of-control triggers, exclusivity, termination rights — with page-cited references.",
         example_prompts=(
@@ -234,6 +246,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="title_zoning", name="Legal & Regulatory Checker",
         category="diligence", icon="◰", prefix="legal:",
+        asset_class="both",
         one_liner="Corporate records + litigation + regulatory review, flags material issues.",
         description="Parses corporate minute books, litigation searches, and regulatory filings, flags material breaches, open litigation, licensure gaps, and change-of-control consents required at close.",
         example_prompts=(
@@ -258,6 +271,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="environmental_risk", name="ESG & Compliance Risk Flagger",
         category="diligence", icon="⚠", prefix="esg:",
+        asset_class="both",
         one_liner="ESG review — flags environmental, social, governance exposures.",
         description="Reads ESG disclosures, environmental site assessments, worker-safety records, and governance reports to identify ESG exposures, and recommends scope where further review is warranted (Phase II ESA, ethics review, etc).",
         example_prompts=(
@@ -296,6 +310,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="lp_update", name="LP Update Generator",
         category="capital", icon="⇄", prefix="lpupd:",
+        asset_class="both",
         one_liner="Quarterly LP letter with portfolio performance + outlook.",
         description="Generates a quarterly LP letter pulling fund-level IRR/MOIC/DPI, portfolio-company performance, deals closed/under contract, market outlook, and capital calls.",
         example_prompts=(
@@ -308,6 +323,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="fundraising_crm", name="Fundraising CRM Copilot",
         category="capital", icon="◎", prefix="crm:",
+        asset_class="both",
         one_liner="LP pipeline ranked by fit, staleness, and commitment size.",
         description="Reads your LP CRM to rank prospects by mandate fit, staleness of last touch, and committed check size — and drafts the next outreach email or meeting prep doc.",
         example_prompts=(
@@ -334,6 +350,7 @@ AGENTS: tuple[AgentSpec, ...] = (
     AgentSpec(
         slug="opex_variance", name="EBITDA Variance Watcher",
         category="asset_mgmt", icon="Δ", prefix="ebitda:",
+        asset_class="both",
         one_liner="Monthly EBITDA variance vs. budget — with root-cause commentary.",
         description="Watches monthly actuals vs. budget across all portcos, surfaces variances above your threshold, and suggests root causes from GL-level expense breakouts.",
         example_prompts=(
@@ -365,6 +382,140 @@ AGENTS: tuple[AgentSpec, ...] = (
             "Score renewal likelihood for Kardiolita's top 20 accounts",
             "What's the at-risk revenue across the portfolio for Q4 renewals?",
             "Draft a save play for Baltic Transline's top-3 at-risk accounts",
+        ),
+    ),
+
+    # Private Credit — shared workflow categories, strategy-labelled in the UI
+    AgentSpec(
+        slug="credit_opportunity_screener", name="Credit Opportunity Screener",
+        category="sourcing", icon="◫", prefix="credit:", asset_class="credit",
+        one_liner="Rapid mandate fit and repayment-source screening across private credit.",
+        description="Screens direct lending, ABL, real-estate, infrastructure, fund-finance, specialty-finance, and distressed opportunities for mandate fit, repayment capacity, leverage, structure, and preliminary risks. Venture debt is excluded.",
+        example_prompts=(
+            "credit: screen a €40M sponsor-backed unitranche for a healthcare platform",
+            "Screen a UK logistics ABL with receivables and inventory collateral",
+            "Is this infrastructure refinancing suitable for a senior credit fund?",
+        ),
+    ),
+    AgentSpec(
+        slug="default_risk_modeler", name="Default Risk Modeler",
+        category="underwriting", icon="⊘", prefix="default:", asset_class="credit",
+        one_liner="Transparent obligor PD, facility LGD, EAD, and expected loss.",
+        description="Assigns an explainable internal risk grade from financial and qualitative factors, maps it to editable synthetic-calibration PD assumptions, and combines facility structure and recovery with EAD and LGD.",
+        example_prompts=(
+            "default: estimate PD, LGD and expected loss for a 5.0x unitranche",
+            "Re-rate the borrower after a 20% EBITDA downside and covenant breach",
+            "Compare obligor and facility risk for senior and second-lien tranches",
+        ),
+    ),
+    AgentSpec(
+        slug="debt_cashflow_pricing", name="Debt Cash Flow & Pricing Modeler",
+        category="underwriting", icon="≋", prefix="debtcf:", asset_class="credit",
+        one_liner="Contractual cash flows, PIK, OID, fees, yield, and lender IRR.",
+        description="Builds facility cash-flow schedules across fixed and floating-rate debt, including floors, cash/PIK interest, amortization, bullets, OID, fees, prepayment, debt sculpting, and lender return metrics.",
+        example_prompts=(
+            "debtcf: model a €25M 5-year loan at EURIBOR + 650bps with a 2% floor",
+            "Price a unitranche with 8% cash, 3% PIK and 98 OID",
+            "Sculpt infrastructure debt to a 1.35x minimum DSCR",
+        ),
+    ),
+    AgentSpec(
+        slug="covenant_headroom", name="Covenant & Headroom Analyst",
+        category="underwriting", icon="⌁", prefix="covenant:", asset_class="credit",
+        one_liner="Covenant compliance and breach timing across downside cases.",
+        description="Tests leverage, interest cover, DSCR, FCCR, minimum liquidity, LTV, debt yield, LLCR, PLCR, NAV coverage, and other maintenance or incurrence covenants across forecast scenarios.",
+        example_prompts=(
+            "covenant: test leverage and FCCR headroom under a 15% EBITDA downside",
+            "When does this real-estate loan breach LTV or debt yield?",
+            "Run DSCR, LLCR and PLCR tests on the infrastructure base case",
+        ),
+    ),
+    AgentSpec(
+        slug="private_debt_valuation", name="Private Debt Valuation",
+        category="underwriting", icon="◇", prefix="loanval:", asset_class="credit",
+        one_liner="Probability-weighted loan DCF and fair-value bridge versus par.",
+        description="Values performing and stressed private debt using contractual or expected cash flows, benchmark rates, market spreads, default and recovery assumptions, accrued interest, and observable transaction evidence.",
+        example_prompts=(
+            "loanval: mark a 7-year unitranche at a 950bps market discount spread",
+            "Value the loan using 6% PD and 45% recovery",
+            "Bridge the quarter-on-quarter mark from par to fair value",
+        ),
+    ),
+    AgentSpec(
+        slug="recovery_waterfall", name="Recovery & Waterfall Modeler",
+        category="underwriting", icon="⇣", prefix="recovery:", asset_class="credit",
+        one_liner="Collateral and enterprise-value recovery by lien and priority.",
+        description="Models going-concern and liquidation recoveries with collateral haircuts, enforcement costs, super-priority claims, lien ranking, structural subordination, time-to-recovery, and facility LGD.",
+        example_prompts=(
+            "recovery: run the waterfall at 5x, 6x and 7x stressed EBITDA",
+            "Compare liquidation and going-concern recovery for the second lien",
+            "Apply collateral haircuts and calculate LGD by facility",
+        ),
+    ),
+    AgentSpec(
+        slug="abl_collateral", name="ABL & Collateral Analyst",
+        category="underwriting", icon="▧", prefix="abl:", asset_class="credit",
+        one_liner="Borrowing bases, eligibility, advance rates, and collateral coverage.",
+        description="Calculates borrowing availability and collateral coverage across receivables, inventory, equipment, real estate, infrastructure, and fund-finance collateral with eligibility rules and concentration reserves.",
+        example_prompts=(
+            "abl: calculate availability on €18M receivables and €9M inventory",
+            "Stress the borrowing base for customer concentration and dilution",
+            "Calculate LTV, LTC and debt yield for this property loan",
+        ),
+    ),
+    AgentSpec(
+        slug="loan_terms_extractor", name="Loan Terms Extractor",
+        category="diligence", icon="§", prefix="terms:", asset_class="credit",
+        one_liner="Credit documents into structured economics, covenants, and controls.",
+        description="Extracts facility economics, maturity, amortization, covenants, baskets, events of default, security, guarantees, transfer rights, reporting requirements, and amendment controls from loan documents with citations.",
+        example_prompts=(
+            "terms: extract economics and covenants from the credit agreement",
+            "List baskets, cure rights and events of default with page citations",
+            "Compare the signed agreement with the approved term sheet",
+        ),
+    ),
+    AgentSpec(
+        slug="credit_memo_writer", name="Credit Memo Writer",
+        category="capital", icon="✐", prefix="creditmemo:", asset_class="credit",
+        one_liner="IC-ready credit memo with structure, downside, and recovery.",
+        description="Drafts a lender credit memo covering borrower and sponsor, business risk, repayment sources, structure, covenants, pricing, default risk, downside, recovery, documentation, ESG, and recommendation.",
+        example_prompts=(
+            "creditmemo: draft an IC memo for the proposed healthcare unitranche",
+            "Write the downside and recovery sections only",
+            "Summarize key credit risks, mitigants and approval conditions",
+        ),
+    ),
+    AgentSpec(
+        slug="credit_portfolio_monitor", name="Portfolio Credit Monitor",
+        category="asset_mgmt", icon="⌁", prefix="watch:", asset_class="credit",
+        one_liner="Early warnings, covenant compliance, and rating migration.",
+        description="Monitors actual versus plan, liquidity, interest coverage, covenant compliance, collateral availability, PIK usage, waivers, rating migration, maturity walls, and watchlist triggers across the loan portfolio.",
+        example_prompts=(
+            "watch: show borrowers with deteriorating coverage or rating migration",
+            "Which facilities have less than 10% covenant headroom?",
+            "Build this quarter's credit watchlist and recommended actions",
+        ),
+    ),
+    AgentSpec(
+        slug="restructuring_workout", name="Restructuring & Workout Planner",
+        category="asset_mgmt", icon="⚒", prefix="workout:", asset_class="credit",
+        one_liner="Amend, extend, enforce, or equitise—with recovery comparisons.",
+        description="Compares waiver, amendment, amend-and-extend, new-money, debt-for-equity, enforcement, and insolvency paths using liquidity runway, stakeholder priorities, implementation risk, and probability-weighted recovery.",
+        example_prompts=(
+            "workout: compare amend-and-extend with enforcement for this borrower",
+            "Model a debt-for-equity swap and new-money super-senior facility",
+            "Prepare a 13-week workout action plan and lender asks",
+        ),
+    ),
+    AgentSpec(
+        slug="credit_portfolio_constructor", name="Credit Portfolio Constructor",
+        category="asset_mgmt", icon="◩", prefix="credport:", asset_class="credit",
+        one_liner="Risk-adjusted yield, concentration, maturity, and loss scenarios.",
+        description="Analyzes portfolio construction by borrower, sponsor, sector, geography, strategy, lien, rating, maturity, currency, yield, expected loss, and downside contribution, with concentration-limit tests.",
+        example_prompts=(
+            "credport: optimize allocations for yield after expected loss",
+            "Show sponsor, sector and maturity concentrations against limits",
+            "Stress portfolio losses under recession and real-estate downside cases",
         ),
     ),
 )

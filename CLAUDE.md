@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 PEHero — agentic AI for private equity. One FastHTML process hosting a marketing landing site, a 3-pane chat app, a pipeline kanban, an analytics (text-to-SQL → Plotly) page and in-app prompt editing. Backed by PostgreSQL (`pehero` OLTP schema + `pehero_rag` pgvector schema) and xAI Grok as the default LLM.
 
-25 specialist agents are wired via LangGraph `create_react_agent`, routed by prefix / keywords / LLM fallback. 11 UI languages (EN, ET, LT, LV, FI, SV, NO, DA, FR, DE, PL) via `utils/i18n.py`. Public copy avoids naming the count — the product is pitched as "Your Private Equity AI Agent Squad".
+37 specialist equity and private-credit agents are wired via LangGraph `create_react_agent`, routed by prefix / keywords / LLM fallback. 11 UI languages (EN, ET, LT, LV, FI, SV, NO, DA, FR, DE, PL) via `utils/i18n.py`. Public copy avoids naming the count — the product is pitched as a private-capital AI agent squad.
 
 ## Commands
 
@@ -33,7 +33,7 @@ pytest -q tests/test_agents_smoke.py             # 41 tests; build-every-agent, 
 pytest -q tests/test_agents_smoke.py::test_lbo_round_trip
 
 # Full regression — HITS the LLM, writes docs/regression-latest.md
-python -m tests.regression_suite                 # all 25 agents, their first example_prompt
+python -m tests.regression_suite                 # all agents, their first example_prompt
 python -m tests.regression_suite --slug deal_triage
 
 # Daily deals email digest (Postmark) — sends to all opted-in users
@@ -145,7 +145,7 @@ Core tables all live in `pehero.*`:
 
 ### Front-end (`chat/components.py` + `static/`)
 
-- Left pane: New-chat + session list, agent browser (5 categories × 25 agents), Workspace (Pipeline / Companies / Investors / Data Room / Instructions / Analytics / Valuation / Portfolio / Integrations), Training (User Guide + PE Hero Game), Configuration (currency + language switcher). All routes pass `current_currency=get_currency(sess)` and `lang=get_lang(sess)` to `left_pane()`.
+- Left pane: New-chat + session list, agent browser (5 shared workflow categories with Equity/Credit/Both labels), Workspace (Pipeline / Companies / Investors / Data Room / Skills / Analytics / Valuation / Portfolio / Integrations), Training (User Guide + PE Hero Game), Configuration (currency + language switcher). All routes pass `current_currency=get_currency(sess)` and `lang=get_lang(sess)` to `left_pane()`.
 - `static/app.css` holds base chat + left-pane + thinking indicator + follow-up + sample-cards + currency-chip rules. `static/pipeline.css` holds kanban + deal-detail + instructions + analytics rules (pipeline.css is only loaded on those routes; anything that also appears on `/app` must live in `app.css`).
 - `static/chat.js` handles SSE streaming, thinking-indicator (timer + rotating tool name), contextual sample cards (per agent — prompt tables embedded as `<script id="agent-prompts-data">`), the "Next step — Yes / No" follow-up pattern, Copy chat / Share link (clipboard + `POST /app/share`), memo → PDF/Word export, table → CSV/XLS export + Plotly visualize, and the currency/language selectors.
 
@@ -173,7 +173,7 @@ Cookies via Starlette's `SessionMiddleware`. Helpers in `utils/session.py`: `get
 - **All LLM calls** go through `utils.llm.build_llm()` / `build_agent_llm()` — never construct `ChatOpenAI` elsewhere.
 - Schemas `pehero.*` and `pehero_rag.*` are always qualified in SQL — never rely on `search_path`.
 - Synthetic data is deterministic given `--seed`. Keep it that way so the smoke tests stay stable.
-- User-facing copy does **not** mention "25 agents" or "$0 / synthetic data". Use "squad" language and "BYOD — bring your own data". Internal docstrings and this file can still mention the count.
+- User-facing copy does **not** mention an agent count or "$0 / synthetic data". Use "squad" language and "BYOD — bring your own data". Credit model outputs must disclose synthetic calibration until empirical data is supplied.
 - Public marketing renders monetary figures in **EUR** (`€`). In-app figures follow the session's currency preference via `currency_symbol(get_currency(sess))`.
 - Agent module filenames (`rent_roll_parser.py`, `leases.py`, `t12_normalizer.py`, etc.) and tool filenames still mirror the Bricksmith origin. Public names in `AgentSpec` and all prompts/synthetic content are PE-specific. Don't be surprised by the mismatch.
 - When you rename or add an agent slug, remember: module path (`agents/<category>/<slug>.py`) must match, `prompts/system/<slug>.md` must exist, and the router's `_best_in_category_for` + `CATEGORY_HINTS` keyword maps might need updating too.

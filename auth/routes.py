@@ -65,7 +65,7 @@ def _auth_layout(title: str, card_parts: list):
                 Div(
                     Div("◆", cls="w-14 h-14 rounded-xl bg-gradient-to-br from-[#1B4D3E] to-[#2d7a5f] text-white flex items-center justify-center text-xl font-extrabold mx-auto"),
                     P("PEHero", cls="text-xl font-bold text-[#1B4D3E] mt-2"),
-                    P("Your Private Equity AI Agent Squad", cls="text-xs text-gray-500"),
+                    P("Your Equity + Private Credit AI Agent Squad", cls="text-xs text-gray-500"),
                     cls="text-center mb-6",
                 ),
                 Div(*card_parts, cls="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-8 shadow-lg"),

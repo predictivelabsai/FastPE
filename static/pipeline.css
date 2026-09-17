@@ -138,6 +138,9 @@
 }
 .instr-list { padding: 1rem 1.2rem 2rem; max-width: 820px; margin: 0 auto; width: 100%; }
 .instr-intro { color: var(--ink-muted); font-size: .82rem; margin-bottom: 1rem; }
+.skills-filter-bar { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1rem; }
+.skills-filter { padding: .35rem .65rem; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-elev); color: var(--ink-muted); font: 500 .65rem 'JetBrains Mono', monospace; cursor: pointer; }
+.skills-filter:hover, .skills-filter.active { color: var(--bg); background: var(--accent); border-color: var(--accent); }
 .instr-shared-link {
     display: inline-block; padding: .45rem .75rem; margin-bottom: 1rem;
     background: var(--accent-dim); color: var(--accent-deep);
@@ -153,6 +156,10 @@
 .instr-row:hover { border-color: var(--accent); }
 .instr-icon { color: var(--accent); font-size: 1.3rem; width: 1.5rem; text-align: center; }
 .instr-name { color: var(--ink); font-size: .88rem; font-weight: 600; }
+.instr-strategy { display: inline-flex; margin-top: .2rem; padding: .1rem .35rem; border-radius: .25rem; font: 500 .58rem 'JetBrains Mono', monospace; text-transform: uppercase; }
+.instr-strategy.strategy-equity { color: #475569; background: #e2e8f0; }
+.instr-strategy.strategy-credit { color: #166534; background: #dcfce7; }
+.instr-strategy.strategy-both { color: #92400e; background: #fef3c7; }
 .instr-sub { color: var(--ink-muted); font-size: .72rem; margin-top: .15rem; }
 .instr-row-actions { margin-left: auto; display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
 .instr-size { color: var(--ink-dim); font-size: .7rem; font-family: 'JetBrains Mono', monospace; }

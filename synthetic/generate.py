@@ -28,6 +28,7 @@ from synthetic import market_signals as MS
 from synthetic import lps as LP
 from synthetic import leases as LEASE       # customer MSA bodies
 from synthetic import documents as DOC
+from synthetic import credit as CREDIT
 
 log = logging.getLogger(__name__)
 
@@ -39,6 +40,12 @@ TRUNCATE_TABLES = [
     "pehero.portfolio_kpis",
     "pehero.market_signals",
     "pehero.investor_crm",
+    "pehero.credit_monitoring",
+    "pehero.credit_ratings",
+    "pehero.credit_collateral",
+    "pehero.credit_covenants",
+    "pehero.credit_cashflows",
+    "pehero.credit_facilities",
     "pehero.debt_stacks",
     "pehero.lbo_models",
     "pehero.trading_comps",
@@ -366,6 +373,74 @@ def _insert_lps(rows: list[dict]) -> int:
     return len(rows)
 
 
+def _insert_credit(rows: list[dict]) -> int:
+    """Insert reproducible multi-strategy credit examples and monitoring history."""
+    with connect() as conn, conn.cursor() as cur:
+        for r in rows:
+            cash_rate = max(r["base_rate_pct"], r["floor_pct"]) + r["spread_bps"] / 100
+            cur.execute(
+                """INSERT INTO pehero.credit_facilities
+                   (company_id, name, strategy, facility_type, currency, commitment, drawn_amount,
+                    base_rate_pct, spread_bps, floor_pct, cash_interest_pct, pik_interest_pct,
+                    oid_pct, upfront_fee_pct, amortization_pct, maturity_date, lien, obligor_grade,
+                    pd_pct, lgd_pct, synthetic_calibration)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,TRUE)
+                   RETURNING id""",
+                (r["company_id"], r["name"], r["strategy"], r["facility_type"], r["currency"],
+                 r["commitment"], r["drawn_amount"], r["base_rate_pct"], r["spread_bps"], r["floor_pct"],
+                 cash_rate, r["pik_interest_pct"], r["oid_pct"], r["upfront_fee_pct"], r["amortization_pct"],
+                 r["maturity_date"], r["lien"], r["obligor_grade"], r["pd_pct"], r["lgd_pct"]),
+            )
+            fid = cur.fetchone()[0]
+            balance = r["drawn_amount"]
+            for year in range(1, 6):
+                opening = balance
+                cash_interest = opening * cash_rate / 100
+                pik = opening * r["pik_interest_pct"] / 100
+                balance += pik
+                principal = balance if year == 5 else min(balance, r["drawn_amount"] * r["amortization_pct"] / 100)
+                balance -= principal
+                cur.execute(
+                    """INSERT INTO pehero.credit_cashflows
+                       (facility_id, period_end, opening_balance, cash_interest, pik_interest, principal, fees, closing_balance, scenario)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s,%s,'base')""",
+                    (fid, date.today() + relativedelta(years=year), opening, cash_interest, pik, principal, 0, balance),
+                )
+            cur.execute(
+                """INSERT INTO pehero.credit_covenants
+                   (facility_id, covenant_type, threshold, direction, cure_rights)
+                   VALUES (%s,%s,%s,%s,%s)""",
+                (fid, r["covenant_type"], r["covenant_threshold"], r["covenant_direction"], "Equity cure subject to documentation"),
+            )
+            cur.execute(
+                """INSERT INTO pehero.credit_collateral
+                   (facility_id, collateral_type, gross_value, eligible_value, advance_rate_pct, haircut_pct, as_of_date)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s)""",
+                (fid, r["collateral_type"], r["collateral_value"], r["collateral_value"] * .9,
+                 r["advance_rate_pct"], 100-r["advance_rate_pct"], date.today()),
+            )
+            expected_loss = r["drawn_amount"] * r["pd_pct"] / 100 * r["lgd_pct"] / 100
+            cur.execute(
+                """INSERT INTO pehero.credit_ratings
+                   (facility_id, as_of_date, obligor_grade, facility_grade, pd_pct, lgd_pct, expected_loss, rationale, synthetic_calibration)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s::jsonb,TRUE)""",
+                (fid, date.today(), r["obligor_grade"], r["obligor_grade"], r["pd_pct"], r["lgd_pct"],
+                 expected_loss, json.dumps({"source": "deterministic synthetic fixture", "venture_debt": False})),
+            )
+            watch = "watch" if r["headroom_pct"] < 10 or r["interest_cover_x"] < 1.5 else "performing"
+            cur.execute(
+                """INSERT INTO pehero.credit_monitoring
+                   (facility_id, as_of_date, revenue_variance_pct, ebitda_variance_pct, liquidity,
+                    leverage_x, interest_cover_x, dscr_x, covenant_headroom_pct, watch_status, notes)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s::jsonb)""",
+                (fid, date.today(), r["revenue_variance_pct"], r["ebitda_variance_pct"], r["liquidity"],
+                 r["leverage_x"], r["interest_cover_x"], r["dscr_x"], r["headroom_pct"], watch,
+                 json.dumps({"synthetic_calibration": True})),
+            )
+        conn.commit()
+    return len(rows)
+
+
 def _index_rag(cos_with_ids: list[tuple[int, dict]], rng: random.Random) -> int:
     """Index DD docs per company + top-2 customer MSAs per company + industry reports."""
     docs: list[DocIn] = []
@@ -457,6 +532,9 @@ def run(seed: int = 42, skip_rag: bool = False, limit: int | None = None, fresh:
 
     n = _insert_lps(LP.generate(count=60, seed=seed))
     print(f"inserted {n} LP contacts")
+
+    n = _insert_credit(CREDIT.generate_for_companies(cos_with_ids, seed=seed))
+    print(f"inserted {n} synthetic private-credit facilities")
 
     if not skip_rag:
         n = _index_rag(cos_with_ids, rng)

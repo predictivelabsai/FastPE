@@ -1,8 +1,8 @@
 # PEHero User Guide
 
-## Your Private Equity AI Agent Squad
+## Your Private Capital AI Agent Squad
 
-*One chat interface, every PE workflow — sourcing through exit.*
+*One chat interface for private equity and private credit — sourcing through exit or repayment.*
 
 **pehero.chat**
 
@@ -28,7 +28,7 @@
 
 **Analytics** · Text-to-SQL, auto-charting, schema-aware queries
 
-**Instructions** · Live-edit agent prompts — no redeploy needed
+**Skills** · Filter Equity, Credit, and cross-strategy agents; live-edit prompts without a redeploy
 
 **Training** · PE Hero RPG game for deal-making practice
 
@@ -43,7 +43,7 @@
 1. **Open the app** at [pehero.chat/app](https://pehero.chat/app)
 2. **Sign in** with Google or email/password (bottom of the left pane)
 3. **Type a prompt** in the chat input — PEHero routes to the right specialist agent automatically
-4. **Browse agents** in the left pane under the 5 PE workflow categories
+4. **Browse agents** in the left pane under five shared workflow categories; each is labelled Equity, Credit, or Equity + Credit
 
 > First time? Try: *"Triage Northwind Systems for our fund"* — the Deal Triage agent runs a full strategic fit analysis.
 
@@ -70,15 +70,17 @@ Two ways to invoke a specialist:
 
 ## Chat — Agent Categories
 
-PEHero's specialist agents cover every stage of the PE deal lifecycle:
+PEHero's specialist agents cover the equity and private-credit investment lifecycles in shared workflow categories:
 
 | Category | Agents | Example Prefixes |
 |----------|--------|-----------------|
-| **Sourcing** | Market Scanner, Deal Triage, Comp Finder, Owner Intent, Outreach, LOI Writer, Deal Teaser | `scan:`, `triage:`, `comps:`, `loi:` |
-| **Underwriting** | LTM Normalizer, LBO Model, Pro Forma, Debt Stack, Return Metrics | `ltm:`, `lbo:`, `pf:`, `debt:` |
-| **Diligence** | VDR Auditor, Contract Abstractor, Legal, Ops DD, ESG Risk | `vdr:`, `contracts:`, `legal:` |
-| **Capital** | IC Memo Writer, LP Update, Fundraising CRM | `memo:`, `lp:`, `crm:` |
-| **Portfolio Ops** | Pricing Optimizer, EBITDA Variance, Value Creation, Customer Churn | `pricing:`, `opex:`, `vcb:`, `churn:` |
+| **Sourcing** | Market Scanner, Deal Triage, Credit Opportunity Screener, Outreach, LOI Writer | `scan:`, `triage:`, `credit:`, `loi:` |
+| **Underwriting** | LTM, LBO, Debt Stack, Default Risk, Debt Cash Flow, Covenants, Private Debt Valuation, Recovery, ABL | `ltm:`, `lbo:`, `default:`, `debtcf:`, `covenant:`, `loanval:`, `recovery:`, `abl:` |
+| **Diligence** | VDR Auditor, Contract Abstractor, Loan Terms Extractor, Legal, Ops DD, ESG | `vdr:`, `abstract:`, `terms:`, `legal:` |
+| **Investment Committee & Capital** | Equity IC Memo, Credit Memo, LP Update, Fundraising CRM | `memo:`, `creditmemo:`, `lpupd:`, `crm:` |
+| **Portfolio Monitoring & Operations** | EBITDA Variance, Credit Monitor, Workout, Credit Portfolio Construction, Value Creation | `ebitda:`, `watch:`, `workout:`, `credport:`, `vc:` |
+
+Private credit supports direct lending, ABL, real estate, infrastructure, fund finance, specialty finance, and distressed debt. Venture debt is excluded. Default and recovery outputs use visibly disclosed synthetic calibration until empirical portfolio data is supplied.
 
 ---
 
@@ -380,4 +382,4 @@ BYOD — bring your own data. Upload documents to the Data Room, and PEHero's ag
 - **Copilot**: ask any question on any workspace page
 - **Support**: contact@pehero.chat
 
-*PEHero — your Private Equity AI Agent Squad.*
+*PEHero — your Private Capital AI Agent Squad.*

@@ -151,7 +151,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "pl": "Zaloguj się"},
 
     # ── Hero section ──────────────────────────────────────────────
-    "hero_eyebrow":      {"en": "Agentic AI for private equity",
+    "hero_eyebrow":      {"en": "Agentic AI for private equity + private credit",
                           "et": "Agentne AI erakapitalile",
                           "lt": "Agentinė AI privataus kapitalo komandai",
                           "fi": "Agenttitekoäly pääomasijoittamiseen", "sv": "Agentbaserad AI för private equity",
@@ -161,7 +161,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "fr": "IA agentique pour le private equity",
                           "de": "Agentische KI für Private Equity",
                           "pl": "AI agentyczna dla private equity"},
-    "hero_h1_1":         {"en": "Your Private Equity ",       "et": "Teie erakapitali ",          "lt": "Jūsų privataus kapitalo ",
+    "hero_h1_1":         {"en": "Your Private Capital ",      "et": "Teie erakapitali ",          "lt": "Jūsų privataus kapitalo ",
                           "fi": "Teidän pääomasijoitus ", "sv": "Ert private equity ",
                           "lv": "Jūsu privātais kapitāls",
                           "no": "Din Private Equity",
@@ -209,7 +209,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "fr": "et closing ",
                           "de": "und Closing",
                           "pl": "i zamykanie"},
-    "hero_h1_7":         {"en": "your next platform.",        "et": "teie järgmise platvormi.",   "lt": "jūsų kitą platformą.",
+    "hero_h1_7":         {"en": "your next investment.",      "et": "teie järgmise platvormi.",   "lt": "jūsų kitą platformą.",
                           "fi": "seuraavan alustanne.", "sv": "er nästa plattform.",
                           "lv": "jūsu nākamo platformu.",
                           "no": "din neste plattform.",
@@ -218,8 +218,8 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "de": "Ihre nächste Plattform.",
                           "pl": "Twojej następnej platformy."},
     "hero_lede":         {"en": "Not a prompt pack. Not a build-it-yourself kit. PEHero is a full agentic system "
-                                "already wired into your deal flow — scanning targets, running QoE, building LBO "
-                                "models, and drafting IC memos while your team focuses on the call.",
+                                "for equity and private credit — scanning opportunities, underwriting cash flows and default risk, "
+                                "building models, and drafting IC memos while your team focuses on the call.",
                           "et": "Mitte promptide kogum. Mitte 'ehita ise' komplekt. PEHero on täielik agentne süsteem, "
                                 "mis on juba ühendatud teie tehingute voogu — skaneerib sihtmärke, teeb QoE-d, ehitab LBO "
                                 "mudeleid ja koostab IC memosid, kuni teie meeskond keskendub kõnele.",
@@ -259,7 +259,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "fr": "Escouade",
                           "de": "Trupp",
                           "pl": "Drużyna"},
-    "stat_squad_cap":    {"en": "of PE specialists, on call",
+    "stat_squad_cap":    {"en": "of private-capital specialists, on call",
                           "et": "PE spetsialisti, alati valmis",
                           "lt": "PE specialistų, visada pasiekiamų",
                           "fi": "PE-asiantuntijaa, aina valmiina", "sv": "PE-specialister, alltid tillgängliga",
@@ -793,7 +793,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "pl": "Każda rozmowa i każdy artefakt persists, queryable między agentami, więc Tydzień 3 diligence nadal wie, co uzgodnił Tydzień 1."},
 
     # ── Agents page ───────────────────────────────────────────────
-    "agents_eyebrow":    {"en": "Your Private Equity AI Agent Squad",
+    "agents_eyebrow":    {"en": "Your Private Capital AI Agent Squad",
                           "et": "Teie erakapitali AI agentide meeskond",
                           "lt": "Jūsų privataus kapitalo AI agentų komanda",
                           "fi": "Teidän pääomasijoitus-AI-agenttitiimi", "sv": "Ert private equity AI-agentteam",
@@ -2018,7 +2018,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
                           "fr": "PEHero",
                           "de": "PEHero",
                           "pl": "PEHero"},
-    "chat_welcome_sub":  {"en": "Your Private Equity AI Agent Squad. Type a prompt — the router picks the right specialist.",
+    "chat_welcome_sub":  {"en": "Your Equity + Private Credit AI Agent Squad. Type a prompt — the router picks the right specialist.",
                           "et": "Teie erakapitali AI agentide meeskond. Sisestage päring — marsruuter valib õige spetsialisti.",
                           "lt": "Jūsų privataus kapitalo AI agentų komanda. Įveskite užklausą — maršrutizatorius parinks tinkamą specialistą.",
                           "fi": "Teidän pääomasijoitus-AI-agenttitiimi. Kirjoita prompti — reitittäjä valitsee oikean asiantuntijan.", "sv": "Ert private equity AI-agentteam. Skriv en prompt — routern väljer rätt specialist.",
@@ -2883,16 +2883,16 @@ def t(key: str, lang: str = DEFAULT_LANG) -> str:
 
 CATEGORY_TRANSLATIONS: dict[str, dict[str, dict[str, str]]] = {
     "sourcing": {
-        "name": {"en": "Deal Sourcing & Screening", "et": "Tehingute otsing ja sõelumine", "lt": "Sandorių paieška ir atranka",
+        "name": {"en": "Opportunity Sourcing & Screening", "et": "Tehingute otsing ja sõelumine", "lt": "Sandorių paieška ir atranka",
                   "fi": "Tehingute otsing ja sõelumine", "sv": "Deal sourcing & screening"},
-        "blurb": {"en": "Find proprietary deals before they hit the auction.",
+        "blurb": {"en": "Find and screen equity and credit opportunities early.",
                   "et": "Leidke ainulaadsed tehingud enne, kui need jõuavad oksjonile.",
                   "lt": "Raskite savitus sandorius anksčiau nei jie pateks į aukcioną."},
     },
     "underwriting": {
-        "name": {"en": "LBO Underwriting Engine", "et": "LBO hindamise mootor", "lt": "LBO vertinimo variklis",
+        "name": {"en": "Underwriting & Modelling", "et": "LBO hindamise mootor", "lt": "LBO vertinimo variklis",
                   "fi": "LBO-arviointi", "sv": "LBO-bedömning"},
-        "blurb": {"en": "Teaser to IC-ready LBO model in hours.",
+        "blurb": {"en": "Equity returns, credit risk, cash flows, and downside cases.",
                   "et": "Teaserist IC-valmis LBO mudelini tundidega.",
                   "lt": "Nuo teaserio iki IC parengt LBO modelio per valandas."},
     },
@@ -2904,16 +2904,16 @@ CATEGORY_TRANSLATIONS: dict[str, dict[str, dict[str, str]]] = {
                   "lt": "VDR patikrintas, QoE patvirtintas, rizikos atskleistos anksti."},
     },
     "capital": {
-        "name": {"en": "Capital & LP Relations", "et": "Kapital ja LP suhted", "lt": "Kapitalas ir LP santykiai",
+        "name": {"en": "Investment Committee & Capital", "et": "Kapital ja LP suhted", "lt": "Kapitalas ir LP santykiai",
                   "fi": "Pääoma ja LP-suhteet", "sv": "Kapital & LP-relationer"},
-        "blurb": {"en": "IC memos, teasers and LP updates your GP will sign.",
+        "blurb": {"en": "Equity and credit memos, teasers, and investor reporting.",
                   "et": "IC memod, teaserid ja LP uuendused, mille teie GP allkirjastab.",
                   "lt": "IC memo, teaser ir LP ataskaitos, kurias jūsų GP pasirašys."},
     },
     "asset_mgmt": {
-        "name": {"en": "Portfolio Operations", "et": "Portfelli opereerimine", "lt": "Portfelio operacijos",
+        "name": {"en": "Portfolio Monitoring & Operations", "et": "Portfelli opereerimine", "lt": "Portfelio operacijos",
                   "fi": "Portfolion hallinnointi", "sv": "Portföljförvaltning"},
-        "blurb": {"en": "Drive EBITDA growth and value creation post-close.",
+        "blurb": {"en": "Monitor credit risk and drive equity value creation post-close.",
                   "et": "Edendage EBITDA kasvu ja väärtuse loomist pärast sulgemist.",
                   "lt": "Skatinkite EBITDA augimą ir vertės kūrimą po uždarymo."},
     },

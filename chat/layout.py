@@ -36,7 +36,7 @@ def chat_page(*, user_email: str | None, sessions: list, current_sid: str = "",
     head = Head(
         Meta(charset="utf-8"),
         Meta(name="viewport", content="width=device-width, initial-scale=1"),
-        Meta(name="description", content="PEHero — agentic AI for private equity deal teams"),
+        Meta(name="description", content="PEHero — agentic AI for private equity and private credit teams"),
         Title(f"App · {SITE_NAME}"),
         *_favicon_links(),
         Link(rel="preconnect", href="https://fonts.googleapis.com"),

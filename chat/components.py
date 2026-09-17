@@ -147,7 +147,7 @@ def welcome_hero(lang: str = "en"):
 
 
 def agent_browser(lang: str = "en"):
-    """Left-pane browser of all 22 agents, grouped by category."""
+    """Left-pane browser of all agents, grouped by workflow category."""
     from urllib.parse import quote
     groups = []
     for cat in CATEGORIES:
@@ -156,6 +156,8 @@ def agent_browser(lang: str = "en"):
             A(
                 Span(a.icon, cls="aitem-icon"),
                 Span(agent_t(a.slug, "name", lang), cls="aitem-name"),
+                Span({"equity": "E", "credit": "C", "both": "E+C"}[a.asset_class],
+                     cls=f"aitem-strategy strategy-{a.asset_class}", title=a.asset_class_label),
                 Span(a.prefix, cls="aitem-prefix"),
                 cls="agent-item",
                 href=f"/app?prefill={quote(a.prefix + ' ')}",

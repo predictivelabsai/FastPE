@@ -184,26 +184,26 @@ def _seed_prompt_versions() -> None:
     shared_path = Path(__file__).resolve().parent.parent / "prompts" / "shared" / "pe_context.md"
 
     with connect() as conn, conn.cursor() as cur:
-        cur.execute("SELECT COUNT(*) FROM pehero.prompt_versions")
-        if cur.fetchone()[0] > 0:
-            return
-
         seeded = 0
         for md in sorted(prompts_dir.glob("*.md")):
             slug = md.stem
             content = md.read_text()
             cur.execute(
-                "INSERT INTO pehero.prompt_versions (slug, content, changed_by) VALUES (%s, %s, %s)",
-                (slug, content, "seed"),
+                "INSERT INTO pehero.prompt_versions (slug, content, changed_by) "
+                "SELECT %s, %s, %s WHERE NOT EXISTS "
+                "(SELECT 1 FROM pehero.prompt_versions WHERE slug = %s)",
+                (slug, content, "seed", slug),
             )
-            seeded += 1
+            seeded += cur.rowcount
 
         if shared_path.exists():
             cur.execute(
-                "INSERT INTO pehero.prompt_versions (slug, content, changed_by) VALUES (%s, %s, %s)",
-                ("__shared__", shared_path.read_text(), "seed"),
+                "INSERT INTO pehero.prompt_versions (slug, content, changed_by) "
+                "SELECT %s, %s, %s WHERE NOT EXISTS "
+                "(SELECT 1 FROM pehero.prompt_versions WHERE slug = %s)",
+                ("__shared__", shared_path.read_text(), "seed", "__shared__"),
             )
-            seeded += 1
+            seeded += cur.rowcount
 
         conn.commit()
         if seeded:

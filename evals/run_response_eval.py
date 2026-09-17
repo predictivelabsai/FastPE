@@ -3,7 +3,7 @@
 Runs each agent's first example_prompt through the full agent graph and scores
 the response using pattern matching + LLM-as-judge (deepeval GEval).
 
-HITS THE LLM. Expect ~2-5 minutes for all 25 agents.
+HITS THE LLM. Runtime scales with the current registered agent squad.
 
 Usage:
     python -m evals.run_response_eval                    # all agents

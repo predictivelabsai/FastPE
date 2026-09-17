@@ -1,4 +1,4 @@
-"""End-to-end regression across all 22 agents.
+"""End-to-end regression across all registered agents.
 
 Hits the real LLM (XAI_API_KEY required). Each agent is invoked with its
 first example_prompt; we capture the final answer + any tool calls it made
@@ -6,7 +6,7 @@ and write a markdown report so failures are easy to review.
 
 Not part of the fast pytest suite — run explicitly:
 
-    python -m tests.regression_suite            # all 22 agents, report to docs/regression-latest.md
+    python -m tests.regression_suite            # all agents, report to docs/regression-latest.md
     python -m tests.regression_suite --slug deal_triage   # one agent
     python -m tests.regression_suite --timeout 60         # per-agent timeout (s)
 """

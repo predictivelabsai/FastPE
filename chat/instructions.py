@@ -91,6 +91,7 @@ def instructions_home(sess):
                 Span(a.icon, cls="instr-icon"),
                 Div(
                     Div(agent_t(a.slug, "name", lang), cls="instr-name"),
+                    Span(a.asset_class_label, cls=f"instr-strategy strategy-{a.asset_class}"),
                     Div(agent_t(a.slug, "one_liner", lang), cls="instr-sub"),
                 ),
                 Div(
@@ -98,7 +99,8 @@ def instructions_home(sess):
                     Span(f"{t('instr_editor', lang)} →", cls="instr-edit-cta"),
                     cls="instr-row-actions",
                 ),
-                cls="instr-row",
+                cls="instr-row skill-strategy-row",
+                data_asset_class=a.asset_class,
             ),
             href=f"/skills/{a.slug}",
             cls="instr-link",
@@ -125,6 +127,12 @@ def instructions_home(sess):
             ),
             Div(
                 P(t("instr_intro", lang), cls="instr-intro"),
+                Div(
+                    *[Button(label, type="button", cls=f"skills-filter{' active' if value == 'all' else ''}",
+                             onclick=f"filterSkills('{value}', this)")
+                      for label, value in (("All", "all"), ("Equity", "equity"), ("Credit", "credit"), ("Equity + Credit", "both"))],
+                    cls="skills-filter-bar",
+                ),
                 A(t("instr_shared", lang),
                   href="/skills/__shared__",
                   cls="instr-shared-link"),
@@ -143,6 +151,16 @@ def instructions_home(sess):
         ),
         Script(src=_versioned("chat.js")),
         Script(src=_versioned("copilot.js")),
+        Script(NotStr("""
+function filterSkills(value, button) {
+  document.querySelectorAll('.skill-strategy-row').forEach(function(row) {
+    var own = row.dataset.assetClass;
+    row.closest('.instr-link').style.display = (value === 'all' || own === value || (own === 'both' && value !== 'both')) ? '' : 'none';
+  });
+  document.querySelectorAll('.skills-filter').forEach(function(btn) { btn.classList.remove('active'); });
+  button.classList.add('active');
+}
+""")),
         cls="bg-bg text-ink font-sans antialiased app pipeline-app",
     )
     return Html(_head("Skills"), body, lang="en")
@@ -194,6 +212,7 @@ def instruction_edit(sess, slug: str):
                     A(f"← {t('instr_title', lang)}", href="/skills", cls="back-to-chat-btn"),
                     Span("·", cls="chat-header-dot"),
                     Span(title, cls="chat-header-title"),
+                    Span(spec.asset_class_label, cls=f"instr-strategy strategy-{spec.asset_class}") if slug != "__shared__" else Span(),
                     Span(f"v{vc}", cls="instr-version-badge", id="version-badge") if vc else
                     Span("", cls="instr-version-badge", id="version-badge"),
                     cls="chat-header-left",

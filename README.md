@@ -1,6 +1,6 @@
 # PEHero
 
-Agentic AI for private equity — specialist agents that source, underwrite, close, and operate your deals.
+Agentic AI for private equity and private credit — specialist agents that source, underwrite, close, and monitor investments.
 
 ![PEHero product tour](docs/pehero.gif)
 
@@ -8,7 +8,8 @@ Product tour — [PDF](docs/pehero-product-tour.pdf) · [PPTX](docs/pehero-produ
 
 - **Marketing landing** at `/` with hero, agent directory, how-it-works, pricing, PE news feed.
 - **3-pane chat app** at `/app` — left agent/session browser, centre chat with inline tables/charts, right PE news pane.
-- **LangGraph ReAct agents** across deal sourcing, LBO underwriting, due diligence, capital/LP, and portfolio operations — routed by prefix (`triage:`, `lbo:`, `memo:`...) or by keyword heuristics with an LLM fallback classifier.
+- **LangGraph ReAct agent squad** across shared sourcing, underwriting, diligence, capital, and portfolio workflows, visibly labelled Equity, Credit, or Equity + Credit.
+- **Private-credit engine** for direct lending, ABL, real-estate, infrastructure, fund finance, specialty finance, and distressed debt (venture debt excluded): PD/LGD/EAD, expected loss, debt cash flows, covenants, valuation, recovery, borrowing bases, monitoring, workouts, and portfolio construction.
 - **Pipeline kanban** — deal stages from Sourced to Exited with per-deal workspaces, triage scoring (40/30/20/10 weighted priority), risk register (P×I), and milestone tracking.
 - **Portfolio management** — 3-tab submenu (Dashboard, Analytics, KPIs) with value bridge, health donut, bubble charts, heatmaps, and financial trend lines.
 - **Investors** — family office & investor prospecting with 2,500+ persons, wealth data, and company links across Estonia, Lithuania, and Latvia.
@@ -19,7 +20,7 @@ Product tour — [PDF](docs/pehero-product-tour.pdf) · [PPTX](docs/pehero-produ
 - **Copilot** — contextual AI assistant on every workspace page. Auto-injects page context and routes to the best specialist agent.
 - **11 languages** — EN, ET, LT, LV, FI, SV, NO, DA, FR, DE, PL.
 - **xAI Grok** as the default LLM via OpenAI-compatible endpoint.
-- **PostgreSQL** with two schemas: `pehero` (OLTP — 1,800+ companies from Baltic registries, financials, contracts, comps, LBO models, debt stacks, LP CRM, deal risks, milestones) and `pehero_rag` (pgvector — document RAG with semantic search).
+- **PostgreSQL** with two schemas: `pehero` (OLTP — companies, financials, contracts, equity models, credit facilities/cash flows/covenants/collateral/ratings/monitoring, LP CRM, risks, milestones) and `pehero_rag` (pgvector — document RAG with semantic search).
 - **Local embeddings** via fastembed (no API key required) — BAAI/bge-small-en-v1.5 at 384 dim.
 
 ## Running locally
@@ -68,8 +69,8 @@ This project includes slash commands for [Claude Code](https://claude.ai/code) (
 | `/build-product-tour` | Generate product tour slide deck as PDF + PPTX (ReportLab + python-pptx) |
 | `/build-handbook` | Generate PE handbook PDF + EPUB with Plotly charts and Baltic case studies |
 | `/capture-screenshots` | Run Playwright to capture product screenshots for docs |
-| `/seed-data` | Generate deterministic synthetic data (companies, financials, risks, milestones, comps, LPs) |
-| `/run-tests` | Smoke tests (41, no LLM), full regression (25 agents), routing/response/game evals |
+| `/seed-data` | Generate deterministic synthetic data (companies, financials, credit facilities, covenants, ratings, monitoring, risks, comps, LPs) |
+| `/run-tests` | Agent smoke tests, deterministic credit-model tests, routing/response/game evals |
 | `/scrape-data` | Scrape Baltic company registries (EE, LT, LV, PL, RO) and load into DB |
 | `/deploy` | Docker / Coolify deployment checklist and environment variables |
 
@@ -80,12 +81,12 @@ main.py              entrypoint (thin shim)
 app.py               FastHTML app, mounts landing + chat
 landing/             / /platform /agents /agents/<slug> /how-it-works /pricing /contact
 chat/                /app + /app/chat (SSE stream) + /app/auth/*
-agents/              registry + router + 5 category packages (25 agents)
-tools/               StructuredTools: companies, captable, financials, market, diligence, capital, asset, rag
+agents/              registry + router + 5 shared workflow packages (37 agents)
+tools/               StructuredTools: companies, equity/credit financials, market, diligence, capital, asset, rag
 db/                  schema.sql, rag_schema.sql, migrate.py
 rag/                 embeddings (pluggable), indexer, retriever
-synthetic/           PE dataset + DD doc generators + RAG ingest
-prompts/             per-agent system prompts + shared PE glossary
+synthetic/           equity + private-credit datasets, DD documents, and RAG ingest
+prompts/             per-agent system prompts + shared private-capital glossary
 scripts/             scrapers, loaders, doc builders, email digest
 docs/                user guide, PE handbook, product tour (md + pdf + pptx)
 .claude/commands/    Claude Code slash commands
