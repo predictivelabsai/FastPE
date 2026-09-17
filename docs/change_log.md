@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.0 — 2026-09-17
+
+### Bring your own LLM key
+- Added encrypted per-user API-key storage and a dedicated `/byok` settings page
+- Added OpenAI, Anthropic, xAI, and optional Google Gemini model routing
+- Added a five-query free tier backed by the deployment key, with usage enforcement
+- Preserved upstream chat-stream privacy protections when routing requests through user-provided models
+
 ## v0.8.1 — 2026-09-01
 
 ### Safe, consistently formatted agent responses
